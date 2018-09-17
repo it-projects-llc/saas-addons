@@ -7,6 +7,7 @@
     'category': 'SaaS',
     'version': '11.0.1.0.0',
     'depends': ['saas_portal'],
+    'installable': False,
     'data': [
         'views/res_config.xml',
     ],
