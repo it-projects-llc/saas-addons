@@ -8,6 +8,7 @@
     'version': '11.0.1.0.0',
     'depends': ['saas_server'],
     "external_dependencies": {"python": ['pysftp'], "bin": []},
+    'installable': False,
     'data': [
         'views/res_config.xml',
         'data/ir_cron.xml',
