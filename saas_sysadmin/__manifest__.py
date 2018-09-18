@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': 'SaaS System Administration',
     'summary': "System Administration Framework for SAAS Tools",
