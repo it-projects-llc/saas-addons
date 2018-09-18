@@ -25,7 +25,7 @@
           <notebook>
             <page string="Demo Modules">
               <field name="demo_plan_module_ids" mode="tree">
-                <tree string="Demo Modules" create="0" delete="false">
+                <tree create="0" delete="false">
                   <field name="technical_name"/>
                   <field name="url"/>
                 </tree>
@@ -33,7 +33,7 @@
             </page>
             <page string="Demo Hidden Modules">
               <field name="demo_plan_hidden_module_ids" mode="tree">
-                <tree string="Demo Modules" create="0" delete="false">
+                <tree create="0" delete="false">
                   <field name="technical_name"/>
                 </tree>
               </field>

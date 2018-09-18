@@ -15,7 +15,7 @@
             <field name="model">saas_portal.client</field>
             <field name="priority">4</field>
             <field name="arch" type="xml">
-                <tree string="Clients" colors="red:expired" create="false" delete="false" edit="false">
+                <tree colors="red:expired" create="false" delete="false" edit="false">
                     <field name="name"/>
                     <field name="plan_id"/>
                     <field name="state"/>
@@ -129,7 +129,7 @@
             <field name="model">saas_portal.server</field>
             <field name="priority">4</field>
             <field name="arch" type="xml">
-                <tree string="Server" delete="false">
+                <tree delete="false">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="active"/>
@@ -213,7 +213,7 @@
             <field name="model">saas_portal.plan</field>
             <field name="priority">4</field>
             <field name="arch" type="xml">
-                <tree string="Plans">
+                <tree>
                     <field name="sequence" invisible="1"/>
                     <field name="name"/>
                     <field name="template_id"/>
@@ -418,7 +418,7 @@
             <field name="name">saas_portal.support_team.tree</field>
             <field name="model">saas_portal.support_team</field>
             <field name="arch" type="xml">
-                <tree string="Support Teams">
+                <tree>
                     <field name="name"/>
                 </tree>
             </field>
@@ -457,7 +457,7 @@
             <field name="name">saas_portal.databases.tree</field>
             <field name="model">saas_portal.database</field>
             <field name="arch" type="xml">
-                <tree string="Plans" create="false" edit="false" delete="false">
+                <tree create="false" edit="false" delete="false">
                      <field name="name" />
                      <field name="state" />
                      <field name="client_id" />

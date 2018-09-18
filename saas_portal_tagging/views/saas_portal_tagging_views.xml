@@ -20,7 +20,7 @@
             <field name="model">saas.portal.category</field>
             <field eval="8" name="priority"/>
             <field name="arch" type="xml">
-                <tree string="SaaS Client Categories">
+                <tree>
                     <field name="display_name"/>
                 </tree>
             </field>
@@ -31,7 +31,7 @@
             <field name="model">saas.portal.category</field>
             <field name="field_parent">child_ids</field>
             <field name="arch" type="xml">
-                <tree string="SaaS Client Categories">
+                <tree>
                     <field name="name"/>
                 </tree>
             </field>
