@@ -6,14 +6,14 @@ Short description of the issue
 
 ***Steps to reproduce:***
 
- 1. 
- 2. 
- 3. 
+ 1.
+ 2.
+ 3.
 
 ***Current behavior:***
 
- - 
+ -
 
 ***Expected behavior:***
 
- - 
+ -

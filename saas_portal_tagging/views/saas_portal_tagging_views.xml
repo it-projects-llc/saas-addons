@@ -46,8 +46,8 @@
 
         <menuitem action="open_view_saas_categ_form" id="menu_view_saas_client_category_form"
             parent="saas_portal.menu_saas_tech" sequence="100"/>
-    
-            
+
+
         <record id="view_clients_form" model="ir.ui.view">
             <field name="name">saas_portal.client.form</field>
             <field name="model">saas_portal.client</field>
@@ -60,7 +60,7 @@
                 </group>
             </field>
         </record>
-        
+
         <record id="view_plans_form" model="ir.ui.view">
             <field name="name">saas_portal.plan.form</field>
             <field name="model">saas_portal.plan</field>

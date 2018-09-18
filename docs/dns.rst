@@ -33,8 +33,8 @@ If Server is server-1.example.com and Clients are client-001.example.com, client
     Name: *.example.com
 
     IP: 1.2.3.4
- 
- 
+
+
 
 
 

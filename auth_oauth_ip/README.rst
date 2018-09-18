@@ -12,7 +12,7 @@ The module adds two fields to auth.oauth.provider:
 This addresses is used on sending Authentication and Validation requests by using simple trick:
 
      # host - origin host for the URL
-     # url - original host is replaced by local_host and local_port 
+     # url - original host is replaced by local_host and local_port
      urllib2.Request(url, headers={'host': host})
 
 Credits
@@ -35,4 +35,4 @@ Usage instructions: `<doc/index.rst>`__
 
 Changelog: `<doc/changelog.rst>`__
 
-Tested on Odoo 8.0 
+Tested on Odoo 8.0
