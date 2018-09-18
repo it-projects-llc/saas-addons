@@ -3,7 +3,7 @@
     <data>
 
         <template id="signup_fields_custom" inherit_id="saas_portal_signup.signup_fields" >
-	    <xpath expr="//label[@for='plan_id']/.." position="replace">
+        <xpath expr="//label[@for='plan_id']/.." position="replace">
 
                <t t-if="reset == false">
                    <div class="form-group field-role">
@@ -21,7 +21,7 @@
 
             </xpath>
 
-	    <xpath expr="//label[@for='country_id']/.." position="replace">
+        <xpath expr="//label[@for='country_id']/.." position="replace">
                <t t-if="reset == false">
                    <div t-attf-class="form-group  field-country">
                          <label class="control-label" for="country_id">Country</label>

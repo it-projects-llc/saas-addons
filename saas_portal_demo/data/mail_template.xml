@@ -29,7 +29,7 @@
                 % endif
             </p>
             <p>
-		Trial ends on ${object.expiration_datetime}.<br />
+        Trial ends on ${object.expiration_datetime}.<br />
             </p>
             <p>Best regards,</p>
 
