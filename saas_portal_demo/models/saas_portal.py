@@ -7,7 +7,7 @@ class SaasPortalPlan(models.Model):
     demo_plan_module_ids = fields.One2many('saas_portal.demo_plan_module', 'demo_plan_id',
                                            help="The modules that should be in this demo plan", string='Modules')
     demo_plan_hidden_module_ids = fields.One2many('saas_portal.hidden_demo_plan_module', 'demo_plan_id',
-                                                  help="The modules that should be in this demo plan", string='Modules')
+                                                  help="The modules that should be in this demo plan", string='Hidden Modules')
 
     @api.multi
     def create_new_database(self, **kwargs):

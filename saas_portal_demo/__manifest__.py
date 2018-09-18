@@ -18,7 +18,8 @@
     "data": [
         "security/ir.model.access.csv",
         "views/saas_portal_demo.xml",
-        "data/ir_cron.xml",
+        # Commented out as cron records are not ported to odoo12 yet
+        # "data/ir_cron.xml",
     ],
     "qweb": [
     ],
