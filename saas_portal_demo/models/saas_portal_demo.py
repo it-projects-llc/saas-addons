@@ -298,6 +298,7 @@ class SaaSPortalHiddenDemoPlanModule(models.Model):
     demo_plan_id = fields.Many2one(
         'saas_portal.plan', string='Demo plan where the module intended to be installed', ondelete='cascade')
 
+
 class SaasPortalDatabase(models.Model):
     _inherit = 'saas_portal.database'
 
