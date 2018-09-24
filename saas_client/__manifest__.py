@@ -14,6 +14,7 @@
         'mail',
         'web_settings_dashboard',
         'access_limit_records_number',
+        'backend_theme_v11',
     ],
     'data': [
         'views/saas_client.xml',
