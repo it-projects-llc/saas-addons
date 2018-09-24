@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     "name": """Create databases after signup custom""",
     "summary": """Create several databases for new customers after signup""",

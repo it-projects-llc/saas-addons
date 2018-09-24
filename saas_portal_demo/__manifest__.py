@@ -13,25 +13,13 @@
 
     "depends": [
         "saas_portal",
-        "website_sale",
-        "saas_portal_sale_online",
-        # "website_seo_url",
-        # "website_seo_url_product",
-        # "website_sale_add_to_cart_disable",
-        "portal",
     ],
     "external_dependencies": {"python": ['requests'], "bin": []},
     "data": [
         "security/ir.model.access.csv",
-        "security/saas_portal_demo.xml",
-        "views/templates.xml",
         "views/saas_portal_demo.xml",
-        "views/product.xml",
-        'views/saas_portal_demo_templates.xml',
-        "data/product.xml",
-        "data/ir_cron.xml",
-        "data/mail_template.xml",
-        "data/ir_actions.xml",
+        # Commented out as cron records are not ported to odoo12 yet
+        # "data/ir_cron.xml",
     ],
     "qweb": [
     ],

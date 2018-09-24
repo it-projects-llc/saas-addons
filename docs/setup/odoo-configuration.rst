@@ -10,7 +10,7 @@ dbfilter
 ``dbfilter`` in config file or ``--db-filter`` parameter in running command must be::
 
     ^%h$
-    
+
 db_name
 =======
 be sure, that you don't use ``db_name`` in config file and don't run odoo with ``-d`` (``--database``) parameter

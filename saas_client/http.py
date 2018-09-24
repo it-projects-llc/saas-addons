@@ -13,4 +13,3 @@ def check_security(self):
         if suspended == "1" and uid != odoo.SUPERUSER_ID:
             raise SuspendedDBException
     return check_security.super(self)
-

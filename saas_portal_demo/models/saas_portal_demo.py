@@ -299,15 +299,6 @@ class SaaSPortalHiddenDemoPlanModule(models.Model):
         'saas_portal.plan', string='Demo plan where the module intended to be installed', ondelete='cascade')
 
 
-class SaasPortalDemoPlan(models.Model):
-    _inherit = 'saas_portal.plan'
-
-    demo_plan_module_ids = fields.One2many('saas_portal.demo_plan_module', 'demo_plan_id',
-                                           help="The modules that should be in this demo plan", string='Modules')
-    demo_plan_hidden_module_ids = fields.One2many('saas_portal.hidden_demo_plan_module', 'demo_plan_id',
-                                                  help="The modules that should be in this demo plan", string='Modules')
-
-
 class SaasPortalDatabase(models.Model):
     _inherit = 'saas_portal.database'
 

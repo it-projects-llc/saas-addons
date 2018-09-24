@@ -21,7 +21,7 @@ odoo.saas_client = function(instance){
                     }
                 });
                 if (!self._ab_location_value) {
-                  return;  
+                  return;
                 }
                 _super.apply(self);
         });

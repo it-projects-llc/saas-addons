@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': 'SaaS System Administration',
     'summary': "System Administration Framework for SAAS Tools",
@@ -11,5 +10,5 @@
     'data': [
         'views/saas_portal_views.xml',
     ],
-    'installable': True,
+    'installable': False,
 }

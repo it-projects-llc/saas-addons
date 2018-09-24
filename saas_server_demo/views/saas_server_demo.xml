@@ -20,7 +20,7 @@
       <field name="name">saas_server.repository.tree</field>
       <field name="model">saas_server.repository</field>
       <field name="arch" type="xml">
-        <tree string="Repositories">
+        <tree>
           <field name="path"/>
         </tree>
       </field>

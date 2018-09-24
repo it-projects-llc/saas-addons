@@ -14,7 +14,8 @@
     'data': [
         'data/mail_template_data.xml',
         'data/plan_sequence.xml',
-        'data/cron.xml',
+        # Commented out as cron records are not ported to odoo12 yet
+        # 'data/cron.xml',
         'wizard/config_wizard.xml',
         'wizard/batch_delete.xml',
         'views/saas_portal.xml',

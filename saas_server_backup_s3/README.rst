@@ -1,7 +1,7 @@
 SaaS Server Backup S3
 =============================
 
-Installed on server and sends backup data to S3. 
+Installed on server and sends backup data to S3.
 
 To Use:
 -------

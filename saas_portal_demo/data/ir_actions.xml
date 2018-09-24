@@ -3,6 +3,6 @@
       <record id="action_open_my_instances" model="ir.actions.act_url">
           <field name="name">My Instances</field>
           <field name="target">self</field>
-	  <field name="url">/my/instances</field>
+      <field name="url">/my/instances</field>
       </record>
 </odoo>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        
+
         <record id="saas_portal_tag_client_view_form" model="ir.ui.view">
             <field name="name">saas_portal.tag_client.form</field>
             <field name="model">saas_portal.tag_client</field>
@@ -18,7 +18,7 @@
                 </form>
             </field>
         </record>
-        
+
         <act_window
             id="action_tag_client"
             name="Modify Tag"

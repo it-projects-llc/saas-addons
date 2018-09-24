@@ -2,3 +2,4 @@ e-commerce https://github.com/vauxoo-dev/e-commerce.git 11.0-migrate_sale_requir
 access-addons
 website-addons
 contract
+backend_theme https://github.com/Openworx/backend_theme.git

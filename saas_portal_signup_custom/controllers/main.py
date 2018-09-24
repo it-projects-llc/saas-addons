@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import openerp
 from openerp import SUPERUSER_ID
 from openerp.addons.web import http

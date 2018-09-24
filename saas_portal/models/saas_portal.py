@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from odoo import api, exceptions, fields, models
 from odoo.tools import scan_languages
 from odoo.tools.translate import _
-from odoo.addons.base.res.res_partner import _tz_get
+from odoo.addons.base.models.res_partner import _tz_get
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from odoo.addons.saas_base.exceptions import MaximumTrialDBException
@@ -54,7 +54,7 @@ class SaasPortalServer(models.Model):
     local_port = fields.Char(
         'Local port', help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
+        [('http', 'http'), ('https', 'https')], 'Local Scheme', default='http', required=True)
     host = fields.Char('Host', compute=_compute_host)
     odoo_version = fields.Char('Odoo version', readonly=True)
     password = fields.Char()
