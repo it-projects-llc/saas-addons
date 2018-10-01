@@ -7,3 +7,4 @@ The repository contains modules for master instance (old name: *SaaS Portal*). O
 * https://odoo-devops.readthedocs.io -- documentation for multi-server deployment
 * https://gitlab.com/itpp/saas-clusters -- modules for multi-server deployment
 * https://github.com/it-projects-llc/access-addons -- useful modules for client instances (*SaaS Client*)
+* https://github.com/it-projects-llc/odoo-saas-tools -- abandoned original repository
