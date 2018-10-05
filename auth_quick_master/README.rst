@@ -26,7 +26,7 @@ Base idea is similar to OAuth protocol.
   * ``build_user_id``
   * ``token``
 
-* Master odoo redirects User back to the build with new url: build-123.example.com/auth_quick/check-token?token=abcdf456789
+* Master odoo redirects User back to the build with new url: ``build-123.example.com/auth_quick/check-token?token=abcdf456789``
 * Build validate the token by sending direct request to Master odoo and initialize session if token is avalid
 
 Credits
