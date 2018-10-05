@@ -11,6 +11,7 @@ _logger = logging.getLogger(__name__)
 
 class Token(models.Model):
     _name = 'auth_quick_master.token'
+    _description = 'Authentication Tokens'
 
     user_id = fields.Many2one('res.users', 'Master User', default=lambda s: s.env.user.id)
     build = fields.Char('Build Reference')
