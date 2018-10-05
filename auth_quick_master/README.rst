@@ -16,16 +16,17 @@ How it works
 Base idea is similar to OAuth protocol.
 
 * User is authenticated in master odoo database (where this module is installed)
-* User opens url in the build (where ``auth_quick`` module is installed): build-123.example.com/quick-auth/login?login=admin (this module doesn't provider UI with such links)
+* User opens url in the build (where ``auth_quick`` module is installed): ``build-123.example.com/auth_quick/login?build_login=admin`` (authentication via ``?build_user_id=1`` is also supported). This module doesn't provider UI with such links and has to be implemented via another module depending on your needs.
 * Build redirects User back to master odoo with build reference
 * Master odoo creates record in model ``auth_quick_master.token`` with fields
 
   * ``user_id``
-  * ``login``
-  * ``token``
   * ``build``
+  * ``build_login``
+  * ``build_user_id``
+  * ``token``
 
-* Master odoo redirects User back to the build with new url: build-123.example.com/quick-auth/check-token?token=abcdf456789
+* Master odoo redirects User back to the build with new url: build-123.example.com/auth_quick/check-token?token=abcdf456789
 * Build validate the token by sending direct request to Master odoo and initialize session if token is avalid
 
 Credits

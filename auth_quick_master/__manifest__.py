@@ -17,19 +17,15 @@
     # "currency": "EUR",
 
     "depends": [
-        "{DEPENDENCY1}",
-        "{DEPENDENCY2}",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
-        "{FILE1}.xml",
-        "{FILE2}.xml",
+        "security/res_groups_data.xml",
+        "security/ir.model.access.csv",
     ],
     "demo": [
-        "demo/{DEMOFILE1}.xml",
     ],
     "qweb": [
-        "static/src/xml/{QWEBFILE1}.xml",
     ],
 
     "post_load": None,
