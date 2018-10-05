@@ -2,15 +2,19 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 import werkzeug
 import urllib.parse
+import logging
 
 from odoo import http
 from odoo.http import request
+
+_logger = logging.getLogger(__name__)
 
 
 class AuthQuickMaster(http.Controller):
 
     @http.route('/auth_quick_master/get-token', type="http", auth='user')
     def get_token(self, build, build_user_id, build_login, build_url):
+        _logger.debug('Request for token: build reference = %s, build_user_id = %s, build_login = %s, build_url = %s', build, build_user_id, build_login, build_url)
         token_obj = request.env['auth_quick_master.token'].create({
             'build': build,
             'build_login': build_login,
@@ -30,6 +34,7 @@ class AuthQuickMaster(http.Controller):
 
     @http.route('/auth_quick_master/check-token', type="json", auth='public')
     def check_token(self, token):
+        _logger.debug('Checking for token: %s', token)
         token_obj = request.env['auth_quick_master.token'].sudo().search([
             ('token', '=', token)
         ])
