@@ -15,8 +15,8 @@ Models overview
 
 * ``saas.template`` -- similar to ``saas_portal.plan`` in *odoo-saas-tools*, but covers only technical aspects (database creation) and not any sale/trial stuff. A single record can be used for multiple servers.
 * ``saas.operator`` -- similar to ``saas_portal.server`` in *odoo-saas-tools*. Credentials to create-destoroy, update, migrate, backup, etc. odoo instances. It doesn't need special odoo instance (database) in corresponding server and could work by sending requests, for example, to kubernetes.
-* ``saas.client`` -- similar to ``saas_portal.client`` in *odoo-saas-tools*
-* ``saas.log`` -- client instance history.
+* ``saas.db`` -- similar to ``saas_portal.client`` in *odoo-saas-tools*
+* ``saas.log`` -- saas history, e.g. database creation, updating, etc.
 
 
 Credits

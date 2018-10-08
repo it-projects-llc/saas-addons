@@ -17,8 +17,7 @@
     # "currency": "EUR",
 
     "depends": [
-        "{DEPENDENCY1}",
-        "{DEPENDENCY2}",
+        "auth_quick_master",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [

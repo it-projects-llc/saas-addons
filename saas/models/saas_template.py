@@ -15,13 +15,13 @@ class SAASTemplate(models.Model):
     template_post_hook = fields.Text(
         'Template Creation Hook',
         help='Python code to be executed once db is created and modules are installed')
-    operator_line_ids = fields.One2many(
+    operator_ids = fields.One2many(
         'saas.template.operator',
         'template_id')
 
 
 class SAASTemplateLine(models.Model):
-    _name = 'saas.template.line'
+    _name = 'saas.template.operator'
 
     template_id = fields.Many2one('saas.template')
     operator_id = fields.Many2one('saas.operator')
