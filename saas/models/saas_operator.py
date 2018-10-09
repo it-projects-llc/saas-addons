@@ -15,7 +15,8 @@ class SAASOperator(models.Model):
     port = fields.Char()
 
     @api.multi
-    def create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
+    def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
+        """Synchronous db creation"""
         for r in self:
             if r.type != 'local':
                 continue
@@ -28,7 +29,7 @@ class SAASOperator(models.Model):
                     db_name, demo, lang, user_password=password)
 
     @api.multi
-    def drop_db(self, db_name):
+    def _drop_db(self, db_name):
         for r in self:
             if r.type != 'local':
                 continue
