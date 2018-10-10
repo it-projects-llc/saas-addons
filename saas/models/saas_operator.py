@@ -13,6 +13,8 @@ class SAASOperator(models.Model):
     ], 'Type')
     host = fields.Char()
     port = fields.Char()
+    db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
+    db_name_template = fields.Char('DB Names', help='Avaialble variables: {db_id}')
 
     @api.multi
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
@@ -35,3 +37,13 @@ class SAASOperator(models.Model):
                 continue
 
             db.exp_drop(db_name)
+
+    def get_db_url(self, db):
+        # TODO: use mako for url templating
+        self.ensure_one()
+        return self.db_url.format(db_id=db.id, db_name=db.name)
+
+    def get_db_name(self, db):
+        # TODO: use mako for url templating
+        self.ensure_one()
+        return self.db_url.format(db_id=db.id)

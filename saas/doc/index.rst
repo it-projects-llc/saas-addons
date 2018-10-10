@@ -1,9 +1,14 @@
-===============
+===========
  SaaS Base
-===============
+===========
+
+Follow insturction of `Job Queue <https://github.com/OCA/queue/tree/12.0/queue_job>`__ module.
 
 Installation
 ============
+
+Follow instruction
+
 {Instruction about things to do before actual installation}
 
 * {OPTIONAL }`Activate longpolling <https://odoo-development.readthedocs.io/en/latest/admin/longpolling.html>`__ 
