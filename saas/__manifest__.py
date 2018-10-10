@@ -3,7 +3,7 @@
 {
     "name": """SaaS Base""",
     "summary": """Base module for master SaaS instance""",
-    "category": "Extra Tools",
+    "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
     "version": "12.0.1.0.0",
