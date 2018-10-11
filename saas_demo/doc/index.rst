@@ -41,6 +41,7 @@ SaaS Backend
 * Create or update an Operator:
 
   * **Repositories**
+    * **Repo URL**
     * **Branch**
     * **Scan for demo** -- if not, it's used only as dependency
 

@@ -19,6 +19,7 @@ def random_password(len=32):
 
 class SAASTemplate(models.Model):
     _name = 'saas.template'
+    _description = 'Database Template'
 
     name = fields.Char()
     template_demo = fields.Boolean('Install demo data', default=False)
@@ -44,6 +45,7 @@ class SAASTemplate(models.Model):
 
 class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'
+    _description = 'Database Operator'
 
     template_id = fields.Many2one('saas.template')
     operator_id = fields.Many2one('saas.operator')

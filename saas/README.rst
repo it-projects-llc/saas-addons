@@ -13,8 +13,16 @@ The module is similar to ``saas_portal`` in *odoo-saas-tools*.
 Models overview
 ===============
 
-* ``saas.template`` -- similar to ``saas_portal.plan`` in *odoo-saas-tools*, but covers only technical aspects (database creation) and not any sale/trial stuff. A single record can be used for multiple servers.
-* ``saas.operator`` -- similar to ``saas_portal.server`` in *odoo-saas-tools*. Credentials to create-destoroy, update, migrate, backup, etc. odoo instances. It doesn't need special odoo instance (database) in corresponding server and could work by sending requests, for example, to kubernetes.
+* ``saas.template`` -- similar to ``saas_portal.plan`` in *odoo-saas-tools*, but covers only technical aspects (database creation) and not any sale/trial stuff. A single record can be used for multiple servers (via ``saas.template.operator``.
+* ``saas.operator`` -- similar to ``saas_portal.server`` in *odoo-saas-tools*. Credentials to create-destroy, update, migrate, backup, etc. odoo instances. 
+
+  * It doesn't need special odoo instance (database, *SaaS Server* in terms of
+    *odoo-saas-tool* project) in corresponding server and could work by sending
+    requests, for example, to kubernetes.
+  * It's assumed that single operator has isolated postgresql (operators cannot
+    share same postgresql). Load balancing could be implemented inside operator,
+    not on *SaaS Master* level.
+
 * ``saas.db`` -- similar to ``saas_portal.client`` in *odoo-saas-tools*
 * ``saas.log`` -- saas history, e.g. database creation, updating, etc.
 

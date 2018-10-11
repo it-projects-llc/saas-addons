@@ -8,6 +8,22 @@
 
 One-click demo-instances with modules from your git repositories
 
+How it works
+============
+
+* 1 ``saas.operator`` record has 1 set of repositories (``saas.demo`` record).
+* In each repository only one branch is used.
+* 1 ``saas.template`` record may have many ``saas.template.operator``. The idea
+  is that we can rebuild template database on one operator, while there is
+  another one available to use.
+* ``saas.template`` records are generated automatically from ``saas.demo`` records
+
+Repository updating
+===================
+
+* Once in a night all ``saas.demo`` 's *Operators* are marked for updates
+* One by one *Operators* from ``saas.demo`` update repositories, destroy templates and start rebuilding templates.
+
 Credits
 =======
 
