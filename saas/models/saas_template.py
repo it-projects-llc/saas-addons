@@ -52,8 +52,8 @@ class SAASTemplateLine(models.Model):
     password = fields.Char('DB Password')
     db_name = fields.Char(required=True)
     db_id = fields.Many2one('saas.db', readonly=True)
-    creating = fields.Boolean()
     db_state = fields.Selection(related='db_id.state')
+    to_rebuild = fields.Boolean()
     state = fields.Selection([
         ('draft', 'Draft'),
         ('creating', 'Database Creating'),
@@ -63,7 +63,30 @@ class SAASTemplateLine(models.Model):
 
     ])
 
-    def prepare_template(self):
+    def preparing_template_next(self):
+        # TODO: This method is called by cron every few minutes
+        template_operators = self.search([('to_rebuild', '=', True)])
+        operators = template_operators.mapped('operator_id')
+
+        # filter out operators which already have template creating
+        def filter_free_operators(op):
+            states = op.template_operator_ids.mapped('state')
+            return all((s in ['draft', 'done'] for s in states))
+
+        operators = operators.filtered(filter_free_operators)
+        if not operators:
+            # it's not a time to start
+            return
+
+        for t_op in template_operators:
+            if t_op.operator_id not in operators:
+                continue
+            t_op._prepare_template()
+
+            # only one template per operator
+            operators -= t_op.operator_id
+
+    def _prepare_template(self):
         for r in self:
             # delete db is there is one
             r.db_id.drop_db()
@@ -88,20 +111,21 @@ class SAASTemplateLine(models.Model):
                 callback_obj=r,
                 callback_method='on_template_created')
 
-    def on_template_created(self):
+    def _on_template_created(self):
+        self.ensure_one()
         self.state = 'installing_modules'
-        self.with_delay().install_modules()
+        self.with_delay()._install_modules()
 
     @job
-    def install_modules(self):
+    def _install_modules(self):
         self.ensure_one()
         auth = self._rpc_auth()
         rpc_install_modules(auth, self.template_id.template_modules_domain)
         self.state = 'post_init'
-        self.with_delay().post_init.with_delay()
+        self.with_delay()._post_init.with_delay()
 
     @job
-    def post_init(self):
+    def _post_init(self):
         auth = self._rpc_auth()
         rpc_install_modules(auth, self.template_id.template_post_init)
         self.state = 'done'

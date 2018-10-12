@@ -42,6 +42,13 @@ class SAASOperator(models.Model):
             else:
                 r.update_repos_state = 'none'
 
+        updated_operators\
+            .mapped('template_operator_ids')\
+            .filtered(lambda r: r.state != 'draft')\
+            .write({
+                'to_rebuild': True,
+            })
+
         # update odoo source only when we have updates in other repositories.
         # Otherwise don't update it and don't rebuild templates
         updated_operators.update_odoo()

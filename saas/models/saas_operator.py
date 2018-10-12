@@ -15,6 +15,7 @@ class SAASOperator(models.Model):
     port = fields.Char()
     db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
     db_name_template = fields.Char('DB Names', help='Avaialble variables: {db_id}')
+    template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     @api.multi
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):

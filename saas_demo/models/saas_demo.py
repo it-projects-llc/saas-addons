@@ -25,7 +25,20 @@ class Demo(models.Model):
 
     def repos_updating_next(self):
         # TODO: This method is called by cron every few minutes
-        # TODO: start template rebuilding process
+
+        # Check for operators with finished rebuilding
+        rebuilding_operators = self.env['saas.operator'].search([
+            ('update_repos_state', '=', 'rebuilding'),
+        ])
+        for op in rebuilding_operators:
+            count = self.env['saas.template.operator'].search_count([
+                ('to_rebuild', '=', True),
+                ('operator_id', '=', op.id),
+            ])
+            if not count:
+                op.update_repos_state = 'none'
+
+        # Update repos in operators
         pending_operators = self.env['saas.operator'].search([
             ('demo_id', '!=', False),
             ('update_repos_state', '=', 'pending')
@@ -34,12 +47,12 @@ class Demo(models.Model):
             # nothing to do
             return
 
-        # filter our operators which demo already has processing operator
-        def op_filter(op):
+        # filter out operators which demo already has processing operator
+        def filter_free_operators(op):
             states = op.demo_id.operator_ids.mapped('update_repos_state')
             return all((s != 'processing' for s in states))
 
-        operators = pending_operators.filtered(op_filter)
+        operators = pending_operators.filtered(filter_free_operators)
         if not operators:
             # it's not a time to start
             return
