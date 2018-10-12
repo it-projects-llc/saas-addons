@@ -71,16 +71,21 @@ def repos_dir():
     return mkdir(d)
 
 
+def root_odoo_path():
+    path = os.path.abspath(os.path.expanduser(
+        os.path.expandvars(os.path.dirname(odoo.__file__))))
+    path = os.path.join(path, '../')
+    return path
+
+
 def update_addons_path(folder_of_folders, force=True):
     """
     :param list folder_of_folders: <folder_of_folders>/REPO/MODULE/__manifest__.py
     :param bool force: override existing addons
     """
     if force:
-        root_path = os.path.abspath(os.path.expanduser(
-            os.path.expandvars(os.path.dirname(odoo.__file__))))
-        base_addons = os.path.join(root_path, 'addons')
-        main_addons = os.path.abspath(os.path.join(root_path, '../addons'))
+        base_addons = os.path.join(root_odoo_path(), 'odoo/addons')
+        main_addons = os.path.abspath(os.path.join(root_odoo_path(), 'addons'))
         addons_path = [base_addons, main_addons]
     else:
         addons_path = odoo.conf.addons_paths

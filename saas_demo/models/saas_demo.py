@@ -16,11 +16,44 @@ class Demo(models.Model):
     template_ids = fields.One2many('saas.template', 'demo_id')
     repo_ids = fields.One2many('saas.demo.repo', 'demo_id')
 
-    def start_repos_updating(self):
+    def repos_updating_start(self):
+        # TODO: This method is called by cron once in a night
         self.search([]).mapped('operator_ids').write({
             'update_repos_state': 'pending',
         })
-        # TODO: start update process
+        self.repos_updating_next()
+
+    def repos_updating_next(self):
+        # TODO: This method is called by cron every few minutes
+        # TODO: start template rebuilding process
+        pending_operators = self.env['saas.operator'].search([
+            ('demo_id', '!=', False),
+            ('update_repos_state', '=', 'pending')
+        ])
+        if not pending_operators:
+            # nothing to do
+            return
+
+        # filter our operators which demo already has processing operator
+        def op_filter(op):
+            states = op.demo_id.operator_ids.mapped('update_repos_state')
+            return all((s != 'processing' for s in states))
+
+        operators = pending_operators.filtered(op_filter)
+        if not operators:
+            # it's not a time to start
+            return
+
+        operators.write({
+            'update_repos_state': 'processing',
+        })
+        # close transaction to make update_repos_state update visible
+        self.env.cr.commit()
+
+        operators.update_repos()
+
+        # repos_updating_next() will be called via cron
+        # we cannot use with_delay() because in case of local operators we restart server
 
 
 class Repo(models.Model):
