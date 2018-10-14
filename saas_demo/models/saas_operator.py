@@ -1,11 +1,9 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
-import os
 import logging
 
 from odoo import models, fields, api, service
-from ..os import repos_dir, update_repo, update_addons_path, root_odoo_path, git
+from ..os import repos_dir, update_addons_path, root_odoo_path, git
 
 _logger = logging.getLogger(__name__)
 
@@ -20,6 +18,7 @@ class SAASOperator(models.Model):
         ('updating', 'Updating Repositories'),
         ('rebuilding', 'Rebuilding Templates'),
     ])
+
     @api.multi
     def is_local(self):
         return any((r.type == 'local' for r in self))

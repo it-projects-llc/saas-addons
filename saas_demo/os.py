@@ -12,7 +12,7 @@ except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file, module_manifest
+from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file
 import odoo
 
 _logger = logging.getLogger(__name__)
@@ -64,6 +64,7 @@ def update_repo(path, repo_url, branch):
     git(path, ['checkout', 'origin/%s' % branch])
     commit = git(path, ['rev-parse', 'origin/%s' % branch])
     return commit
+
 
 # ODOO
 def repos_dir():

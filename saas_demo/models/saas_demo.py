@@ -1,6 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 import logging
 import os
 import os.path
@@ -9,7 +8,7 @@ import json
 from odoo import models, fields, api
 
 from odoo.addons.queue_job.job import job
-from ..os import repos_dir, update_repo, update_addons_path, root_odoo_path, git, get_manifests
+from ..os import repos_dir, update_repo, get_manifests
 
 _logger = logging.getLogger(__name__)
 
