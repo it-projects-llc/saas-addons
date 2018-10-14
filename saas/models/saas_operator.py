@@ -6,6 +6,7 @@ from odoo.service import db
 
 class SAASOperator(models.Model):
     _name = 'saas.operator'
+    _description = 'Database Operator'
 
     # list of types can be extended via selection_add
     type = fields.Selection([

@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 
 class Demo(models.Model):
     _name = 'saas.demo'
+    _description = 'Repos Set for Demo'
 
     name = fields.Char()
     operator_ids = fields.One2many('saas.operator', 'demo_id')
@@ -120,6 +121,7 @@ class Demo(models.Model):
 
 class Repo(models.Model):
     _name = 'saas.demo.repo'
+    _description = 'Repository for Demo'
     _rec_name = 'url'
 
     demo_id = fields.Many2one('saas.operator')

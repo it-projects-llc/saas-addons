@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 
 class SAASLog(models.Model):
     _name = 'saas.log'
+    _description = 'Database Event Log'
 
     type = fields.Selection([
         ('creation', 'DB is being created'),

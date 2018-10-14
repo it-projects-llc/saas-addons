@@ -47,7 +47,7 @@ class SAASTemplate(models.Model):
 
 class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'
-    _description = 'Database Operator'
+    _description = 'Template\'s Settings for Operator'
 
     template_id = fields.Many2one('saas.template')
     operator_id = fields.Many2one('saas.operator')

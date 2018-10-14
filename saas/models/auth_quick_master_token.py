@@ -4,7 +4,7 @@ from odoo import models, api
 
 
 class Token(models.Model):
-    _name = 'auth_quick_master.token'
+    _inherit = 'auth_quick_master.token'
 
     @api.model
     def create(self, vals):

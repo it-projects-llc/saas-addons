@@ -6,6 +6,7 @@ from odoo.addons.queue_job.job import job
 
 class SAASDB(models.Model):
     _name = 'saas.db'
+    _description = 'Odoo Database'
 
     name = fields.Char('Name', help='Technical Database name')
     operator_id = fields.Many2one('saas.operator')
