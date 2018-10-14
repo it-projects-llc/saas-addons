@@ -38,15 +38,4 @@
 
     "auto_install": False,
     "installable": True,
-
-    # "demo_title": "SaaS Base",
-    # "demo_addons": [
-    # ],
-    # "demo_addons_hidden": [
-    # ],
-    # "demo_url": "DEMO-URL",
-    # "demo_summary": "",
-    # "demo_images": [
-    #    "images/MAIN_IMAGE",
-    # ]
 }

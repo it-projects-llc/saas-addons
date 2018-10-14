@@ -17,19 +17,14 @@
     # "currency": "EUR",
 
     "depends": [
-        "{DEPENDENCY1}",
-        "{DEPENDENCY2}",
+        "saas",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
-        "{FILE1}.xml",
-        "{FILE2}.xml",
     ],
     "demo": [
-        "demo/{DEMOFILE1}.xml",
     ],
     "qweb": [
-        "static/src/xml/{QWEBFILE1}.xml",
     ],
 
     "post_load": None,
@@ -39,15 +34,4 @@
 
     "auto_install": False,
     "installable": True,
-
-    # "demo_title": "Quick Demo Databases",
-    # "demo_addons": [
-    # ],
-    # "demo_addons_hidden": [
-    # ],
-    # "demo_url": "DEMO-URL",
-    # "demo_summary": "One-click demo-instances with modules from your git repositories",
-    # "demo_images": [
-    #    "images/MAIN_IMAGE",
-    # ]
 }
