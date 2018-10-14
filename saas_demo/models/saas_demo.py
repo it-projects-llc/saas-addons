@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Demo(models.Model):
-    _inherit = 'saas.demo'
+    _name = 'saas.demo'
 
     name = fields.Char()
     operator_ids = fields.One2many('saas.operator', 'demo_id')
