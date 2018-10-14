@@ -12,6 +12,7 @@ except ImportError:
     import ConfigParser
 
 from odoo import tools
+from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file, module_manifest
 import odoo
 
 _logger = logging.getLogger(__name__)
@@ -53,7 +54,7 @@ def mkdir(d):
 def git(path, cmd):
     cmd = ['git', '-C', path] + cmd
     _logger.debug("git: %s", ' '.join(cmd))
-    return subprocess.check_output(cmd)
+    return subprocess.check_output(cmd).strip()
 
 
 def update_repo(path, repo_url, branch):
@@ -61,9 +62,8 @@ def update_repo(path, repo_url, branch):
         run(['git', 'clone', repo_url, path])
     git(path, ['fetch', 'origin'])
     git(path, ['checkout', 'origin/%s' % branch])
-    # TODO: return false when there is no updates
-    return True
-
+    commit = git(path, ['rev-parse', 'origin/%s' % branch])
+    return commit
 
 # ODOO
 def repos_dir():
@@ -110,3 +110,23 @@ def update_config(section, key, value):
     config_parser.set(section, key, value)
     with open(tools.config.rcfile, 'w') as configfile:
         config_parser.write(configfile)
+
+
+def get_manifests(path):
+
+    def is_really_module(name):
+        for mname in MANIFEST_NAMES:
+            if os.path.isfile(os.path.join(path, name, mname)):
+                return True
+
+    modules = [
+        it
+        for it in os.listdir(path)
+        if is_really_module(it)
+    ]
+    res = []
+    for mname in modules:
+        mod_path = os.path.join(path, mname)
+        info = load_information_from_description_file(mname, mod_path)
+        res[mname] = info
+    return info

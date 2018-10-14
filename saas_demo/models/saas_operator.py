@@ -81,10 +81,4 @@ class SAASOperator(models.Model):
         self.ensure_one()
         if self.type != 'local':
             return
-        local_root = repos_dir()
-        has_updates = False
-        for repo in self.repo_ids:
-            path = os.path.join(local_root, repo.name_escaped)
-            has_updates = update_repo(path, repo.url, repo.branch) or has_updates
-
-        return has_updates
+        return self.demo_id.repo_ids._local_update_repo()

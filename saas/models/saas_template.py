@@ -5,12 +5,14 @@ import string
 import logging
 
 from odoo import models, fields, api
-from odoo.tools.safe_eval import test_python_expr
+from odoo.tools.safe_eval import test_python_expr, safe_eval
 from odoo.exceptions import ValidationError
 from odoo.addons.queue_job.job import job
 from ..xmlrpc import rpc_auth, rpc_execute_kw, rpc_install_modules, rpc_code_eval
 
 _logger = logging.getLogger(__name__)
+
+MANDATORY_MODULES = ['auth_quick']
 
 
 def random_password(len=32):
@@ -120,7 +122,9 @@ class SAASTemplateLine(models.Model):
     def _install_modules(self):
         self.ensure_one()
         auth = self._rpc_auth()
-        rpc_install_modules(auth, self.template_id.template_modules_domain)
+        domain = safe_eval(self.template_id.template_modules_domain)
+        domain = ['|', ('name', 'in', MANDATORY_MODULES)] + domain
+        rpc_install_modules(auth, domain)
         self.state = 'post_init'
         self.with_delay()._post_init.with_delay()
 
