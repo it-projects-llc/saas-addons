@@ -19,9 +19,13 @@ Models overview
   * It doesn't need special odoo instance (database, *SaaS Server* in terms of
     *odoo-saas-tool* project) in corresponding server and could work by sending
     requests, for example, to kubernetes.
-  * It's assumed that single operator has isolated postgresql (operators cannot
-    share same postgresql). Load balancing could be implemented inside operator,
-    not on *SaaS Master* level.
+  * Single *operator* is only one set of modules at some versions. If you have a
+    server which is used for different versions of odoo or just module version,
+    then you need you to create ``saas.operator`` per each module set. Those
+    *operators* may use same credentials.
+  * Different *Operators* may have same postgresql scope. It's usefull in
+    staging when we apply a database for new versions of modules. On the other
+    hand, it force us to have unique database names across operators
 
 * ``saas.db`` -- similar to ``saas_portal.client`` in *odoo-saas-tools*
 * ``saas.log`` -- saas history, e.g. database creation, updating, etc.
