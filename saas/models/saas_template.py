@@ -8,7 +8,7 @@ from odoo import models, fields, api
 from odoo.tools.safe_eval import test_python_expr, safe_eval
 from odoo.exceptions import ValidationError
 from odoo.addons.queue_job.job import job
-from ..xmlrpc import rpc_auth, rpc_execute_kw, rpc_install_modules, rpc_code_eval
+from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 
 _logger = logging.getLogger(__name__)
 
@@ -131,7 +131,7 @@ class SAASTemplateLine(models.Model):
     @job
     def _post_init(self):
         auth = self._rpc_auth()
-        rpc_install_modules(auth, self.template_id.template_post_init)
+        rpc_code_eval(auth, self.template_id.template_post_init)
         self.state = 'done'
 
     def _rpc_auth(self):
