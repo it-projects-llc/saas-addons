@@ -49,8 +49,8 @@ class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'
     _description = 'Template\'s Settings for Operator'
 
-    template_id = fields.Many2one('saas.template')
-    operator_id = fields.Many2one('saas.operator')
+    template_id = fields.Many2one('saas.template', required=True)
+    operator_id = fields.Many2one('saas.operator', required=True)
     password = fields.Char('DB Password')
     db_name = fields.Char(required=True)
     db_id = fields.Many2one('saas.db', readonly=True)
