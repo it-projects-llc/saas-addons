@@ -37,10 +37,10 @@ class SAASTemplate(models.Model):
         'saas.template.operator',
         'template_id')
 
-    @api.constrains('code')
+    @api.constrains('template_post_init')
     def _check_python_code(self):
         for r in self.sudo():
-            msg = test_python_expr(expr=r.code.strip(), mode="exec")
+            msg = test_python_expr(expr=r.template_post_init.strip(), mode="exec")
             if msg:
                 raise ValidationError(msg)
 
