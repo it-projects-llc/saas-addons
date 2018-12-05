@@ -52,9 +52,9 @@ class SAASTemplateLine(models.Model):
     template_id = fields.Many2one('saas.template', required=True)
     operator_id = fields.Many2one('saas.operator', required=True)
     password = fields.Char('DB Password')
-    db_name = fields.Char(required=True)
-    db_id = fields.Many2one('saas.db', readonly=True)
-    db_state = fields.Selection(related='db_id.state')
+    operator_db_name = fields.Char(required=True)
+    operator_db_id = fields.Many2one('saas.db', readonly=True)
+    operator_db_state = fields.Selection(related='operator_db_id.state')
     to_rebuild = fields.Boolean()
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -91,11 +91,11 @@ class SAASTemplateLine(models.Model):
     def _prepare_template(self):
         for r in self:
             # delete db is there is one
-            r.db_id.drop_db()
-            if not r.db_id or r.operator_id != r.db_id.operator_id:
-                r.db_id = self.env['saas.db'].create({
-                    'name': r.db_name,
-                    'operator_id': r.operator_id,
+            r.operator_db_id.drop_db()
+            if not r.operator_db_id or r.operator_id != r.operator_db_id.operator_id:
+                r.operator_db_id = self.env['saas.db'].create({
+                    'name': r.operator_db_name,
+                    'operator_id': r.operator_id.id,
                     'type': 'template',
                 })
             password = random_password()
@@ -106,7 +106,7 @@ class SAASTemplateLine(models.Model):
                 'password': password,
             })
 
-            r.db_id.with_delay().create_db(
+            r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,
                 password,
@@ -136,9 +136,9 @@ class SAASTemplateLine(models.Model):
 
     def _rpc_auth(self):
         self.ensure_one()
-        url = self.db_id.get_url()
+        url = self.operator_db_id.get_url()
         return rpc_auth(
             url,
-            self.db_name,
+            self.operator_db_name,
             admin_username='admin',
             admin_password=self.password)
