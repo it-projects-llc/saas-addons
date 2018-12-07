@@ -18,6 +18,7 @@
 
     "depends": [
         "auth_quick_master",
+        "queue_job",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
