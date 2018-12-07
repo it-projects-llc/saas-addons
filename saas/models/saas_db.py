@@ -9,7 +9,7 @@ class SAASDB(models.Model):
     _description = 'Odoo Database'
 
     name = fields.Char('Name', help='Technical Database name')
-    operator_id = fields.Many2one('saas.operator')
+    operator_id = fields.Many2one('saas.operator', required=True)
     type = fields.Selection([
         ('template', 'Templated DB'),
         ('build', 'Normal Build'),
