@@ -105,7 +105,6 @@ class SAASTemplateLine(models.Model):
                 'state': 'creating',
                 'password': password,
             })
-
             r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,

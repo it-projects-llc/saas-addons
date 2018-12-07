@@ -1,5 +1,5 @@
 # Copyright 2018 Denis Mudarisov <https://it-projects.info/team/trojikman>
-# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 
 from odoo.tests.common import TransactionCase, tagged
@@ -32,4 +32,3 @@ class TestSaasTemplate(TransactionCase):
         self.assertTrue(self.saas_template_operator.operator_db_id.name)
         self.assertEqual(self.saas_template_operator.operator_db_id.name, 'test_db_name')
         self.assertIn('test_db_name', db.list_dbs())
-

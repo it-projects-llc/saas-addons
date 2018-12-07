@@ -1,5 +1,5 @@
 # Copyright 2018 Denis Mudarisov <https://it-projects.info/team/trojikman>
-# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """Tests for SaaS""",
     "summary": """Separate module for testing saas-addons modules""",
@@ -12,7 +12,7 @@
     "author": "IT-Projects LLC, Denis Mudarisov",
     "support": "apps@it-projects.info",
     "website": "https://it-projects.info/team/trojikman",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
 
