@@ -55,7 +55,7 @@ class SAASTemplateLine(models.Model):
     operator_db_name = fields.Char(required=True)
     operator_db_id = fields.Many2one('saas.db', readonly=True)
     operator_db_state = fields.Selection(related='operator_db_id.state')
-    to_rebuild = fields.Boolean()
+    to_rebuild = fields.Boolean(default=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('creating', 'Database Creating'),
@@ -63,7 +63,7 @@ class SAASTemplateLine(models.Model):
         ('post_init', 'Extra initialization'),
         ('done', 'Ready'),
 
-    ])
+    ], default='draft')
 
     def preparing_template_next(self):
         # TODO: This method is called by cron every few minutes
