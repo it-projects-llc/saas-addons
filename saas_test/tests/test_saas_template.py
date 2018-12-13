@@ -4,6 +4,8 @@
 
 from odoo.tests.common import TransactionCase, tagged
 from odoo.service import db
+from odoo.addons.queue_job.job import Job
+
 
 @tagged('post_install', 'at_install')
 class TestSaasTemplate(TransactionCase):
@@ -24,6 +26,9 @@ class TestSaasTemplate(TransactionCase):
 
     def test_template_operator(self):
         self.saas_template_operator.preparing_template_next()
+        job_id = self.env['queue.job'].search([('model_name', '=', 'saas.db')])
+        job = Job.load(self.env, job_id.uuid)
+        job.perform()
         # when preparing_template_next is called, a database is created. To check create_db separately,
         # we first need to delete the old one.
         self.saas_template_operator.operator_db_id.drop_db()
