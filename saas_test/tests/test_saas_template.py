@@ -27,9 +27,11 @@ class TestSaasTemplate(TransactionCase):
     def test_template_operator(self):
         self.saas_template_operator.preparing_template_next()
         job_id = self.env['queue.job'].search([('model_name', '=', 'saas.db')])
-        job = Job.load(self.env, job_id.uuid)
-        if job.state == ENQUEUED:
-            job.perform()
+        if job_id:
+            job = Job.load(self.env, job_id[-1].uuid)
+            if job.state == ENQUEUED:
+                job.perform()
+
         # when preparing_template_next is called, a database is created. To check create_db separately,
         # we first need to delete the old one.
         self.saas_template_operator.operator_db_id.drop_db()
