@@ -99,7 +99,7 @@ class SAASTemplateLine(models.Model):
                     'type': 'template',
                 })
             password = random_password()
-            self.env['saas.log'].log_db_creating(self)
+            self.env['saas.log'].log_db_creating(r.operator_db_id)
 
             r.write({
                 'state': 'creating',
