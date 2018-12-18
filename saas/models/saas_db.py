@@ -40,4 +40,4 @@ class SAASDB(models.Model):
 
     def get_url(self):
         self.ensure_one()
-        return self.operator_id.get_build_url(self)
+        return self.operator_id.get_db_url(self)

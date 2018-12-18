@@ -110,7 +110,7 @@ class SAASTemplateLine(models.Model):
                 r.template_id.template_demo,
                 password,
                 callback_obj=r,
-                callback_method='on_template_created')
+                callback_method='_on_template_created')
 
     def _on_template_created(self):
         self.ensure_one()
