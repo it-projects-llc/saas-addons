@@ -42,6 +42,14 @@ class TestSaasTemplate(TransactionCase):
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
             return self.assertTrue(getattr(env[model_name], 'search')(search_domain))
 
+    def assert_no_error_in_db(self, dbname):
+        # In order for the following tests to work correctly, you need to run odoo with parameters:
+        # --log-db={db name} --log-db-level=info
+        template_db_log = self.env['ir.logging'].search([('dbname', '=', dbname)])
+        if template_db_log:
+            for l in template_db_log:
+                self.assertNotIn(l.level, ['ERROR', 'WARNING'], 'Database creation was not correct')
+
     def setUp(self):
         super(TestSaasTemplate, self).setUp()
         self.saas_template = self.env['saas.template'].create({
@@ -73,11 +81,11 @@ class TestSaasTemplate(TransactionCase):
         self.assertTrue(self.saas_template_operator.operator_db_id.name)
         self.assertEqual(self.saas_template_operator.operator_db_id.name, DB_TEMPLATE)
         self.assertIn(DB_TEMPLATE, db.list_dbs())
+        self.assert_no_error_in_db(DB_TEMPLATE)
 
         # Check that module from template_modules_domain is installed
         self.assert_modules_is_installed(DB_TEMPLATE, MODULES)
         self.assert_record_is_created(DB_TEMPLATE, 'mail.message', [('subject', '=', TEST_SUBJECT)])
 
-        # TODO: check that there were no errors when creating the database
-
-        self.saas_template_operator.create_db()
+        self.saas_template_operator.create_db(DB_INSTANCE)
+        self.assert_no_error_in_db(DB_INSTANCE)
