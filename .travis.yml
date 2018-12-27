@@ -22,7 +22,7 @@ addons:
 
 env:
   global:
-  - SERVER_OPTIONS="--log-db={db-name-where-tests-are-run}"
+  - SERVER_OPTIONS="--log-db={openerp_test}"
   - VERSION="master" TESTS="0" LINT_CHECK="0" TRANSIFEX="0" UNIT_TEST="0"
   - PYLINT_ODOO_JSLINTRC="/home/travis/maintainer-quality-tools/travis/cfg/.jslintrc"
   - TRANSIFEX_USER='i18n-bot@it-projects.info'
