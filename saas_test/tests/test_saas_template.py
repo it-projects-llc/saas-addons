@@ -32,23 +32,23 @@ class TestSaasTemplate(TransactionCase):
         odoo.registry(db_name).check_signaling()
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            return self.assertTrue(getattr(env['ir.module.module'],'search')
-                                       ([('name', '=', module_name), ('state', '=', 'installed')]))
+            return self.assertTrue(
+                env['ir.module.module'].search([('name', '=', module_name), ('state', '=', 'installed')])
+            )
 
     def assert_record_is_created(self, db_name, model_name, search_domain):
         db = odoo.sql_db.db_connect(db_name)
         odoo.registry(db_name).check_signaling()
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            return self.assertTrue(getattr(env[model_name], 'search')(search_domain))
+            return self.assertTrue(env[model_name].search(search_domain))
 
     def assert_no_error_in_db(self, dbname):
-        # In order for the following tests to work correctly, you need to run odoo with parameters:
-        # --log-db={db-name-where-tests-are-run} --log-db-level=info
-        template_db_log = self.env['ir.logging'].search([('dbname', '=', dbname)])
-        if template_db_log:
-            for l in template_db_log:
-                self.assertNotIn(l.level, ['ERROR', 'WARNING'], 'Database creation was not correct')
+        # In order for the following tests to work correctly, you need to run odoo with parameter:
+        # --log-db={db-name-where-tests-are-run}
+        template_db_log = self.env['ir.logging'].search([('dbname', '=', dbname), ('level', '=', 'WARNING')])
+        self.assertFalse(template_db_log)
+
 
     def setUp(self):
         super(TestSaasTemplate, self).setUp()
