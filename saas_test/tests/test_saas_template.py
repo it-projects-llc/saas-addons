@@ -44,7 +44,7 @@ class TestSaasTemplate(TransactionCase):
 
     def assert_no_error_in_db(self, dbname):
         # In order for the following tests to work correctly, you need to run odoo with parameters:
-        # --log-db={db name} --log-db-level=info
+        # --log-db={db-name-where-tests-are-run} --log-db-level=info
         template_db_log = self.env['ir.logging'].search([('dbname', '=', dbname)])
         if template_db_log:
             for l in template_db_log:
