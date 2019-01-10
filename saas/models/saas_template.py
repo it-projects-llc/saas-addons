@@ -141,3 +141,23 @@ class SAASTemplateLine(models.Model):
             self.operator_db_name,
             admin_username='admin',
             admin_password=self.password)
+
+    # FIXME: method needs debug and refactor, for example there can be more checks,
+    #  but now tests cannot be reached where this method is called
+    @api.multi
+    def create_db(self, template_db_name, db_name):
+        self.ensure_one()
+        build = self.env['saas.db'].create({
+            'name': db_name,
+            'operator_id': self.operator_id.id,
+            'type': 'build',
+        })
+
+        self.env['saas.log'].log_db_creating(self.operator_db_id)
+
+        build.with_delay().create_db(
+            template_db_name,
+            self.template_id.template_demo,
+            self.password,
+        )
+
