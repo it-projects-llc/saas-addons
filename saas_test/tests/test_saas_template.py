@@ -46,7 +46,10 @@ class TestSaasTemplate(TransactionCase):
     def assert_no_error_in_db(self, dbname):
         # In order for the following tests to work correctly, you need to run odoo with parameter:
         # --log-db={db-name-where-tests-are-run}
-        template_db_log = self.env['ir.logging'].search([('dbname', '=', dbname), ('level', '=', 'WARNING')])
+        template_db_log = self.env['ir.logging'].search([
+            ('dbname', '=', dbname),
+            ('level', 'in', ['WARNING', 'ERROR', 'CRITICAL'])
+        ])
         self.assertFalse(template_db_log)
 
 
@@ -59,7 +62,7 @@ class TestSaasTemplate(TransactionCase):
 
         self.saas_operator = self.env['saas.operator'].create({
             'type': 'local',
-            'db_url_template': '{db_name}.{db_id}.test',
+            'db_url_template': 'http://{db_name}.{db_id}.test',
         })
         self.saas_template_operator = self.env['saas.template.operator'].create({
             'template_id': self.saas_template.id,
@@ -87,5 +90,7 @@ class TestSaasTemplate(TransactionCase):
         self.assert_modules_is_installed(DB_TEMPLATE, MODULES)
         self.assert_record_is_created(DB_TEMPLATE, 'mail.message', [('subject', '=', TEST_SUBJECT)])
 
+        # Check that database instance created correctly
         self.saas_template_operator.create_db(DB_INSTANCE)
+        self.assertIn(DB_INSTANCE, db.list_dbs())
         self.assert_no_error_in_db(DB_INSTANCE)
