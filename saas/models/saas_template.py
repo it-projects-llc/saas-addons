@@ -54,8 +54,8 @@ class SAASTemplateLine(models.Model):
     password = fields.Char('DB Password')
     operator_db_name = fields.Char(required=True)
     operator_db_id = fields.Many2one('saas.db', readonly=True)
-    operator_db_state = fields.Selection(related='operator_db_id.state')
-    to_rebuild = fields.Boolean()
+    operator_db_state = fields.Selection(related='operator_db_id.state', string='Database operator state')
+    to_rebuild = fields.Boolean(default=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('creating', 'Database Creating'),
@@ -63,7 +63,7 @@ class SAASTemplateLine(models.Model):
         ('post_init', 'Extra initialization'),
         ('done', 'Ready'),
 
-    ])
+    ], default='draft')
 
     def preparing_template_next(self):
         # TODO: This method is called by cron every few minutes
@@ -99,7 +99,7 @@ class SAASTemplateLine(models.Model):
                     'type': 'template',
                 })
             password = random_password()
-            self.env['saas.log'].log_db_creating(self)
+            self.env['saas.log'].log_db_creating(r.operator_db_id)
 
             r.write({
                 'state': 'creating',
@@ -110,7 +110,7 @@ class SAASTemplateLine(models.Model):
                 r.template_id.template_demo,
                 password,
                 callback_obj=r,
-                callback_method='on_template_created')
+                callback_method='_on_template_created')
 
     def _on_template_created(self):
         self.ensure_one()
@@ -141,3 +141,22 @@ class SAASTemplateLine(models.Model):
             self.operator_db_name,
             admin_username='admin',
             admin_password=self.password)
+
+    # FIXME: method needs debug and refactor, for example there can be more checks,
+    #  but now tests cannot be reached where this method is called
+    @api.multi
+    def create_db(self, db_name):
+        self.ensure_one()
+        build = self.env['saas.db'].create({
+            'name': db_name,
+            'operator_id': self.operator_id.id,
+            'type': 'build',
+        })
+
+        self.env['saas.log'].log_db_creating(build, self.operator_db_id)
+
+        build.with_delay().create_db(
+            self.operator_db_name,
+            self.template_id.template_demo,
+            self.password,
+        )
