@@ -52,7 +52,6 @@ class TestSaasTemplate(TransactionCase):
         ])
         self.assertFalse(template_db_log)
 
-
     def setUp(self):
         super(TestSaasTemplate, self).setUp()
         self.saas_template = self.env['saas.template'].create({
@@ -92,5 +91,6 @@ class TestSaasTemplate(TransactionCase):
 
         # Check that database instance created correctly
         self.saas_template_operator.create_db(DB_INSTANCE)
+        self.perform_last_job('saas.template.operator', 'create_db')
         self.assertIn(DB_INSTANCE, db.list_dbs())
         self.assert_no_error_in_db(DB_INSTANCE)

@@ -54,7 +54,7 @@ class SAASTemplateLine(models.Model):
     password = fields.Char('DB Password')
     operator_db_name = fields.Char(required=True)
     operator_db_id = fields.Many2one('saas.db', readonly=True)
-    operator_db_state = fields.Selection(related='operator_db_id.state')
+    operator_db_state = fields.Selection(related='operator_db_id.state', string='Database operator state')
     to_rebuild = fields.Boolean(default=True)
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -145,7 +145,7 @@ class SAASTemplateLine(models.Model):
     # FIXME: method needs debug and refactor, for example there can be more checks,
     #  but now tests cannot be reached where this method is called
     @api.multi
-    def create_db(self, template_db_name, db_name):
+    def create_db(self, db_name):
         self.ensure_one()
         build = self.env['saas.db'].create({
             'name': db_name,
@@ -153,11 +153,10 @@ class SAASTemplateLine(models.Model):
             'type': 'build',
         })
 
-        self.env['saas.log'].log_db_creating(self.operator_db_id)
+        self.env['saas.log'].log_db_creating(build, self.operator_db_id)
 
         build.with_delay().create_db(
-            template_db_name,
+            self.operator_db_name,
             self.template_id.template_demo,
             self.password,
         )
-
