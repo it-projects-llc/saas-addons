@@ -34,7 +34,6 @@ class TestSaasTemplate(TransactionCase):
         modules = safe_eval(modules)
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            installed_modules = env['ir.module.module'].search([('state', '=', 'installed')])
             for module in modules:
                 self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
 
