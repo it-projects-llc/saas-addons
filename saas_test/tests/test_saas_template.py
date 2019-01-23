@@ -7,10 +7,11 @@ from odoo import SUPERUSER_ID
 from odoo.tests.common import TransactionCase, tagged
 from odoo.service import db
 from odoo.addons.queue_job.job import Job, ENQUEUED, PENDING
+from odoo.tools.safe_eval import safe_eval
 
 DB_TEMPLATE = 'db_template'
 DB_INSTANCE = 'db_instance'
-MODULES = 'mail'
+MODULES = '[\'mail\']'
 TEST_SUBJECT = 'Dummy subject name to test that code is applied'
 
 
@@ -27,14 +28,14 @@ class TestSaasTemplate(TransactionCase):
             if job.state == ENQUEUED or job.state == PENDING:
                 job.perform()
 
-    def assert_modules_is_installed(self, db_name, module_name):
+    def assert_modules_is_installed(self, db_name, modules):
         db = odoo.sql_db.db_connect(db_name)
         odoo.registry(db_name).check_signaling()
+        modules = safe_eval(modules)
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            return self.assertTrue(
-                env['ir.module.module'].search([('name', '=', module_name), ('state', '=', 'installed')])
-            )
+            for module in modules:
+                self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
 
     def assert_record_is_created(self, db_name, model_name, search_domain):
         db = odoo.sql_db.db_connect(db_name)
@@ -56,12 +57,12 @@ class TestSaasTemplate(TransactionCase):
         super(TestSaasTemplate, self).setUp()
         self.saas_template = self.env['saas.template'].create({
             'template_modules_domain': MODULES,
-            'template_post_init': 'self.env[\'mail.message\'].create({\'subject\': \'' + TEST_SUBJECT + '\', })',
+            'template_post_init': 'action = env[\'mail.message\'].create({\'subject\': \'' + TEST_SUBJECT + '\', })',
         })
 
         self.saas_operator = self.env['saas.operator'].create({
             'type': 'local',
-            'db_url_template': 'http://{db_name}.{db_id}.test',
+            'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
         })
         self.saas_template_operator = self.env['saas.template.operator'].create({
             'template_id': self.saas_template.id,
@@ -78,6 +79,7 @@ class TestSaasTemplate(TransactionCase):
         self.perform_last_job('saas.db', 'create_db')
         self.perform_last_job('saas.template.operator', '_on_template_created')
         self.perform_last_job('saas.template.operator', '_install_modules')
+        self.perform_last_job('saas.template.operator', '_post_init')
 
         # Tests that template db created correctly
         self.assertTrue(self.saas_template_operator.operator_db_id.name)
@@ -90,7 +92,10 @@ class TestSaasTemplate(TransactionCase):
         self.assert_record_is_created(DB_TEMPLATE, 'mail.message', [('subject', '=', TEST_SUBJECT)])
 
         # Check that database instance created correctly
+        if DB_INSTANCE in db.list_dbs():
+            db.exp_drop(DB_INSTANCE)
         self.saas_template_operator.create_db(DB_INSTANCE)
         self.perform_last_job('saas.template.operator', 'create_db')
+        self.perform_last_job('saas.db', 'create_db')
         self.assertIn(DB_INSTANCE, db.list_dbs())
         self.assert_no_error_in_db(DB_INSTANCE)

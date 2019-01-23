@@ -1,6 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields, api
+from odoo import models, fields, api, tools
 from odoo.service import db
 
 
@@ -21,6 +21,9 @@ class SAASOperator(models.Model):
     @api.multi
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
         """Synchronous db creation"""
+        # to avoid installing extra modules we need this condition
+        if tools.config['init']:
+            tools.config['init'] = {}
         for r in self:
             if r.type != 'local':
                 continue

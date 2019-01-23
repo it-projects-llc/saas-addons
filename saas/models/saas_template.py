@@ -4,7 +4,7 @@ import random
 import string
 import logging
 
-from odoo import models, fields, api
+from odoo import models, fields, api, registry, SUPERUSER_ID, sql_db
 from odoo.tools.safe_eval import test_python_expr, safe_eval
 from odoo.exceptions import ValidationError
 from odoo.addons.queue_job.job import job
@@ -120,18 +120,42 @@ class SAASTemplateLine(models.Model):
     @job
     def _install_modules(self):
         self.ensure_one()
-        auth = self._rpc_auth()
         domain = safe_eval(self.template_id.template_modules_domain)
-        domain = ['|', ('name', 'in', MANDATORY_MODULES)] + domain
-        rpc_install_modules(auth, domain)
+        domain = [('name', 'in', MANDATORY_MODULES + domain)]
+        if self.operator_id.type == 'local':
+            db = sql_db.db_connect(self.operator_db_name)
+            registry(self.operator_db_name).check_signaling()
+            with api.Environment.manage(), db.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
+                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + domain)
+                module_ids.button_immediate_install()
+        else:
+            auth = self._rpc_auth()
+            rpc_install_modules(auth, domain)
         self.state = 'post_init'
-        self.with_delay()._post_init.with_delay()
+        self.with_delay()._post_init()
 
     @job
     def _post_init(self):
-        auth = self._rpc_auth()
-        rpc_code_eval(auth, self.template_id.template_post_init)
-        self.state = 'done'
+        if self.operator_id.type == 'local':
+            db = sql_db.db_connect(self.operator_db_name)
+            registry(self.operator_db_name).check_signaling()
+            with api.Environment.manage(), db.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
+                # it's not really important which model to use
+                model_id = env['ir.model'].search([('model', '=', 'res.users')])[0].id
+                action = env['ir.actions.server'].create({
+                    'name': 'Local Code Eval',
+                    'state': 'code',
+                    'model_id': model_id,
+                    'code': self.template_id.template_post_init
+                })
+                action.run()
+                self.state = 'done'
+        else:
+            auth = self._rpc_auth()
+            rpc_code_eval(auth, self.template_id.template_post_init)
+            self.state = 'done'
 
     def _rpc_auth(self):
         self.ensure_one()
