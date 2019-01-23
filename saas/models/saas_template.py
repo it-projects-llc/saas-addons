@@ -4,15 +4,10 @@ import random
 import string
 import logging
 
-from odoo import models, fields, api
+from odoo import models, fields, api, registry, SUPERUSER_ID, sql_db
 from odoo.tools.safe_eval import test_python_expr, safe_eval
 from odoo.exceptions import ValidationError
 from odoo.addons.queue_job.job import job
-# Test imports
-from odoo import registry
-from odoo import SUPERUSER_ID
-from odoo import sql_db
-# End test imports
 from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 
 _logger = logging.getLogger(__name__)
