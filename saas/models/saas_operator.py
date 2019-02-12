@@ -22,7 +22,7 @@ class SAASOperator(models.Model):
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
         """Synchronous db creation"""
         # to avoid installing extra modules we need this condition
-        if tools.config['init']:
+        if tools.config['init'] and self.type == 'local':
             tools.config['init'] = {}
         for r in self:
             if r.type != 'local':
