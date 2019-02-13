@@ -13,8 +13,7 @@ from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 _logger = logging.getLogger(__name__)
 
 MANDATORY_MODULES = ['auth_quick']
-# TODO: mandatory post init auth_quick.master -- url to master server.
-#                           auth_quick.build -- reference for this database
+
 
 def random_password(len=32):
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len))

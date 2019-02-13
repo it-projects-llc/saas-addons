@@ -96,7 +96,7 @@ class TestSaasTemplate(TransactionCase):
             db.exp_drop(DB_INSTANCE)
         self.saas_template_operator.create_db(DB_INSTANCE)
         self.perform_last_job('saas.db', 'create_db')
-        self.perform_last_job('saas.db', 'built_post_init')
+        self.perform_last_job('saas.db', 'auth_built_post_init')
         self.assertIn(DB_INSTANCE, db.list_dbs())
         self.assert_no_error_in_db(DB_INSTANCE)
         self.assert_record_is_created(DB_INSTANCE, 'ir.config_parameter', [('key', '=', 'auth_quick.master')])
