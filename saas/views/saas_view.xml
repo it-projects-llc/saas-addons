@@ -1,0 +1,53 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <record id='saas_view_tree' model='ir.ui.view'>
+        <field name="name">saas.tree</field>
+        <field name="model">saas.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_template_form_view" model="ir.ui.view">
+        <field name="name">saas.template</field>
+        <field name="model">saas.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_create_build" type="object" string="Create Build" icon="fa-building"/>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="template_demo"/>
+                        <field name="template_modules_domain"/>
+                        <field name="template_post_init"/>
+                        <field name="operator_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model='ir.actions.act_window' id="saas_template_action" >
+        <field name="name">SaaS template</field>
+        <field name="res_model">saas.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu items-->
+    <menuitem name="SaaS"
+              id="saas_main_menu"/>
+
+    <menuitem name="SaaS Template"
+              parent="saas_main_menu"
+              id="saas_main_menu_test"
+              sequence="3"
+              action="saas_model_test_action"/>
+
+</odoo>

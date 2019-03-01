@@ -45,6 +45,23 @@ class SAASTemplate(models.Model):
                 raise ValidationError(msg)
 
 
+    @api.multi
+    def action_create_build(self):
+        self.ensure_one()
+        res = self.env['create.build.by.template'].create({})
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Create Build',
+            'res_model': 'create.build.by.template',
+            'src_model': 'saas.template',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_id': res.id,
+            'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
+            'target': 'new',
+            'context': {'template_id': self.id},
+        }
+
 class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'
     _description = 'Template\'s Settings for Operator'
@@ -166,8 +183,6 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
-    # FIXME: method needs debug and refactor, for example there can be more checks,
-    #  but now tests cannot be reached where this method is called
     @api.multi
     def create_db(self, db_name):
         self.ensure_one()
