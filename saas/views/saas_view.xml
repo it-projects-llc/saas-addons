@@ -46,8 +46,8 @@
 
     <menuitem name="SaaS Template"
               parent="saas_main_menu"
-              id="saas_main_menu_test"
+              id="saas_main_menu_item"
               sequence="3"
-              action="saas_model_test_action"/>
+              action="saas_template_action"/>
 
 </odoo>

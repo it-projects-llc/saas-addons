@@ -8,12 +8,11 @@ from odoo import api, models, fields
 class CreateBuildByTemplate(models.TransientModel):
     _name = 'create.build.by.template'
     _description = 'Wizard to create build by template'
-    template_operator_id = fields.Many2one('saas.template.operator', 'Operator', required=True)
+    template_operator_id = fields.Many2one('saas.template.operator', 'Operator')
     choose_by_random = fields.Boolean(string='Random operator')
     build_post_init_ids = fields.One2many('build.post.init.line', 'build_creation_id')
-    build_name = fields.Char(string="Build name", required=True)
+    build_name = fields.Char(string="Build name")
 
-    @api.constrains('build_name', 'template_operator_id')
     def create_build(self):
         self.template_operator_id.sudo().create_db(self.build_name)
         build = self.env['saas.db'].search([('name', '=', self.build_name)])
@@ -21,6 +20,7 @@ class CreateBuildByTemplate(models.TransientModel):
             'type': 'ir.actions.act_window',
             'name': 'SaaS DB',
             'res_id': build.id,
+            'view_mode': 'form',
         }
 
 
