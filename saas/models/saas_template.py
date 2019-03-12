@@ -44,7 +44,6 @@ class SAASTemplate(models.Model):
             if msg:
                 raise ValidationError(msg)
 
-
     @api.multi
     def action_create_build(self):
         self.ensure_one()
@@ -61,6 +60,7 @@ class SAASTemplate(models.Model):
             'target': 'new',
             'context': {'template_id': self.id},
         }
+
 
 class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'

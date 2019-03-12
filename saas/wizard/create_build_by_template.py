@@ -23,7 +23,6 @@ class CreateBuildByTemplate(models.TransientModel):
             'view_mode': 'form',
         }
 
-
     @api.onchange('choose_by_random')
     def change_operator(self):
         template_id = self.env.context.get('template_id')

@@ -6,7 +6,6 @@ import odoo
 from odoo import SUPERUSER_ID
 from odoo.tests.common import TransactionCase, tagged
 from odoo.service import db
-from odoo.addons.queue_job.job import Job, ENQUEUED, PENDING
 from odoo.tools.safe_eval import safe_eval
 
 DB_TEMPLATE = 'db_template'
@@ -39,7 +38,8 @@ class TestSaasTemplate(TransactionCase):
         # --log-db={db-name-where-tests-are-run}
         template_db_log = self.env['ir.logging'].search([
             ('dbname', '=', dbname),
-            ('level', 'in', ['WARNING', 'ERROR', 'CRITICAL'])
+            ('level', 'in', ['WARNING', 'ERROR', 'CRITICAL']),
+            ('message', 'not like', 'test_queue_job_no_delay'),
         ])
         self.assertFalse(template_db_log)
 
