@@ -137,7 +137,12 @@ class SAASTemplateLine(models.Model):
     @job
     def _install_modules(self):
         self.ensure_one()
-        domain = safe_eval(self.template_id.template_modules_domain)
+        # FIXME: for some unknown reason, if you leave the field template_modules_domain empty,
+        #  then the default value is not set for it, so we need this check
+        if self.template_id.template_modules_domain:
+            domain = safe_eval(self.template_id.template_modules_domain)
+        else:
+            domain = []
         domain = [('name', 'in', MANDATORY_MODULES + domain)]
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
