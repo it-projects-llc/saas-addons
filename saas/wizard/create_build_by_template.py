@@ -19,8 +19,10 @@ class CreateBuildByTemplate(models.TransientModel):
         return {
             'type': 'ir.actions.act_window',
             'name': 'SaaS DB',
+            'res_model': 'saas.db',
             'res_id': build.id,
             'view_mode': 'form',
+            'target': 'main'
         }
 
     @api.onchange('choose_by_random')
