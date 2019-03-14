@@ -1,7 +1,9 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields, api, tools
+from odoo import models, fields, api, tools, registry, SUPERUSER_ID, sql_db
 from odoo.service import db
+from odoo.addons.queue_job.job import job
 
 
 class SAASOperator(models.Model):
@@ -52,3 +54,24 @@ class SAASOperator(models.Model):
         # TODO: use mako for url templating
         self.ensure_one()
         return self.db_url_template.format(db_id=db.id)
+
+    @api.multi
+    @job
+    def auth_build_post_init(self, master_url=None, build_url=None):
+        # TODO: add custom build post init handling
+        if self.type == 'local':
+            if not master_url:
+                master_url = self.env['ir.config_parameter'].get_param('web.base.url')
+
+            if not build_url:
+                build_url = self.get_url()
+
+            db = sql_db.db_connect(self.name) #
+            registry(self.name).check_signaling()
+            with api.Environment.manage(), db.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
+                # Mandatory post init
+                env['ir.config_parameter'].create([
+                    {'key': 'auth_quick.master', 'value': master_url},
+                    {'key': 'auth_quick.build', 'value': build_url}
+                ])

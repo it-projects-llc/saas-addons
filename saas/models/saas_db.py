@@ -41,18 +41,3 @@ class SAASDB(models.Model):
     def get_url(self):
         self.ensure_one()
         return self.operator_id.get_db_url(self)
-
-    @api.multi
-    @job
-    def auth_built_post_init(self):
-        self.ensure_one()
-        # fixme: not sure about method of getting master_url
-        master_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        db = sql_db.db_connect(self.name)
-        registry(self.name).check_signaling()
-        with api.Environment.manage(), db.cursor() as cr:
-            env = api.Environment(cr, SUPERUSER_ID, {})
-            env['ir.config_parameter'].create([
-                {'key': 'auth_quick.master', 'value': master_url},
-                {'key': 'auth_quick.build', 'value': self.get_url()}
-            ])

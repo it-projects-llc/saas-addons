@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import random
 import string
@@ -204,4 +205,4 @@ class SAASTemplateLine(models.Model):
             self.template_id.template_demo,
             self.password,
         )
-        build.with_delay().auth_built_post_init()
+        build.operator_id.with_delay().auth_build_post_init()
