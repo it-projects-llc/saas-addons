@@ -190,7 +190,7 @@ class SAASTemplateLine(models.Model):
             admin_password=self.password)
 
     @api.multi
-    def create_db(self, db_name):
+    def create_db(self, db_name, post_init=None):
         self.ensure_one()
         build = self.env['saas.db'].create({
             'name': db_name,
@@ -205,4 +205,6 @@ class SAASTemplateLine(models.Model):
             self.template_id.template_demo,
             self.password,
         )
-        build.operator_id.with_delay().auth_build_post_init()
+        self.operator_id.with_delay().build_post_init(build, post_init or [])
+
+        return build

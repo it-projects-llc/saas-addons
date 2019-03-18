@@ -55,23 +55,32 @@ class SAASOperator(models.Model):
         self.ensure_one()
         return self.db_url_template.format(db_id=db.id)
 
-    @api.multi
-    @job
-    def auth_build_post_init(self, master_url=None, build_url=None):
-        # TODO: add custom build post init handling
+    def get_auth_urls(self, db):
+        self.ensure_one()
         if self.type == 'local':
-            if not master_url:
-                master_url = self.env['ir.config_parameter'].get_param('web.base.url')
+            master_url = self.env['ir.config_parameter'].get_param('web.base.url')
+            build_url = self.get_db_url(db)
+        return master_url, build_url
 
-            if not build_url:
-                build_url = self.get_url()
-
-            db = sql_db.db_connect(self.name) #
-            registry(self.name).check_signaling()
+    def build_execute_kw(self, build, code):
+        if self.type == 'local':
+            db = sql_db.db_connect(build.name)
+            registry(build.name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
-                # Mandatory post init
-                env['ir.config_parameter'].create([
-                    {'key': 'auth_quick.master', 'value': master_url},
-                    {'key': 'auth_quick.build', 'value': build_url}
-                ])
+                action = env['ir.actions.server'].create({
+                    'name': 'Local Code Eval',
+                    'state': 'code',
+                    'model_id': 1,
+                    'code': code,
+                })
+                action.run()
+
+    @job
+    def build_post_init(self, build, post_init):
+        master_url, build_url = self.get_auth_urls(build)
+        mandatory_post_init = 'action = env[\'ir.config_parameter\'].create([{\'key\': \'auth_quick.master\', \'value\': \''\
+                              + master_url + '\'}, {\'key\': \'auth_quick.build\', \'value\': \'' + build_url + '\'}])'
+        post_init.append(mandatory_post_init)
+        for action in post_init:
+            self.build_execute_kw(build, action)

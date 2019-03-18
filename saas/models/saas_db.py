@@ -1,6 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields, api, registry, SUPERUSER_ID, sql_db
+from odoo import models, fields, api
 from odoo.addons.queue_job.job import job
 
 
