@@ -1,9 +1,16 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields, api, tools, registry, SUPERUSER_ID, sql_db
+from odoo import models, fields, api, tools, SUPERUSER_ID
 from odoo.service import db
+from odoo.service.model import execute
 from odoo.addons.queue_job.job import job
+
+MANDATORY_BUILD_POST_INIT = """
+action = env['ir.config_parameter'].create([ \
+{{'key': 'auth_quick.master', 'value': '{}'}}, {{'key': 'auth_quick.build', 'value': '{}'}} \
+])
+"""
 
 
 class SAASOperator(models.Model):
@@ -55,32 +62,30 @@ class SAASOperator(models.Model):
         self.ensure_one()
         return self.db_url_template.format(db_id=db.id)
 
-    def get_auth_urls(self, db):
+    def _get_auth_urls(self, db):
         self.ensure_one()
         if self.type == 'local':
             master_url = self.env['ir.config_parameter'].get_param('web.base.url')
             build_url = self.get_db_url(db)
         return master_url, build_url
 
-    def build_execute_kw(self, build, code):
+    def build_execute_kw(self, build, model, method, args=None, kwargs=None):
+        args = args or []
+        kwargs = kwargs or {}
         if self.type == 'local':
-            db = sql_db.db_connect(build.name)
-            registry(build.name).check_signaling()
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
-                action = env['ir.actions.server'].create({
-                    'name': 'Local Code Eval',
-                    'state': 'code',
-                    'model_id': 1,
-                    'code': code,
-                })
-                action.run()
+            return execute(build.name, SUPERUSER_ID, model, method, *args, **kwargs)
 
     @job
-    def build_post_init(self, build, post_init):
-        master_url, build_url = self.get_auth_urls(build)
-        mandatory_post_init = 'action = env[\'ir.config_parameter\'].create([{\'key\': \'auth_quick.master\', \'value\': \''\
-                              + master_url + '\'}, {\'key\': \'auth_quick.build\', \'value\': \'' + build_url + '\'}])'
-        post_init.append(mandatory_post_init)
-        for action in post_init:
-            self.build_execute_kw(build, action)
+    def build_post_init(self, build, post_init=None):
+        post_init = post_init or []
+        master_url, build_url = self._get_auth_urls(build)
+        vals = {
+            'name': 'Build Code Eval',
+            'state': 'code',
+            'model_id': 1,
+            'code': MANDATORY_BUILD_POST_INIT.format(master_url, build_url)
+        }
+
+        post_init.append(vals)
+        action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [post_init])
+        self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])

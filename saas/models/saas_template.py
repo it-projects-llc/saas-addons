@@ -165,12 +165,10 @@ class SAASTemplateLine(models.Model):
             registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
-                # it's not really important which model to use
-                model_id = env['ir.model'].search([('model', '=', 'res.users')])[0].id
                 action = env['ir.actions.server'].create({
                     'name': 'Local Code Eval',
                     'state': 'code',
-                    'model_id': model_id,
+                    'model_id': 1,
                     'code': self.template_id.template_post_init
                 })
                 action.run()
