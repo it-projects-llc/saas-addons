@@ -29,7 +29,7 @@ class SAASTemplate(models.Model):
     template_modules_domain = fields.Text(
         'Modules to install',
         help='Domain to search for modules to install after template database creation',
-        defalt="[]")
+        default="[]")
     template_post_init = fields.Text(
         'Template Initialization',
         default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
@@ -138,12 +138,7 @@ class SAASTemplateLine(models.Model):
     @job
     def _install_modules(self):
         self.ensure_one()
-        # FIXME: for some unknown reason, if you leave the field template_modules_domain empty,
-        #  then the default value is not set for it, so we need this check
-        if self.template_id.template_modules_domain:
-            domain = safe_eval(self.template_id.template_modules_domain)
-        else:
-            domain = []
+        domain = safe_eval(self.template_id.template_modules_domain)
         domain = [('name', 'in', MANDATORY_MODULES + domain)]
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
