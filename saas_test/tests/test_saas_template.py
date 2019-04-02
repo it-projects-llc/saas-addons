@@ -11,8 +11,8 @@ from odoo.tools.safe_eval import safe_eval
 DB_TEMPLATE = 'db_template'
 DB_INSTANCE = 'db_instance'
 MODULES = '[\'mail\']'
-TEST_SUBJECT = 'Dummy subject name to test that code is applied'
-
+TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
+BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
 
 @tagged('post_install', 'at_install')
 class TestSaasTemplate(TransactionCase):
@@ -52,7 +52,8 @@ class TestSaasTemplate(TransactionCase):
 
         self.saas_template = self.env['saas.template'].create({
             'template_modules_domain': MODULES,
-            'template_post_init': 'action = env[\'mail.message\'].create({\'subject\': \'' + TEST_SUBJECT + '\', })',
+            'template_post_init': 'action = env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
+            'build_post_init': 'action = env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
 
         self.saas_operator = self.env['saas.operator'].create({
@@ -65,13 +66,17 @@ class TestSaasTemplate(TransactionCase):
             'operator_db_name': DB_TEMPLATE,
         })
 
+        self.build_post_init_line = self.env['build.post_init.line'].create({
+            'key': 'mail_message',
+            'value': 'mail.message'
+        })
+
     def test_template_operator(self):
         # FIXME: that check needed when last tests didn't pass, not sure that it is correct way to drop db
         if DB_TEMPLATE in db.list_dbs():
             db.exp_drop(DB_TEMPLATE)
 
         self.saas_template_operator.preparing_template_next()
-
         # Tests that template db created correctly
         self.assertTrue(self.saas_template_operator.operator_db_id.name)
         self.assertEqual(self.saas_template_operator.operator_db_id.name, DB_TEMPLATE)
@@ -80,13 +85,16 @@ class TestSaasTemplate(TransactionCase):
 
         # Check that module from template_modules_domain is installed
         self.assert_modules_is_installed(DB_TEMPLATE, MODULES)
-        self.assert_record_is_created(DB_TEMPLATE, 'mail.message', [('subject', '=', TEST_SUBJECT)])
+        self.assert_record_is_created(DB_TEMPLATE, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Check that database instance created correctly
         if DB_INSTANCE in db.list_dbs():
             db.exp_drop(DB_INSTANCE)
-        self.saas_template_operator.create_db(DB_INSTANCE)
+        self.saas_template_operator.create_db(DB_INSTANCE, self.build_post_init_line)
         self.assertIn(DB_INSTANCE, db.list_dbs())
         self.assert_no_error_in_db(DB_INSTANCE)
         self.assert_record_is_created(DB_INSTANCE, 'ir.config_parameter', [('key', '=', 'auth_quick.master')])
         self.assert_record_is_created(DB_INSTANCE, 'ir.config_parameter', [('key', '=', 'auth_quick.build')])
+        self.assert_record_is_created(DB_INSTANCE, 'mail.message', [
+            ('subject', '=', BUILD_TEST_SUBJECT)
+        ])
