@@ -8,7 +8,7 @@ from odoo.addons.queue_job.job import job
 
 MANDATORY_BUILD_POST_INIT = """
 action = env['ir.config_parameter'].create([ \
-{{'key': 'auth_quick.master', 'value': '{}'}}, {{'key': 'auth_quick.build', 'value': '{}'}} \
+{{'key': 'auth_quick.master', 'value': '{master_url}'}}, {{'key': 'auth_quick.build', 'value': '{build_url}'}} \
 ])
 """
 
@@ -67,7 +67,10 @@ class SAASOperator(models.Model):
         if self.type == 'local':
             master_url = self.env['ir.config_parameter'].get_param('web.base.url')
             build_url = self.get_db_url(db)
-        return master_url, build_url
+        return {
+            'master_url': master_url,
+            'build_url': build_url
+        }
 
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
         args = args or []
@@ -75,17 +78,29 @@ class SAASOperator(models.Model):
         if self.type == 'local':
             return execute(build.name, SUPERUSER_ID, model, method, *args, **kwargs)
 
-    @job
-    def build_post_init(self, build, post_init=None):
-        post_init = post_init or []
-        master_url, build_url = self._get_auth_urls(build)
-        vals = {
+    @staticmethod
+    def _make_action(code):
+        return {
             'name': 'Build Code Eval',
             'state': 'code',
             'model_id': 1,
-            'code': MANDATORY_BUILD_POST_INIT.format(master_url, build_url)
+            'code': code
         }
 
-        post_init.append(vals)
-        action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [post_init])
+    @staticmethod
+    def _convert_to_dict(key_values):
+        key_value_dict = {}
+        for r in key_values:
+            key_value_dict.update({r.key: r.value})
+        return key_value_dict
+
+    @job
+    def build_post_init(self, build, post_init_actions, key_values):
+        key_value_dict = self._convert_to_dict(key_values)
+        post_init_actions.append(MANDATORY_BUILD_POST_INIT)
+        key_value_dict.update(self._get_auth_urls(build))
+        for i in range(len(post_init_actions)):
+            post_init_actions[i] = self._make_action(post_init_actions[i].format(**key_value_dict))
+
+        action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [post_init_actions])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])

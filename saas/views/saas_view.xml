@@ -19,13 +19,14 @@
             <form>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_create_build" type="object" string="Create Build" icon="fa-building"/>
+                        <button name="action_create_build" type="object" string="Create Build" class="oe_read_only" icon="fa-building"/>
                     </div>
                     <group>
                         <field name="name"/>
                         <field name="template_demo"/>
                         <field name="template_modules_domain"/>
                         <field name="template_post_init"/>
+                        <field name="build_post_init"/>
                         <field name="operator_ids"/>
                     </group>
                 </sheet>

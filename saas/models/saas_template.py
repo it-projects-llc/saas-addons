@@ -34,6 +34,10 @@ class SAASTemplate(models.Model):
         'Template Initialization',
         default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
+    build_post_init = fields.Text(
+        'Build Initialization',
+        default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
+        help='Python code to be executed once build db is created from template')
     operator_ids = fields.One2many(
         'saas.template.operator',
         'template_id')
@@ -84,7 +88,6 @@ class SAASTemplateLine(models.Model):
     ], default='draft')
 
     def preparing_template_next(self):
-        # TODO: This method is called by cron every few minutes
         template_operators = self.search([('to_rebuild', '=', True)])
         operators = template_operators.mapped('operator_id')
 
@@ -183,7 +186,7 @@ class SAASTemplateLine(models.Model):
             admin_password=self.password)
 
     @api.multi
-    def create_db(self, db_name, post_init=None):
+    def create_db(self, db_name, key_values):
         self.ensure_one()
         build = self.env['saas.db'].create({
             'name': db_name,
@@ -198,6 +201,6 @@ class SAASTemplateLine(models.Model):
             self.template_id.template_demo,
             self.password,
         )
-        self.operator_id.with_delay().build_post_init(build, post_init or [])
+        self.operator_id.with_delay().build_post_init(build, [self.template_id.build_post_init], key_values)
 
         return build

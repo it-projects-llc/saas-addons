@@ -14,6 +14,7 @@ MODULES = '[\'mail\']'
 TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
 BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
 
+
 @tagged('post_install', 'at_install')
 class TestSaasTemplate(TransactionCase):
 

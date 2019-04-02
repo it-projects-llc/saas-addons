@@ -10,12 +10,11 @@ class CreateBuildByTemplate(models.TransientModel):
     _description = 'Wizard to create build by template'
     template_operator_id = fields.Many2one('saas.template.operator', 'Operator')
     choose_by_random = fields.Boolean(string='Random operator')
-    build_post_init_ids = fields.One2many('build.post.init.line', 'build_creation_id')
+    build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
     build_name = fields.Char(string="Build name")
 
     def create_build(self):
-        self.template_operator_id.sudo().create_db(self.build_name)
-        build = self.env['saas.db'].search([('name', '=', self.build_name)])
+        build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)
         return {
             'type': 'ir.actions.act_window',
             'name': 'SaaS DB',
@@ -34,7 +33,7 @@ class CreateBuildByTemplate(models.TransientModel):
 
 
 class BuildPostInit(models.TransientModel):
-    _name = 'build.post.init.line'
+    _name = 'build.post_init.line'
     _description = 'Build post init line'
     build_creation_id = fields.Many2one('create.build.by.template', readonly=True)
     key = fields.Char()
