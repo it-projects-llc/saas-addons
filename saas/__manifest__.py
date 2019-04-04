@@ -19,6 +19,7 @@
     "depends": [
         "auth_quick_master",
         "queue_job",
+        "web_editor",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [

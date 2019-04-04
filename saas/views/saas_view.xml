@@ -24,9 +24,9 @@
                     <group>
                         <field name="name"/>
                         <field name="template_demo"/>
-                        <field name="template_modules_domain"/>
-                        <field name="template_post_init"/>
-                        <field name="build_post_init"/>
+                        <field name="template_modules_domain" widget="ace" options="{'mode': 'python'}"/>
+                        <field name="template_post_init" widget="ace" options="{'mode': 'python'}"/>
+                        <field name="build_post_init" widget="ace" options="{'mode': 'python'}"/>
                         <field name="operator_ids"/>
                     </group>
                 </sheet>
