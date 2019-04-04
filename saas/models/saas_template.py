@@ -185,6 +185,13 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
+    @staticmethod
+    def _convert_to_dict(key_values):
+        key_value_dict = {}
+        for r in key_values:
+            key_value_dict.update({r.key: r.value})
+        return key_value_dict
+
     @api.multi
     def create_db(self, db_name, key_values):
         self.ensure_one()
@@ -201,6 +208,7 @@ class SAASTemplateLine(models.Model):
             self.template_id.template_demo,
             self.password,
         )
-        self.operator_id.with_delay().build_post_init(build, [self.template_id.build_post_init], key_values)
+        key_value_dict = self._convert_to_dict(key_values)
+        self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
 
         return build
