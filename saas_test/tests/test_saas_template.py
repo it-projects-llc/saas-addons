@@ -53,8 +53,8 @@ class TestSaasTemplate(TransactionCase):
 
         self.saas_template = self.env['saas.template'].create({
             'template_modules_domain': MODULES,
-            'template_post_init': 'action = env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
-            'build_post_init': 'action = env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
+            'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
+            'build_post_init': 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
 
         self.saas_operator = self.env['saas.operator'].create({
@@ -96,6 +96,4 @@ class TestSaasTemplate(TransactionCase):
         self.assert_no_error_in_db(DB_INSTANCE)
         self.assert_record_is_created(DB_INSTANCE, 'ir.config_parameter', [('key', '=', 'auth_quick.master')])
         self.assert_record_is_created(DB_INSTANCE, 'ir.config_parameter', [('key', '=', 'auth_quick.build')])
-        self.assert_record_is_created(DB_INSTANCE, 'mail.message', [
-            ('subject', '=', BUILD_TEST_SUBJECT)
-        ])
+        self.assert_record_is_created(DB_INSTANCE, 'mail.message', [('subject', '=', BUILD_TEST_SUBJECT)])
