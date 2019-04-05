@@ -6,12 +6,6 @@ from odoo.service import db
 from odoo.service.model import execute
 from odoo.addons.queue_job.job import job
 
-MANDATORY_BUILD_POST_INIT = """
-\nenv['ir.config_parameter'].create([ \
-{{'key': 'auth_quick.master', 'value': '{master_url}'}}, {{'key': 'auth_quick.build', 'value': '{build_url}'}} \
-])
-"""
-
 
 class SAASOperator(models.Model):
     _name = 'saas.operator'
@@ -62,7 +56,7 @@ class SAASOperator(models.Model):
         self.ensure_one()
         return self.db_url_template.format(db_id=db.id)
 
-    def _get_auth_urls(self, db):
+    def _get_mandatory_args(self, db):
         self.ensure_one()
         master_url = self.env['ir.config_parameter'].get_param('web.base.url')
         if self.type == 'local':
@@ -72,6 +66,13 @@ class SAASOperator(models.Model):
             'build_url': build_url
         }
 
+    @staticmethod
+    def _get_mandatory_code():
+        code = '''env['ir.config_parameter'].create([ \
+        {{'key': 'auth_quick.master', 'value': '{master_url}'}}, {{'key': 'auth_quick.build', 'value': '{build_url}'}} \
+        ])\n'''
+        return code
+
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
         args = args or []
         kwargs = kwargs or {}
@@ -79,14 +80,14 @@ class SAASOperator(models.Model):
             return execute(build.name, SUPERUSER_ID, model, method, *args, **kwargs)
 
     @job
-    def build_post_init(self, build, post_init_actions, key_value_dict):
-        key_value_dict.update(self._get_auth_urls(build))
-        post_init_actions += MANDATORY_BUILD_POST_INIT
+    def build_post_init(self, build, post_init_action, key_value_dict):
+        key_value_dict.update(self._get_mandatory_args(build))
+        code = self._get_mandatory_code() + post_init_action
         action = {
             'name': 'Build Code Eval',
             'state': 'code',
             'model_id': 1,
-            'code': post_init_actions.format(**key_value_dict)
+            'code': code.format(**key_value_dict)
         }
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
