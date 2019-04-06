@@ -68,10 +68,9 @@ class SAASOperator(models.Model):
 
     @staticmethod
     def _get_mandatory_code():
-        code = '''env['ir.config_parameter'].create([ \
-        {{'key': 'auth_quick.master', 'value': '{master_url}'}}, {{'key': 'auth_quick.build', 'value': '{build_url}'}} \
-        ])\n'''
-        return code
+        master = "env['ir.config_parameter'].create([{{'key': 'auth_quick.master', 'value': '{master_url}'}}])\n"
+        build = "env['ir.config_parameter'].create([{{'key': 'auth_quick.build', 'value': '{build_url}'}}])\n"
+        return master + build
 
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
         args = args or []
