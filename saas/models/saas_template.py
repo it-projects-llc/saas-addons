@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import random
 import string
@@ -28,11 +29,15 @@ class SAASTemplate(models.Model):
     template_modules_domain = fields.Text(
         'Modules to install',
         help='Domain to search for modules to install after template database creation',
-        defalt="[]")
+        default="[]")
     template_post_init = fields.Text(
         'Template Initialization',
         default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
+    build_post_init = fields.Text(
+        'Build Initialization',
+        default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
+        help='Python code to be executed once build db is created from template')
     operator_ids = fields.One2many(
         'saas.template.operator',
         'template_id')
@@ -43,6 +48,23 @@ class SAASTemplate(models.Model):
             msg = test_python_expr(expr=r.template_post_init.strip(), mode="exec")
             if msg:
                 raise ValidationError(msg)
+
+    @api.multi
+    def action_create_build(self):
+        self.ensure_one()
+        res = self.env['create.build.by.template'].create({})
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Create Build',
+            'res_model': 'create.build.by.template',
+            'src_model': 'saas.template',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_id': res.id,
+            'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
+            'target': 'new',
+            'context': {'template_id': self.id},
+        }
 
 
 class SAASTemplateLine(models.Model):
@@ -66,7 +88,6 @@ class SAASTemplateLine(models.Model):
     ], default='draft')
 
     def preparing_template_next(self):
-        # TODO: This method is called by cron every few minutes
         template_operators = self.search([('to_rebuild', '=', True)])
         operators = template_operators.mapped('operator_id')
 
@@ -142,12 +163,10 @@ class SAASTemplateLine(models.Model):
             registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
-                # it's not really important which model to use
-                model_id = env['ir.model'].search([('model', '=', 'res.users')])[0].id
                 action = env['ir.actions.server'].create({
                     'name': 'Local Code Eval',
                     'state': 'code',
-                    'model_id': model_id,
+                    'model_id': 1,
                     'code': self.template_id.template_post_init
                 })
                 action.run()
@@ -166,10 +185,15 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
-    # FIXME: method needs debug and refactor, for example there can be more checks,
-    #  but now tests cannot be reached where this method is called
+    @staticmethod
+    def _convert_to_dict(key_values):
+        key_value_dict = {}
+        for r in key_values:
+            key_value_dict.update({r.key: r.value})
+        return key_value_dict
+
     @api.multi
-    def create_db(self, db_name):
+    def create_db(self, db_name, key_values):
         self.ensure_one()
         build = self.env['saas.db'].create({
             'name': db_name,
@@ -184,3 +208,7 @@ class SAASTemplateLine(models.Model):
             self.template_id.template_demo,
             self.password,
         )
+        key_value_dict = self._convert_to_dict(key_values)
+        self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+
+        return build

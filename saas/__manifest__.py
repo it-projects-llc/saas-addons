@@ -19,10 +19,14 @@
     "depends": [
         "auth_quick_master",
         "queue_job",
+        "web_editor",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/ir.model.access.csv",
+        "views/saas_view.xml",
+        "wizard/create_build_by_template_view.xml",
+        "data/ir_cron_data.xml",
     ],
     "demo": [
     ],

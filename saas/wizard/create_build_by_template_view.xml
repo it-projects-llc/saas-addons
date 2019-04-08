@@ -1,0 +1,34 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record model="ir.ui.view" id="create_build_by_template_wizard">
+        <field name="name">Create Build By Template</field>
+        <field name="model">create.build.by.template</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="build_name"/>
+                    <field name="template_operator_id"/>
+                    <field name="choose_by_random" widget="toggle_button" options='{"active": "Random", "inactive": "Not Random"}'/>
+                    <field name='build_post_init_ids'>
+                        <tree editable='bottom'>
+                            <field name='key'/>
+                            <field name='value'/>
+                        </tree>
+                        <form string='Build post init form'>
+                            <group>
+                                <field name='key'/>
+                                <field name='value'/>
+                            </group>
+                        </form>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    <button name="create_build" string="Create Build" type="object" class="oe_highlight" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
