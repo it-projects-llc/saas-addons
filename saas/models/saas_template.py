@@ -36,7 +36,7 @@ class SAASTemplate(models.Model):
         help='Python code to be executed once db is created and modules are installed')
     build_post_init = fields.Text(
         'Build Initialization',
-        default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
+        default='',
         help='Python code to be executed once build db is created from template')
     operator_ids = fields.One2many(
         'saas.template.operator',
@@ -135,6 +135,7 @@ class SAASTemplateLine(models.Model):
 
     def _on_template_created(self):
         self.ensure_one()
+        self.to_rebuild = False
         self.state = 'installing_modules'
         self.with_delay()._install_modules()
 
@@ -189,7 +190,8 @@ class SAASTemplateLine(models.Model):
     def _convert_to_dict(key_values):
         key_value_dict = {}
         for r in key_values:
-            key_value_dict.update({r.key: r.value})
+            if r.key and r.value:
+                key_value_dict.update({r.key: r.value})
         return key_value_dict
 
     @api.multi
