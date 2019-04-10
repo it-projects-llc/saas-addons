@@ -59,17 +59,15 @@ class SAASOperator(models.Model):
     def _get_mandatory_args(self, db):
         self.ensure_one()
         master_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        if self.type == 'local':
-            build_url = self.get_db_url(db)
         return {
             'master_url': master_url,
-            'build_url': build_url
+            'build_id': db.id
         }
 
     @staticmethod
     def _get_mandatory_code():
         master = "env['ir.config_parameter'].create([{{'key': 'auth_quick.master', 'value': '{master_url}'}}])\n"
-        build = "env['ir.config_parameter'].create([{{'key': 'auth_quick.build', 'value': '{build_url}'}}])\n"
+        build = "env['ir.config_parameter'].create([{{'key': 'auth_quick.build', 'value': '{build_id}'}}])\n"
         return master + build
 
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
