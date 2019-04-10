@@ -47,6 +47,6 @@ class SAASDB(models.Model):
         auth_url = '/saas/auth-to-build/' + str(self.id)
         return {
             'type': 'ir.actions.act_url',
-            'target': 'self', # or new?
+            'target': 'new',
             'url': auth_url,
         }

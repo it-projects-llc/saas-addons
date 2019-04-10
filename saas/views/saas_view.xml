@@ -2,8 +2,9 @@
     # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
 
 <odoo>
-    <record id='saas_view_tree' model='ir.ui.view'>
-        <field name="name">saas.tree</field>
+    <!--  SaaS Template  -->
+    <record id='saas_template_view_tree' model='ir.ui.view'>
+        <field name="name">saas.template.tree</field>
         <field name="model">saas.template</field>
         <field name="arch" type="xml">
             <tree>
@@ -41,6 +42,59 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+<!--    SaaS Template Operator-->
+    <record id="saas_template_operator_form_view" model="ir.ui.view">
+        <field name="name">saas.template.operator</field>
+        <field name="model">saas.template.operator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="operator_db_name"/>
+                        <field name="operator_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SaaS DB   -->
+    <record id='saas_db_view_tree' model='ir.ui.view'>
+        <field name="name">saas.db.tree</field>
+        <field name="model">saas.db</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_db_form_view" model="ir.ui.view">
+        <field name="name">saas.db</field>
+        <field name="model">saas.db</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h2>SaaS DB test</h2>
+                    <group>
+                        <field name="name"/>
+                        <field name="operator_id"/>
+                        <field name="type"/>
+                        <field name="state"/>
+                        <button name="action_get_build_access" type="object" string="Connect to the Build" class="oe_read_only" icon="fa-plug"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model='ir.actions.act_window' id="saas_db_action" >
+        <field name="name">SaaS DB</field>
+        <field name="res_model">saas.db</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
     <!-- Menu items-->
     <menuitem name="SaaS"
               id="saas_main_menu"/>
@@ -50,5 +104,11 @@
               id="saas_main_menu_item"
               sequence="3"
               action="saas_template_action"/>
+
+    <menuitem name="SaaS DB"
+              parent="saas_main_menu"
+              id="saas_main_menu_item_2"
+              sequence="4"
+              action="saas_db_action"/>
 
 </odoo>

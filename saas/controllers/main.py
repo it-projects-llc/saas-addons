@@ -8,6 +8,7 @@ import os
 import odoo
 from odoo.http import route, request
 
+
 class SaasController(odoo.http.Controller):
     @route('/saas/auth-to-build/<int:build_id>', type='http', auth='user')
     def auth_to_build(self, build_id=None):
