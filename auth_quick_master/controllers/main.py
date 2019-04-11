@@ -15,11 +15,11 @@ class AuthQuickMaster(http.Controller):
     @http.route('/auth_quick_master/get-token', type="http", auth='user')
     def get_token(self, build, build_user_id, build_login, build_url):
         _logger.debug('Request for token: build reference = %s, build_user_id = %s, build_login = %s, build_url = %s', build, build_user_id, build_login, build_url)
-        token_obj = request.env['auth_quick_master.token'].sudo().create({
+        token_obj = request.env['auth_quick_master.token'].create({
             'build': build,
             'build_login': build_login,
             'build_user_id': build_user_id,
-        })
+        }).sudo()
 
         if not token_obj.user_has_access():
             return """{"error": "You don't have access"}"""
