@@ -14,6 +14,15 @@ from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 _logger = logging.getLogger(__name__)
 
 MANDATORY_MODULES = ['auth_quick']
+DEFAULT_PYTHON_CODE = """# Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - model: Odoo Model of the record on which the action is triggered; is a void recordset
+#  - record: record on which the action is triggered; may be void
+#  - records: recordset of all records on which the action is triggered in multi-mode; may be void
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {{...}}\n\n\n\n"""
 
 
 def random_password(len=32):
@@ -32,11 +41,11 @@ class SAASTemplate(models.Model):
         default="[]")
     template_post_init = fields.Text(
         'Template Initialization',
-        default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
+        default=DEFAULT_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
     build_post_init = fields.Text(
         'Build Initialization',
-        default='',
+        default=DEFAULT_PYTHON_CODE,
         help='Python code to be executed once build db is created from template')
     operator_ids = fields.One2many(
         'saas.template.operator',
@@ -190,7 +199,7 @@ class SAASTemplateLine(models.Model):
     def _convert_to_dict(key_values):
         key_value_dict = {}
         for r in key_values:
-            if r.key and r.value:
+            if r.key:
                 key_value_dict.update({r.key: r.value})
         return key_value_dict
 
