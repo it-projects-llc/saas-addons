@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import models, fields, api
 from odoo.addons.queue_job.job import job
@@ -41,3 +42,11 @@ class SAASDB(models.Model):
     def get_url(self):
         self.ensure_one()
         return self.operator_id.get_db_url(self)
+
+    def action_get_build_access(self):
+        auth_url = '/saas/auth-to-build/' + str(self.id)
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'new',
+            'url': auth_url,
+        }

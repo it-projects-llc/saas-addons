@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+<odoo noupdate="1">
+        <record model="ir.rule" id="auth_quick_master_token_rule">
+            <field name="name">User's token only</field>
+            <field name="model_id" ref="model_auth_quick_master_token"/>
+            <field name="domain_force">[('user_id','=', user.id)]</field>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+</odoo>
