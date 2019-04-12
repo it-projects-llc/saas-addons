@@ -18,7 +18,7 @@ BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build d
 
 
 @tagged('post_install', 'at_install')
-class TestSaasTemplate(TransactionCase):
+class TestSaas(TransactionCase):
 
     def assert_modules_is_installed(self, db_name, modules):
         db = odoo.sql_db.db_connect(db_name)

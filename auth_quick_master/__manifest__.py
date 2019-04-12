@@ -21,6 +21,7 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/res_groups_data.xml",
+        "security/ir_rule_data.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [
