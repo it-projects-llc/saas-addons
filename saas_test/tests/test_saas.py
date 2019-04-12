@@ -18,7 +18,7 @@ BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build d
 
 
 @tagged('post_install', 'at_install')
-class TestSaasTemplate(TransactionCase):
+class TestSaas(TransactionCase):
 
     def assert_modules_is_installed(self, db_name, modules):
         db = odoo.sql_db.db_connect(db_name)
@@ -47,7 +47,7 @@ class TestSaasTemplate(TransactionCase):
         self.assertFalse(template_db_log)
 
     def setUp(self):
-        super(TestSaasTemplate, self).setUp()
+        super(TestSaas, self).setUp()
         self.env = self.env(context=dict(
             self.env.context,
             test_queue_job_no_delay=True,
