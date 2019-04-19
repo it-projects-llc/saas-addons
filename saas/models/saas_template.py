@@ -5,7 +5,7 @@ import random
 import string
 import logging
 
-from odoo import models, fields, api, registry, SUPERUSER_ID, sql_db
+from odoo import models, fields, api, SUPERUSER_ID, sql_db
 from odoo.tools.safe_eval import test_python_expr, safe_eval
 from odoo.exceptions import ValidationError
 from odoo.addons.queue_job.job import job
