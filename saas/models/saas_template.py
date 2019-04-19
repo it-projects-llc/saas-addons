@@ -109,7 +109,6 @@ class SAASTemplateLine(models.Model):
         if not operators:
             # it's not a time to start
             return
-
         for t_op in template_operators:
             if t_op.operator_id not in operators:
                 continue
@@ -155,11 +154,13 @@ class SAASTemplateLine(models.Model):
         domain = [('name', 'in', MANDATORY_MODULES + domain)]
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
-            registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
                 module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + domain)
                 module_ids.button_immediate_install()
+                # Some magic to force reloading registry in other workers
+                env.registry.registry_invalidated = True
+                env.registry.signal_changes()
         else:
             auth = self._rpc_auth()
             rpc_install_modules(auth, domain)
@@ -170,7 +171,6 @@ class SAASTemplateLine(models.Model):
     def _post_init(self):
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
-            registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
                 action = env['ir.actions.server'].create({
@@ -180,7 +180,7 @@ class SAASTemplateLine(models.Model):
                     'code': self.template_id.template_post_init
                 })
                 action.run()
-                self.state = 'done'
+            self.state = 'done'
         else:
             auth = self._rpc_auth()
             rpc_code_eval(auth, self.template_id.template_post_init)
