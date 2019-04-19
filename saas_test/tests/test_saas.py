@@ -48,6 +48,8 @@ class TestSaas(TransactionCase):
 
     def setUp(self):
         super(TestSaas, self).setUp()
+
+
         self.env = self.env(context=dict(
             self.env.context,
             test_queue_job_no_delay=True,
