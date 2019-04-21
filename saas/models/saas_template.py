@@ -14,7 +14,7 @@ from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 _logger = logging.getLogger(__name__)
 
 MANDATORY_MODULES = ['auth_quick']
-DEFAULT_PYTHON_CODE = """# Available variables:
+DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 #  - env: Odoo Environment on which the action is triggered
 #  - model: Odoo Model of the record on which the action is triggered; is a void recordset
 #  - record: record on which the action is triggered; may be void
@@ -22,7 +22,10 @@ DEFAULT_PYTHON_CODE = """# Available variables:
 #  - time, datetime, dateutil, timezone: useful Python libraries
 #  - log: log(message, level='info'): logging function to record debug information in ir.logging table
 #  - Warning: Warning Exception to use with raise
-# To return an action, assign: action = {{...}}\n\n\n\n"""
+# To return an action, assign: action = {{...}}
+# You can specify places for variables that can be passed when creating a build like this:
+# env['{{key_name_1}}'].create({{'subject': '{{key_name_2}}', }})
+# but with single curly braces instead of double in places where you need pass variable\n\n\n\n"""
 
 
 def random_password(len=32):
@@ -41,11 +44,11 @@ class SAASTemplate(models.Model):
         default="[]")
     template_post_init = fields.Text(
         'Template Initialization',
-        default=DEFAULT_PYTHON_CODE,
+        default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
     build_post_init = fields.Text(
         'Build Initialization',
-        default=DEFAULT_PYTHON_CODE,
+        default=DEFAULT_BUILD_PYTHON_CODE,
         help='Python code to be executed once build db is created from template')
     operator_ids = fields.One2many(
         'saas.template.operator',
