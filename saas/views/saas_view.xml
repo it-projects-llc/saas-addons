@@ -8,7 +8,7 @@
         <field name="model">saas.template</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name" />
+                <field name="name" string="Template" />
             </tree>
         </field>
     </record>
@@ -18,28 +18,21 @@
         <field name="model">saas.template</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_create_build" type="object" string="Create Build" class="oe_read_only"/>
+                </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="action_create_build" type="object" string="Create Build" class="oe_read_only" icon="fa-building"/>
-                    </div>
                     <group>
                         <field name="name"/>
                         <field name="template_demo"/>
                         <field name="template_modules_domain" widget="ace" options="{'mode': 'python'}"/>
                         <field name="template_post_init" widget="ace" options="{'mode': 'python'}"/>
                         <field name="build_post_init" widget="ace" options="{'mode': 'python'}"/>
-                        <field name="operator_ids"/>
+                        <field name="operator_ids" string="Template operators"/>
                     </group>
                 </sheet>
             </form>
         </field>
-    </record>
-
-    <record model='ir.actions.act_window' id="saas_template_action" >
-        <field name="name">SaaS template</field>
-        <field name="res_model">saas.template</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
     </record>
 
 <!--    SaaS Template Operator-->
@@ -55,6 +48,16 @@
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="saas_template_operator_tree" model="ir.ui.view">
+        <field name="name">saas.template.operator.tree</field>
+        <field name="model">saas.template.operator</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="operator_db_name" string="Template database name"/>
+            </tree>
         </field>
     </record>
 
@@ -74,18 +77,46 @@
         <field name="model">saas.db</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_get_build_access" type="object" string="Connect to the Build" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
                 <sheet>
-                    <h2>SaaS DB test</h2>
                     <group>
                         <field name="name"/>
                         <field name="operator_id"/>
                         <field name="type"/>
-                        <field name="state"/>
-                        <button name="action_get_build_access" type="object" string="Connect to the Build" class="oe_read_only" icon="fa-plug"/>
                     </group>
                 </sheet>
             </form>
         </field>
+    </record>
+
+    <!-- SaaS Operator   -->
+    <record id="saas_operator_form_view" model="ir.ui.view">
+        <field name="name">saas.operator</field>
+        <field name="model">saas.operator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="type"/>
+                        <field name="db_url_template"/>
+                        <field name="db_name_template"/>
+                        <field name="host"/>
+                        <field name="port"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record model='ir.actions.act_window' id="saas_template_action" >
+        <field name="name">SaaS template</field>
+        <field name="res_model">saas.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
     <record model='ir.actions.act_window' id="saas_db_action" >
