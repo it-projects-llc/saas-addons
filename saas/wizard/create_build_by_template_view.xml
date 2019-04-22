@@ -9,7 +9,7 @@
             <form>
                 <group>
                     <field name="build_name"/>
-                    <field name="template_operator_id"/>
+                    <field name="template_operator_id" domain="[('template_id', '=', context.get('template_id')), ('state', '=', 'done')]"/>
                     <field name="choose_by_random"/>
                     <field name='build_post_init_ids'>
                         <tree editable='bottom'>

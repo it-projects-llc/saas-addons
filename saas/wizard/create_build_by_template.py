@@ -15,13 +15,15 @@ class CreateBuildByTemplate(models.TransientModel):
 
     def create_build(self):
         build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)
+        template_id = self.env.context.get('template_id')
         return {
             'type': 'ir.actions.act_window',
             'name': 'SaaS DB',
             'res_model': 'saas.db',
             'res_id': build.id,
             'view_mode': 'form',
-            'target': 'main'
+            'target': 'main',
+            'context': template_id,
         }
 
     @api.onchange('choose_by_random')
