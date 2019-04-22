@@ -41,6 +41,9 @@
         <field name="model">saas.template.operator</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="state" widget="statusbar" nolabel="1" class="oe_read_only"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="operator_db_name"/>
