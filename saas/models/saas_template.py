@@ -50,9 +50,7 @@ class SAASTemplate(models.Model):
         'Build Initialization',
         default=DEFAULT_BUILD_PYTHON_CODE,
         help='Python code to be executed once build db is created from template')
-    operator_ids = fields.One2many(
-        'saas.template.operator',
-        'template_id')
+    operator_ids = fields.One2many('saas.template.operator', 'template_id', string="Template operators")
 
     @api.constrains('template_post_init')
     def _check_python_code(self):
@@ -64,7 +62,6 @@ class SAASTemplate(models.Model):
     @api.multi
     def action_create_build(self):
         self.ensure_one()
-        res = self.env['create.build.by.template'].create({})
         return {
             'type': 'ir.actions.act_window',
             'name': 'Create Build',
@@ -72,7 +69,6 @@ class SAASTemplate(models.Model):
             'src_model': 'saas.template',
             'view_type': 'form',
             'view_mode': 'form',
-            'res_id': res.id,
             'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
             'target': 'new',
             'context': {'template_id': self.id},
