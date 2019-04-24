@@ -8,10 +8,10 @@ from odoo import api, models, fields
 class CreateBuildByTemplate(models.TransientModel):
     _name = 'create.build.by.template'
     _description = 'Wizard to create build by template'
-    template_operator_id = fields.Many2one('saas.template.operator', 'Operator')
-    choose_by_random = fields.Boolean(string='Random operator')
+    template_operator_id = fields.Many2one('saas.template.operator', 'Operator', required=True)
+    random = fields.Boolean(string='Random operator')
     build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
-    build_name = fields.Char(string="Build name")
+    build_name = fields.Char(string="Build name", required=True)
 
     def create_build(self):
         build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)
@@ -26,12 +26,13 @@ class CreateBuildByTemplate(models.TransientModel):
             'context': template_id,
         }
 
-    @api.onchange('choose_by_random')
+    @api.onchange('random')
     def change_operator(self):
-        template_id = self.env.context.get('template_id')
-        template = self.env['saas.template'].browse(template_id)
-        random_operator = choice(template.operator_ids)
-        self.template_operator_id = random_operator.id
+        if self.random:
+            template_id = self.env.context.get('template_id')
+            template = self.env['saas.template'].browse(template_id)
+            random_operator = choice(template.operator_ids)
+            self.template_operator_id = random_operator.id
 
 
 class BuildPostInit(models.TransientModel):
