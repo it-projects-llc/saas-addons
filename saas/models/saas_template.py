@@ -14,11 +14,15 @@ from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 _logger = logging.getLogger(__name__)
 
 MANDATORY_MODULES = ['auth_quick']
+DEFAULT_TEMPLATE_PYTHON_CODE = """# Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {...}\n\n\n\n"""
+
 DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 #  - env: Odoo Environment on which the action is triggered
-#  - model: Odoo Model of the record on which the action is triggered; is a void recordset
-#  - record: record on which the action is triggered; may be void
-#  - records: recordset of all records on which the action is triggered in multi-mode; may be void
 #  - time, datetime, dateutil, timezone: useful Python libraries
 #  - log: log(message, level='info'): logging function to record debug information in ir.logging table
 #  - Warning: Warning Exception to use with raise
