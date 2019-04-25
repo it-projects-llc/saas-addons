@@ -59,7 +59,8 @@
         <field name="model">saas.template.operator</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="operator_db_name" string="Template database name"/>
+                <field name="operator_db_name"/>
+                <field name="operator_id"/>
             </tree>
         </field>
     </record>
