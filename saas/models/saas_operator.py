@@ -11,6 +11,7 @@ class SAASOperator(models.Model):
     _name = 'saas.operator'
     _description = 'Database Operator'
 
+    name = fields.Char()
     # list of types can be extended via selection_add
     type = fields.Selection([
         ('local', 'Same Instance'),
