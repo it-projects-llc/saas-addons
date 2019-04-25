@@ -52,9 +52,9 @@ class SAASOperator(models.Model):
         return self.db_url_template.format(db_id=db.id, db_name=db.name)
 
     def get_db_name(self, db):
-        # TODO: use mako for url templating
+        # TODO: use mako for name templating
         self.ensure_one()
-        return self.db_url_template.format(db_id=db.id)
+        return self.db_name_template.format(db_id=db.id)
 
     def _get_mandatory_args(self, db):
         self.ensure_one()

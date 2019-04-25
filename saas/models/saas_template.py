@@ -50,7 +50,7 @@ class SAASTemplate(models.Model):
         'Build Initialization',
         default=DEFAULT_BUILD_PYTHON_CODE,
         help='Python code to be executed once build db is created from template')
-    operator_ids = fields.One2many('saas.template.operator', 'template_id', string="Template operators")
+    operator_ids = fields.One2many('saas.template.operator', 'template_id', string="Template's deployments")
 
     @api.constrains('template_post_init')
     def _check_python_code(self):
@@ -65,7 +65,7 @@ class SAASTemplate(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Create Build',
-            'res_model': 'create.build.by.template',
+            'res_model': 'saas.template.create_build',
             'src_model': 'saas.template',
             'view_type': 'form',
             'view_mode': 'form',
@@ -77,13 +77,13 @@ class SAASTemplate(models.Model):
 
 class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'
-    _description = 'Template\'s Settings for Operator'
+    _description = 'Template\'s Deployment'
     _rec_name = 'operator_db_name'
 
     template_id = fields.Many2one('saas.template', required=True)
     operator_id = fields.Many2one('saas.operator', required=True)
     password = fields.Char('DB Password')
-    operator_db_name = fields.Char(required=True)
+    operator_db_name = fields.Char(required=True, string="Template database name")
     operator_db_id = fields.Many2one('saas.db', readonly=True)
     operator_db_state = fields.Selection(related='operator_db_id.state', string='Database operator state')
     to_rebuild = fields.Boolean(default=True)

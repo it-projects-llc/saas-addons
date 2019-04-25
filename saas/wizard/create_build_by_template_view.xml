@@ -2,8 +2,8 @@
     # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
 <odoo>
     <record model="ir.ui.view" id="create_build_by_template_wizard">
-        <field name="name">Create Build By Template</field>
-        <field name="model">create.build.by.template</field>
+        <field name="name">SaaS Template Create Build</field>
+        <field name="model">saas.template.create_build</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form>
