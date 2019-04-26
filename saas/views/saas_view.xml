@@ -60,6 +60,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="operator_db_name"/>
+                <field name="state"/>
                 <field name="operator_id"/>
             </tree>
         </field>
