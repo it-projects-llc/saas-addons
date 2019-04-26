@@ -7,7 +7,7 @@ import logging
 
 from odoo import models, fields, api, SUPERUSER_ID, sql_db
 from odoo.tools.safe_eval import test_python_expr, safe_eval
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from odoo.addons.queue_job.job import job
 from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 
@@ -66,17 +66,24 @@ class SAASTemplate(models.Model):
     @api.multi
     def action_create_build(self):
         self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Create Build',
-            'res_model': 'saas.template.create_build',
-            'src_model': 'saas.template',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
-            'target': 'new',
-            'context': {'template_id': self.id},
-        }
+        ready_template_operators = 0
+        for rec in self.operator_ids:
+            if rec.state == 'done':
+                ready_template_operators += 1
+        if ready_template_operators:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Create Build',
+                'res_model': 'saas.template.create_build',
+                'src_model': 'saas.template',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
+                'target': 'new',
+                'context': {'template_id': self.id},
+            }
+        else:
+            raise UserError('There is no ready template\'s deployments. Create new one or wait until it\'s done.')
 
 
 class SAASTemplateLine(models.Model):
