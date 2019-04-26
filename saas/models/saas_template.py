@@ -4,7 +4,6 @@
 import random
 import string
 import logging
-import re
 
 from odoo import models, fields, api, SUPERUSER_ID, sql_db
 from odoo.tools.safe_eval import test_python_expr, safe_eval
@@ -225,18 +224,6 @@ class SAASTemplateLine(models.Model):
             self.password,
         )
         key_value_dict = self._convert_to_dict(key_values)
-        code = self.remove_comments(self.template_id.build_post_init)
-        self.operator_id.with_delay().build_post_init(build, code, key_value_dict)
+        self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
 
         return build
-
-    @staticmethod
-    def remove_comments(code):
-        arr = code.split('\n')
-        clean_arr = []
-        for string in arr:
-            if not re.match(r' *#', string):
-                clean_arr.append(string)
-
-        clean_code = '\n'.join(clean_arr)
-        return clean_code
