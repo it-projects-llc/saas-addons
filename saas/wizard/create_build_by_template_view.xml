@@ -10,7 +10,8 @@
                 <group>
                     <field name="build_name"/>
                     <field name="template_operator_id" domain="[('template_id', '=', context.get('template_id')), ('state', '=', 'done')]"/>
-                    <field name="random"/>
+                    <field name="template_operator_count" />
+                    <field name="random" attrs="{'invisible':[('template_operator_count', 'in', [0, 1])]}"/>
                     <field name='build_post_init_ids'>
                         <tree editable='bottom'>
                             <field name='key'/>

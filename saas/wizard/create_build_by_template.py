@@ -8,10 +8,15 @@ from odoo import api, models, fields
 class CreateBuildByTemplate(models.TransientModel):
     _name = 'saas.template.create_build'
     _description = 'Wizard to create build by template'
+
+    def _get_count(self):
+        return self.env.context.get('template_operator_count')
+
     template_operator_id = fields.Many2one('saas.template.operator', 'Template\'s Deployment', required=True)
     random = fields.Boolean(string='Random operator')
     build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
     build_name = fields.Char(string="Build name", required=True)
+    template_operator_count = fields.Integer(default=_get_count)
 
     def create_build(self):
         build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)

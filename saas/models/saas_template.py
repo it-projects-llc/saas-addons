@@ -67,6 +67,7 @@ class SAASTemplate(models.Model):
     def action_create_build(self):
         self.ensure_one()
         if any([rec.state == 'done' for rec in self.operator_ids]):
+            template_operator_count = len(self.operator_ids)
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'Create Build',
@@ -76,10 +77,10 @@ class SAASTemplate(models.Model):
                 'view_mode': 'form',
                 'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
                 'target': 'new',
-                'context': {'template_id': self.id},
+                'context': {'template_id': self.id, 'template_operator_count': template_operator_count},
             }
         else:
-            raise UserError(_('There is no ready template\'s deployments. Create new one or wait until it\'s done.'))
+            raise UserError(_('There are no ready template\'s deployments. Create new one or wait until it\'s done.'))
 
 
 class SAASTemplateLine(models.Model):
