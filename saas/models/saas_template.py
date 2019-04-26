@@ -5,7 +5,7 @@ import random
 import string
 import logging
 
-from odoo import models, fields, api, SUPERUSER_ID, sql_db
+from odoo import models, fields, api, SUPERUSER_ID, sql_db, _
 from odoo.tools.safe_eval import test_python_expr, safe_eval
 from odoo.exceptions import ValidationError, UserError
 from odoo.addons.queue_job.job import job
@@ -66,11 +66,7 @@ class SAASTemplate(models.Model):
     @api.multi
     def action_create_build(self):
         self.ensure_one()
-        ready_template_operators = 0
-        for rec in self.operator_ids:
-            if rec.state == 'done':
-                ready_template_operators += 1
-        if ready_template_operators:
+        if any([rec.state == 'done' for rec in self.operator_ids]):
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'Create Build',
@@ -83,7 +79,7 @@ class SAASTemplate(models.Model):
                 'context': {'template_id': self.id},
             }
         else:
-            raise UserError('There is no ready template\'s deployments. Create new one or wait until it\'s done.')
+            raise UserError(_('There is no ready template\'s deployments. Create new one or wait until it\'s done.'))
 
 
 class SAASTemplateLine(models.Model):
