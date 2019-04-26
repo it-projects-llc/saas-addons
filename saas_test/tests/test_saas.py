@@ -15,6 +15,15 @@ DB_INSTANCE_2 = 'db_instance_2'
 MODULES = '[\'mail\']'
 TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
 BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
+DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {{...}}
+# You can specify places for variables that can be passed when creating a build like this:
+# env['{key_name_1}'].create({{'subject': '{key_name_2}', }})
+# When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 
 
 @tagged('post_install', 'at_install')
@@ -56,7 +65,7 @@ class TestSaas(TransactionCase):
         self.saas_template_1 = self.env['saas.template'].create({
             'template_modules_domain': MODULES,
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
-            'build_post_init': 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
+            'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
 
         self.saas_template_2 = self.env['saas.template'].create({
