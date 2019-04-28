@@ -42,10 +42,7 @@ class SAASTemplate(models.Model):
 
     name = fields.Char()
     template_demo = fields.Boolean('Install demo data', default=False)
-    template_modules_domain = fields.Text(
-        'Modules to install',
-        help='Domain to search for modules to install after template database creation',
-        default="[]")
+    template_modules_domain = fields.Many2many('saas.module')
     template_post_init = fields.Text(
         'Template Initialization',
         default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
@@ -81,6 +78,24 @@ class SAASTemplate(models.Model):
             }
         else:
             raise UserError(_('There are no ready template\'s deployments. Create new one or wait until it\'s done.'))
+
+
+class SAASModules(models.Model):
+    _name = 'saas.module'
+    _description = 'Template\'s modules to install'
+    name = fields.Char('Technical name', required=True)
+    description = fields.Char()
+    template_ids = fields.Many2many('saas.template')
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.description:
+                result.append((rec.id, rec.description))
+            else:
+                result.append((rec.id, rec.name))
+        return result
 
 
 class SAASTemplateLine(models.Model):
@@ -158,7 +173,9 @@ class SAASTemplateLine(models.Model):
     @job
     def _install_modules(self):
         self.ensure_one()
-        domain = safe_eval(self.template_id.template_modules_domain)
+        domain = []
+        for module in self.template_id.template_modules_domain:
+            domain.append(module.name)
         domain = [('name', 'in', MANDATORY_MODULES + domain)]
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
