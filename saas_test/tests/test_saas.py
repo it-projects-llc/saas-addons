@@ -12,7 +12,7 @@ DB_TEMPLATE_1 = 'db_template_1'
 DB_TEMPLATE_2 = 'db_template_2'
 DB_INSTANCE_1 = 'db_instance_1'
 DB_INSTANCE_2 = 'db_instance_2'
-MODULES = '[\'mail\']'
+MODULE_TO_INSTALL = 'mail'
 TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
 BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
 DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
@@ -29,14 +29,12 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 @tagged('post_install', 'at_install')
 class TestSaas(TransactionCase):
 
-    def assert_modules_is_installed(self, db_name, modules):
+    def assert_modules_is_installed(self, db_name, module):
         db = odoo.sql_db.db_connect(db_name)
         odoo.registry(db_name).check_signaling()
-        modules = safe_eval(modules)
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            for module in modules:
-                self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
+            self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
 
     def assert_record_is_created(self, db_name, model_name, search_domain):
         db = odoo.sql_db.db_connect(db_name)
@@ -63,13 +61,17 @@ class TestSaas(TransactionCase):
         ))
 
         self.saas_template_1 = self.env['saas.template'].create({
-            'template_modules_domain': MODULES,
+            'template_modules_domain': [(0, 0, {
+                'name': MODULE_TO_INSTALL,
+            }),],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
             'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
 
         self.saas_template_2 = self.env['saas.template'].create({
-            'template_modules_domain': MODULES,
+            'template_modules_domain': [(0, 0, {
+                'name': 'mail',
+            }),],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
         })
 
@@ -117,7 +119,7 @@ class TestSaas(TransactionCase):
         self.assert_no_error_in_db(DB_TEMPLATE_1)
 
         # Check that module from template_modules_domain is installed
-        self.assert_modules_is_installed(DB_TEMPLATE_1, MODULES)
+        self.assert_modules_is_installed(DB_TEMPLATE_1, MODULE_TO_INSTALL)
         self.assert_record_is_created(DB_TEMPLATE_1, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Template 2. Actually second template is done by calling preparing_template_next first time but that call
@@ -131,7 +133,7 @@ class TestSaas(TransactionCase):
         self.assert_no_error_in_db(DB_TEMPLATE_2)
 
         # Check that module from template_modules_domain is installed
-        self.assert_modules_is_installed(DB_TEMPLATE_2, MODULES)
+        self.assert_modules_is_installed(DB_TEMPLATE_2, MODULE_TO_INSTALL)
         self.assert_record_is_created(DB_TEMPLATE_2, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Check that database instance created correctly
