@@ -28,6 +28,7 @@
         "wizard/create_build_by_template_view.xml",
         "data/ir_cron_data.xml",
         "data/local_operator.xml",
+        "data/default_modules.xml",
     ],
     "demo": [
     ],
