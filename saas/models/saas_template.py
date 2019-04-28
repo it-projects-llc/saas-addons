@@ -6,7 +6,7 @@ import string
 import logging
 
 from odoo import models, fields, api, SUPERUSER_ID, sql_db, _
-from odoo.tools.safe_eval import test_python_expr, safe_eval
+from odoo.tools.safe_eval import test_python_expr
 from odoo.exceptions import ValidationError, UserError
 from odoo.addons.queue_job.job import job
 from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval

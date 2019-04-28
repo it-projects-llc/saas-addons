@@ -6,7 +6,6 @@ import odoo
 from odoo import SUPERUSER_ID
 from odoo.tests.common import TransactionCase, tagged
 from odoo.service import db
-from odoo.tools.safe_eval import safe_eval
 
 DB_TEMPLATE_1 = 'db_template_1'
 DB_TEMPLATE_2 = 'db_template_2'
@@ -63,7 +62,7 @@ class TestSaas(TransactionCase):
         self.saas_template_1 = self.env['saas.template'].create({
             'template_modules_domain': [(0, 0, {
                 'name': MODULE_TO_INSTALL,
-            }),],
+            })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
             'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
@@ -71,7 +70,7 @@ class TestSaas(TransactionCase):
         self.saas_template_2 = self.env['saas.template'].create({
             'template_modules_domain': [(0, 0, {
                 'name': 'mail',
-            }),],
+            })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
         })
 
