@@ -30,6 +30,11 @@ Models overview
 * ``saas.db`` -- similar to ``saas_portal.client`` in *odoo-saas-tools*
 * ``saas.log`` -- saas history, e.g. database creation, updating, etc.
 
+Roadmap
+=======
+
+ * TODO: create saas access levels (SaaS: User, Manager)
+ * TODO: Create menu for SaaS Operator, SaaS Log model
 
 Credits
 =======
