@@ -13,49 +13,21 @@
         <field name="name">project</field>
         <field name="description">Project</field>
     </record>
-    <record id="timesheet_grid" model="saas.module">
-        <field name="name">timesheet_grid</field>
-        <field name="description">Timesheets</field>
-    </record>
     <record id="stock" model="saas.module">
         <field name="name">stock</field>
         <field name="description">Inventory</field>
-    </record>
-    <record id="stock_barcode" model="saas.module">
-        <field name="name">stock_barcode</field>
-        <field name="description">Barcode</field>
     </record>
     <record id="account" model="saas.module">
         <field name="name">account</field>
         <field name="description">Invoicing</field>
     </record>
-    <record id="account_accountant" model="saas.module">
-        <field name="name">account_accountant</field>
-        <field name="description">Accounting</field>
-    </record>
     <record id="mrp" model="saas.module">
         <field name="name">mrp</field>
         <field name="description">Manufacturing</field>
     </record>
-    <record id="mrp_workorder" model="saas.module">
-        <field name="name">mrp_workorder</field>
-        <field name="description">MRP II</field>
-    </record>
-    <record id="mrp_plm" model="saas.module">
-        <field name="name">mrp_plm</field>
-        <field name="description">Product Lifecycle Management (PLM)</field>
-    </record>
-    <record id="quality_control" model="saas.module">
-        <field name="name">quality_control</field>
-        <field name="description">Quality</field>
-    </record>
     <record id="sale_management" model="saas.module">
         <field name="name">sale_management</field>
         <field name="description">Sales</field>
-    </record>
-    <record id="web_studio" model="saas.module">
-        <field name="name">web_studio</field>
-        <field name="description">Studio</field>
     </record>
     <record id="point_of_sale" model="saas.module">
         <field name="name">point_of_sale</field>
@@ -73,10 +45,6 @@
         <field name="name">purchase</field>
         <field name="description">Purchase</field>
     </record>
-    <record id="helpdesk" model="saas.module">
-        <field name="name">helpdesk</field>
-        <field name="description">Helpdesk</field>
-    </record>
     <record id="hr" model="saas.module">
         <field name="name">hr</field>
         <field name="description">Employees</field>
@@ -93,10 +61,6 @@
         <field name="name">hr_expense</field>
         <field name="description">Expenses</field>
     </record>
-    <record id="barcode_widget" model="saas.module">
-        <field name="name">barcode_widget</field>
-        <field name="description">Barcode Widget</field>
-    </record>
     <record id="board" model="saas.module">
         <field name="name">board</field>
         <field name="description">Dashboards</field>
@@ -105,10 +69,6 @@
         <field name="name">contacts</field>
         <field name="description">Contacts</field>
     </record>
-    <record id="hr_appraisal" model="saas.module">
-        <field name="name">hr_appraisal</field>
-        <field name="description">Appraisal</field>
-    </record>
     <record id="hr_holidays" model="saas.module">
         <field name="name">hr_holidays</field>
         <field name="description">Leaves</field>
@@ -116,30 +76,6 @@
     <record id="mail" model="saas.module">
         <field name="name">mail</field>
         <field name="description">Discuss</field>
-    </record>
-    <record id="project_forecast" model="saas.module">
-        <field name="name">project_forecast</field>
-        <field name="description">Project Forecast</field>
-    </record>
-    <record id="sale_ebay" model="saas.module">
-        <field name="name">sale_ebay</field>
-        <field name="description">eBay Connector</field>
-    </record>
-    <record id="sale_subscription" model="saas.module">
-        <field name="name">sale_subscription</field>
-        <field name="description">Subscriptions</field>
-    </record>
-    <record id="sign" model="saas.module">
-        <field name="name">sign</field>
-        <field name="description">Sign</field>
-    </record>
-    <record id="voip" model="saas.module">
-        <field name="name">voip</field>
-        <field name="description">VoIP</field>
-    </record>
-    <record id="website_calendar" model="saas.module">
-        <field name="name">website_calendar</field>
-        <field name="description">Appointments</field>
     </record>
     <record id="website_livechat" model="saas.module">
         <field name="name">website_livechat</field>
@@ -152,10 +88,6 @@
     <record id="mass_mailing" model="saas.module">
         <field name="name">mass_mailing</field>
         <field name="description">Email Marketing</field>
-    </record>
-    <record id="marketing_automation" model="saas.module">
-        <field name="name">marketing_automation</field>
-        <field name="description">Marketing Automation</field>
     </record>
     <record id="lunch" model="saas.module">
         <field name="name">lunch</field>
@@ -200,9 +132,5 @@
     <record id="repair" model="saas.module">
         <field name="name">repair</field>
         <field name="description">Repairs</field>
-    </record>
-    <record id="web_mobile" model="saas.module">
-        <field name="name">web_mobile</field>
-        <field name="description">Android &amp; iPhone</field>
     </record>
 </odoo>
