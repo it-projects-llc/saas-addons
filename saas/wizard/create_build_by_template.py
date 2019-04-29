@@ -16,7 +16,7 @@ class CreateBuildByTemplate(models.TransientModel):
 
     def _compute_count(self):
         template_id = self.env.context.get('template_id')
-        return len(template_id.operator_ids)
+        self.template_operator_count = len(template_id.operator_ids)
 
     def create_build(self):
         build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)

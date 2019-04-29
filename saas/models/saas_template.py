@@ -43,9 +43,10 @@ class SAASTemplate(models.Model):
     name = fields.Char()
     template_demo = fields.Boolean('Install demo data', default=False)
     template_modules_domain = fields.Many2many('saas.module')
+    template_module_ids = fields.Many2many('saas.module')
     template_post_init = fields.Text(
         'Template Initialization',
-        default=lambda s: s.env['ir.actions.server'].DEFAULT_PYTHON_CODE,
+        default=DEFAULT_TEMPLATE_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
     build_post_init = fields.Text(
         'Build Initialization',
@@ -71,7 +72,7 @@ class SAASTemplate(models.Model):
                 'src_model': 'saas.template',
                 'view_type': 'form',
                 'view_mode': 'form',
-                'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
+                'view_id': self.env.ref('saas.saas_template_create_build').id,
                 'target': 'new',
                 'context': {'template_id': self.id},
             }
@@ -91,7 +92,7 @@ class SAASModules(models.Model):
         result = []
         for rec in self:
             if rec.description:
-                result.append((rec.id, rec.description))
+                result.append((rec.id, '%s (%s)' % (rec.description, rec.name)))
             else:
                 result.append((rec.id, rec.name))
         return result
@@ -172,22 +173,20 @@ class SAASTemplateLine(models.Model):
     @job
     def _install_modules(self):
         self.ensure_one()
-        domain = []
-        for module in self.template_id.template_modules_domain:
-            domain.append(module.name)
-        domain = [('name', 'in', MANDATORY_MODULES + domain)]
+        modules = [module.name for module in self.template_id.template_module_ids]
+        modules = [('name', 'in', MANDATORY_MODULES + modules)]
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
-                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + domain)
+                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
                 module_ids.button_immediate_install()
                 # Some magic to force reloading registry in other workers
                 env.registry.registry_invalidated = True
                 env.registry.signal_changes()
         else:
             auth = self._rpc_auth()
-            rpc_install_modules(auth, domain)
+            rpc_install_modules(auth, modules)
         self.state = 'post_init'
         self.with_delay()._post_init()
 

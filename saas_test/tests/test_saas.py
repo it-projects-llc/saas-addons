@@ -60,7 +60,7 @@ class TestSaas(TransactionCase):
         ))
 
         self.saas_template_1 = self.env['saas.template'].create({
-            'template_modules_domain': [(0, 0, {
+            'template_module_ids': [(0, 0, {
                 'name': MODULE_TO_INSTALL,
             })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
@@ -68,7 +68,7 @@ class TestSaas(TransactionCase):
         })
 
         self.saas_template_2 = self.env['saas.template'].create({
-            'template_modules_domain': [(0, 0, {
+            'template_module_ids': [(0, 0, {
                 'name': 'mail',
             })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
@@ -117,7 +117,7 @@ class TestSaas(TransactionCase):
         self.assertIn(DB_TEMPLATE_1, db.list_dbs())
         self.assert_no_error_in_db(DB_TEMPLATE_1)
 
-        # Check that module from template_modules_domain is installed
+        # Check that module from template_module_ids is installed
         self.assert_modules_is_installed(DB_TEMPLATE_1, MODULE_TO_INSTALL)
         self.assert_record_is_created(DB_TEMPLATE_1, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
@@ -131,7 +131,7 @@ class TestSaas(TransactionCase):
         self.assertIn(DB_TEMPLATE_2, db.list_dbs())
         self.assert_no_error_in_db(DB_TEMPLATE_2)
 
-        # Check that module from template_modules_domain is installed
+        # Check that module from template_module_ids is installed
         self.assert_modules_is_installed(DB_TEMPLATE_2, MODULE_TO_INSTALL)
         self.assert_record_is_created(DB_TEMPLATE_2, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 

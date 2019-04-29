@@ -1,7 +1,7 @@
 <!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
     # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
 <odoo>
-    <record model="ir.ui.view" id="create_build_by_template_wizard">
+    <record model="ir.ui.view" id="saas_template_create_build">
         <field name="name">SaaS Template Create Build</field>
         <field name="model">saas.template.create_build</field>
         <field name="type">form</field>
