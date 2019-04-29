@@ -1,0 +1,30 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <record id='saas_module_view_tree' model='ir.ui.view'>
+        <field name="name">saas.module.tree</field>
+        <field name="model">saas.module</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="description" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_module_form_view" model="ir.ui.view">
+        <field name="name">saas.module.form.view</field>
+        <field name="model">saas.module</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -25,6 +25,11 @@
     "data": [
         "security/ir.model.access.csv",
         "views/saas_view.xml",
+        "views/saas_template_views.xml",
+        "views/saas_template_operator_views.xml",
+        "views/saas_operator_views.xml",
+        "views/saas_module_views.xml",
+        "views/saas_db_views.xml",
         "wizard/create_build_by_template_view.xml",
         "data/ir_cron_data.xml",
         "data/local_operator.xml",
