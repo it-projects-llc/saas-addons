@@ -2,7 +2,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from random import choice
 
-from odoo import api, models, fields
+from odoo import api, models, fields, _
+from odoo.exceptions import ValidationError
+from odoo.service import db
 
 
 class CreateBuildByTemplate(models.TransientModel):
@@ -21,6 +23,11 @@ class CreateBuildByTemplate(models.TransientModel):
     build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
     build_name = fields.Char(string="Build name", required=True)
     template_operator_count = fields.Integer(default=get_count)
+
+    @api.constrains('build_name')
+    def _check_db(self):
+        if self.build_name in db.list_dbs():
+            raise ValidationError(_('Database name must be unique'))
 
     def create_build(self):
         build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)

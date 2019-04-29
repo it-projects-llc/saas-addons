@@ -8,6 +8,7 @@ import logging
 from odoo import models, fields, api, SUPERUSER_ID, sql_db, _
 from odoo.tools.safe_eval import test_python_expr
 from odoo.exceptions import ValidationError, UserError
+from odoo.service import db
 from odoo.addons.queue_job.job import job
 from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 
@@ -103,7 +104,7 @@ class SAASTemplateLine(models.Model):
     _description = 'Template\'s Deployment'
     _rec_name = 'operator_db_name'
 
-    template_id = fields.Many2one('saas.template', required=True)
+    template_id = fields.Many2one('saas.template', required=True, ondelete='cascade')
     operator_id = fields.Many2one('saas.operator', required=True)
     password = fields.Char('DB Password')
     operator_db_name = fields.Char(required=True, string="Template database name")
@@ -118,6 +119,12 @@ class SAASTemplateLine(models.Model):
         ('done', 'Ready'),
 
     ], default='draft')
+
+    @api.constrains('operator_db_name')
+    def _check_db(self):
+        if self.operator_db_name in db.list_dbs():
+            raise ValidationError(_('Database name must be unique'))
+
 
     def preparing_template_next(self):
         template_operators = self.search([('to_rebuild', '=', True)])
