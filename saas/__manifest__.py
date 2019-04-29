@@ -30,7 +30,7 @@
         "views/saas_operator_views.xml",
         "views/saas_module_views.xml",
         "views/saas_db_views.xml",
-        "wizard/create_build_by_template_view.xml",
+        "wizard/saas_template_create_build_view.xml",
         "data/ir_cron_data.xml",
         "data/local_operator.xml",
         "data/default_modules.xml",

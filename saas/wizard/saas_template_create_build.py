@@ -16,7 +16,7 @@ class CreateBuildByTemplate(models.TransientModel):
             for rec in self:
                 rec.template_operator_count = len(template.operator_ids)
 
-    template_operator_id = fields.Many2one('saas.template.operator', 'Template\'s Deployment', required=True)
+    template_operator_id = fields.Many2one('saas.template.operator', 'Template\'s Deployment', required=True, ondelete='cascade')
     random = fields.Boolean(string='Random operator')
     build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
     build_name = fields.Char(string="Build name", required=True)
