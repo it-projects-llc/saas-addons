@@ -16,7 +16,7 @@
         <field name="name">saas.template</field>
         <field name="model">saas.template</field>
         <field name="arch" type="xml">
-            <form>
+            <form duplicate="0">
                 <header>
                     <button name="action_create_build" type="object" string="Create Build" class="oe_read_only"/>
                 </header>
