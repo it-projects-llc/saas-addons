@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from random import choice
 
-from odoo import api, models, fields, _
+from odoo import api, models, fields
 
 
 class CreateBuildByTemplate(models.TransientModel):
