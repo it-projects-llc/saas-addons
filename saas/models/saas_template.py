@@ -48,6 +48,8 @@ class SAASTemplate(models.Model):
         'Template Initialization',
         default=DEFAULT_TEMPLATE_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
+    # TODO: need additional check on the possibility of using with format().
+    #  Normal use of curly braces will cause an error
     build_post_init = fields.Text(
         'Build Initialization',
         default=DEFAULT_BUILD_PYTHON_CODE,
