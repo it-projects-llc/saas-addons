@@ -5,7 +5,7 @@ import random
 import string
 import logging
 
-from odoo import models, fields, api, SUPERUSER_ID, sql_db, _
+from odoo import models, fields, api, SUPERUSER_ID, sql_db, _, registry
 from odoo.tools.safe_eval import test_python_expr
 from odoo.exceptions import ValidationError, UserError
 from odoo.addons.queue_job.job import job
@@ -195,6 +195,7 @@ class SAASTemplateLine(models.Model):
     def _post_init(self):
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
+            registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
                 action = env['ir.actions.server'].create({
