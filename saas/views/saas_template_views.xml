@@ -1,0 +1,37 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <record id='saas_template_view_tree' model='ir.ui.view'>
+        <field name="name">saas.template.tree</field>
+        <field name="model">saas.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Template" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_template_form_view" model="ir.ui.view">
+        <field name="name">saas.template</field>
+        <field name="model">saas.template</field>
+        <field name="arch" type="xml">
+            <!-- made this this form non-duplicable temporarily so that there were no random errors -->
+            <form duplicate="0">
+                <header>
+                    <button name="action_create_build" type="object" string="Create Build" class="oe_read_only"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="template_demo"/>
+                        <field name="template_module_ids" widget="many2many_tags"/>
+                        <field name="template_post_init" widget="ace" options="{'mode': 'python'}"/>
+                        <field name="build_post_init" widget="ace" options="{'mode': 'python'}"/>
+                        <field name="operator_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

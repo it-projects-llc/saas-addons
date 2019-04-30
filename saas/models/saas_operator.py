@@ -1,6 +1,9 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+from collections import defaultdict
+import string
+
 from odoo import models, fields, api, tools, SUPERUSER_ID
 from odoo.service import db
 from odoo.service.model import execute
@@ -11,6 +14,7 @@ class SAASOperator(models.Model):
     _name = 'saas.operator'
     _description = 'Database Operator'
 
+    name = fields.Char()
     # list of types can be extended via selection_add
     type = fields.Selection([
         ('local', 'Same Instance'),
@@ -52,9 +56,9 @@ class SAASOperator(models.Model):
         return self.db_url_template.format(db_id=db.id, db_name=db.name)
 
     def get_db_name(self, db):
-        # TODO: use mako for url templating
+        # TODO: use mako for name templating
         self.ensure_one()
-        return self.db_url_template.format(db_id=db.id)
+        return self.db_name_template.format(db_id=db.id)
 
     def _get_mandatory_args(self, db):
         self.ensure_one()
@@ -84,7 +88,12 @@ class SAASOperator(models.Model):
             'name': 'Build Code Eval',
             'state': 'code',
             'model_id': 1,
-            'code': code.format(**key_value_dict)
+            'code': string.Formatter().vformat(code, (), SafeDict(**key_value_dict))
         }
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
+
+
+class SafeDict(defaultdict):
+    def __missing__(self, key):
+        return '{' + key + '}'

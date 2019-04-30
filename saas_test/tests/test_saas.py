@@ -6,28 +6,34 @@ import odoo
 from odoo import SUPERUSER_ID
 from odoo.tests.common import TransactionCase, tagged
 from odoo.service import db
-from odoo.tools.safe_eval import safe_eval
 
 DB_TEMPLATE_1 = 'db_template_1'
 DB_TEMPLATE_2 = 'db_template_2'
 DB_INSTANCE_1 = 'db_instance_1'
 DB_INSTANCE_2 = 'db_instance_2'
-MODULES = '[\'mail\']'
+MODULE_TO_INSTALL = 'mail'
 TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
 BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
+DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {{...}}
+# You can specify places for variables that can be passed when creating a build like this:
+# env['{key_name_1}'].create({{'subject': '{key_name_2}', }})
+# When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 
 
 @tagged('post_install', 'at_install')
 class TestSaas(TransactionCase):
 
-    def assert_modules_is_installed(self, db_name, modules):
+    def assert_modules_is_installed(self, db_name, module):
         db = odoo.sql_db.db_connect(db_name)
         odoo.registry(db_name).check_signaling()
-        modules = safe_eval(modules)
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            for module in modules:
-                self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
+            self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
 
     def assert_record_is_created(self, db_name, model_name, search_domain):
         db = odoo.sql_db.db_connect(db_name)
@@ -47,20 +53,24 @@ class TestSaas(TransactionCase):
         self.assertFalse(template_db_log)
 
     def setUp(self):
-        super(TestSaasTemplate, self).setUp()
+        super(TestSaas, self).setUp()
         self.env = self.env(context=dict(
             self.env.context,
             test_queue_job_no_delay=True,
         ))
 
         self.saas_template_1 = self.env['saas.template'].create({
-            'template_modules_domain': MODULES,
+            'template_module_ids': [(0, 0, {
+                'name': MODULE_TO_INSTALL,
+            })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
-            'build_post_init': 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
+            'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
 
         self.saas_template_2 = self.env['saas.template'].create({
-            'template_modules_domain': MODULES,
+            'template_module_ids': [(0, 0, {
+                'name': 'mail',
+            })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
         })
 
@@ -107,8 +117,8 @@ class TestSaas(TransactionCase):
         self.assertIn(DB_TEMPLATE_1, db.list_dbs())
         self.assert_no_error_in_db(DB_TEMPLATE_1)
 
-        # Check that module from template_modules_domain is installed
-        self.assert_modules_is_installed(DB_TEMPLATE_1, MODULES)
+        # Check that module from template_module_ids is installed
+        self.assert_modules_is_installed(DB_TEMPLATE_1, MODULE_TO_INSTALL)
         self.assert_record_is_created(DB_TEMPLATE_1, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Template 2. Actually second template is done by calling preparing_template_next first time but that call
@@ -121,8 +131,8 @@ class TestSaas(TransactionCase):
         self.assertIn(DB_TEMPLATE_2, db.list_dbs())
         self.assert_no_error_in_db(DB_TEMPLATE_2)
 
-        # Check that module from template_modules_domain is installed
-        self.assert_modules_is_installed(DB_TEMPLATE_2, MODULES)
+        # Check that module from template_module_ids is installed
+        self.assert_modules_is_installed(DB_TEMPLATE_2, MODULE_TO_INSTALL)
         self.assert_record_is_created(DB_TEMPLATE_2, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Check that database instance created correctly

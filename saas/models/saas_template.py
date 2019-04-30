@@ -5,24 +5,31 @@ import random
 import string
 import logging
 
-from odoo import models, fields, api, registry, SUPERUSER_ID, sql_db
-from odoo.tools.safe_eval import test_python_expr, safe_eval
-from odoo.exceptions import ValidationError
+from odoo import models, fields, api, SUPERUSER_ID, sql_db, _
+from odoo.tools.safe_eval import test_python_expr
+from odoo.exceptions import ValidationError, UserError
 from odoo.addons.queue_job.job import job
 from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 
 _logger = logging.getLogger(__name__)
 
 MANDATORY_MODULES = ['auth_quick']
-DEFAULT_PYTHON_CODE = """# Available variables:
+DEFAULT_TEMPLATE_PYTHON_CODE = """# Available variables:
 #  - env: Odoo Environment on which the action is triggered
-#  - model: Odoo Model of the record on which the action is triggered; is a void recordset
-#  - record: record on which the action is triggered; may be void
-#  - records: recordset of all records on which the action is triggered in multi-mode; may be void
 #  - time, datetime, dateutil, timezone: useful Python libraries
 #  - log: log(message, level='info'): logging function to record debug information in ir.logging table
 #  - Warning: Warning Exception to use with raise
-# To return an action, assign: action = {{...}}\n\n\n\n"""
+# To return an action, assign: action = {...}\n\n\n\n"""
+
+DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {{...}}
+# You can specify places for variables that can be passed when creating a build like this:
+# env['{key_name_1}'].create({{'subject': '{key_name_2}', }})
+# When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 
 
 def random_password(len=32):
@@ -35,21 +42,19 @@ class SAASTemplate(models.Model):
 
     name = fields.Char()
     template_demo = fields.Boolean('Install demo data', default=False)
-    template_modules_domain = fields.Text(
-        'Modules to install',
-        help='Domain to search for modules to install after template database creation',
-        default="[]")
+    template_modules_domain = fields.Many2many('saas.module')
+    template_module_ids = fields.Many2many('saas.module')
     template_post_init = fields.Text(
         'Template Initialization',
-        default=DEFAULT_PYTHON_CODE,
+        default=DEFAULT_TEMPLATE_PYTHON_CODE,
         help='Python code to be executed once db is created and modules are installed')
+    # TODO: need additional check on the possibility of using with format().
+    #  Normal use of curly braces will cause an error
     build_post_init = fields.Text(
         'Build Initialization',
-        default=DEFAULT_PYTHON_CODE,
+        default=DEFAULT_BUILD_PYTHON_CODE,
         help='Python code to be executed once build db is created from template')
-    operator_ids = fields.One2many(
-        'saas.template.operator',
-        'template_id')
+    operator_ids = fields.One2many('saas.template.operator', 'template_id', string="Template's deployments")
 
     @api.constrains('template_post_init')
     def _check_python_code(self):
@@ -61,29 +66,48 @@ class SAASTemplate(models.Model):
     @api.multi
     def action_create_build(self):
         self.ensure_one()
-        res = self.env['create.build.by.template'].create({})
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Create Build',
-            'res_model': 'create.build.by.template',
-            'src_model': 'saas.template',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_id': res.id,
-            'view_id': self.env.ref('saas.create_build_by_template_wizard').id,
-            'target': 'new',
-            'context': {'template_id': self.id},
-        }
+        if any([rec.state == 'done' for rec in self.operator_ids]):
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Create Build',
+                'res_model': 'saas.template.create_build',
+                'src_model': 'saas.template',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': self.env.ref('saas.saas_template_create_build').id,
+                'target': 'new',
+            }
+        else:
+            raise UserError(_('There are no ready template\'s deployments. Create new one or wait until it\'s done.'))
+
+
+class SAASModules(models.Model):
+    _name = 'saas.module'
+    _description = 'Template\'s modules to install'
+    name = fields.Char('Technical name', required=True)
+    description = fields.Char()
+    template_ids = fields.Many2many('saas.template')
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.description:
+                result.append((rec.id, '%s (%s)' % (rec.description, rec.name)))
+            else:
+                result.append((rec.id, rec.name))
+        return result
 
 
 class SAASTemplateLine(models.Model):
     _name = 'saas.template.operator'
-    _description = 'Template\'s Settings for Operator'
+    _description = 'Template\'s Deployment'
+    _rec_name = 'operator_db_name'
 
-    template_id = fields.Many2one('saas.template', required=True)
+    template_id = fields.Many2one('saas.template', required=True, ondelete='cascade')
     operator_id = fields.Many2one('saas.operator', required=True)
     password = fields.Char('DB Password')
-    operator_db_name = fields.Char(required=True)
+    operator_db_name = fields.Char(required=True, string="Template database name")
     operator_db_id = fields.Many2one('saas.db', readonly=True)
     operator_db_state = fields.Selection(related='operator_db_id.state', string='Database operator state')
     to_rebuild = fields.Boolean(default=True)
@@ -109,7 +133,6 @@ class SAASTemplateLine(models.Model):
         if not operators:
             # it's not a time to start
             return
-
         for t_op in template_operators:
             if t_op.operator_id not in operators:
                 continue
@@ -151,18 +174,20 @@ class SAASTemplateLine(models.Model):
     @job
     def _install_modules(self):
         self.ensure_one()
-        domain = safe_eval(self.template_id.template_modules_domain)
-        domain = [('name', 'in', MANDATORY_MODULES + domain)]
+        modules = [module.name for module in self.template_id.template_module_ids]
+        modules = [('name', 'in', MANDATORY_MODULES + modules)]
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
-            registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
-                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + domain)
+                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
                 module_ids.button_immediate_install()
+                # Some magic to force reloading registry in other workers
+                env.registry.registry_invalidated = True
+                env.registry.signal_changes()
         else:
             auth = self._rpc_auth()
-            rpc_install_modules(auth, domain)
+            rpc_install_modules(auth, modules)
         self.state = 'post_init'
         self.with_delay()._post_init()
 
@@ -170,7 +195,6 @@ class SAASTemplateLine(models.Model):
     def _post_init(self):
         if self.operator_id.type == 'local':
             db = sql_db.db_connect(self.operator_db_name)
-            registry(self.operator_db_name).check_signaling()
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
                 action = env['ir.actions.server'].create({
@@ -180,7 +204,7 @@ class SAASTemplateLine(models.Model):
                     'code': self.template_id.template_post_init
                 })
                 action.run()
-                self.state = 'done'
+            self.state = 'done'
         else:
             auth = self._rpc_auth()
             rpc_code_eval(auth, self.template_id.template_post_init)
