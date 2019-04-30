@@ -3,35 +3,31 @@
 from random import choice
 
 from odoo import api, models, fields, _
-from odoo.exceptions import ValidationError
-from odoo.service import db
 
 
 class CreateBuildByTemplate(models.TransientModel):
     _name = 'saas.template.create_build'
     _description = 'Wizard to create build by template'
 
-    def get_count(self):
-        template_id = self.env.context.get('template_id')
-        template = self.env['saas.template'].browse(template_id)
-        if template_id:
-            for rec in self:
-                rec.template_operator_count = len(template.operator_ids)
+    def _default_template_id(self):
+        return self.env.context.get('active_id')
 
-    template_operator_id = fields.Many2one('saas.template.operator', 'Template\'s Deployment', required=True, ondelete='cascade')
+    template_operator_id = fields.Many2one(
+        'saas.template.operator', 'Template\'s Deployment', required=True, ondelete='cascade'
+    )
     random = fields.Boolean(string='Random operator')
     build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
     build_name = fields.Char(string="Build name", required=True)
-    template_operator_count = fields.Integer(default=get_count)
+    template_id = fields.Many2one('saas.template', default=_default_template_id)
+    template_operator_count = fields.Integer(compute="_compute_count")
 
-    @api.constrains('build_name')
-    def _check_db(self):
-        if self.build_name in db.list_dbs():
-            raise ValidationError(_('Database name must be unique'))
+    @api.depends('template_id')
+    def _compute_count(self):
+        for rec in self:
+            rec.template_operator_count = len(self.template_id.operator_ids)
 
     def create_build(self):
         build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)
-        template_id = self.env.context.get('template_id')
         return {
             'type': 'ir.actions.act_window',
             'name': 'SaaS DB',
@@ -39,15 +35,12 @@ class CreateBuildByTemplate(models.TransientModel):
             'res_id': build.id,
             'view_mode': 'form',
             'target': 'main',
-            'context': template_id,
         }
 
     @api.onchange('random')
     def change_operator(self):
         if self.random:
-            template_id = self.env.context.get('template_id')
-            template = self.env['saas.template'].browse(template_id)
-            random_operator = choice(template.operator_ids)
+            random_operator = choice(self.template_id.operator_ids)
             self.template_operator_id = random_operator.id
 
 
