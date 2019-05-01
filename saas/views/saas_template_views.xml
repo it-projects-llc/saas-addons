@@ -8,6 +8,8 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name" string="Template" />
+                <field name="template_module_ids" widget="many2many_tags"/>
+                <field name="template_demo"/>
             </tree>
         </field>
     </record>
