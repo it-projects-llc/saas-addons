@@ -36,6 +36,7 @@
         "data/default_modules.xml",
     ],
     "demo": [
+        "demo/saas_template_demo.xml",
     ],
     "qweb": [
     ],
