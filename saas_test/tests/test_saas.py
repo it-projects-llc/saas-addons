@@ -108,7 +108,8 @@ class TestSaas(TransactionCase):
             db.exp_drop(DB_TEMPLATE_1)
         if DB_TEMPLATE_2 in db.list_dbs():
             db.exp_drop(DB_TEMPLATE_2)
-
+        if 'template_database' in db.list_dbs():
+            db.exp_drop('template_database')
         # Template 1
         self.saas_template_operator_1.preparing_template_next()
         # Tests that template db created correctly
