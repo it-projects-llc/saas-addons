@@ -27,7 +27,6 @@
                     <group>
                         <field name="name"/>
                         <field name="operator_id"/>
-                        <field name="type"/>
                     </group>
                 </sheet>
             </form>
