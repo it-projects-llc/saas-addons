@@ -15,8 +15,11 @@ class CreateBuildByTemplate(models.TransientModel):
     template_operator_id = fields.Many2one(
         'saas.template.operator', 'Template\'s Deployment', required=True, ondelete='cascade'
     )
-    random = fields.Boolean(string='Random operator')
-    build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id')
+    random = fields.Boolean(string='Use random operator')
+    build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id',
+                                          string="Build Initialization Values",
+                                          help="These values will be used on execution "
+                                               "template's Build Initialization code")
     build_name = fields.Char(string="Build name", required=True)
     template_id = fields.Many2one('saas.template', default=_default_template_id)
     template_operator_count = fields.Integer(compute="_compute_count")
