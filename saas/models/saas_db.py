@@ -12,7 +12,7 @@ class SAASDB(models.Model):
     name = fields.Char('Name', help='Technical Database name')
     operator_id = fields.Many2one('saas.operator', required=True)
     type = fields.Selection([
-        ('template', 'Templated DB'),
+        ('template', 'Template DB'),
         ('build', 'Normal Build'),
     ], string='DB Type', default='build')
     state = fields.Selection([
@@ -40,6 +40,7 @@ class SAASDB(models.Model):
             self.env['saas.log'].log_db_dropped(self)
 
     def get_url(self):
+        # TODO: need possibility to use custom domain
         self.ensure_one()
         return self.operator_id.get_db_url(self)
 
