@@ -2,38 +2,28 @@
  SaaS Base
 ===========
 
-Follow insturction of `Job Queue <https://github.com/OCA/queue/tree/12.0/queue_job>`__ module.
-
 Installation
 ============
 
-Follow instruction
-
-{Instruction about things to do before actual installation}
-
-* {OPTIONAL }`Activate longpolling <https://odoo-development.readthedocs.io/en/latest/admin/longpolling.html>`__ 
-* {Additional notes if any}
+* Follow instruction of `Job Queue <https://github.com/OCA/queue/tree/12.0/queue_job>`__ module.
 * `Install <https://odoo-development.readthedocs.io/en/latest/odoo/usage/install-module.html>`__ this module in a usual way
-
-Configuration
-=============
-
-{Instruction how to configure the module before start to use it}
-
-* `Activate Developer Mode <https://odoo-development.readthedocs.io/en/latest/odoo/usage/debug-mode.html>`__
-* Open menu ``[[ {Menu} ]] >> {Submenu} >> {Subsubmenu}``
-* Click ``[{Button Name}]``
+* Restart the database as required by the Job Queue module
 
 Usage
 =====
 
-{Instruction for daily usage. It should describe how to check that module works. What shall user do and what would user get.} 
+**Create template**
 
-* Open menu ``[[ {Menu} ]]>> {Submenu} >> {Subsubmenu}``
-* Click ``[{Button Name}]``
-* RESULT: {what user gets, how the modules changes default behaviour}
+* Open menu ``[[ SaaS ]] >> Templates``
+* Click ``Create``
+* Fill in the required fields including Template's deployments
 
-Uninstallation
-==============
+**Create build**
 
-{Optional section for uninstallation notes. Delete it if you don't have notes for uninstallation.}
+* Wait until needed Template's deployment is ready
+* Click ``Create build``
+* Fill in required fields
+* Click ``Create build``
+* Wait for the creation of the build on the template
+* Click ``Connect to the build``
+* RESULT: you will be redirected and logged in to the created build
