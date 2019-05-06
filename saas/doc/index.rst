@@ -15,15 +15,15 @@ Usage
 **Create template**
 
 * Open menu ``[[ SaaS ]] >> Templates``
-* Click ``Create``
+* Click ``[Create]``
 * Fill in the required fields including **Template's deployments**
 
 **Create build**
 
-* Wait until needed Template's deployment is ready
-* Click ``Create build``
+* Wait until at least one of **Template's deployments** is ready
+* Click ``[Create build]``
 * Fill in required fields
-* Click ``Create build``
+* Click ``[Create build]``
 * Wait for the creation of the build on the template
-* Click ``Connect to the build``
+* Click ``[Connect to the build]``
 * RESULT: you will be redirected and logged in to the created build
