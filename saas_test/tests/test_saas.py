@@ -108,7 +108,8 @@ class TestSaas(TransactionCase):
             db.exp_drop(DB_TEMPLATE_1)
         if DB_TEMPLATE_2 in db.list_dbs():
             db.exp_drop(DB_TEMPLATE_2)
-
+        if 'template_database' in db.list_dbs():
+            db.exp_drop('template_database')
         # Template 1
         self.saas_template_operator_1.preparing_template_next()
         # Tests that template db created correctly
@@ -122,7 +123,8 @@ class TestSaas(TransactionCase):
         self.assert_record_is_created(DB_TEMPLATE_1, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Template 2. Actually second template is done by calling preparing_template_next first time but that call
-        # is needed to recreate calling by crone every few minutes
+        # is needed to emulate calling by crone every few minutes. This is done to make sure that the repeated method
+        # call does not cause errors.
         self.saas_template_operator_2.preparing_template_next()
 
         # Tests that template db created correctly

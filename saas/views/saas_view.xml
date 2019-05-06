@@ -4,28 +4,29 @@
 <odoo>
     <!-- Actions   -->
     <record model='ir.actions.act_window' id="saas_template_action" >
-        <field name="name">SaaS template</field>
+        <field name="name">Templates</field>
         <field name="res_model">saas.template</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
     <record model='ir.actions.act_window' id="saas_db_action" >
-        <field name="name">SaaS DB</field>
+        <field name="name">Builds</field>
         <field name="res_model">saas.db</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
+        <field name="domain">[('type', '=', 'build')]</field>
     </record>
     <!-- Menu items-->
     <menuitem name="SaaS"
               id="saas_main_menu"/>
 
-    <menuitem name="SaaS Template"
+    <menuitem name="Templates"
               parent="saas_main_menu"
               id="saas_main_menu_item"
               sequence="3"
               action="saas_template_action"/>
 
-    <menuitem name="SaaS DB"
+    <menuitem name="Builds"
               parent="saas_main_menu"
               id="saas_main_menu_item_2"
               sequence="4"
