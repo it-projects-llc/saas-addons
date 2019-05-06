@@ -16,7 +16,7 @@ Usage
 
 * Open menu ``[[ SaaS ]] >> Templates``
 * Click ``Create``
-* Fill in the required fields including Template's deployments
+* Fill in the required fields including **Template's deployments**
 
 **Create build**
 
