@@ -5,5 +5,6 @@
         <field name="name">Same Instance</field>
         <field name="type">local</field>
         <field name="db_url_template">http://{db_name}.{db_id}.127.0.0.1.nip.io</field>
+        <field name="master_url">http://saas.127.0.0.1.nip.io</field>
     </record>
 </odoo>
