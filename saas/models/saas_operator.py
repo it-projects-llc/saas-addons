@@ -19,8 +19,9 @@ class SAASOperator(models.Model):
     type = fields.Selection([
         ('local', 'Same Instance'),
     ], 'Type')
-    host = fields.Char()
-    port = fields.Char()
+    master_url = fields.Char(required=True, help='URL for server-to-server communication ')
+    # host = fields.Char()
+    # port = fields.Char()
     db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
     db_name_template = fields.Char('DB Names', help='Avaialble variables: {db_id}')
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
@@ -68,7 +69,7 @@ class SAASOperator(models.Model):
 
     def _get_mandatory_args(self, db):
         self.ensure_one()
-        master_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        master_url = self.master_url
         return {
             'master_url': master_url,
             'build_id': db.id

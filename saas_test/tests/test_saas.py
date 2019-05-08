@@ -77,11 +77,13 @@ class TestSaas(TransactionCase):
         self.saas_operator_1 = self.env['saas.operator'].create({
             'type': 'local',
             'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
+            'master_url': 'http://saas.127.0.0.1.nip.io:8069',
         })
 
         self.saas_operator_2 = self.env['saas.operator'].create({
             'type': 'local',
             'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
+            'master_url': 'http://saas.127.0.0.1.nip.io:8069',
         })
 
         self.saas_template_operator_1 = self.env['saas.template.operator'].create({

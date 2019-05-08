@@ -32,7 +32,7 @@
         "views/saas_db_views.xml",
         "wizard/saas_template_create_build_view.xml",
         "data/ir_cron_data.xml",
-        "data/local_operator.xml",
+        "data/saas_operator_data.xml",
         "data/default_modules.xml",
     ],
     "demo": [

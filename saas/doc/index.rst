@@ -9,6 +9,11 @@ Installation
 * `Install <https://odoo-development.readthedocs.io/en/latest/odoo/usage/install-module.html>`__ this module in a usual way
 * Restart the odoo as required by the Job Queue module
 
+Configuration
+=============
+
+* Use ``db-filter=^%d$`` when using Same Instance type in saas.operator model
+
 Usage
 =====
 

@@ -12,8 +12,7 @@
                         <field name="type"/>
                         <field name="db_url_template"/>
                         <field name="db_name_template"/>
-                        <field name="host"/>
-                        <field name="port"/>
+                        <field name="master_url"/>
                     </group>
                 </sheet>
             </form>
