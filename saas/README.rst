@@ -47,9 +47,10 @@ Roadmap
     * use random suffix to avoid droping database reserved for production purposes during test execution, e.g. template_database_ecusnc63asdf234
     * tearDown: drop created databases after test exectuion
 * TODO: Add coverage for "Connect to the build" button:
-    * get authentication on master database in requests' session(use authenticate method from odoo/tests/common.py)
+    * get authentication on master database in requests' session (use authenticate method from odoo/tests/common.py)
     * open "connect to build url"
     * check that you are finally redirected to /web page at the build
+* TODO: add computed record in saas.db model to avoid using the name of the master database
 
 Credits
 =======
