@@ -12,7 +12,7 @@ Installation
 Configuration
 =============
 
-* Use db-filter=^%d$ when using Same Instance type in saas.operator model
+* Use ``db-filter=^%d$`` when using Same Instance type in saas.operator model
 
 Usage
 =====
