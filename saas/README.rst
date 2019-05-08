@@ -50,7 +50,7 @@ Roadmap
     * get authentication on master database in requests' session (use authenticate method from odoo/tests/common.py)
     * open "connect to build url"
     * check that you are finally redirected to /web page at the build
-* TODO: add computed record in saas.db model to avoid using the name of the master database
+* TODO: add computed record in saas.db model to avoid using the name of the master database. Some new db type is needed. Say, ``('other', 'Reserved DB Name')``
 
 Credits
 =======
