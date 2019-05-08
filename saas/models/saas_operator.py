@@ -19,7 +19,7 @@ class SAASOperator(models.Model):
     type = fields.Selection([
         ('local', 'Same Instance'),
     ], 'Type')
-    master_url = fields.Char(required=True, help='Master URL to manage builds')
+    master_url = fields.Char(required=True, help='URL for server-to-server communication ')
     # host = fields.Char()
     # port = fields.Char()
     db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
