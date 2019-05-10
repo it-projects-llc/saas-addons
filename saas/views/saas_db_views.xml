@@ -1,0 +1,37 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <record id='saas_db_view_tree' model='ir.ui.view'>
+        <field name="name">saas.db.tree</field>
+        <field name="model">saas.db</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="state"/>
+                <field name="operator_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_db_form_view" model="ir.ui.view">
+        <field name="name">saas.db</field>
+        <field name="model">saas.db</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_get_build_access" type="object" string="Connect to the Build" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="operator_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>

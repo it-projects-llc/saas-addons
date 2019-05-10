@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_saas_db,access_saas_db,model_saas_db,base.group_user,1,0,0,0
+access_saas_template_operator,access_saas_template_operator,model_saas_template_operator,base.group_user,1,1,1,0
+access_saas_log,access_saas_log,model_saas_log,base.group_user,1,0,1,0
+access_saas_operator,access_saas_operator,model_saas_operator,base.group_user,1,1,1,0
+access_saas_template,access_saas_template,model_saas_template,base.group_user,1,1,1,1
+access_saas_module,access_saas_module,model_saas_module,base.group_user,1,1,1,1

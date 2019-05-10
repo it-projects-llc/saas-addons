@@ -1,9 +1,9 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+# License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
-    "name": """Quick Authentication (Master)""",
-    "summary": """Authentication provider for "Quick Authentication" module""",
-    "category": "Extra Tools",
+    "name": """Quick Demo Databases""",
+    "summary": """One-click demo-instances with modules from your git repositories""",
+    "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
     "version": "12.0.1.0.0",
@@ -12,16 +12,15 @@
     "author": "IT-Projects LLC, Ivan Yelizariev",
     "support": "apps@it-projects.info",
     "website": "https://it-projects.info/team/yelizariev",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
 
     "depends": [
+        "saas",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
-        "security/res_groups_data.xml",
-        "security/ir_rule_data.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [
@@ -36,15 +35,4 @@
 
     "auto_install": False,
     "installable": True,
-
-    # "demo_title": "Quick Authentication (Master)",
-    # "demo_addons": [
-    # ],
-    # "demo_addons_hidden": [
-    # ],
-    # "demo_url": "DEMO-URL",
-    # "demo_summary": "Authentication provider for "Quick Authentication" module",
-    # "demo_images": [
-    #    "images/MAIN_IMAGE",
-    # ]
 }

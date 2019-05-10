@@ -44,14 +44,6 @@ Maintainers
 -----------
 * `IT-Projects LLC <https://it-projects.info>`__
 
-      To get a guaranteed support
-      you are kindly requested to purchase the module
-      at `odoo apps store <https://apps.odoo.com/apps/modules/12.0/auth_quick_master/>`__.
-
-      Thank you for understanding!
-
-      `IT-Projects Team <https://www.it-projects.info/team>`__
-
 Further information
 ===================
 

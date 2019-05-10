@@ -1,0 +1,36 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record model="ir.ui.view" id="saas_template_create_build">
+        <field name="name">SaaS Template Create Build</field>
+        <field name="model">saas.template.create_build</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="build_name"/>
+                    <field name="template_id" invisible="1"/>
+                    <field name="template_operator_id" domain="[('template_id', '=', template_id), ('state', '=', 'done')]"/>
+                    <field name="template_operator_count" invisible="1"/>
+                    <field name="random" attrs="{'invisible':[('template_operator_count', 'in', [0, 1])]}"/>
+                    <field name='build_post_init_ids'>
+                        <tree editable='bottom'>
+                            <field name='key'/>
+                            <field name='value'/>
+                        </tree>
+                        <form string='Build post init form'>
+                            <group>
+                                <field name='key'/>
+                                <field name='value'/>
+                            </group>
+                        </form>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    <button name="create_build" string="Create Build" type="object" class="oe_highlight" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
