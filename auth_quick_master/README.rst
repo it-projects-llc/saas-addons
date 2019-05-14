@@ -6,6 +6,7 @@
  Quick Authentication (Master)
 ===============================
 
+
 Authentication provider for ``auth_quick`` module.
 
 Allows users from group ``Quick authentication for builds`` be authenticated as any user from the build. Access levels to builds can be extented in a custom module.
