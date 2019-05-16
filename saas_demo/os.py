@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 # Some code is based on https://github.com/odoo/odoo-extra/blob/master/runbot/runbot.py
 import subprocess
@@ -12,12 +13,12 @@ except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file
+from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file, ad_paths
 import odoo
 
 _logger = logging.getLogger(__name__)
 config_parser = ConfigParser.ConfigParser()
-
+ad_paths.append(os.path.join(tools.config['data_dir'], 'repos'))
 
 # SYSTEM
 def run(l, env=None):
@@ -125,9 +126,9 @@ def get_manifests(path):
         for it in os.listdir(path)
         if is_really_module(it)
     ]
-    res = []
+    res = {}
     for mname in modules:
         mod_path = os.path.join(path, mname)
         info = load_information_from_description_file(mname, mod_path)
         res[mname] = info
-    return info
+    return res
