@@ -4,7 +4,6 @@
 import logging
 import os
 import os.path
-import json
 
 from odoo import models, fields, api
 
