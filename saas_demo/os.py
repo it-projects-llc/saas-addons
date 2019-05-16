@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 # Some code is based on https://github.com/odoo/odoo-extra/blob/master/runbot/runbot.py
 import subprocess
@@ -6,13 +7,17 @@ import os
 import os.path
 import logging
 import errno
+import io
+from os.path import join as opj
+import ast
 try:
     import configparser as ConfigParser
 except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file
+from odoo.modules.module import module_manifest, README, MANIFEST_NAMES, adapt_version
+from odoo.tools import pycompat
 import odoo
 
 _logger = logging.getLogger(__name__)
@@ -54,7 +59,7 @@ def mkdir(d):
 def git(path, cmd):
     cmd = ['git', '-C', path] + cmd
     _logger.debug("git: %s", ' '.join(cmd))
-    return subprocess.check_output(cmd).strip()
+    return subprocess.check_output(cmd).strip().decode('utf-8')
 
 
 def update_repo(path, repo_url, branch):
@@ -64,6 +69,11 @@ def update_repo(path, repo_url, branch):
     git(path, ['checkout', 'origin/%s' % branch])
     commit = git(path, ['rev-parse', 'origin/%s' % branch])
     return commit
+
+
+def analysis_dir():
+    d = os.path.join(tools.config['data_dir'], 'analysis')
+    return mkdir(d)
 
 
 # ODOO
@@ -102,15 +112,85 @@ def update_addons_path(folder_of_folders, force=True):
     ]
     addons_path += extra
     addons_path = list(set(addons_path))
-    addons_path = addons_path.join(',')
+    addons_path = ','.join(addons_path)
     _logger.info('addons_path for %s:\n%s', folder_of_folders, addons_path)
     update_config('options', 'addons_path', addons_path)
 
 
 def update_config(section, key, value):
+    config_parser.read(tools.config.rcfile)
     config_parser.set(section, key, value)
     with open(tools.config.rcfile, 'w') as configfile:
         config_parser.write(configfile)
+
+
+def _fileopen(path, mode, basedir, pathinfo):
+    name = os.path.normpath(os.path.normcase(os.path.join(basedir, path)))
+    if os.path.isfile(name):
+        if 'b' in mode:
+            fo = open(name, mode)
+        else:
+            fo = io.open(name, mode, encoding='utf-8')
+        if pathinfo:
+            return fo, name
+        return fo
+
+
+def file_open(name, mode="r", pathinfo=False):
+    if os.path.isabs(name):
+        base, name = os.path.split(name)
+        return _fileopen(name, mode=mode, basedir=base, pathinfo=pathinfo)
+
+
+def load_information_from_description_file(module, mod_path):
+    """
+    :param module: The name of the module (sale, purchase, ...)
+    :param mod_path: Physical path of module, if not providedThe name of the module (sale, purchase, ...)
+    """
+    manifest_file = module_manifest(mod_path)
+    if manifest_file:
+        # default values for descriptor
+        info = {
+            'application': False,
+            'author': 'Odoo S.A.',
+            'auto_install': False,
+            'category': 'Uncategorized',
+            'depends': [],
+            'description': '',
+            'installable': True,
+            'license': 'LGPL-3',
+            'post_load': None,
+            'version': '1.0',
+            'web': False,
+            'sequence': 100,
+            'summary': '',
+            'website': '',
+        }
+        info.update(pycompat.izip(
+            'depends data demo test init_xml update_xml demo_xml'.split(),
+            iter(list, None)))
+        f = file_open(manifest_file, mode='rb')
+        try:
+            info.update(ast.literal_eval(pycompat.to_native(f.read())))
+        finally:
+            f.close()
+
+        if not info.get('description'):
+            readme_path = [opj(mod_path, x) for x in README
+                           if os.path.isfile(opj(mod_path, x))]
+            if readme_path:
+                readme_text = file_open(readme_path[0]).read()
+                info['description'] = readme_text
+
+        if 'active' in info:
+            # 'active' has been renamed 'auto_install'
+            info['auto_install'] = info['active']
+
+        info['version'] = adapt_version(info['version'])
+        return info
+
+    _logger.debug('module %s: no manifest file found %s', module, MANIFEST_NAMES)
+    return {}
 
 
 def get_manifests(path):
@@ -125,9 +205,9 @@ def get_manifests(path):
         for it in os.listdir(path)
         if is_really_module(it)
     ]
-    res = []
+    res = {}
     for mname in modules:
         mod_path = os.path.join(path, mname)
         info = load_information_from_description_file(mname, mod_path)
         res[mname] = info
-    return info
+    return res
