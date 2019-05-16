@@ -4,6 +4,7 @@
 
 from odoo.tests.common import TransactionCase, tagged
 
+
 @tagged('post_install', 'at_install')
 class TestSaasDemo(TransactionCase):
     def setUp(self):
@@ -31,7 +32,6 @@ class TestSaasDemo(TransactionCase):
             'demo_main_addon_id': self.saas_module.id,
             'demo_branch': '12.0',
         })
-
 
         self.saas_demo_repo = self.env['saas.demo.repo'].create({
             'demo_id': self.saas_demo.id,
