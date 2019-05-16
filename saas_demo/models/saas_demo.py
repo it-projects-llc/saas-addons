@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import logging
 import os
@@ -35,7 +36,7 @@ class Demo(models.Model):
             for repo in demo.repo_ids:
                 path = os.path.join(repos_path, repo.url_escaped)
                 for module, manifest in get_manifests(path).items():
-                    if not manifest.get('demo_url'):
+                    if not manifest.get('saas_demo_title'):
                         # not a demo
                         continue
                     if not manifest.get('installable', True):
@@ -43,24 +44,40 @@ class Demo(models.Model):
                         continue
                     template = self.env['saas.template'].search([
                         ('demo_id', '=', demo.id),
-                        ('demo_module', '=', module),
+                        ('demo_main_addon_id.name', '=', module),
                     ])
                     if not template:
+                        module_rec = self.env['saas.module'].search([('name', '=', module)])
+                        if not module_rec:
+                            module_rec = self.env['saas.module'].create({
+                                'name': module
+                            })
                         template = self.env['saas.template'].create({
                             'demo_id': demo.id,
-                            'demo_module': module,
+                            'demo_module': module_rec.id,
                         })
                         demos_for_immediate_update |= demo
+                    modules_to_show = [module] + manifest.get('saas_demo_addons')
+                    modules_to_install = modules_to_show + manifest.get('saas_demo_addons_hidden')
                     template.write({
-                        'name': manifest.get('demo_title'),
-                        'template_modules_domain': json.dumps([
-                            ('name', 'in', manifest.get('demo_addons') + manifest.get('demo_addons_hidden'))
-                        ]),
-                        'demo_addons': ','.join(manifest.get('demo_addons')),
-                        'demo_url': manifest.get('demo_url'),
+                        'name': manifest.get('saas_demo_title'),
+                        'template_module_ids': self.get_module_vals(modules_to_install),
+                        'demo_addon_ids': self.get_module_vals(modules_to_show),
                     })
         if demos_for_immediate_update:
             self.repos_updating_start(demos_for_immediate_update)
+
+    @api.model
+    def get_module_vals(self, modules):
+        vals = []
+        for module in modules:
+            module_rec = self.env['saas.module'].search([('name', '=', module)])
+            if not module_rec:
+                module_rec = self.env['saas.module'].create({
+                    'name': module
+                })
+            vals.append((4, module_rec.id, 0))
+        return vals
 
     @api.model
     @job
@@ -124,10 +141,10 @@ class Repo(models.Model):
     _description = 'Repository for Demo'
     _rec_name = 'url'
 
-    demo_id = fields.Many2one('saas.operator')
-    url = fields.Char('Repo URL')
+    demo_id = fields.Many2one('saas.demo')
+    url = fields.Char('Repo URL', required=True)
     url_escaped = fields.Char('Repo URL (escaped)', compute='_compute_url_escaped')
-    branch = fields.Char('Branch')
+    branch = fields.Char('Branch', required=True)
     demo_repo = fields.Boolean('Scan for demo', default=True)
     commit = fields.Char('Commit SHA', help='Last processed point')
 
