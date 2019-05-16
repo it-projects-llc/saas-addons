@@ -1,5 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
-# License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """Quick Demo Databases""",
     "summary": """One-click demo-instances with modules from your git repositories""",
@@ -12,18 +13,20 @@
     "author": "IT-Projects LLC, Ivan Yelizariev",
     "support": "apps@it-projects.info",
     "website": "https://it-projects.info/team/yelizariev",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
 
     "depends": [
-        "saas",
+        "saas_public",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/ir.model.access.csv",
+        "views/saas_demo_view.xml",
     ],
     "demo": [
+        "demo/demo.xml",
     ],
     "qweb": [
     ],
@@ -34,5 +37,5 @@
     "uninstall_hook": None,
 
     "auto_install": False,
-    "installable": False,
+    "installable": True,
 }

@@ -1,0 +1,54 @@
+<!-- Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <!-- Actions -->
+    <record model='ir.actions.act_window' id="saas_demo_action" >
+        <field name="name">Demo</field>
+        <field name="res_model">saas.demo</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- Menu items -->
+    <menuitem name="SaaS Demo"
+              id="saas_demo_main_menu"/>
+
+    <menuitem name="Demos"
+              parent="saas_demo_main_menu"
+              id="saas_demo_main_menu_item"
+              sequence="1"
+              action="saas_demo_action"/>
+
+    <record id='saas_demo_view_tree' model='ir.ui.view'>
+        <field name="name">saas.demo.tree</field>
+        <field name="model">saas.demo</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="operator_ids" />
+                <field name="template_ids"/>
+                <field name="repo_ids"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_demo_form_view" model="ir.ui.view">
+        <field name="name">saas.demo</field>
+        <field name="model">saas.demo</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_fetch_templates" type="object" string="Fetch Repositories" class="oe_read_only"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="operator_ids"/>
+                        <field name="template_ids"/>
+                        <field name="repo_ids" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
