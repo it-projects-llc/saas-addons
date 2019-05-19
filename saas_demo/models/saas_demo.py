@@ -53,7 +53,7 @@ class Demo(models.Model):
                             })
                         template = self.env['saas.template'].create({
                             'demo_id': demo.id,
-                            'demo_module': module_rec.id,
+                            'demo_main_addon_id': module_rec.id,
                         })
                         demos_for_immediate_update |= demo
                     modules_to_show = [module] + manifest.get('saas_demo_addons')
@@ -68,14 +68,12 @@ class Demo(models.Model):
 
     @api.model
     def get_module_vals(self, modules):
-        vals = []
+        module_ids = self.env['saas.module'].search([('name', 'in', modules)])
         for module in modules:
-            module_rec = self.env['saas.module'].search([('name', '=', module)])
-            if not module_rec:
-                module_rec = self.env['saas.module'].create({
-                    'name': module
-                })
-            vals.append((4, module_rec.id, 0))
+            if module not in module_ids.mapped('name'):
+                new_module = self.env['saas.module'].create({'name': module})
+                module_ids |= new_module
+        vals = [(4, module.id, 0) for module in module_ids]
         return vals
 
     @api.model
