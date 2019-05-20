@@ -114,7 +114,7 @@ class Demo(models.Model):
         # filter out operators which demo already has processing operator
         def filter_free_operators(op):
             states = op.demo_id.operator_ids.mapped('update_repos_state')
-            return all((s != 'processing' for s in states))
+            return all((s != 'updating' for s in states))
 
         operators = pending_operators.filtered(filter_free_operators)
         if not operators:
@@ -122,11 +122,10 @@ class Demo(models.Model):
             return
 
         operators.write({
-            'update_repos_state': 'processing',
+            'update_repos_state': 'updating',
         })
         # close transaction to make update_repos_state update visible
         self.env.cr.commit()
-
         operators.update_repos()
 
         # repos_updating_next() will be called via cron
