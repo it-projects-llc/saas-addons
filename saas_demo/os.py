@@ -104,12 +104,13 @@ def update_addons_path(folder_of_folders, force=True):
     ]
     addons_path += extra
     addons_path = list(set(addons_path))
-    addons_path = addons_path.join(',')
+    addons_path = ','.join(addons_path)
     _logger.info('addons_path for %s:\n%s', folder_of_folders, addons_path)
     update_config('options', 'addons_path', addons_path)
 
 
 def update_config(section, key, value):
+    config_parser.read(tools.config.rcfile)
     config_parser.set(section, key, value)
     with open(tools.config.rcfile, 'w') as configfile:
         config_parser.write(configfile)
