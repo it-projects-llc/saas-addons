@@ -4,7 +4,7 @@
 from collections import defaultdict
 import string
 
-from odoo import models, fields, api, tools, SUPERUSER_ID
+from odoo import models, fields, api, tools, SUPERUSER_ID, service
 from odoo.service import db
 from odoo.service.model import execute
 from odoo.addons.queue_job.job import job
@@ -27,9 +27,29 @@ class SAASOperator(models.Model):
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     @api.multi
+    def is_local(self):
+        # TODO: Check code duplicate in saas_demo module
+        return any((r.type == 'local' for r in self))
+
+    @api.multi
+    def _enable_db(self, db_name):
+        for r in self:
+            if r.type != 'local':
+                continue
+            # TODO: add db_name to tools.config['db_name'] which is comma-seprated list
+            # TODO: somehow master saas db must be already in toolconfig['db_name'] list
+
+    @api.multi
+    def _disable_db(self, db_name):
+        for r in self:
+            if r.type != 'local':
+                continue
+            # TODO: REMOVE db_name from tools.config['db_name'] which is comma-seprated list
+
+    @api.multi
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
         """Synchronous db creation"""
-        if self.type == 'local':
+        if self.is_local():
             # to avoid installing extra modules we need this condition
             if tools.config['init']:
                 tools.config['init'] = {}
@@ -38,10 +58,12 @@ class SAASOperator(models.Model):
             if tools.config['test_enable']:
                 tools.config['test_enable'] = {}
 
+        restart = False
         for r in self:
             if r.type != 'local':
                 continue
 
+            restart = True
             if template_db:
                 db._drop_conn(self.env.cr, template_db)
                 db.exp_duplicate_database(template_db, db_name)
@@ -49,13 +71,23 @@ class SAASOperator(models.Model):
                 db.exp_create_database(
                     db_name, demo, lang, user_password=password)
 
+        self._enable_db(db_name)
+        if restart:
+            self._restart_odoo()
+
     @api.multi
     def _drop_db(self, db_name):
+        restart = False
         for r in self:
             if r.type != 'local':
                 continue
 
             db.exp_drop(db_name)
+            r._disable_db(db_name)
+            restart = True
+
+        if restart:
+            self._restart_odoo()
 
     def get_db_url(self, db):
         # TODO: use mako for url templating
@@ -99,6 +131,16 @@ class SAASOperator(models.Model):
         }
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
+
+    def _restart_odoo(self):
+        # TODO: remove code duplicate from saas_demo module
+        if self.is_local():
+            # must be called asyncronyosly to finish current transaction
+            self.with_delay()._restart_odoo_job()
+
+    @job
+    def _restart_odoo_job(self):
+        service.service.restart()
 
 
 class SafeDict(defaultdict):
