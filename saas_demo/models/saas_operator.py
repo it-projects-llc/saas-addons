@@ -51,7 +51,6 @@ class SAASOperator(models.Model):
         # update odoo source only when we have updates in other repositories.
         # Otherwise don't update it and don't rebuild templates
         updated_operators.update_odoo()
-
         # update addons-path
         updated_operators.update_addons_path()
 
@@ -73,7 +72,7 @@ class SAASOperator(models.Model):
     @api.multi
     def restart_odoo(self):
         if self.is_local():
-            service.service.restart()
+            service.server.restart()
 
     @api.multi
     def _update_repos(self):
