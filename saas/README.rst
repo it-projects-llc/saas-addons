@@ -52,6 +52,7 @@ Roadmap
     * check that you are finally redirected to /web page at the build
 * TODO: add computed record in saas.db model to avoid using the name of the master database. Some new db type is needed. Say, ``('other', 'Reserved DB Name')``
 
+* TODO: saas.operator: add a button that runs a wizard which allows to make new build (saas.db) from backup; add a method in ``saas.operator`` which takes the backup as argument; implement the method for "Same Instance" operator 
 Credits
 =======
 
