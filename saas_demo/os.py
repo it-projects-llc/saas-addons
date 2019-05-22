@@ -13,12 +13,11 @@ except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file, ad_paths
+from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file
 import odoo
 
 _logger = logging.getLogger(__name__)
 config_parser = ConfigParser.ConfigParser()
-ad_paths.append(os.path.join(tools.config['data_dir'], 'repos'))
 
 
 # SYSTEM
