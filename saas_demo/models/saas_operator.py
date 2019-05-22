@@ -61,7 +61,12 @@ class SAASOperator(models.Model):
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
-            git(root_odoo_path(), ['pull', 'origin'])
+            test = self.env['ir.config_parameter'].get_param('test')
+            if test:
+                # no need to pull odoo folder in test mode
+                return
+            else:
+                git(root_odoo_path(), ['pull', 'origin'])
 
     @api.multi
     def update_addons_path(self):
