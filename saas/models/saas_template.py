@@ -228,7 +228,7 @@ class SAASTemplateLine(models.Model):
         return key_value_dict
 
     @api.multi
-    def create_db(self, db_name, key_values):
+    def create_db(self, db_name, key_values, with_delay=True):
         self.ensure_one()
         build = self.env['saas.db'].create({
             'name': db_name,
@@ -237,13 +237,23 @@ class SAASTemplateLine(models.Model):
         })
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
-
-        build.with_delay().create_db(
-            self.operator_db_name,
-            self.template_id.template_demo,
-            self.password,
-        )
-        key_value_dict = self._convert_to_dict(key_values)
-        self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+        if isinstance(key_values, dict):
+            key_value_dict = key_values
+        else:
+            key_value_dict = self._convert_to_dict(key_values)
+        if with_delay:
+            build.with_delay().create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+        else:
+            build.create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_value_dict)
 
         return build
