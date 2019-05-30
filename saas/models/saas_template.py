@@ -252,3 +252,8 @@ class SAASTemplateLine(models.Model):
         self.operator_id.build_post_init(build, self.template_id.build_post_init, key_value_dict)
 
         return build
+
+    @api.multi
+    def get_ready_random_operator(self):
+        ready_operators = self.search([('state', '=', 'done'), ('id', 'in', self.ids)])
+        return random.choice(ready_operators)

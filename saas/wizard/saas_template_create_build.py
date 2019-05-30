@@ -43,8 +43,8 @@ class CreateBuildByTemplate(models.TransientModel):
     @api.onchange('random')
     def change_operator(self):
         if self.random:
-            random_operator = choice(self.template_id.operator_ids)
-            self.template_operator_id = random_operator.id
+            random_operator = self.template_id.operator_ids.get_ready_random_operator()
+            self.template_operator_id = random_operator
 
 
 class BuildPostInit(models.TransientModel):

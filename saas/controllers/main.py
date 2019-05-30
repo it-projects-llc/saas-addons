@@ -29,13 +29,7 @@ class SaasController(odoo.http.Controller):
         if not kwargs:
             kwargs = {}
         if not template_operator_id:
-            ready_t_ops = request.env['saas.template.operator'].search([
-                ('template_id', '=', template_id.id),
-                ('state', '=', 'done'),
-            ])
-            if not ready_t_ops:
-                return False
-            template_operator_id = choice(ready_t_ops)
+            template_operator_id = template_id.operator_ids.get_ready_random_operator()
 
         if template_operator_id.state != 'done':
             return False
