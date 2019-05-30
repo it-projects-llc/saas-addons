@@ -4,6 +4,7 @@
 
 import jinja2
 import os
+from random import choice
 
 import odoo
 from odoo.http import route, request
@@ -21,16 +22,26 @@ class SaasController(odoo.http.Controller):
 
         return env.get_template('saas_auth.html').render({'build_url': build_url})
 
-    @route('/saas/create-fast-build/<int:template_operator_id>', type='http', auth='public')
-    def create_fast_build(self, template_operator_id, **kwargs):
+    @route(['/saas/<model("saas.template"):template_id>/create-fast-build',
+            '/saas/<model("saas.template"):template_id>/<model("saas.template.operator"):template_operator_id>'
+            '/create-fast-build'], type='http', auth='public')
+    def create_fast_build(self, template_id, template_operator_id=None, **kwargs):
         if not kwargs:
             kwargs = {}
-        t_op = request.env['saas.template.operator'].sudo().browse(template_operator_id)
-        if not t_op or t_op.state != 'done':
+        if not template_operator_id:
+            ready_t_ops = request.env['saas.template.operator'].search([
+                ('template_id', '=', template_id.id),
+                ('state', '=', 'done'),
+            ])
+            if not ready_t_ops:
+                return False
+            template_operator_id = choice(ready_t_ops)
+
+        if template_operator_id.state != 'done':
             return False
-        db_ids = request.env['saas.db'].sudo().search([]).mapped('id')
-        build_name = 'fast_build_{}'.format(len(db_ids))
-        build = t_op.sudo().create_db(build_name, kwargs, with_delay=False)
+        db_count = request.env['saas.db'].search_count([])
+        build_name = 'fast_build_{}'.format(db_count)
+        build = template_operator_id.sudo().create_db(build_name, kwargs, with_delay=False)
         token_obj = request.env['auth_quick_master.token'].sudo().create({
             'build': build.id,
             'build_login': 'admin',
