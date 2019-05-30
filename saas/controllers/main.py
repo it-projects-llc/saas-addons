@@ -4,7 +4,6 @@
 
 import jinja2
 import os
-from random import choice
 
 import odoo
 from odoo.http import route, request
