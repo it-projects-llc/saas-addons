@@ -32,8 +32,8 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 # When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 
 
-def random_password(len=32):
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len))
+def random_password(length=32):
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
 class SAASTemplate(models.Model):
