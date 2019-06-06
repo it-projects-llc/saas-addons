@@ -42,7 +42,7 @@ Roadmap
 * TODO: Add check uniqueness of database name across saas.db records with state == done. Also check that there is no records of saas.db with name equal to one that user wants to use in use in wizard, saas template operator.
 * TODO: Make the saas.template form duplicable again
 * TODO: Add page refresh button on saas.template form
-* TODO: saas_test: move tests to module saas; add database creation rollback and extra safety:
+* TODO: saas_test: add database creation rollback and extra safety:
     * setUp: prepare list of database names that will be created during the tests. Check that those databases don't exist and raise error otherwise
     * use random suffix to avoid droping database reserved for production purposes during test execution, e.g. template_database_ecusnc63asdf234
     * tearDown: drop created databases after test exectuion
