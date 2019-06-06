@@ -3,6 +3,8 @@
 import werkzeug
 import urllib.parse
 import logging
+import jinja2
+import os
 
 from odoo import http
 from odoo.http import request
@@ -48,3 +50,30 @@ class AuthQuickMaster(http.Controller):
             "build_user_id": token_obj.build_user_id,
             "build_login": token_obj.build_login,
         }}
+
+    @http.route('/auth_quick_master/build-redirect', type='http', auth='public')
+    def build_redirect(self, build_url):
+        path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'views'))
+        loader = jinja2.FileSystemLoader(path)
+        env = jinja2.Environment(loader=loader, autoescape=True)
+        return env.get_template('auth_quick_master_redirect.html').render({'build_url': build_url})
+
+    @http.route('/auth_quick_master/get-public-token', type='http', auth='public')
+    def get_public_token(self, build_id, build_url, build_login=None, build_user_id=None):
+        build = request.env['saas.db'].browse(int(build_id)).sudo()
+        if not build.is_public:
+            return """{"error": "You do not have access to this build"}"""
+
+        token_obj = request.env['auth_quick_master.token'].sudo().create({
+            'build': build_id,
+            'build_login': build_login,
+            'build_user_id': build_user_id,
+        })
+        build_url = token_obj.get_build_url() or build_url
+        if not build_url:
+            return """{"error": "Build url is unknown"}"""
+        url = urllib.parse.urljoin(build_url, '/auth_quick/check-token?token=%s' % token_obj.token)
+        params = urllib.parse.urlencode({
+            'build_url': url,
+        })
+        return werkzeug.utils.redirect('/auth_quick_master/build-redirect?{}'.format(params))

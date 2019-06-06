@@ -28,7 +28,7 @@ class CreateBuildByTemplate(models.TransientModel):
             rec.template_operator_count = len(self.template_id.operator_ids)
 
     def create_build(self):
-        build = self.template_operator_id.sudo().create_db(self.build_name, self.build_post_init_ids)
+        build = self.template_operator_id.sudo().create_db(self.build_post_init_ids, self.build_name)
         return {
             'type': 'ir.actions.act_window',
             'name': 'SaaS DB',
@@ -41,7 +41,7 @@ class CreateBuildByTemplate(models.TransientModel):
     @api.onchange('random')
     def change_operator(self):
         if self.random:
-            random_operator = self.template_id.operator_ids.get_ready_random_operator()
+            random_operator = self.template_id.operator_ids.random_ready_operator()
             self.template_operator_id = random_operator
 
 
