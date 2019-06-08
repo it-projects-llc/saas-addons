@@ -1,8 +1,11 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import uuid
 from dateutil.relativedelta import relativedelta
 import logging
+import urllib.parse
+from ..tools.build_redirection import build_redirection
 
 from odoo import models, fields
 
@@ -38,3 +41,20 @@ class Token(models.Model):
         """To be extended"""
         self.ensure_one()
         return None
+
+    def get_public_token(self, build_url, build_id, build_login=None, build_user_id=None):
+        if build_user_id:
+            user = self.env['res.users'].browse(int(build_user_id))
+            build_login = user.login
+        else:
+            user = self.env['res.users'].search([('login', '=', build_login)])
+            build_user_id = user.id
+
+        token_obj = self.create({
+            'build': build_id,
+            'build_login': build_login,
+            'build_user_id': build_user_id,
+        })
+        url = urllib.parse.urljoin(build_url, '/auth_quick/check-token?token={}'.format(token_obj.token))
+
+        return build_redirection(url)

@@ -19,7 +19,6 @@ class SAASDB(models.Model):
         ('draft', 'Draft'),
         ('done', 'Ready'),
     ], default='draft')
-    is_public = fields.Boolean(default=False)
 
     @api.multi
     @job

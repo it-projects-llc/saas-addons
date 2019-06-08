@@ -34,6 +34,7 @@
         "data/ir_cron_data.xml",
         "data/saas_operator_data.xml",
         "data/default_modules.xml",
+        "data/db_sequence.xml",
     ],
     "demo": [
         "demo/saas_template_demo.xml",

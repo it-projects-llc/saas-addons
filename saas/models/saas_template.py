@@ -230,29 +230,17 @@ class SAASTemplateLine(models.Model):
                     key_value_dict.update({r.key: r.value})
         return key_value_dict
 
-    def get_db_name(self, last_id=None):
-        if not last_id:
-            db_ids = self.env['saas.db'].search([]).ids
-            if db_ids:
-                last_id = max(db_ids)
-            else:
-                last_id = 0
-        db_name = 'fast_build_{}'.format(last_id)
-        if self.env['saas.db'].search([('name', '=', db_name)]):
-            db_name = self.get_db_name(last_id + 1)
-
-        return db_name
-
     @api.multi
-    def create_db(self, key_values, db_name=None, with_delay=True, is_public=False):
+    def create_db(self, key_values=None, db_name=None, with_delay=True):
         self.ensure_one()
+        if not key_values:
+            key_values = {}
         if not db_name:
-            db_name = self.get_db_name()
+            db_name = self.operator_id.generate_db_name()
         build = self.env['saas.db'].create({
             'name': db_name,
             'operator_id': self.operator_id.id,
             'type': 'build',
-            'is_public': is_public,
         })
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)

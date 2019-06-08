@@ -4,8 +4,7 @@
 
 import odoo
 from odoo import SUPERUSER_ID
-from odoo.tests.common import TransactionCase, tagged
-from odoo.tests.common import HttpCase
+from odoo.tests.common import tagged, HttpCase
 from odoo.service import db
 
 DB_TEMPLATE_1 = 'db_template_1'
