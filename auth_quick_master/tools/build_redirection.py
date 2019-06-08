@@ -3,6 +3,7 @@
 import jinja2
 import os
 
+
 def build_redirection(build_url):
     path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'views'))
     loader = jinja2.FileSystemLoader(path)
