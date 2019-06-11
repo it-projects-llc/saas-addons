@@ -22,4 +22,4 @@ class SaasController(odoo.http.Controller):
         template_operator_id = template_id.sudo().operator_ids.random_ready_operator()
         build = template_operator_id.sudo().create_db(kwargs, with_delay=False)
         build_url = build.get_url()
-        return request.env['auth_quick_master.token'].sudo().get_public_token(build_url, build.id, build_login='admin')
+        return request.env['auth_quick_master.token'].sudo().redirect_with_token(build_url, build.id, build_login='admin')

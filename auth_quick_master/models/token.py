@@ -42,18 +42,10 @@ class Token(models.Model):
         self.ensure_one()
         return None
 
-    def get_public_token(self, build_url, build_id, build_login=None, build_user_id=None):
-        if build_user_id:
-            user = self.env['res.users'].browse(int(build_user_id))
-            build_login = user.login
-        else:
-            user = self.env['res.users'].search([('login', '=', build_login)])
-            build_user_id = user.id
-
+    def redirect_with_token(self, build_url, build_id, build_login):
         token_obj = self.create({
             'build': build_id,
             'build_login': build_login,
-            'build_user_id': build_user_id,
         })
         url = urllib.parse.urljoin(build_url, '/auth_quick/check-token?token={}'.format(token_obj.token))
 
