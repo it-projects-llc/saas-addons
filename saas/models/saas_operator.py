@@ -29,6 +29,7 @@ class SAASOperator(models.Model):
     @api.multi
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
         """Synchronous db creation"""
+        test_clear = False
         if self.type == 'local':
             # to avoid installing extra modules we need this condition
             if tools.config['init']:
@@ -36,6 +37,7 @@ class SAASOperator(models.Model):
 
             # we don't need tests in templates and builds
             if tools.config['test_enable']:
+                test_clear = True
                 tools.config['test_enable'] = {}
 
         for r in self:
@@ -48,6 +50,9 @@ class SAASOperator(models.Model):
             else:
                 db.exp_create_database(
                     db_name, demo, lang, user_password=password)
+
+            if test_clear:
+                tools.config['test_enable'] = True
 
     @api.multi
     def _drop_db(self, db_name):
