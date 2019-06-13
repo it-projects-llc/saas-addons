@@ -148,6 +148,8 @@ class TestSaas(HttpCase):
         url = '/saas/1/create-fast-build'
         r = self.url_open(url)
         self.assertEqual(r.status_code, 200, 'User must be redirected to the build')
+        self.assertIn('fast_build_001', db.list_dbs())
+        self.assert_no_error_in_db('fast_build_001')
 
         self.saas_template_operator_1.create_db(self.build_post_init_line_1, DB_INSTANCE_1)
         self.assertIn(DB_INSTANCE_1, db.list_dbs())
