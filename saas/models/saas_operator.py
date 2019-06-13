@@ -29,7 +29,6 @@ class SAASOperator(models.Model):
     @api.multi
     def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
         """Synchronous db creation"""
-        test_clear = False
         if self.type == 'local':
             # to avoid installing extra modules we need this condition
             if tools.config['init']:
