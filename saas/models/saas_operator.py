@@ -36,8 +36,8 @@ class SAASOperator(models.Model):
                 tools.config['init'] = {}
 
             # we don't need tests in templates and builds
-            if tools.config['test_enable']:
-                test_clear = True
+            test_enable = tools.config['test_enable']
+            if test_enable:
                 tools.config['test_enable'] = {}
 
         for r in self:
@@ -51,8 +51,8 @@ class SAASOperator(models.Model):
                 db.exp_create_database(
                     db_name, demo, lang, user_password=password)
 
-            if test_clear:
-                tools.config['test_enable'] = True
+        if test_enable:
+            tools.config['test_enable'] = test_enable
 
     @api.multi
     def _drop_db(self, db_name):
