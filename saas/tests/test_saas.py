@@ -4,7 +4,7 @@
 
 import odoo
 from odoo import SUPERUSER_ID
-from odoo.tests.common import tagged, HttpCase
+from odoo.tests.common import tagged, HttpCase, SavepointCase
 from odoo.service import db
 
 DB_TEMPLATE_1 = 'db_template_1'
@@ -26,7 +26,7 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 
 
 @tagged('post_install', 'at_install')
-class TestSaas(HttpCase):
+class TestSaas(HttpCase, SavepointCase):
 
     def assert_modules_is_installed(self, db_name, module):
         db = odoo.sql_db.db_connect(db_name)
@@ -52,14 +52,15 @@ class TestSaas(HttpCase):
         ])
         self.assertFalse(template_db_log)
 
-    def setUp(self):
-        super(TestSaas, self).setUp()
-        self.env = self.env(context=dict(
-            self.env.context,
+    @classmethod
+    def setUpClass(cls):
+        super(TestSaas, cls).setUpClass()
+        cls.env = cls.env(context=dict(
+            cls.env.context,
             test_queue_job_no_delay=True,
         ))
 
-        self.saas_template_1 = self.env['saas.template'].create({
+        cls.saas_template_1 = cls.env['saas.template'].create({
             'template_module_ids': [(0, 0, {
                 'name': MODULE_TO_INSTALL,
             })],
@@ -67,51 +68,51 @@ class TestSaas(HttpCase):
             'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })
 
-        self.saas_template_2 = self.env['saas.template'].create({
+        cls.saas_template_2 = cls.env['saas.template'].create({
             'template_module_ids': [(0, 0, {
                 'name': 'mail',
             })],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
         })
 
-        self.saas_operator_1 = self.env['saas.operator'].create({
+        cls.saas_operator_1 = cls.env['saas.operator'].create({
             'type': 'local',
             'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
             'master_url': 'http://saas.127.0.0.1.nip.io:8069',
         })
 
-        self.saas_operator_2 = self.env['saas.operator'].create({
+        cls.saas_operator_2 = cls.env['saas.operator'].create({
             'type': 'local',
             'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
             'master_url': 'http://saas.127.0.0.1.nip.io:8069',
         })
 
-        self.saas_template_operator_1 = self.env['saas.template.operator'].create({
-            'template_id': self.saas_template_1.id,
-            'operator_id': self.saas_operator_1.id,
+        cls.saas_template_operator_1 = cls.env['saas.template.operator'].create({
+            'template_id': cls.saas_template_1.id,
+            'operator_id': cls.saas_operator_1.id,
             'operator_db_name': DB_TEMPLATE_1,
         })
 
-        self.saas_template_operator_2 = self.env['saas.template.operator'].create({
-            'template_id': self.saas_template_2.id,
-            'operator_id': self.saas_operator_2.id,
+        cls.saas_template_operator_2 = cls.env['saas.template.operator'].create({
+            'template_id': cls.saas_template_2.id,
+            'operator_id': cls.saas_operator_2.id,
             'operator_db_name': DB_TEMPLATE_2,
         })
 
-        self.build_post_init_line_1 = self.env['build.post_init.line'].create({
+        cls.build_post_init_line_1 = cls.env['build.post_init.line'].create({
             'key': 'mail_message',
             'value': 'mail.message'
         })
-        self.build_post_init_line_2 = self.env['build.post_init.line'].create({})
-
-    def test_template_operator(self):
-        # FIXME: that check needed when last tests didn't pass, not sure that it is correct way to drop db
+        cls.build_post_init_line_2 = cls.env['build.post_init.line'].create({})
         if DB_TEMPLATE_1 in db.list_dbs():
             db.exp_drop(DB_TEMPLATE_1)
         if DB_TEMPLATE_2 in db.list_dbs():
             db.exp_drop(DB_TEMPLATE_2)
         if 'template_database' in db.list_dbs():
             db.exp_drop('template_database')
+        cls.saas_template_operator_1.preparing_template_next()
+
+    def test_template_operator(self):
         # Template 1
         self.saas_template_operator_1.preparing_template_next()
         # Tests that template db created correctly
@@ -159,13 +160,6 @@ class TestSaas(HttpCase):
         self.assert_record_is_created(DB_INSTANCE_2, 'ir.config_parameter', [('key', '=', 'auth_quick.build')])
 
     def test_build_creation_by_link(self):
-        if DB_TEMPLATE_1 in db.list_dbs():
-            db.exp_drop(DB_TEMPLATE_1)
-        if DB_TEMPLATE_2 in db.list_dbs():
-            db.exp_drop(DB_TEMPLATE_2)
-        if 'template_database' in db.list_dbs():
-            db.exp_drop('template_database')
-        self.saas_template_operator_1.preparing_template_next()
         url = '/saas/1/create-fast-build'
         r = self.url_open(url)
         self.assertEqual(r.status_code, 200, 'User must be redirected to the build')
