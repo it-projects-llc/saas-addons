@@ -246,14 +246,19 @@ class SAASTemplateLine(models.Model):
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
         key_value_dict = self._convert_to_dict(key_values)
         if with_delay:
-            build = build.with_delay()
-            self.operator_id = self.operator_id.with_delay()
-        build.create_db(
-            self.operator_db_name,
-            self.template_id.template_demo,
-            self.password,
-        )
-        self.operator_id.build_post_init(build, self.template_id.build_post_init, key_value_dict)
+            build.with_delay().create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+        else:
+            build.create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_value_dict)
 
         return build
 
