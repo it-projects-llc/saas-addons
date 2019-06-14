@@ -4,7 +4,7 @@
 
 import odoo
 from odoo import SUPERUSER_ID
-from odoo.tests.common import tagged, HttpCase, SavepointCase
+from odoo.tests.common import tagged, HttpCase, SingleTransactionCase
 from odoo.service import db
 
 DB_TEMPLATE_1 = 'db_template_1'
@@ -26,7 +26,7 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 
 
 @tagged('post_install', 'at_install')
-class TestSaas(HttpCase, SavepointCase):
+class TestSaas(HttpCase, SingleTransactionCase):
 
     def assert_modules_is_installed(self, db_name, module):
         db = odoo.sql_db.db_connect(db_name)
