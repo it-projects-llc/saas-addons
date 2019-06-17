@@ -219,17 +219,6 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
-    @staticmethod
-    def _convert_to_dict(key_values):
-        if isinstance(key_values, dict):
-            key_value_dict = key_values
-        else:
-            key_value_dict = {}
-            for r in key_values:
-                if r.key:
-                    key_value_dict.update({r.key: r.value})
-        return key_value_dict
-
     @api.multi
     def create_db(self, key_values=None, db_name=None, with_delay=True):
         self.ensure_one()
@@ -244,21 +233,20 @@ class SAASTemplateLine(models.Model):
         })
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
-        key_value_dict = self._convert_to_dict(key_values)
         if with_delay:
             build.with_delay().create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
                 self.password,
             )
-            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values)
         else:
             build.create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
                 self.password,
             )
-            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_value_dict)
+            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values)
 
         return build
 
