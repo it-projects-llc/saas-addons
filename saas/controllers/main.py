@@ -14,12 +14,3 @@ class SaasController(odoo.http.Controller):
             return False
         build_url = request.env['saas.db'].browse(build_id).get_url() + '/auth_quick/login?build_login=admin'
         return build_redirection(build_url)
-
-    @route('/saas/<model("saas.template"):template_id>/create-fast-build', type='http', auth='public')
-    def create_fast_build(self, template_id, **kwargs):
-        if not kwargs:
-            kwargs = {}
-        template_operator_id = template_id.sudo().operator_ids.random_ready_operator()
-        build = template_operator_id.sudo().create_db(kwargs, with_delay=False)
-        build_url = build.get_url()
-        return request.env['auth_quick_master.token'].sudo().redirect_with_token(build_url, build.id, build_login='admin')
