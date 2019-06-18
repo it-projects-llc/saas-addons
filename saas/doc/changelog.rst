@@ -1,7 +1,7 @@
-`1.1.0`
+`1.0.1`
 -------
 
-- **New:** add the ability to create a quick build when clicking on a link
+- **Fix:** transfer tests to module and refactor
 
 `1.0.0`
 -------
