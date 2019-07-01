@@ -32,8 +32,8 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 # When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 
 
-def random_password(len=32):
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len))
+def random_password(length=32):
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
 class SAASTemplate(models.Model):
@@ -219,17 +219,13 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
-    @staticmethod
-    def _convert_to_dict(key_values):
-        key_value_dict = {}
-        for r in key_values:
-            if r.key:
-                key_value_dict.update({r.key: r.value})
-        return key_value_dict
-
     @api.multi
-    def create_db(self, db_name, key_values):
+    def create_db(self, key_values=None, db_name=None, with_delay=True):
         self.ensure_one()
+        if not key_values:
+            key_values = {}
+        if not db_name:
+            db_name = self.operator_id.generate_db_name()
         build = self.env['saas.db'].create({
             'name': db_name,
             'operator_id': self.operator_id.id,
@@ -237,13 +233,24 @@ class SAASTemplateLine(models.Model):
         })
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
-
-        build.with_delay().create_db(
-            self.operator_db_name,
-            self.template_id.template_demo,
-            self.password,
-        )
-        key_value_dict = self._convert_to_dict(key_values)
-        self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+        if with_delay:
+            build.with_delay().create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values)
+        else:
+            build.create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values)
 
         return build
+
+    @api.multi
+    def random_ready_operator(self):
+        ready_operators = self.filtered(lambda r: r.state == 'done')
+        return random.choice(ready_operators)
