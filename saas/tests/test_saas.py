@@ -99,12 +99,6 @@ class TestSaas(SavepointCase):
             'operator_id': cls.saas_operator_2.id,
             'operator_db_name': DB_TEMPLATE_2,
         })
-        # TODO: now we can pass just a dictionary as build post init key values
-        cls.build_post_init_line_1 = cls.env['build.post_init.line'].create({
-            'key': 'mail_message',
-            'value': 'mail.message'
-        })
-        cls.build_post_init_line_2 = cls.env['build.post_init.line'].create({})
 
     def test_template_operator(self):
         # FIXME: that check needed when last tests didn't pass, not sure that it is correct way to drop db
