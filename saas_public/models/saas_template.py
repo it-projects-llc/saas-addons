@@ -5,12 +5,7 @@ import random
 from odoo import models, fields, api
 
 
-class SAASTemplateOPerator(models.Model):
-    _inherit = 'saas.template.operator'
+class SAASTemplate(models.Model):
+    _inherit = 'saas.template'
 
     public_access = fields.Boolean(default=False)
-
-    @api.multi
-    def random_ready_operator(self):
-        ready_operators = self.filtered(lambda r: r.state == 'done' and r.public_access)
-        return random.choice(ready_operators)
