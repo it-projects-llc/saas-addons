@@ -9,7 +9,7 @@ class SaaSPublicController(Controller):
     def create_fast_build(self, template_id, **kwargs):
         if not kwargs:
             kwargs = {}
-        if template_id and template_id.public_access:
+        if template_id and template_id.sudo().public_access:
             template_operator_id = template_id.sudo().operator_ids.random_ready_operator()
             build = template_operator_id.sudo().create_db(kwargs, with_delay=False)
             build_url = build.get_url()
