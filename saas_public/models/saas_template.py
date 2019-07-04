@@ -1,8 +1,7 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import random
-from odoo import models, fields, api
+from odoo import models, fields
 
 
 class SAASTemplate(models.Model):
