@@ -1,5 +1,7 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+from odoo.service import db
+
 DB_TEMPLATE_1 = 'db_template_1'
 DB_TEMPLATE_2 = 'db_template_2'
 MODULE_TO_INSTALL = 'mail'
@@ -61,3 +63,11 @@ class Common(object):
             'operator_id': self.saas_operator_2.id,
             'operator_db_name': DB_TEMPLATE_2,
         })
+
+    def drop_dbs(self, db_list=None):
+        if not db_list:
+            db_list = []
+        db_list += [DB_TEMPLATE_1, DB_TEMPLATE_2, 'template_database']
+        for i in db_list:
+            if i in db.list_dbs():
+                db.exp_drop(i)

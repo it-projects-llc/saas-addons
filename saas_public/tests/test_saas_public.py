@@ -10,16 +10,26 @@ class TestSaasPublic(HttpCase, Common):
     def setUp(self):
         super(TestSaasPublic, self).setUp()
         self.setup_saas_env()
+        self.saas_template_1.write({
+            'public_access': True,
+        })
+        self.saas_operator_1.write({
+            'db_name_template': 'test_fast_build_{unique_id}',
+        })
+        self.saas_operator_2.write({
+            'db_name_template': 'test_fast_build_{unique_id}',
+        })
 
     def test_saas_public(self):
-        if DB_TEMPLATE_1 in db.list_dbs():
-            db.exp_drop(DB_TEMPLATE_1)
-        if DB_TEMPLATE_2 in db.list_dbs():
-            db.exp_drop(DB_TEMPLATE_2)
-        if 'template_database' in db.list_dbs():
-            db.exp_drop('template_database')
+        drop_db_list = [build for build in db.list_dbs() if build.startswith('test_fast_build')]
+        self.drop_dbs(drop_db_list)
         self.env['saas.template.operator'].preparing_template_next()
-        template_id = self.saas_template_1.id
-        url = '/saas_public/{}/create-fast-build'.format(template_id)
-        r = self.url_open(url)
-        self.assertIn(r.status_code, [200, 204], 'User must be redirected to the build')
+        public_template_id = self.saas_template_1.id
+        url = '/saas_public/{}/create-fast-build'
+        public_template = self.url_open(url.format(public_template_id))
+        self.assertIn(public_template.status_code, [200, 204], 'User must be redirected to the build')
+        created_builds = [build for build in db.list_dbs() if build.startswith('test_fast_build')]
+        self.assertTrue(created_builds)
+        private_template_id = self.saas_operator_2.id
+        private_template = self.url_open(url.format(private_template_id))
+        self.assertIn(private_template.status_code, [404, 403], 'User should not have access to a private template')
