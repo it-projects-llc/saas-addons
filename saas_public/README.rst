@@ -6,7 +6,7 @@
  SaaS Public
 ===============
 
-Create builds for non-authenticated users.
+Create builds for non-authenticated users:
 
 * User opens a link and gets a build
 
