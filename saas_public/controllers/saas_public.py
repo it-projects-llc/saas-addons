@@ -16,4 +16,4 @@ class SaaSPublicController(Controller):
             return request.env['auth_quick_master.token'].sudo().redirect_with_token(build_url, build.id,
                                                                                      build_login='admin')
         else:
-            return False
+            return request.not_found()
