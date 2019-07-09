@@ -1,33 +1,20 @@
 # Copyright 2018-2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
+from .common_saas_test import Common, DB_TEMPLATE_1, DB_TEMPLATE_2, MODULE_TO_INSTALL, TEMPLATE_TEST_SUBJECT, \
+    BUILD_TEST_SUBJECT
 
 import odoo
 from odoo import SUPERUSER_ID
 from odoo.tests.common import tagged, SavepointCase
 from odoo.service import db
 
-DB_TEMPLATE_1 = 'db_template_1'
-DB_TEMPLATE_2 = 'db_template_2'
 DB_INSTANCE_1 = 'db_instance_1'
 DB_INSTANCE_2 = 'db_instance_2'
-MODULE_TO_INSTALL = 'mail'
-TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
-BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
-DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
-#  - env: Odoo Environment on which the action is triggered
-#  - time, datetime, dateutil, timezone: useful Python libraries
-#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
-#  - Warning: Warning Exception to use with raise
-# To return an action, assign: action = {{...}}
-# You can specify places for variables that can be passed when creating a build like this:
-# env['{key_name_1}'].create({{'subject': '{key_name_2}', }})
-# When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 KEY_VALUES = {'mail_message': 'mail.message'}
 
 
 @tagged('post_install', 'at_install')
-class TestSaas(SavepointCase):
+class TestSaas(SavepointCase, Common):
 
     def assert_modules_is_installed(self, db_name, module):
         db = odoo.sql_db.db_connect(db_name)
@@ -56,58 +43,10 @@ class TestSaas(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super(TestSaas, cls).setUpClass()
-        cls.env = cls.env(context=dict(
-            cls.env.context,
-            test_queue_job_no_delay=True,
-        ))
-
-        cls.saas_template_1 = cls.env['saas.template'].create({
-            'template_module_ids': [(0, 0, {
-                'name': MODULE_TO_INSTALL,
-            })],
-            'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
-            'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
-        })
-
-        cls.saas_template_2 = cls.env['saas.template'].create({
-            'template_module_ids': [(0, 0, {
-                'name': 'mail',
-            })],
-            'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
-        })
-
-        cls.saas_operator_1 = cls.env['saas.operator'].create({
-            'type': 'local',
-            'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
-            'master_url': 'http://saas.127.0.0.1.nip.io:8069',
-        })
-
-        cls.saas_operator_2 = cls.env['saas.operator'].create({
-            'type': 'local',
-            'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
-            'master_url': 'http://saas.127.0.0.1.nip.io:8069',
-        })
-
-        cls.saas_template_operator_1 = cls.env['saas.template.operator'].create({
-            'template_id': cls.saas_template_1.id,
-            'operator_id': cls.saas_operator_1.id,
-            'operator_db_name': DB_TEMPLATE_1,
-        })
-
-        cls.saas_template_operator_2 = cls.env['saas.template.operator'].create({
-            'template_id': cls.saas_template_2.id,
-            'operator_id': cls.saas_operator_2.id,
-            'operator_db_name': DB_TEMPLATE_2,
-        })
+        cls.setup_saas_env(cls)
 
     def test_template_operator(self):
-        # FIXME: that check needed when last tests didn't pass, not sure that it is correct way to drop db
-        if DB_TEMPLATE_1 in db.list_dbs():
-            db.exp_drop(DB_TEMPLATE_1)
-        if DB_TEMPLATE_2 in db.list_dbs():
-            db.exp_drop(DB_TEMPLATE_2)
-        if 'template_database' in db.list_dbs():
-            db.exp_drop('template_database')
+        self.drop_dbs([DB_INSTANCE_1, DB_INSTANCE_2])
         self.env['saas.template.operator'].preparing_template_next()
 
         # Tests that template db created correctly
@@ -136,11 +75,6 @@ class TestSaas(SavepointCase):
         self.assert_record_is_created(DB_TEMPLATE_2, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Check that database instance created correctly
-        if DB_INSTANCE_1 in db.list_dbs():
-            db.exp_drop(DB_INSTANCE_1)
-        if DB_INSTANCE_2 in db.list_dbs():
-            db.exp_drop(DB_INSTANCE_2)
-
         self.saas_template_operator_1.create_db(KEY_VALUES, DB_INSTANCE_1)
         self.assertIn(DB_INSTANCE_1, db.list_dbs())
         self.assert_no_error_in_db(DB_INSTANCE_1)
