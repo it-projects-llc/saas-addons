@@ -31,8 +31,6 @@ Further information
 
 Demo: http://runbot.it-projects.info/demo/saas-addons/12.0
 
-HTML Description: https://apps.odoo.com/apps/modules/12.0/saas_public/
-
 Usage instructions: `<doc/index.rst>`_
 
 Changelog: `<doc/changelog.rst>`_
