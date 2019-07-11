@@ -4,6 +4,7 @@
 import random
 import string
 import logging
+from slugify import slugify
 
 from odoo import models, fields, api, SUPERUSER_ID, sql_db, _, registry
 from odoo.tools.safe_eval import test_python_expr
@@ -219,6 +220,10 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
+    def prepare_name(self, db_name):
+        self.ensure_one()
+        return slugify(db_name)
+
     @api.multi
     def create_db(self, key_values=None, db_name=None, with_delay=True):
         self.ensure_one()
@@ -226,6 +231,8 @@ class SAASTemplateLine(models.Model):
             key_values = {}
         if not db_name:
             db_name = self.operator_id.generate_db_name()
+        else:
+            db_name = self.prepare_name(db_name)
         build = self.env['saas.db'].create({
             'name': db_name,
             'operator_id': self.operator_id.id,
