@@ -23,7 +23,7 @@ class SAASOperator(models.Model):
     # host = fields.Char()
     # port = fields.Char()
     db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
-    db_name_template = fields.Char('DB Names', help='Avaialble variables: {db_id}')
+    db_name_template = fields.Char('DB Names', help='Avaialble variables: {unique_id}')
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     @api.multi
@@ -35,7 +35,8 @@ class SAASOperator(models.Model):
                 tools.config['init'] = {}
 
             # we don't need tests in templates and builds
-            if tools.config['test_enable']:
+            test_enable = tools.config['test_enable']
+            if test_enable:
                 tools.config['test_enable'] = {}
 
         for r in self:
@@ -48,6 +49,9 @@ class SAASOperator(models.Model):
             else:
                 db.exp_create_database(
                     db_name, demo, lang, user_password=password)
+
+        if test_enable:
+            tools.config['test_enable'] = test_enable
 
     @api.multi
     def _drop_db(self, db_name):
@@ -62,10 +66,10 @@ class SAASOperator(models.Model):
         self.ensure_one()
         return self.db_url_template.format(db_id=db.id, db_name=db.name)
 
-    def get_db_name(self, db):
-        # TODO: use mako for name templating
+    def generate_db_name(self):
         self.ensure_one()
-        return self.db_name_template.format(db_id=db.id)
+        sequence = self.env['ir.sequence'].next_by_code('saas.db')
+        return self.db_name_template.format(unique_id=sequence)
 
     def _get_mandatory_args(self, db):
         self.ensure_one()

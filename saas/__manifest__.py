@@ -6,7 +6,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -34,6 +34,7 @@
         "data/ir_cron_data.xml",
         "data/saas_operator_data.xml",
         "data/default_modules.xml",
+        "data/db_sequence.xml",
     ],
     "demo": [
         "demo/saas_template_demo.xml",

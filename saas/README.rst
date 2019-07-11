@@ -42,7 +42,7 @@ Roadmap
 * TODO: Add check uniqueness of database name across saas.db records with state == done. Also check that there is no records of saas.db with name equal to one that user wants to use in use in wizard, saas template operator.
 * TODO: Make the saas.template form duplicable again
 * TODO: Add page refresh button on saas.template form
-* TODO: saas_test: move tests to module saas; add database creation rollback and extra safety:
+* TODO: saas_test: add database creation rollback and extra safety:
     * setUp: prepare list of database names that will be created during the tests. Check that those databases don't exist and raise error otherwise
     * use random suffix to avoid droping database reserved for production purposes during test execution, e.g. template_database_ecusnc63asdf234
     * tearDown: drop created databases after test exectuion
@@ -52,7 +52,8 @@ Roadmap
     * check that you are finally redirected to /web page at the build
 * TODO: add computed record in saas.db model to avoid using the name of the master database. Some new db type is needed. Say, ``('other', 'Reserved DB Name')``
 
-* TODO: saas.operator: add a button that runs a wizard which allows to make new build (saas.db) from backup; add a method in ``saas.operator`` which takes the backup as argument; implement the method for "Same Instance" operator 
+* TODO: saas.operator: add a button that runs a wizard which allows to make new build (saas.db) from backup; add a method in ``saas.operator`` which takes the backup as argument; implement the method for "Same Instance" operator
+
 Credits
 =======
 
@@ -72,8 +73,6 @@ Further information
 ===================
 
 Demo: http://runbot.it-projects.info/demo/saas-addons/12.0
-
-HTML Description: https://apps.odoo.com/apps/modules/12.0/saas/
 
 Usage instructions: `<doc/index.rst>`_
 

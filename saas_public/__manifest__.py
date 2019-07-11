@@ -1,10 +1,9 @@
-# Copyright 2018 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
-    "name": """Tests for SaaS""",
-    "summary": """Separate module for testing saas-addons modules""",
+    "name": """SaaS Public""",
+    "summary": """Module for creating public builds""",
     "category": "SaaS",
-    # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
     "version": "12.0.1.0.0",
     "application": False,
@@ -21,27 +20,21 @@
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
+        "views/saas_template_operator_views.xml",
     ],
     "demo": [
+        "demo/public_saas_template_demo.xml",
     ],
-    "qweb": [
-    ],
-
-    "post_load": None,
-    "pre_init_hook": None,
-    "post_init_hook": None,
-    "uninstall_hook": None,
-
     "auto_install": False,
     "installable": True,
 
-    # "demo_title": "Tests for SaaS",
+    # "demo_title": "{MODULE_NAME}",
     # "demo_addons": [
     # ],
     # "demo_addons_hidden": [
     # ],
     # "demo_url": "DEMO-URL",
-    # "demo_summary": "Separate module for testing saas-addons modules",
+    # "demo_summary": "{SHORT_DESCRIPTION_OF_THE_MODULE}",
     # "demo_images": [
     #    "images/MAIN_IMAGE",
     # ]
