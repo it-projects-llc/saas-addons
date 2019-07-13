@@ -10,7 +10,7 @@
                 <group>
                     <field name="build_name"/>
                     <field name="template_id" invisible="1"/>
-                    <field name="template_operator_id" domain="[('template_id', '=', template_id), ('state', '=', 'done')]"/>
+                    <field name="template_operator_id" domain="[('template_id', '=', template_id), ('state', '=', 'done')]" attrs="{'invisible':[('random', '=', True)]}"/>
                     <field name="template_operator_count" invisible="1"/>
                     <field name="random" attrs="{'invisible':[('template_operator_count', 'in', [0, 1])]}"/>
                     <field name='build_post_init_ids'>
