@@ -8,8 +8,8 @@ from odoo import SUPERUSER_ID
 from odoo.tests.common import tagged, SavepointCase
 from odoo.service import db
 
-DB_INSTANCE_1 = 'db_instance_1'
-DB_INSTANCE_2 = 'db_instance_2'
+DB_INSTANCE_1 = 'db-instance-1'
+DB_INSTANCE_2 = 'db-instance-2'
 KEY_VALUES = {'mail_message': 'mail.message'}
 
 

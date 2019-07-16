@@ -18,14 +18,14 @@ class TestSaasPublic(HttpCase, Common):
         self.public_template = self.saas_template_1
         self.private_template = self.saas_template_2
         self.saas_operator_1.write({
-            'db_name_template': 'test_fast_build_{unique_id}',
+            'db_name_template': 'test-fast-build-{unique_id}',
         })
         self.saas_operator_2.write({
-            'db_name_template': 'test_fast_build_{unique_id}',
+            'db_name_template': 'test-fast-build-{unique_id}',
         })
 
     def test_saas_public(self):
-        drop_db_list = [build for build in db.list_dbs() if build.startswith('test_fast_build')]
+        drop_db_list = [build for build in db.list_dbs() if build.startswith('test-fast-build')]
         self.drop_dbs(drop_db_list)
         self.env['saas.template.operator'].preparing_template_next()
         params = urllib.parse.urlencode({
@@ -34,7 +34,7 @@ class TestSaasPublic(HttpCase, Common):
         url_1 = '/saas_public/{template_id}/create-fast-build?{params}'.format(template_id=self.public_template.id, params=params)
         public_template_response = self.url_open(url_1)
         self.assertIn(public_template_response.status_code, [200, 204], 'User must be redirected to the build')
-        created_builds = [build for build in db.list_dbs() if build.startswith('test_fast_build')]
+        created_builds = [build for build in db.list_dbs() if build.startswith('test-fast-build')]
         self.assertTrue(created_builds)
         url_2 = '/saas_public/{}/create-fast-build'.format(self.private_template.id)
         private_template = self.url_open(url_2)
