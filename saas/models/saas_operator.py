@@ -73,9 +73,8 @@ class SAASOperator(models.Model):
 
     def _get_mandatory_args(self, db):
         self.ensure_one()
-        master_url = self.env['ir.config_parameter'].get_param('web.base.url')
         return {
-            'master_url': master_url,
+            'master_url': self.direct_url,
             'build_id': db.id
         }
 
