@@ -1,4 +1,5 @@
 <!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # Copyright 2019 Kildebekov Anvar <https://www.it-projects.info/team/kildebekov>
     # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
 
 <odoo>
@@ -32,6 +33,7 @@
                         <field name="build_post_init" widget="ace" options="{'mode': 'python'}"/>
                         <field name="operator_ids"/>
                     </group>
+                    <button name="refresh_page" type="object" string="Refresh" style="margin-left:15%"/>
                 </sheet>
             </form>
         </field>
