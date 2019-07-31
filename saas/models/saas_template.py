@@ -1,5 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2019 Kildebekov Anvar <https://it-projects.info/team/kildebekov>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import random
 import string
@@ -79,6 +80,11 @@ class SAASTemplate(models.Model):
             }
         else:
             raise UserError(_('There are no ready template\'s deployments. Create new one or wait until it\'s done.'))
+
+    @api.multi
+    def refresh_page(self):
+        # Empty-function for purpose of refreshing page
+        pass
 
 
 class SAASModules(models.Model):
