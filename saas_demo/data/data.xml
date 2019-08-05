@@ -1,5 +1,0 @@
-<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
-     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
-<odoo>
-    <function model="saas.operator" name="update_ad_paths" eval="[ref('saas.local_operator')]"/>
-</odoo>

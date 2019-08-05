@@ -6,6 +6,7 @@ import os
 import os.path
 
 from odoo import models, fields, api
+from odoo.modules.module import ad_paths
 
 from odoo.addons.queue_job.job import job
 from ..os import repos_dir, update_repo, get_manifests
@@ -33,7 +34,7 @@ class Demo(models.Model):
             if not updated:
                 continue
             for repo in demo.repo_ids:
-                path = os.path.join(repos_path, repo.url_escaped)
+                path = os.path.join(repos_path, repo.branch, repo.url_escaped)
                 for module, manifest in get_manifests(path).items():
                     if not manifest.get('saas_demo_title'):
                         # not a demo
@@ -155,10 +156,12 @@ class Repo(models.Model):
         local_root = repos_dir()
         updated = False
         for repo in self:
-            path = os.path.join(local_root, repo.url_escaped)
+            path = os.path.join(local_root, repo.branch, repo.url_escaped)
             commit = update_repo(path, repo.url, repo.branch)
             if commit != repo.commit:
                 updated = True
                 if update_commit:
                     repo.commit = commit
+                    if path not in ad_paths:
+                        ad_paths.append(path)
         return updated
