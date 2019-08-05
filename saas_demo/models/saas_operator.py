@@ -1,9 +1,8 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import logging
-import os
 
-from odoo import models, fields, api, service, tools
+from odoo import models, fields, api, service
 from ..os import repos_dir, update_addons_path, root_odoo_path, git
 
 _logger = logging.getLogger(__name__)
