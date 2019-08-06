@@ -6,7 +6,7 @@ user_access_saas_template_operator,user_access_saas_template_operator,model_saas
 user_access_saas_log,user_access_saas_log,model_saas_log,saas.group_user,1,0,0,0
 user_access_saas_operator,user_access_saas_operator,model_saas_operator,saas.group_user,1,0,0,0
 manager_access_saas_db,manager_access_saas_db,model_saas_db,saas.group_manager,1,0,0,0
-manager_access_saas_template_operator,manager_access_saas_template_operator,model_saas_template_operator,saas.group_manager,1,1,1,0
+manager_access_saas_template_operator,manager_access_saas_template_operator,model_saas_template_operator,saas.group_manager,1,1,1,1
 manager_access_saas_log,manager_access_saas_log,model_saas_log,saas.group_manager,1,0,1,0
 manager_access_saas_operator,manager_access_saas_operator,model_saas_operator,saas.group_manager,1,1,1,0
 manager_access_saas_template,manager_access_saas_template,model_saas_template,saas.group_manager,1,1,1,1
