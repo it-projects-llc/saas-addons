@@ -14,7 +14,7 @@ Models overview
 ===============
 
 * ``saas.template`` -- similar to ``saas_portal.plan`` in *odoo-saas-tools*, but covers only technical aspects (database creation) and not any sale/trial stuff. A single record can be used for multiple servers (via ``saas.template.operator``.
-* ``saas.operator`` -- similar to ``saas_portal.server`` in *odoo-saas-tools*. Credentials to create-destroy, update, migrate, backup, etc. odoo instances. 
+* ``saas.operator`` -- similar to ``saas_portal.server`` in *odoo-saas-tools*. Credentials to create-destroy, update, migrate, backup, etc. odoo instances.
 
   * It doesn't need special odoo instance (database, *SaaS Server* in terms of
     *odoo-saas-tool* project) in corresponding server and could work by sending
@@ -33,7 +33,6 @@ Models overview
 Roadmap
 =======
 
-* TODO: create saas access levels (SaaS: User, Manager)
 * TODO: Create menu for SaaS Operator
     * smart button for builds list
 * TODO: Create menu for SaaS Log model
@@ -80,4 +79,4 @@ Changelog: `<doc/changelog.rst>`_
 
 Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/12.0/saas.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/12.0/saas.atom>`_
 
-Tested on Odoo 12.0 032d0ed90f580f25819cd6846e21cf155ade44e7
+Tested on Odoo 12.0 4147ef847a1c5182b9f3b7daad504bf8b813190c

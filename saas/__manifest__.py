@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Anvar Kildebekov <https://it-projects.info/team/kildebekov>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """SaaS Base""",
@@ -23,6 +24,7 @@
     ],
     "external_dependencies": {"python": ['slugify'], "bin": []},
     "data": [
+        "security/saas_security.xml",
         "security/ir.model.access.csv",
         "views/saas_view.xml",
         "views/saas_template_views.xml",

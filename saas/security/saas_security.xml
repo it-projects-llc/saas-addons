@@ -1,0 +1,20 @@
+<odoo>
+  <record model="ir.module.category" id="module_management">
+    <field name="name">SaaS</field>
+    <field name="description">User access level for SaaS</field>
+    <field name="sequence">4</field>
+  </record>
+
+  <record model="res.groups" id="group_user">
+    <field name="name">User</field>
+    <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    <field name="category_id" ref="saas.module_management"/>
+  </record>
+
+  <record model="res.groups" id="group_manager">
+    <field name="name">Manager</field>
+    <field name="implied_ids" eval="[(4, ref('saas.group_user'))]"/>
+    <field name="category_id" ref="saas.module_management"/>
+  </record>
+</odoo>
