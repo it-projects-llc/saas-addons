@@ -55,7 +55,7 @@ def mkdir(d):
 def git(path, cmd):
     cmd = ['git', '-C', path] + cmd
     _logger.debug("git: %s", ' '.join(cmd))
-    return subprocess.check_output(cmd).strip()
+    return subprocess.check_output(cmd).strip().decode('utf-8')
 
 
 def update_repo(path, repo_url, branch):
