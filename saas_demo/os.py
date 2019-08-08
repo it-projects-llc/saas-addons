@@ -71,6 +71,7 @@ def analysis_dir():
     d = os.path.join(tools.config['data_dir'], 'analysis')
     return mkdir(d)
 
+
 # ODOO
 def repos_dir():
     d = os.path.join(tools.config['data_dir'], 'repos')

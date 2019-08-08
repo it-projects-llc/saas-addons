@@ -166,7 +166,7 @@ class Repo(models.Model):
             if commit != repo.commit:
                 local_root = repos_dir()
                 build_path = os.path.join(local_root, repo.branch, repo.url_escaped)
-                update_repo(build_path, repo.branch, repo.url_escaped)
+                update_repo(build_path, repo.url, repo.branch)
                 updated = True
                 if update_commit:
                     repo.commit = commit
