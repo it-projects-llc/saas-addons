@@ -1,0 +1,21 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <record id="saas_operator_form_view" model="ir.ui.view">
+        <field name="name">saas.operator</field>
+        <field name="model">saas.operator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="type"/>
+                        <field name="db_url_template"/>
+                        <field name="db_name_template"/>
+                        <field name="direct_url"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

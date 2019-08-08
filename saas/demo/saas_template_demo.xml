@@ -1,0 +1,16 @@
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record id="saas_template" model="saas.template">
+        <field name="name">Demo Template</field>
+        <field name="template_module_ids" eval="[(4, ref('mail')), (4, ref('contacts'))]"/>
+        <field name="template_demo" eval="True"/>
+        <field name="template_post_init">env['res.partner'].create({'name': 'Example of partner creation on template initialization'})</field>
+        <field name="build_post_init">env['res.partner'].create({{'name': '{name}'}})</field>
+    </record>
+    <record id="saas_template_operator" model="saas.template.operator">
+        <field name="operator_db_name">template_database</field>
+        <field name="template_id" eval="ref('saas_template')"/>
+        <field name="operator_id" eval="ref('local_operator')"/>
+    </record>
+</odoo>

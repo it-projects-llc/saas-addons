@@ -1,8 +1,11 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
-# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import uuid
 from dateutil.relativedelta import relativedelta
 import logging
+import urllib.parse
+from ..tools.build_redirection import build_redirection
 
 from odoo import models, fields
 
@@ -11,7 +14,7 @@ _logger = logging.getLogger(__name__)
 
 class Token(models.Model):
     _name = 'auth_quick_master.token'
-    _description = 'Authentication Tokens'
+    _description = 'Authentication Token'
 
     user_id = fields.Many2one('res.users', 'Master User', default=lambda s: s.env.user.id)
     build = fields.Char('Build Reference')
@@ -38,3 +41,12 @@ class Token(models.Model):
         """To be extended"""
         self.ensure_one()
         return None
+
+    def redirect_with_token(self, build_url, build_id, build_login):
+        token_obj = self.create({
+            'build': build_id,
+            'build_login': build_login,
+        })
+        url = urllib.parse.urljoin(build_url, '/auth_quick/check-token?token={}'.format(token_obj.token))
+
+        return build_redirection(url)

@@ -1,0 +1,12 @@
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record id="local_operator" model="saas.operator">
+        <field name="name">Same Instance</field>
+        <field name="type">local</field>
+        <field name="db_url_template">http://{db_name}.{db_id}.127.0.0.1.nip.io</field>
+        <field name="db_name_template">fast_build_{unique_id}</field>
+        <!-- It works when db-filter=^%d$ -->
+        <field name="direct_url" eval="'http://' + obj().env.cr.dbname + '.127.0.0.1.nip.io:8069'" model="saas.operator"/>
+    </record>
+</odoo>

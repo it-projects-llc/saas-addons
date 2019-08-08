@@ -1,0 +1,9 @@
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo noupdate="1">
+        <record id="seq_saas_db" model="ir.sequence">
+            <field name="name">SaaS DB</field>
+            <field name="code">saas.db</field>
+            <field name="padding">3</field>
+        </record>
+</odoo>

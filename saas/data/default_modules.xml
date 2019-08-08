@@ -1,0 +1,136 @@
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record id="crm" model="saas.module">
+        <field name="name">crm</field>
+        <field name="description">CRM</field>
+    </record>
+    <record id="website" model="saas.module">
+        <field name="name">website</field>
+        <field name="description">Website</field>
+    </record>
+    <record id="project" model="saas.module">
+        <field name="name">project</field>
+        <field name="description">Project</field>
+    </record>
+    <record id="stock" model="saas.module">
+        <field name="name">stock</field>
+        <field name="description">Inventory</field>
+    </record>
+    <record id="account" model="saas.module">
+        <field name="name">account</field>
+        <field name="description">Invoicing</field>
+    </record>
+    <record id="mrp" model="saas.module">
+        <field name="name">mrp</field>
+        <field name="description">Manufacturing</field>
+    </record>
+    <record id="sale_management" model="saas.module">
+        <field name="name">sale_management</field>
+        <field name="description">Sales</field>
+    </record>
+    <record id="point_of_sale" model="saas.module">
+        <field name="name">point_of_sale</field>
+        <field name="description">Point of Sale</field>
+    </record>
+    <record id="note" model="saas.module">
+        <field name="name">note</field>
+        <field name="description">Notes</field>
+    </record>
+    <record id="website_sale" model="saas.module">
+        <field name="name">website_sale</field>
+        <field name="description">eCommerce</field>
+    </record>
+    <record id="purchase" model="saas.module">
+        <field name="name">purchase</field>
+        <field name="description">Purchase</field>
+    </record>
+    <record id="hr" model="saas.module">
+        <field name="name">hr</field>
+        <field name="description">Employees</field>
+    </record>
+    <record id="hr_attendance" model="saas.module">
+        <field name="name">hr_attendance</field>
+        <field name="description">Attendances</field>
+    </record>
+    <record id="hr_recruitment" model="saas.module">
+        <field name="name">hr_recruitment</field>
+        <field name="description">Recruitment</field>
+    </record>
+    <record id="hr_expense" model="saas.module">
+        <field name="name">hr_expense</field>
+        <field name="description">Expenses</field>
+    </record>
+    <record id="board" model="saas.module">
+        <field name="name">board</field>
+        <field name="description">Dashboards</field>
+    </record>
+    <record id="contacts" model="saas.module">
+        <field name="name">contacts</field>
+        <field name="description">Contacts</field>
+    </record>
+    <record id="hr_holidays" model="saas.module">
+        <field name="name">hr_holidays</field>
+        <field name="description">Leaves</field>
+    </record>
+    <record id="mail" model="saas.module">
+        <field name="name">mail</field>
+        <field name="description">Discuss</field>
+    </record>
+    <record id="website_livechat" model="saas.module">
+        <field name="name">website_livechat</field>
+        <field name="description">Website Live Chat</field>
+    </record>
+    <record id="survey" model="saas.module">
+        <field name="name">survey</field>
+        <field name="description">Surveys</field>
+    </record>
+    <record id="mass_mailing" model="saas.module">
+        <field name="name">mass_mailing</field>
+        <field name="description">Email Marketing</field>
+    </record>
+    <record id="lunch" model="saas.module">
+        <field name="name">lunch</field>
+        <field name="description">Lunch</field>
+    </record>
+    <record id="maintenance" model="saas.module">
+        <field name="name">maintenance</field>
+        <field name="description">Maintenance</field>
+    </record>
+    <record id="calendar" model="saas.module">
+        <field name="name">calendar</field>
+        <field name="description">Calendar</field>
+    </record>
+    <record id="website_blog" model="saas.module">
+        <field name="name">website_blog</field>
+        <field name="description">Blogs</field>
+    </record>
+    <record id="website_hr_recruitment" model="saas.module">
+        <field name="name">website_hr_recruitment</field>
+        <field name="description">Online Jobs</field>
+    </record>
+    <record id="website_slides" model="saas.module">
+        <field name="name">website_slides</field>
+        <field name="description">Slides</field>
+    </record>
+    <record id="website_forum" model="saas.module">
+        <field name="name">website_forum</field>
+        <field name="description">Forum</field>
+    </record>
+    <record id="fleet" model="saas.module">
+        <field name="name">fleet</field>
+        <field name="description">Fleet</field>
+    </record>
+    <record id="website_event" model="saas.module">
+        <field name="name">website_event</field>
+        <field name="description">Events</field>
+    </record>
+    <record id="im_livechat" model="saas.module">
+        <field name="name">im_livechat</field>
+        <field name="description">Live Chat</field>
+    </record>
+    <record id="repair" model="saas.module">
+        <field name="name">repair</field>
+        <field name="description">Repairs</field>
+    </record>
+</odoo>

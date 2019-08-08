@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-token_create,token_create,model_auth_quick_master_token,group_auth_quick,0,0,1,0
+token_create,token_create,model_auth_quick_master_token,group_auth_quick,1,0,1,0
+

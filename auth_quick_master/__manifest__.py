@@ -1,18 +1,18 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
-# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """Quick Authentication (Master)""",
     "summary": """Authentication provider for "Quick Authentication" module""",
     "category": "Extra Tools",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.1.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
     "support": "apps@it-projects.info",
     "website": "https://it-projects.info/team/yelizariev",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
 
@@ -21,6 +21,7 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/res_groups_data.xml",
+        "security/ir_rule_data.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [
