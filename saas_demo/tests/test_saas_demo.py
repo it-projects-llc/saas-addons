@@ -19,4 +19,7 @@ class TestSaasDemo(TransactionCase):
     def test_saas_demo(self):
         # for some reason, when you restart the tests, the template is not deleted
         self.env['saas.template'].search([('name', '=', 'Demo Title')]).unlink()
+        repo = self.env['saas.demo.repo'].search([('demo_id', '=', self.saas_demo.id)])
+        if repo.commit:
+            repo.commit = None
         self.saas_demo.fetch_and_generate_templates()
