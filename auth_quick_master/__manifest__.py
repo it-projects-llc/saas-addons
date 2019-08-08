@@ -35,7 +35,7 @@
     "uninstall_hook": None,
 
     "auto_install": False,
-    "installable": False,
+    "installable": True,
 
     # "demo_title": "Quick Authentication (Master)",
     # "demo_addons": [
