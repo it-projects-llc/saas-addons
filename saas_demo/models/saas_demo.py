@@ -6,10 +6,9 @@ import os
 import os.path
 
 from odoo import models, fields, api
-from odoo.modules.module import ad_paths
 
 from odoo.addons.queue_job.job import job
-from ..os import repos_dir, update_repo, get_manifests
+from ..os import repos_dir, analysis_dir, update_repo, get_manifests
 
 _logger = logging.getLogger(__name__)
 
@@ -28,13 +27,15 @@ class Demo(models.Model):
         # TODO: this method is called via git webhooks
         # FIXME: split into methods to avoid deep nesting
         repos_path = repos_dir()
+        analysis_path = analysis_dir()
         demos_for_immediate_update = self.env[self._name]
         for demo in self:
             updated = demo.repo_ids._local_update_repo(update_commit=True)
             if not updated:
                 continue
             for repo in demo.repo_ids:
-                path = os.path.join(repos_path, repo.branch, repo.url_escaped)
+                path = os.path.join(analysis_path, repo.branch, repo.url_escaped)
+                self.operator_ids.update_ad_paths(path)
                 for module, manifest in get_manifests(path).items():
                     if not manifest.get('saas_demo_title'):
                         # not a demo
@@ -64,6 +65,10 @@ class Demo(models.Model):
                         'template_module_ids': self.get_module_vals(modules_to_install),
                         'demo_addon_ids': self.get_module_vals(modules_to_show),
                     })
+                    self.operator_ids.clear_ad_paths(path)
+                    build_path = os.path.join(repos_path, repo.branch, repo.url_escaped)
+                    self.operator_ids.update_ad_paths(build_path)
+
         if demos_for_immediate_update:
             self.repos_updating_start(demos_for_immediate_update)
 
@@ -153,15 +158,16 @@ class Repo(models.Model):
             r.url_escaped = url
 
     def _local_update_repo(self, update_commit=True):
-        local_root = repos_dir()
+        analysis_root = analysis_dir()
         updated = False
         for repo in self:
-            path = os.path.join(local_root, repo.branch, repo.url_escaped)
-            commit = update_repo(path, repo.url, repo.branch)
+            analysis_path = os.path.join(analysis_root, repo.branch, repo.url_escaped)
+            commit = update_repo(analysis_path, repo.url, repo.branch)
             if commit != repo.commit:
+                local_root = repos_dir()
+                build_path = os.path.join(local_root, repo.branch, repo.url_escaped)
+                update_repo(build_path, repo.branch, repo.url_escaped)
                 updated = True
                 if update_commit:
                     repo.commit = commit
-                    if path not in ad_paths:
-                        ad_paths.append(path)
         return updated

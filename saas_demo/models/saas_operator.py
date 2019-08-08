@@ -3,6 +3,7 @@
 import logging
 
 from odoo import models, fields, api, service
+from odoo.modules.module import ad_paths
 from ..os import repos_dir, update_addons_path, root_odoo_path, git
 
 _logger = logging.getLogger(__name__)
@@ -85,3 +86,15 @@ class SAASOperator(models.Model):
         if self.type != 'local':
             return
         return self.demo_id.repo_ids._local_update_repo()
+
+    @api.multi
+    def update_ad_paths(self, path):
+        if self.is_local():
+            if path not in ad_paths:
+                ad_paths.append(path)
+
+    @api.multi
+    def clear_ad_paths(self, path):
+        if self.is_local():
+            if path in ad_paths:
+                ad_paths.remove(path)
