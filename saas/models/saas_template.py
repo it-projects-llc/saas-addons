@@ -1,9 +1,11 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2019 Kildebekov Anvar <https://it-projects.info/team/kildebekov>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import random
 import string
 import logging
+from slugify import slugify
 
 from odoo import models, fields, api, SUPERUSER_ID, sql_db, _, registry
 from odoo.tools.safe_eval import test_python_expr
@@ -32,8 +34,8 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 # When you need curly braces in build post init code use doubling for escaping\n\n\n\n"""
 
 
-def random_password(len=32):
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len))
+def random_password(length=32):
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
 class SAASTemplate(models.Model):
@@ -78,6 +80,11 @@ class SAASTemplate(models.Model):
             }
         else:
             raise UserError(_('There are no ready template\'s deployments. Create new one or wait until it\'s done.'))
+
+    @api.multi
+    def refresh_page(self):
+        # Empty-function for purpose of refreshing page
+        pass
 
 
 class SAASModules(models.Model):
@@ -219,17 +226,19 @@ class SAASTemplateLine(models.Model):
             admin_username='admin',
             admin_password=self.password)
 
-    @staticmethod
-    def _convert_to_dict(key_values):
-        key_value_dict = {}
-        for r in key_values:
-            if r.key:
-                key_value_dict.update({r.key: r.value})
-        return key_value_dict
+    def prepare_name(self, db_name):
+        self.ensure_one()
+        return slugify(db_name)
 
     @api.multi
-    def create_db(self, db_name, key_values):
+    def create_db(self, key_values=None, db_name=None, with_delay=True):
         self.ensure_one()
+        if not key_values:
+            key_values = {}
+        if not db_name:
+            db_name = self.operator_id.generate_db_name()
+        else:
+            db_name = self.prepare_name(db_name)
         build = self.env['saas.db'].create({
             'name': db_name,
             'operator_id': self.operator_id.id,
@@ -237,13 +246,24 @@ class SAASTemplateLine(models.Model):
         })
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
-
-        build.with_delay().create_db(
-            self.operator_db_name,
-            self.template_id.template_demo,
-            self.password,
-        )
-        key_value_dict = self._convert_to_dict(key_values)
-        self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_value_dict)
+        if with_delay:
+            build.with_delay().create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values)
+        else:
+            build.create_db(
+                self.operator_db_name,
+                self.template_id.template_demo,
+                self.password,
+            )
+            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values)
 
         return build
+
+    @api.multi
+    def random_ready_operator(self):
+        ready_operators = self.filtered(lambda r: r.state == 'done')
+        return random.choice(ready_operators)

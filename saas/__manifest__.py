@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Anvar Kildebekov <https://it-projects.info/team/kildebekov>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """SaaS Base""",
@@ -6,7 +7,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.2",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -21,8 +22,9 @@
         "queue_job",
         "web_editor",
     ],
-    "external_dependencies": {"python": [], "bin": []},
+    "external_dependencies": {"python": ['slugify'], "bin": []},
     "data": [
+        "security/saas_security.xml",
         "security/ir.model.access.csv",
         "views/saas_view.xml",
         "views/saas_template_views.xml",
@@ -34,6 +36,7 @@
         "data/ir_cron_data.xml",
         "data/saas_operator_data.xml",
         "data/default_modules.xml",
+        "data/db_sequence.xml",
     ],
     "demo": [
         "demo/saas_template_demo.xml",

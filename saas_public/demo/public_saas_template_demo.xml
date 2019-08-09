@@ -1,0 +1,7 @@
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record id="saas.saas_template" model="saas.template">
+        <field name="public_access" eval="True"/>
+    </record>
+</odoo>
