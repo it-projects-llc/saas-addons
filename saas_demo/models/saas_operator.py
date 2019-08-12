@@ -62,7 +62,7 @@ class SAASOperator(models.Model):
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
-            test = self.env['ir.config_parameter'].get_param('test')
+            test = self.env['ir.config_parameter'].get_param('test_saas_demo')
             if test:
                 # no need to pull odoo folder in test mode
                 return
@@ -94,7 +94,7 @@ class SAASOperator(models.Model):
                 ad_paths.append(path)
 
     @api.multi
-    def clear_ad_paths(self, path):
+    def remove_ad_paths(self, path):
         if self.is_local():
             if path in ad_paths:
                 ad_paths.remove(path)

@@ -65,7 +65,7 @@ class Demo(models.Model):
                         'template_module_ids': self.get_module_vals(modules_to_install),
                         'demo_addon_ids': self.get_module_vals(modules_to_show),
                     })
-                    self.operator_ids.clear_ad_paths(path)
+                    self.operator_ids.remove_ad_paths(path)
                     build_path = os.path.join(repos_path, repo.branch, repo.url_escaped)
                     self.operator_ids.update_ad_paths(build_path)
 
@@ -75,10 +75,12 @@ class Demo(models.Model):
     @api.model
     def get_module_vals(self, modules):
         module_ids = self.env['saas.module'].search([('name', 'in', modules)])
+        existing_modules = module_ids.mapped('name')
         for module in modules:
-            if module not in module_ids.mapped('name'):
+            if module not in existing_modules:
                 new_module = self.env['saas.module'].create({'name': module})
                 module_ids |= new_module
+                existing_modules.append(module)
         vals = [(4, module.id, 0) for module in module_ids]
         return vals
 
