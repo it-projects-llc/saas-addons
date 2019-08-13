@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 # Some code is based on https://github.com/odoo/odoo-extra/blob/master/runbot/runbot.py
 import subprocess
@@ -54,7 +55,7 @@ def mkdir(d):
 def git(path, cmd):
     cmd = ['git', '-C', path] + cmd
     _logger.debug("git: %s", ' '.join(cmd))
-    return subprocess.check_output(cmd).strip()
+    return subprocess.check_output(cmd).strip().decode('utf-8')
 
 
 def update_repo(path, repo_url, branch):
@@ -64,6 +65,11 @@ def update_repo(path, repo_url, branch):
     git(path, ['checkout', 'origin/%s' % branch])
     commit = git(path, ['rev-parse', 'origin/%s' % branch])
     return commit
+
+
+def analysis_dir():
+    d = os.path.join(tools.config['data_dir'], 'analysis')
+    return mkdir(d)
 
 
 # ODOO
@@ -102,12 +108,13 @@ def update_addons_path(folder_of_folders, force=True):
     ]
     addons_path += extra
     addons_path = list(set(addons_path))
-    addons_path = addons_path.join(',')
+    addons_path = ','.join(addons_path)
     _logger.info('addons_path for %s:\n%s', folder_of_folders, addons_path)
     update_config('options', 'addons_path', addons_path)
 
 
 def update_config(section, key, value):
+    config_parser.read(tools.config.rcfile)
     config_parser.set(section, key, value)
     with open(tools.config.rcfile, 'w') as configfile:
         config_parser.write(configfile)
@@ -125,9 +132,9 @@ def get_manifests(path):
         for it in os.listdir(path)
         if is_really_module(it)
     ]
-    res = []
+    res = {}
     for mname in modules:
         mod_path = os.path.join(path, mname)
         info = load_information_from_description_file(mname, mod_path)
         res[mname] = info
-    return info
+    return res

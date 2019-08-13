@@ -3,6 +3,7 @@
 import logging
 
 from odoo import models, fields, api, service
+from odoo.modules.module import ad_paths
 from ..os import repos_dir, update_addons_path, root_odoo_path, git
 
 _logger = logging.getLogger(__name__)
@@ -51,7 +52,6 @@ class SAASOperator(models.Model):
         # update odoo source only when we have updates in other repositories.
         # Otherwise don't update it and don't rebuild templates
         updated_operators.update_odoo()
-
         # update addons-path
         updated_operators.update_addons_path()
 
@@ -62,7 +62,12 @@ class SAASOperator(models.Model):
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
-            git(root_odoo_path(), ['pull', 'origin'])
+            test = self.env['ir.config_parameter'].get_param('test_saas_demo')
+            if test:
+                # no need to pull odoo folder in test mode
+                return
+            else:
+                git(root_odoo_path(), ['pull', 'origin'])
 
     @api.multi
     def update_addons_path(self):
@@ -73,7 +78,7 @@ class SAASOperator(models.Model):
     @api.multi
     def restart_odoo(self):
         if self.is_local():
-            service.service.restart()
+            service.server.restart()
 
     @api.multi
     def _update_repos(self):
@@ -81,3 +86,15 @@ class SAASOperator(models.Model):
         if self.type != 'local':
             return
         return self.demo_id.repo_ids._local_update_repo()
+
+    @api.multi
+    def update_ad_paths(self, path):
+        if self.is_local():
+            if path not in ad_paths:
+                ad_paths.append(path)
+
+    @api.multi
+    def remove_ad_paths(self, path):
+        if self.is_local():
+            if path in ad_paths:
+                ad_paths.remove(path)
