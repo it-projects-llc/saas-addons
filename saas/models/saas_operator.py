@@ -158,6 +158,15 @@ class SAASOperator(models.Model):
             action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
             self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
+    def notify_users(self, message, title=None, message_type=None):
+        manager_users = self.env.ref('saas.group_manager').users
+        if message_type == 'success':
+            manager_users.notify_success(message=message, title=title, sticky=True)
+        elif message_type == 'info':
+            manager_users.notify_info(message=message, title=title, sticky=True)
+        else:
+            manager_users.notify_default(message=message, title=title, sticky=True)
+
 
 class SafeDict(defaultdict):
     def __missing__(self, key):

@@ -1,5 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
-# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2018-2019 Denis Mudarisov <https://it-projects.info/team/mudarisov>
 # Copyright 2019 Anvar Kildebekov <https://it-projects.info/team/kildebekov>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
@@ -8,7 +8,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
-    "version": "12.0.2.3.1",
+    "version": "12.0.2.4.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -22,6 +22,7 @@
         "auth_quick_master",
         "queue_job",
         "web_editor",
+        "web_notify",
     ],
     "external_dependencies": {"python": ['slugify'], "bin": []},
     "data": [

@@ -1,3 +1,8 @@
+`2.4.0`
+-------
+
+- **New:** notification of the user about the process of creating the template's deployment
+
 `2.3.1`
 -------
 
