@@ -2,9 +2,9 @@
    :target: https://www.gnu.org/licenses/lgpl
    :alt: License: LGPL-3
 
-===============================
- Quick Authentication (Master)
-===============================
+=======================
+ Quick Auth (Master)
+=======================
 
 Authentication provider for ``auth_quick`` module.
 
