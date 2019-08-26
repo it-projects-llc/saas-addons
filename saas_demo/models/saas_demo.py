@@ -25,8 +25,6 @@ class Demo(models.Model):
     @api.model
     def fetch_and_generate_templates(self):
         # TODO: this method is called via git webhooks
-        # FIXME: split into methods to avoid deep nesting
-        repos_path = repos_dir()
         analysis_path = analysis_dir()
         demos_for_immediate_update = self.env[self._name]
         for demo in self:
@@ -36,41 +34,45 @@ class Demo(models.Model):
             for repo in demo.repo_ids:
                 path = os.path.join(analysis_path, repo.branch, repo.url_escaped)
                 self.operator_ids.update_ad_paths(path)
-                for module, manifest in get_manifests(path).items():
-                    if not manifest.get('saas_demo_title'):
-                        # not a demo
-                        continue
-                    if not manifest.get('installable', True):
-                        # not installable
-                        continue
-                    template = self.env['saas.template'].search([
-                        ('demo_id', '=', demo.id),
-                        ('demo_main_addon_id.name', '=', module),
-                    ])
-                    if not template:
-                        module_rec = self.env['saas.module'].search([('name', '=', module)])
-                        if not module_rec:
-                            module_rec = self.env['saas.module'].create({
-                                'name': module
-                            })
-                        template = self.env['saas.template'].create({
-                            'demo_id': demo.id,
-                            'demo_main_addon_id': module_rec.id,
-                        })
-                        demos_for_immediate_update |= demo
-                    modules_to_show = [module] + manifest.get('saas_demo_addons')
-                    modules_to_install = modules_to_show + manifest.get('saas_demo_addons_hidden')
-                    template.write({
-                        'name': manifest.get('saas_demo_title'),
-                        'template_module_ids': self.get_module_vals(modules_to_install),
-                        'demo_addon_ids': self.get_module_vals(modules_to_show),
-                    })
-                    self.operator_ids.remove_ad_paths(path)
-                    build_path = os.path.join(repos_path, repo.branch, repo.url_escaped)
-                    self.operator_ids.update_ad_paths(build_path)
-
+                demos_for_immediate_update = self.update_modules_templates(path, demo, repo, demos_for_immediate_update)
         if demos_for_immediate_update:
             self.repos_updating_start(demos_for_immediate_update)
+
+    def update_modules_templates(self, path, demo, repo, demos_for_immediate_update):
+        repos_path = repos_dir()
+        for module, manifest in get_manifests(path).items():
+            if not manifest.get('saas_demo_title'):
+                # not a demo
+                continue
+            if not manifest.get('installable', True):
+                # not installable
+                continue
+            template = self.env['saas.template'].search([
+                ('demo_id', '=', demo.id),
+                ('demo_main_addon_id.name', '=', module),
+            ])
+            if not template:
+                module_rec = self.env['saas.module'].search([('name', '=', module)])
+                if not module_rec:
+                    module_rec = self.env['saas.module'].create({
+                        'name': module
+                    })
+                template = self.env['saas.template'].create({
+                    'demo_id': demo.id,
+                    'demo_main_addon_id': module_rec.id,
+                })
+                demos_for_immediate_update |= demo
+            modules_to_show = [module] + manifest.get('saas_demo_addons')
+            modules_to_install = modules_to_show + manifest.get('saas_demo_addons_hidden')
+            template.write({
+                'name': manifest.get('saas_demo_title'),
+                'template_module_ids': self.get_module_vals(modules_to_install),
+                'demo_addon_ids': self.get_module_vals(modules_to_show),
+            })
+            self.operator_ids.remove_ad_paths(path)
+            build_path = os.path.join(repos_path, repo.branch, repo.url_escaped)
+            self.operator_ids.update_ad_paths(build_path)
+        return demos_for_immediate_update
 
     @api.model
     def get_module_vals(self, modules):
