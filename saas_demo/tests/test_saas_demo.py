@@ -1,8 +1,8 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo.addons.saas.tests.common_saas_test import Common
-
 from odoo.tests.common import TransactionCase, tagged
+from odoo.service import db
 
 
 @tagged('post_install', 'at_install')
@@ -28,7 +28,8 @@ class TestSaasDemo(TransactionCase, Common):
         self.saas_demo = self.env.ref('saas_demo.saas_demo')
 
     def test_saas_demo(self):
-        self.drop_dbs()
+        drop_db_list = [build for build in db.list_dbs() if build.startswith('test_db')]
+        self.drop_dbs(drop_db_list)
         # for some reason, when you restart the tests, the template is not deleted
         self.env['saas.template'].search([('name', '=', 'Demo Title')]).unlink()
         repo = self.env['saas.demo.repo'].search([('demo_id', '=', self.saas_demo.id)])
