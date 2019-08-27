@@ -1,12 +1,12 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
+from odoo.addons.saas.tests.common_saas_test import Common
 
 from odoo.tests.common import TransactionCase, tagged
 
 
 @tagged('post_install', 'at_install')
-class TestSaasDemo(TransactionCase):
+class TestSaasDemo(TransactionCase, Common):
     def setUp(self):
         super(TestSaasDemo, self).setUp()
         self.env = self.env(context=dict(
@@ -14,12 +14,25 @@ class TestSaasDemo(TransactionCase):
             test_queue_job_no_delay=True,
         ))
         self.env['ir.config_parameter'].set_param('test_saas_demo', 'True')
+        self.setup_saas_env()
+        # No need to test it again
+        self.env.ref('saas.saas_template_operator').write({
+            'to_rebuild': False,
+        })
+        self.saas_template_operator_1.write({
+            'to_rebuild': False,
+        })
+        self.saas_template_operator_2.write({
+            'to_rebuild': False,
+        })
         self.saas_demo = self.env.ref('saas_demo.saas_demo')
 
     def test_saas_demo(self):
+        self.drop_dbs()
         # for some reason, when you restart the tests, the template is not deleted
         self.env['saas.template'].search([('name', '=', 'Demo Title')]).unlink()
         repo = self.env['saas.demo.repo'].search([('demo_id', '=', self.saas_demo.id)])
         if repo.commit:
             repo.commit = None
         self.saas_demo.fetch_and_generate_templates()
+        self.env['saas.template.operator'].preparing_template_next()
