@@ -40,3 +40,6 @@ class TestSaasDemo(TransactionCase, Common):
             repo.commit = None
         self.saas_demo.fetch_and_generate_templates()
         self.env['saas.template.operator'].preparing_template_next()
+        # delete databases again so that there are no conflicts with tests of other saas modules
+        drop_db_list = [build for build in db.list_dbs() if build.startswith('test-db')]
+        self.drop_dbs(drop_db_list)
