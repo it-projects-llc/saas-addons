@@ -11,6 +11,7 @@ from odoo.service import db
 class TestSaasPublic(HttpCase, Common):
     def setUp(self):
         super(TestSaasPublic, self).setUp()
+        self.env['saas.template.operator'].search([]).unlink()
         self.setup_saas_env()
         self.saas_template_1.write({
             'public_access': True,
