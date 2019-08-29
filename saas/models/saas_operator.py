@@ -23,7 +23,7 @@ class SAASOperator(models.Model):
     # host = fields.Char()
     # port = fields.Char()
     db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
-    db_name_template = fields.Char('DB Names', help='Avaialble variables: {unique_id}')
+    db_name_template = fields.Char('DB Names', required=True, help='Avaialble variables: {unique_id}')
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     @api.multi

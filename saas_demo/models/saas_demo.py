@@ -61,6 +61,12 @@ class Demo(models.Model):
                     'demo_id': demo.id,
                     'demo_main_addon_id': module_rec.id,
                 })
+                for operator in self.operator_ids:
+                    self.env['saas.template.operator'].create({
+                        'operator_db_name': operator.generate_db_name(),
+                        'template_id': template.id,
+                        'operator_id': operator.id,
+                    })
                 demos_for_immediate_update |= demo
             modules_to_show = [module] + manifest.get('saas_demo_addons')
             modules_to_install = modules_to_show + manifest.get('saas_demo_addons_hidden')
