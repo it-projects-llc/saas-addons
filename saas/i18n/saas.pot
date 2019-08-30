@@ -1,0 +1,493 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* saas
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: saas
+#: model:ir.model,name:saas.model_auth_quick_master_token
+msgid "Authentication Token"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_operator__db_url_template
+msgid "Avaialble variables: {db_id}, {db_name}"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_operator__db_name_template
+msgid "Avaialble variables: {unique_id}"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_db
+msgid "Build"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__build_creation_id
+msgid "Build Creation"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__build_post_init
+msgid "Build Initialization"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__build_post_init_ids
+msgid "Build Initialization Values"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__build_name
+msgid "Build name"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
+msgid "Build post init form"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_build_post_init_line
+msgid "Build post init line"
+msgstr ""
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_db_action
+#: model:ir.ui.menu,name:saas.saas_main_menu_item_2
+msgid "Builds"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
+msgid "Cancel"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+msgid "Connect to the Build"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
+msgid "Create Build"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_db__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_log__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_module__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_operator__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_db__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_log__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_module__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_operator__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_template__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__db_name_template
+msgid "DB Names"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__password
+msgid "DB Password"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__type
+msgid "DB Type"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__db_url_template
+msgid "DB URLs"
+msgstr ""
+
+#. module: saas
+#: selection:saas.log,type:0
+msgid "DB is being created"
+msgstr ""
+
+#. module: saas
+#: selection:saas.log,type:0
+msgid "DB is created"
+msgstr ""
+
+#. module: saas
+#: selection:saas.log,type:0
+msgid "DB is dropped"
+msgstr ""
+
+#. module: saas
+#: selection:saas.template.operator,state:0
+msgid "Database Creating"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_log
+msgid "Database Event Log"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_operator
+msgid "Database Operator"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_template
+msgid "Database Template"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_state
+msgid "Database operator state"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__db_id
+msgid "Db"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_module__description
+msgid "Description"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_log__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_module__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_operator__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_template__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas
+#: selection:saas.db,state:0
+#: selection:saas.template.operator,state:0
+msgid "Draft"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__description
+msgid "Extra data"
+msgstr ""
+
+#. module: saas
+#: selection:saas.template.operator,state:0
+msgid "Extra initialization"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__id
+#: model:ir.model.fields,field_description:saas.field_saas_db__id
+#: model:ir.model.fields,field_description:saas.field_saas_log__id
+#: model:ir.model.fields,field_description:saas.field_saas_module__id
+#: model:ir.model.fields,field_description:saas.field_saas_operator__id
+#: model:ir.model.fields,field_description:saas.field_saas_template__id
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__id
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__id
+msgid "ID"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__template_demo
+msgid "Install demo data"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__key
+msgid "Key"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_db____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_log____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_module____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_operator____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_template____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build____last_update
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_db__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_log__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_module__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_operator__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_db__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_log__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_module__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_operator__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_template__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__type
+msgid "Log type"
+msgstr ""
+
+#. module: saas
+#: model:res.groups,name:saas.group_manager
+msgid "Manager"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__direct_url
+msgid "Master URL (Server-to-Server)"
+msgstr ""
+
+#. module: saas
+#: selection:saas.template.operator,state:0
+msgid "Modules installation"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__template_module_ids
+msgid "Modules to install"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__name
+#: model:ir.model.fields,field_description:saas.field_saas_operator__name
+#: model:ir.model.fields,field_description:saas.field_saas_template__name
+msgid "Name"
+msgstr ""
+
+#. module: saas
+#: selection:saas.db,type:0
+msgid "Normal Build"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__operator_id
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_id
+#: selection:saas.log,data_id:0
+msgid "Operator"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_id
+msgid "Operator Db"
+msgstr ""
+
+#. module: saas
+#: model:ir.actions.server,name:saas.preparing_template_next_cron_ir_actions_server
+#: model:ir.cron,cron_name:saas.preparing_template_next_cron
+#: model:ir.cron,name:saas.preparing_template_next_cron
+msgid "Preparing Template Next Cron"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_template__build_post_init
+msgid "Python code to be executed once build db is created from template"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_template__template_post_init
+msgid "Python code to be executed once db is created and modules are installed"
+msgstr ""
+
+#. module: saas
+#: selection:saas.log,type:0
+msgid "Quick Authentication"
+msgstr ""
+
+#. module: saas
+#: selection:saas.db,state:0
+#: selection:saas.template.operator,state:0
+msgid "Ready"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__data_id
+msgid "Reference"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
+msgid "Refresh"
+msgstr ""
+
+#. module: saas
+#: model:ir.module.category,name:saas.module_management
+#: model:ir.ui.menu,name:saas.saas_main_menu
+msgid "SaaS"
+msgstr ""
+
+#. module: saas
+#: selection:saas.operator,type:0
+msgid "Same Instance"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__state
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__state
+msgid "State"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__name
+msgid "Technical Database name"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_module__name
+msgid "Technical name"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_module__template_ids
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_id
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__template_id
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_view_tree
+msgid "Template"
+msgstr ""
+
+#. module: saas
+#: selection:saas.db,type:0
+msgid "Template DB"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__template_post_init
+msgid "Template Initialization"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__template_operator_ids
+msgid "Template Operator"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_operator_count
+msgid "Template Operator Count"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_name
+msgid "Template database name"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_template_operator
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_operator_id
+msgid "Template's Deployment"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__operator_ids
+msgid "Template's deployments"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_module
+msgid "Template's modules to install"
+msgstr ""
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_template_action
+#: model:ir.ui.menu,name:saas.saas_main_menu_item
+msgid "Templates"
+msgstr ""
+
+#. module: saas
+#: code:addons/saas/models/saas_template.py:82
+#, python-format
+msgid "There are no ready template's deployments. Create new one or wait until it's done."
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_template_create_build__build_post_init_ids
+msgid "These values will be used on execution template's Build Initialization code"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__to_rebuild
+msgid "To Rebuild"
+msgstr ""
+
+#. module: saas
+#: selection:saas.log,data_id:0
+msgid "Token"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__type
+msgid "Type"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_operator__direct_url
+msgid "URL for server-to-server communication "
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__random
+msgid "Use random operator"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__user_id
+#: model:res.groups,name:saas.group_user
+msgid "User"
+msgstr ""
+
+#. module: saas
+#: model:ir.module.category,description:saas.module_management
+msgid "User access level for SaaS"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__value
+msgid "Value"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_template_create_build
+msgid "Wizard to create build by template"
+msgstr ""
+
