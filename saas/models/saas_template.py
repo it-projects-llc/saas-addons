@@ -42,7 +42,7 @@ class SAASTemplate(models.Model):
     _name = 'saas.template'
     _description = 'Database Template'
 
-    name = fields.Char()
+    name = fields.Char(copy=False)
     template_demo = fields.Boolean('Install demo data', default=False)
     template_module_ids = fields.Many2many('saas.module', string="Modules to install")
     template_post_init = fields.Text(
