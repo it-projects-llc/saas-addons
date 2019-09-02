@@ -147,6 +147,10 @@ class Demo(models.Model):
         # repos_updating_next() will be called via cron
         # we cannot use with_delay() because in case of local operators we restart server
 
+    def action_fetch_templates(self):
+        self.ensure_one()
+        self.fetch_and_generate_templates()
+
 
 class Repo(models.Model):
     _name = 'saas.demo.repo'

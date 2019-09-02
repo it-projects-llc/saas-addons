@@ -34,6 +34,8 @@ class SAASOperator(models.Model):
         """
         updated_operators = self.env['saas.operator']
         for r in self:
+            # FIXME: Сомнительный ход здесь, потому что мы уже подтянули эти репозитории,
+            # а сейчас получается идет занова вызов
             has_updates = r._update_repos()
             if has_updates:
                 # mark to rebuild templates
