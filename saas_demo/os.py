@@ -7,13 +7,18 @@ import os
 import os.path
 import logging
 import errno
+import io
+from os.path import join as opj
+import ast
 try:
     import configparser as ConfigParser
 except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import MANIFEST_NAMES, load_information_from_description_file
+from odoo.modules.module import get_module_path, module_manifest, README, MANIFEST_NAMES
+from odoo.tools import pycompat
+import odoo.release as release
 import odoo
 
 _logger = logging.getLogger(__name__)
@@ -118,6 +123,84 @@ def update_config(section, key, value):
     config_parser.set(section, key, value)
     with open(tools.config.rcfile, 'w') as configfile:
         config_parser.write(configfile)
+
+
+def _fileopen(path, mode, basedir, pathinfo):
+    name = os.path.normpath(os.path.normcase(os.path.join(basedir, path)))
+    if os.path.isfile(name):
+        if 'b' in mode:
+            fo = open(name, mode)
+        else:
+            fo = io.open(name, mode, encoding='utf-8')
+        if pathinfo:
+            return fo, name
+        return fo
+
+
+def file_open(name, mode="r", pathinfo=False):
+    if os.path.isabs(name):
+        base, name = os.path.split(name)
+        return _fileopen(name, mode=mode, basedir=base, pathinfo=pathinfo)
+
+
+def adapt_version(version):
+    serie = release.major_version
+    if version == serie or not version.startswith(serie + '.'):
+        version = '%s.%s' % (serie, version)
+    return version
+
+
+def load_information_from_description_file(module, mod_path=None):
+    """
+    :param module: The name of the module (sale, purchase, ...)
+    :param mod_path: Physical path of module, if not providedThe name of the module (sale, purchase, ...)
+    """
+    if not mod_path:
+        mod_path = get_module_path(module, downloaded=True)
+    manifest_file = module_manifest(mod_path)
+    if manifest_file:
+        # default values for descriptor
+        info = {
+            'application': False,
+            'author': 'Odoo S.A.',
+            'auto_install': False,
+            'category': 'Uncategorized',
+            'depends': [],
+            'description': '',
+            'installable': True,
+            'license': 'LGPL-3',
+            'post_load': None,
+            'version': '1.0',
+            'web': False,
+            'sequence': 100,
+            'summary': '',
+            'website': '',
+        }
+        info.update(pycompat.izip(
+            'depends data demo test init_xml update_xml demo_xml'.split(),
+            iter(list, None)))
+        f = file_open(manifest_file, mode='rb')
+        try:
+            info.update(ast.literal_eval(pycompat.to_native(f.read())))
+        finally:
+            f.close()
+
+        if not info.get('description'):
+            readme_path = [opj(mod_path, x) for x in README
+                           if os.path.isfile(opj(mod_path, x))]
+            if readme_path:
+                readme_text = file_open(readme_path[0]).read()
+                info['description'] = readme_text
+
+        if 'active' in info:
+            # 'active' has been renamed 'auto_install'
+            info['auto_install'] = info['active']
+
+        info['version'] = adapt_version(info['version'])
+        return info
+
+    _logger.debug('module %s: no manifest file found %s', module, MANIFEST_NAMES)
+    return {}
 
 
 def get_manifests(path):

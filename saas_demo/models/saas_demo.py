@@ -8,7 +8,7 @@ import os.path
 from odoo import models, fields, api
 
 from odoo.addons.queue_job.job import job
-from ..os import repos_dir, analysis_dir, update_repo, get_manifests
+from ..os import analysis_dir, update_repo, get_manifests
 
 _logger = logging.getLogger(__name__)
 
@@ -33,13 +33,11 @@ class Demo(models.Model):
                 continue
             for repo in demo.repo_ids:
                 path = os.path.join(analysis_path, repo.branch, repo.url_escaped)
-                self.operator_ids.update_ad_paths(path)
-                demos_for_immediate_update = self.update_modules_templates(path, demo, repo, demos_for_immediate_update)
+                demos_for_immediate_update = self.update_modules_templates(path, demo, demos_for_immediate_update)
         if demos_for_immediate_update:
             self.repos_updating_start(demos_for_immediate_update)
 
-    def update_modules_templates(self, path, demo, repo, demos_for_immediate_update):
-        repos_path = repos_dir()
+    def update_modules_templates(self, path, demo, demos_for_immediate_update):
         for module, manifest in get_manifests(path).items():
             if not manifest.get('saas_demo_title'):
                 # not a demo
@@ -75,9 +73,6 @@ class Demo(models.Model):
                 'template_module_ids': self.get_module_vals(modules_to_install),
                 'demo_addon_ids': self.get_module_vals(modules_to_show),
             })
-            self.operator_ids.remove_ad_paths(path)
-            build_path = os.path.join(repos_path, repo.branch, repo.url_escaped)
-            self.operator_ids.update_ad_paths(build_path)
         return demos_for_immediate_update
 
     @api.model
@@ -178,9 +173,6 @@ class Repo(models.Model):
             analysis_path = os.path.join(analysis_root, repo.branch, repo.url_escaped)
             commit = update_repo(analysis_path, repo.url, repo.branch)
             if commit != repo.commit:
-                local_root = repos_dir()
-                build_path = os.path.join(local_root, repo.branch, repo.url_escaped)
-                update_repo(build_path, repo.url, repo.branch)
                 updated = True
                 if update_commit:
                     repo.commit = commit
