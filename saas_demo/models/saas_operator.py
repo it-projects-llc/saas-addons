@@ -93,13 +93,13 @@ class SAASOperator(models.Model):
             return
         has_updates = False
         for repo in self.demo_id.repo_ids:
-            updated = self.server_update_repo(repo.url, repo.url_escaped, repo.branch, repo.commit)
+            updated = self.local_server_update_repo(repo.url, repo.url_escaped, repo.branch, repo.commit)
             if updated:
                 has_updates = True
         return has_updates
 
     @staticmethod
-    def server_update_repo(url, url_escaped, branch, commit):
+    def local_server_update_repo(url, url_escaped, branch, commit):
         repos_root = repos_dir()
         updated = False
         repos_path = os.path.join(repos_root, branch, url_escaped)
