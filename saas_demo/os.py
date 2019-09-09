@@ -16,9 +16,8 @@ except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import get_module_path, module_manifest, README, MANIFEST_NAMES
+from odoo.modules.module import module_manifest, README, MANIFEST_NAMES, adapt_version
 from odoo.tools import pycompat
-import odoo.release as release
 import odoo
 
 _logger = logging.getLogger(__name__)
@@ -143,20 +142,11 @@ def file_open(name, mode="r", pathinfo=False):
         return _fileopen(name, mode=mode, basedir=base, pathinfo=pathinfo)
 
 
-def adapt_version(version):
-    serie = release.major_version
-    if version == serie or not version.startswith(serie + '.'):
-        version = '%s.%s' % (serie, version)
-    return version
-
-
-def load_information_from_description_file(module, mod_path=None):
+def load_information_from_description_file(module, mod_path):
     """
     :param module: The name of the module (sale, purchase, ...)
     :param mod_path: Physical path of module, if not providedThe name of the module (sale, purchase, ...)
     """
-    if not mod_path:
-        mod_path = get_module_path(module, downloaded=True)
     manifest_file = module_manifest(mod_path)
     if manifest_file:
         # default values for descriptor
