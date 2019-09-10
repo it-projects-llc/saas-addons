@@ -111,8 +111,7 @@ class SAASOperator(models.Model):
 
     def _update_direct_url(self, url):
         self.ensure_one()
-        code = "env['ir.config_parameter'].search([('key', '=', 'auth_quick.master')]).write({{'value': '{}'}})\n"\
-            .format(url)
+        code = "env['ir.config_parameter'].set_param('auth_quick.master', '{}')\n".format(url)
         builds = self.env['saas.db'].search([('operator_id', '=', self.id), ('type', '=', 'build')])
         action = {
             'name': 'Build Code Eval',
