@@ -1,3 +1,8 @@
+`1.0.3`
+-------
+
+- **Fix:** update master_url in the created builds when changing the direct_url field in the operator
+
 `1.0.2`
 -------
 
