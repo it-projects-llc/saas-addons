@@ -38,7 +38,6 @@ class SAASOperator(models.Model):
             # FIXME: Сомнительный ход здесь, потому что мы уже подтянули эти репозитории,
             # а сейчас получается идет занова вызов
             has_updates = r._update_repos()
-            # has_updates = r.remote_update()
             if has_updates:
                 # mark to rebuild templates
                 r.update_repos_state = 'rebuilding'
@@ -95,13 +94,21 @@ class SAASOperator(models.Model):
             return
         has_updates = False
         for repo in self.demo_id.repo_ids:
-            updated = self.local_server_update_repo(repo.url, repo.url_escaped, repo.branch, repo.commit)
+            updated = self._local_server_update_repo(repo.url, repo.url_escaped, repo.branch, repo.commit)
             if updated:
                 has_updates = True
         return has_updates
 
     @staticmethod
-    def local_server_update_repo(url, url_escaped, branch, commit):
+    def _local_server_update_repo(url, url_escaped, branch, commit):
+        """
+        Updates git repository
+        :param url: link to git repository
+        :param url_escaped: used for directory name
+        :param branch: repository branch to be cloned
+        :param commit: commit hash
+        :return bool: whether the repository was updated or not
+        """
         repos_root = repos_dir()
         updated = False
         repos_path = os.path.join(repos_root, branch, url_escaped)
