@@ -1,0 +1,15 @@
+name: CI
+
+on: 
+  issues:
+    types: [opened, deleted, closed]
+
+jobs:
+  notify:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="Issue!"
