@@ -103,6 +103,27 @@ class SAASOperator(models.Model):
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
+    @api.multi
+    def write(self, vals):
+        if 'direct_url' in vals:
+            self._update_direct_url(vals['direct_url'])
+        return super(SAASOperator, self).write(vals)
+
+    def _update_direct_url(self, url):
+        self.ensure_one()
+        code = "env['ir.config_parameter'].search([('key', '=', 'auth_quick.master')]).write({{'value': '{}'}})\n"\
+            .format(url)
+        builds = self.env['saas.db'].search([('operator_id', '=', self.id), ('type', '=', 'build')])
+        action = {
+            'name': 'Build Code Eval',
+            'state': 'code',
+            'model_id': 1,
+            'code': code,
+        }
+        for build in builds:
+            action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
+            self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
+
 
 class SafeDict(defaultdict):
     def __missing__(self, key):
