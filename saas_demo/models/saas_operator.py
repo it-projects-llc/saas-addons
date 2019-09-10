@@ -1,10 +1,11 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import logging
+import os.path
 
 from odoo import models, fields, api, service
-from odoo.modules.module import ad_paths
-from ..os import repos_dir, update_addons_path, root_odoo_path, git
+from ..os import repos_dir, update_addons_path, root_odoo_path, git, update_repo
 
 _logger = logging.getLogger(__name__)
 
@@ -78,6 +79,10 @@ class SAASOperator(models.Model):
     @api.multi
     def restart_odoo(self):
         if self.is_local():
+            test = self.env['ir.config_parameter'].get_param('test_saas_demo')
+            if test:
+                # no need to restart odoo folder in test mode
+                return
             service.server.restart()
 
     @api.multi
@@ -85,16 +90,29 @@ class SAASOperator(models.Model):
         self.ensure_one()
         if self.type != 'local':
             return
-        return self.demo_id.repo_ids._local_update_repo()
+        has_updates = False
+        for repo in self.demo_id.repo_ids:
+            updated = self._local_server_update_repo(repo.url, repo.url_escaped, repo.branch, repo.commit)
+            if updated:
+                has_updates = True
+        return has_updates
 
-    @api.multi
-    def update_ad_paths(self, path):
-        if self.is_local():
-            if path not in ad_paths:
-                ad_paths.append(path)
-
-    @api.multi
-    def remove_ad_paths(self, path):
-        if self.is_local():
-            if path in ad_paths:
-                ad_paths.remove(path)
+    @staticmethod
+    def _local_server_update_repo(url, url_escaped, branch, commit):
+        """
+        Updates git repository
+        :param url: link to git repository
+        :param url_escaped: used for directory name
+        :param branch: repository branch to be cloned
+        :param commit: commit hash
+        :return bool: whether the repository was updated or not
+        """
+        repos_root = repos_dir()
+        updated = False
+        repos_path = os.path.join(repos_root, branch, url_escaped)
+        if not os.path.isdir(os.path.join(repos_path)):
+            updated = True
+        current_commit = update_repo(repos_path, url, branch)
+        if current_commit != commit:
+            updated = True
+        return updated
