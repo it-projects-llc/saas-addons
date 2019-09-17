@@ -65,8 +65,8 @@ class SAASOperator(models.Model):
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
-            test = self.env['ir.config_parameter'].get_param('test_saas_demo')
-            if test:
+            test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
+            if test_module:
                 # no need to pull odoo folder in test mode
                 return
             else:
@@ -81,8 +81,8 @@ class SAASOperator(models.Model):
     @api.multi
     def restart_odoo(self):
         if self.is_local():
-            test = self.env['ir.config_parameter'].get_param('test_saas_demo')
-            if test:
+            test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
+            if test_module:
                 # no need to restart odoo folder in test mode
                 return
             service.server.restart()
