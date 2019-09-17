@@ -135,8 +135,11 @@ class Demo(models.Model):
         operators.write({
             'update_repos_state': 'updating',
         })
-        # close transaction to make update_repos_state update visible
-        self.env.cr.commit()
+        test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
+        # no need to commit with the installed test module
+        if not test_module:
+            # close transaction to make update_repos_state update visible
+            self.env.cr.commit()
         operators.update_repos()
 
         # repos_updating_next() will be called via cron
