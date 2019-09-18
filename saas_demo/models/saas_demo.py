@@ -9,6 +9,7 @@ from odoo import models, fields, api
 
 from odoo.addons.queue_job.job import job
 from ..os import analysis_dir, update_repo, get_manifests
+from ..odoo import is_test
 
 _logger = logging.getLogger(__name__)
 
@@ -135,8 +136,11 @@ class Demo(models.Model):
         operators.write({
             'update_repos_state': 'updating',
         })
-        # close transaction to make update_repos_state update visible
-        self.env.cr.commit()
+        # There is no clean way to determine whether we are on tests or not.
+        # So, assume that we are on tests if modules is installed
+        if not is_test(self):
+            # close transaction to make update_repos_state update visible
+            self.env.cr.commit()
         operators.update_repos()
 
         # repos_updating_next() will be called via cron
