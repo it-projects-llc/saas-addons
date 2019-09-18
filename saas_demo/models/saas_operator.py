@@ -6,6 +6,7 @@ import os.path
 
 from odoo import models, fields, api, service
 from ..os import repos_dir, update_addons_path, root_odoo_path, git, update_repo
+from ..odoo import is_test
 
 _logger = logging.getLogger(__name__)
 
@@ -24,10 +25,6 @@ class SAASOperator(models.Model):
     @api.multi
     def is_local(self):
         return any((r.type == 'local' for r in self))
-
-    @api.model
-    def test_module_installed(self):
-        return self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
 
     @api.multi
     def update_repos(self):
@@ -69,7 +66,7 @@ class SAASOperator(models.Model):
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
-            if self.test_module_installed():
+            if is_test(self):
                 # no need to pull odoo folder in test mode
                 return
             else:
@@ -84,7 +81,7 @@ class SAASOperator(models.Model):
     @api.multi
     def restart_odoo(self):
         if self.is_local():
-            if self.test_module_installed():
+            if is_test(self):
                 # no need to restart odoo folder in test mode
                 return
             service.server.restart()
