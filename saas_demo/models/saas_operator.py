@@ -25,6 +25,10 @@ class SAASOperator(models.Model):
     def is_local(self):
         return any((r.type == 'local' for r in self))
 
+    @api.model
+    def test_module_installed(self):
+        return self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
+
     @api.multi
     def update_repos(self):
         """
@@ -65,8 +69,7 @@ class SAASOperator(models.Model):
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
-            test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
-            if test_module:
+            if self.test_module_installed():
                 # no need to pull odoo folder in test mode
                 return
             else:
@@ -81,8 +84,7 @@ class SAASOperator(models.Model):
     @api.multi
     def restart_odoo(self):
         if self.is_local():
-            test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
-            if test_module:
+            if self.test_module_installed():
                 # no need to restart odoo folder in test mode
                 return
             service.server.restart()
