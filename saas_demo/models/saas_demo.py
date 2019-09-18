@@ -136,7 +136,9 @@ class Demo(models.Model):
             'update_repos_state': 'updating',
         })
         test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
-        # no need to commit with the installed test module
+        # There is no clean way to determine whether we are on tests or not.
+        # So, assume that we are on tests if modules is installed
+        
         if not test_module:
             # close transaction to make update_repos_state update visible
             self.env.cr.commit()
