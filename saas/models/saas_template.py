@@ -126,8 +126,13 @@ class SAASTemplateLine(models.Model):
 
     ], default='draft')
 
+    @api.model
+    def get_to_rebuild(self):
+        return self.search([('to_rebuild', '=', True)])
+
+    @api.model
     def preparing_template_next(self):
-        template_operators = self.search([('to_rebuild', '=', True)])
+        template_operators = self.get_to_rebuild()
         operators = template_operators.mapped('operator_id')
 
         # filter out operators which already have template creating
