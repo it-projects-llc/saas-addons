@@ -16,7 +16,6 @@ class TestSaasDemo(TransactionCase):
             self.env.context,
             test_queue_job_no_delay=True,
         ))
-        self.env['ir.config_parameter'].set_param('test_saas_demo', 'True')
         self.saas_demo = self.env.ref('saas_demo.saas_demo')
 
     def test_saas_demo(self):

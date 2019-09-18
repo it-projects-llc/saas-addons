@@ -135,11 +135,9 @@ class Demo(models.Model):
         operators.write({
             'update_repos_state': 'updating',
         })
-        test_module = self.env['ir.module.module'].search([('name', '=', 'saas_demo_test')])
         # There is no clean way to determine whether we are on tests or not.
         # So, assume that we are on tests if modules is installed
-        
-        if not test_module:
+        if not self.operator_ids.test_module_installed():
             # close transaction to make update_repos_state update visible
             self.env.cr.commit()
         operators.update_repos()
