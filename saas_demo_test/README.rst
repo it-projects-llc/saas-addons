@@ -8,6 +8,11 @@
 
 This addon is not meant to be used.
 
+Roadmap
+=======
+
+* TODO: add a test repository to the addons path in advance, since we cannot reload the odoo in tests.
+
 Credits
 =======
 
