@@ -7,15 +7,12 @@ import string
 import logging
 from slugify import slugify
 
-from odoo import models, fields, api, SUPERUSER_ID, sql_db, _, registry
+from odoo import models, fields, api, _
 from odoo.tools.safe_eval import test_python_expr
 from odoo.exceptions import ValidationError, UserError
-from odoo.addons.queue_job.job import job
-from ..xmlrpc import rpc_auth, rpc_install_modules, rpc_code_eval
 
 _logger = logging.getLogger(__name__)
 
-MANDATORY_MODULES = ['auth_quick']
 DEFAULT_TEMPLATE_PYTHON_CODE = """# Available variables:
 #  - env: Odoo Environment on which the action is triggered
 #  - time, datetime, dateutil, timezone: useful Python libraries
@@ -112,7 +109,6 @@ class SAASTemplateLine(models.Model):
 
     template_id = fields.Many2one('saas.template', required=True, ondelete='cascade')
     operator_id = fields.Many2one('saas.operator', required=True)
-    password = fields.Char('DB Password')
     operator_db_name = fields.Char(required=True, string="Template database name")
     operator_db_id = fields.Many2one('saas.db', readonly=True)
     operator_db_state = fields.Selection(related='operator_db_id.state', string='Database operator state')
@@ -162,17 +158,14 @@ class SAASTemplateLine(models.Model):
                     'operator_id': r.operator_id.id,
                     'type': 'template',
                 })
-            password = random_password()
             self.env['saas.log'].log_db_creating(r.operator_db_id)
 
             r.write({
                 'state': 'creating',
-                'password': password,
             })
             r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,
-                password,
                 callback_obj=r,
                 callback_method='_on_template_created')
 
@@ -180,56 +173,7 @@ class SAASTemplateLine(models.Model):
         self.ensure_one()
         self.to_rebuild = False
         self.state = 'installing_modules'
-        self.with_delay()._install_modules()
-
-    @job
-    def _install_modules(self):
-        self.ensure_one()
-        modules = [module.name for module in self.template_id.template_module_ids]
-        modules = [('name', 'in', MANDATORY_MODULES + modules)]
-        if self.operator_id.type == 'local':
-            db = sql_db.db_connect(self.operator_db_name)
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
-                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
-                module_ids.button_immediate_install()
-                # Some magic to force reloading registry in other workers
-                env.registry.registry_invalidated = True
-                env.registry.signal_changes()
-        else:
-            auth = self._rpc_auth()
-            rpc_install_modules(auth, modules)
-        self.state = 'post_init'
-        self.with_delay()._post_init()
-
-    @job
-    def _post_init(self):
-        if self.operator_id.type == 'local':
-            db = sql_db.db_connect(self.operator_db_name)
-            registry(self.operator_db_name).check_signaling()
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
-                action = env['ir.actions.server'].create({
-                    'name': 'Local Code Eval',
-                    'state': 'code',
-                    'model_id': 1,
-                    'code': self.template_id.template_post_init
-                })
-                action.run()
-            self.state = 'done'
-        else:
-            auth = self._rpc_auth()
-            rpc_code_eval(auth, self.template_id.template_post_init)
-            self.state = 'done'
-
-    def _rpc_auth(self):
-        self.ensure_one()
-        url = self.operator_db_id.get_url()
-        return rpc_auth(
-            url,
-            self.operator_db_name,
-            admin_username='admin',
-            admin_password=self.password)
+        self.with_delay().operator_id.install_modules(self.template_id, self)
 
     def prepare_name(self, db_name):
         self.ensure_one()
@@ -255,14 +199,12 @@ class SAASTemplateLine(models.Model):
             build.with_delay().create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
-                self.password,
             )
             self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values)
         else:
             build.create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
-                self.password,
             )
             self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values)
 
