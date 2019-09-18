@@ -1,5 +1,5 @@
-.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
-   :target: https://www.gnu.org/licenses/lgpl
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
 ================
@@ -11,7 +11,7 @@ This addon is not meant to be used.
 Roadmap
 =======
 
-* TODO: add a test repository to the addons path in advance, since we cannot reload the odoo in tests.
+* Auto-testing: we will need to check that template is created. Once it's done, be sure that there is a note in usage insturctions which says that the tests can be run with a pre-written path to the test repository in `addons path`, because we cannot reload the odoo in order to update `addons path`
 
 Credits
 =======
