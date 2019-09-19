@@ -115,11 +115,6 @@ msgid "DB Names"
 msgstr ""
 
 #. module: saas
-#: model:ir.model.fields,field_description:saas.field_saas_template_operator__password
-msgid "DB Password"
-msgstr ""
-
-#. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__type
 msgid "DB Type"
 msgstr ""
@@ -435,7 +430,7 @@ msgid "Templates"
 msgstr ""
 
 #. module: saas
-#: code:addons/saas/models/saas_template.py:82
+#: code:addons/saas/models/saas_template.py:79
 #, python-format
 msgid "There are no ready template's deployments. Create new one or wait until it's done."
 msgstr ""
