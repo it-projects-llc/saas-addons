@@ -1,3 +1,8 @@
+`2.0.0`
+-------
+
+- **New:** don't use RPC on preparing template database -- SaaS Operator must provide it's own way to access to the database
+
 `1.0.3`
 -------
 
