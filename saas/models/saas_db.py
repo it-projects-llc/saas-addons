@@ -22,10 +22,10 @@ class SAASDB(models.Model):
 
     @api.multi
     @job
-    def create_db(self, template_db, demo, password=None, lang='en_US', callback_obj=None, callback_method=None):
+    def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()
         db_name = self.name
-        self.operator_id._create_db(template_db, db_name, demo, password, lang)
+        self.operator_id._create_db(template_db, db_name, demo, lang)
         self.state = 'done'
         self.env['saas.log'].log_db_created(self)
         if callback_obj and callback_method:
