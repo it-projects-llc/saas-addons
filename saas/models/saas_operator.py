@@ -4,10 +4,12 @@
 from collections import defaultdict
 import string
 
-from odoo import models, fields, api, tools, SUPERUSER_ID
+from odoo import models, fields, api, tools, SUPERUSER_ID, sql_db, registry
 from odoo.service import db
 from odoo.service.model import execute
 from odoo.addons.queue_job.job import job
+
+MANDATORY_MODULES = ['auth_quick']
 
 
 class SAASOperator(models.Model):
@@ -27,7 +29,7 @@ class SAASOperator(models.Model):
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     @api.multi
-    def _create_db(self, template_db, db_name, demo, password=None, lang='en_US'):
+    def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
         if self.type == 'local':
             # to avoid installing extra modules we need this condition
@@ -48,7 +50,7 @@ class SAASOperator(models.Model):
                 db.exp_duplicate_database(template_db, db_name)
             else:
                 db.exp_create_database(
-                    db_name, demo, lang, user_password=password)
+                    db_name, demo, lang)
 
         if test_enable:
             tools.config['test_enable'] = test_enable
@@ -60,6 +62,39 @@ class SAASOperator(models.Model):
                 continue
 
             db.exp_drop(db_name)
+
+    @job
+    def install_modules(self, template_id, template_operator_id):
+        self.ensure_one()
+        modules = [module.name for module in template_id.template_module_ids]
+        modules = [('name', 'in', MANDATORY_MODULES + modules)]
+        if self.type == 'local':
+            db = sql_db.db_connect(template_operator_id.operator_db_name)
+            with api.Environment.manage(), db.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
+                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
+                module_ids.button_immediate_install()
+                # Some magic to force reloading registry in other workers
+                env.registry.registry_invalidated = True
+                env.registry.signal_changes()
+                template_operator_id.state = 'post_init'
+                self.with_delay().post_init(template_id, template_operator_id)
+
+    @job
+    def post_init(self, template_id, template_operator_id):
+        if self.type == 'local':
+            db = sql_db.db_connect(template_operator_id.operator_db_name)
+            registry(template_operator_id.operator_db_name).check_signaling()
+            with api.Environment.manage(), db.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
+                action = env['ir.actions.server'].create({
+                    'name': 'Local Code Eval',
+                    'state': 'code',
+                    'model_id': 1,
+                    'code': template_id.template_post_init
+                })
+                action.run()
+            template_operator_id.state = 'done'
 
     def get_db_url(self, db):
         # TODO: use mako for url templating
@@ -102,6 +137,26 @@ class SAASOperator(models.Model):
         }
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
+
+    @api.multi
+    def write(self, vals):
+        if 'direct_url' in vals:
+            self._update_direct_url(vals['direct_url'])
+        return super(SAASOperator, self).write(vals)
+
+    def _update_direct_url(self, url):
+        self.ensure_one()
+        code = "env['ir.config_parameter'].set_param('auth_quick.master', '{}')\n".format(url)
+        builds = self.env['saas.db'].search([('operator_id', '=', self.id), ('type', '=', 'build')])
+        action = {
+            'name': 'Build Code Eval',
+            'state': 'code',
+            'model_id': 1,
+            'code': code,
+        }
+        for build in builds:
+            action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
+            self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
 
 class SafeDict(defaultdict):

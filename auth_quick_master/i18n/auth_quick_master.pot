@@ -1,0 +1,85 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* auth_quick_master
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: auth_quick_master
+#: model:ir.model,name:auth_quick_master.model_auth_quick_master_token
+msgid "Authentication Token"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__build
+msgid "Build Reference"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__id
+msgid "ID"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__user_id
+msgid "Master User"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:res.groups,name:auth_quick_master.group_auth_quick
+msgid "Quick authentication for builds"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__token
+msgid "Token"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__build_user_id
+msgid "User ID"
+msgstr ""
+
+#. module: auth_quick_master
+#: model:ir.model.fields,field_description:auth_quick_master.field_auth_quick_master_token__build_login
+msgid "User Login"
+msgstr ""
+
