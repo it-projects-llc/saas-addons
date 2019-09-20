@@ -173,7 +173,7 @@ class SAASTemplateLine(models.Model):
         self.ensure_one()
         self.to_rebuild = False
         self.state = 'installing_modules'
-        self.with_delay().operator_id.install_modules(self.template_id, self)
+        self.operator_id.with_delay().install_modules(self.template_id, self)
 
     def prepare_name(self, db_name):
         self.ensure_one()
