@@ -61,6 +61,8 @@ class Demo(models.Model):
                     'demo_main_addon_id': module_rec.id,
                 })
                 for operator in self.operator_ids:
+                    # we don’t need the template to start building now
+                    operator.update_repos_state = 'none'
                     self.env['saas.template.operator'].create({
                         'operator_db_name': operator.generate_db_name(),
                         'template_id': template.id,

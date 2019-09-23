@@ -16,12 +16,13 @@ class SAASOperator(models.Model):
 
     demo_id = fields.Many2one('saas.demo')
     update_repos_state = fields.Selection([
+        ('base', 'Not a demo'),
         ('none', 'Not planned'),
         ('pending', 'Pending'),
         ('updating', 'Updating Repositories'),
         ('rebuilding', 'Rebuilding Templates'),
-    ])
-    is_restarted = fields.Boolean(string="Restarted server", config_parameter='saas_demo.is_restarted')
+    ], default='base')
+    needs_restart = fields.Boolean(string="Server needs to be restarted", default=True)
 
     @api.multi
     def is_local(self):
@@ -39,6 +40,9 @@ class SAASOperator(models.Model):
         for r in self:
             has_updates = r._update_repos()
             if has_updates:
+                # we need to make sure that templates will only be created after restarting the odoo
+                if not r.needs_restart:
+                    r.needs_restart = True
                 # mark to rebuild templates
                 r.update_repos_state = 'rebuilding'
                 updated_operators |= r
@@ -88,7 +92,7 @@ class SAASOperator(models.Model):
             if is_test(self):
                 # no need to restart odoo folder in test mode
                 return
-            self.write({'is_restarted': True})
+            self.write({'needs_restart': False})
             service.server.restart()
 
     @api.multi

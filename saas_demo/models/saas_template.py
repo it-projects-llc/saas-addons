@@ -24,6 +24,8 @@ class TemplateOperator(models.Model):
     @api.model
     def get_to_rebuild(self):
         to_rebuild = super(TemplateOperator, self).get_to_rebuild()
-        return to_rebuild.filtered(
-            lambda r: r.operator_id.update_repos_state == 'rebuilding' and r.operator_id.is_restarted
-        )
+
+        def filter_to_rebuild(r):
+            return r.operator_id.update_repos_state == 'rebuilding' and\
+                not r.operator_id.needs_restart or r.operator_id.update_repos_state == 'base'
+        return to_rebuild.filtered(filter_to_rebuild)
