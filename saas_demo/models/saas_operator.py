@@ -21,6 +21,7 @@ class SAASOperator(models.Model):
         ('updating', 'Updating Repositories'),
         ('rebuilding', 'Rebuilding Templates'),
     ])
+    is_restarted = fields.Boolean(string="Restarted server", config_parameter='saas_demo.is_restarted')
 
     @api.multi
     def is_local(self):
@@ -73,8 +74,13 @@ class SAASOperator(models.Model):
     @api.multi
     def update_addons_path(self):
         if self.is_local():
+            if is_test(self):
+                # no need to update config in test mode
+                return
             local_root = repos_dir()
-            update_addons_path(local_root)
+            for r in self:
+                for repo in r.demo_id.repo_ids:
+                    update_addons_path(os.path.join(local_root, repo.branch), False)
 
     @api.multi
     def restart_odoo(self):
@@ -82,6 +88,7 @@ class SAASOperator(models.Model):
             if is_test(self):
                 # no need to restart odoo folder in test mode
                 return
+            self.write({'is_restarted': True})
             service.server.restart()
 
     @api.multi
