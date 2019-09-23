@@ -3,4 +3,5 @@
 
 
 def is_test(self):
-    return self.env['ir.module.module'].search([('name', '=', 'saas_demo_test'), ('state', '=', 'installed')])
+    return self.env['ir.module.module'].search([('name', '=', 'saas_demo_test'),
+                                                ('state', 'in', ['to install', 'installed'])])
