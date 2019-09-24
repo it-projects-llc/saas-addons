@@ -41,8 +41,7 @@ class SAASOperator(models.Model):
             has_updates = r._update_repos()
             if has_updates:
                 # we need to make sure that templates will only be created after restarting the odoo
-                if not r.needs_restart:
-                    r.needs_restart = True
+                r.needs_restart = True
                 # mark to rebuild templates
                 r.update_repos_state = 'rebuilding'
                 updated_operators |= r
