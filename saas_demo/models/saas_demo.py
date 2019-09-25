@@ -61,6 +61,8 @@ class Demo(models.Model):
                     'demo_main_addon_id': module_rec.id,
                 })
                 for operator in self.operator_ids:
+                    # we don’t need the template to start building now
+                    operator.update_repos_state = 'none'
                     self.env['saas.template.operator'].create({
                         'operator_db_name': operator.generate_db_name(),
                         'template_id': template.id,
@@ -146,6 +148,8 @@ class Demo(models.Model):
         # repos_updating_next() will be called via cron
         # we cannot use with_delay() because in case of local operators we restart server
 
+    def action_fetch_templates(self):
+        self.fetch_and_generate_templates()
 
 class Repo(models.Model):
     _name = 'saas.demo.repo'
