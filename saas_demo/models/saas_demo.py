@@ -4,6 +4,7 @@
 import logging
 import os
 import os.path
+from urllib.parse import urlparse
 
 from odoo import models, fields, api
 
@@ -34,11 +35,11 @@ class Demo(models.Model):
                 continue
             for repo in demo.repo_ids:
                 path = os.path.join(analysis_path, repo.branch, repo.url_escaped)
-                demos_for_immediate_update = self.update_modules_templates(path, demo, demos_for_immediate_update)
+                demos_for_immediate_update = self.update_modules_templates(path, demo, demos_for_immediate_update, repo)
         if demos_for_immediate_update:
             self.repos_updating_start(demos_for_immediate_update)
 
-    def update_modules_templates(self, path, demo, demos_for_immediate_update):
+    def update_modules_templates(self, path, demo, demos_for_immediate_update, repo):
         for module, manifest in get_manifests(path).items():
             if not manifest.get('saas_demo_title'):
                 # not a demo
@@ -47,7 +48,7 @@ class Demo(models.Model):
                 # not installable
                 continue
             template = self.env['saas.template'].search([
-                ('demo_id', '=', demo.id),
+                ('repo_id', '=', repo.id),
                 ('demo_main_addon_id.name', '=', module),
             ])
             if not template:
@@ -57,8 +58,10 @@ class Demo(models.Model):
                         'name': module
                     })
                 template = self.env['saas.template'].create({
-                    'demo_id': demo.id,
+                    'repo_id': repo.id,
                     'demo_main_addon_id': module_rec.id,
+                    'template_demo': True,
+                    'public_access': True,
                 })
                 for operator in self.operator_ids:
                     # we don’t need the template to start building now
@@ -151,24 +154,45 @@ class Demo(models.Model):
     def action_fetch_templates(self):
         self.fetch_and_generate_templates()
 
+
 class Repo(models.Model):
     _name = 'saas.demo.repo'
     _description = 'Repository for Demo'
     _rec_name = 'url'
 
+    repo_name = fields.Char('Repo Name', compute='_compute_repo_name', store=True)
     demo_id = fields.Many2one('saas.demo')
     url = fields.Char('Repo URL', required=True)
     url_escaped = fields.Char('Repo URL (escaped)', compute='_compute_url_escaped')
+    vendor = fields.Char('Vendor', compute='_compute_vendor', store=True)
     branch = fields.Char('Branch', required=True)
     demo_repo = fields.Boolean('Scan for demo', default=True)
     commit = fields.Char('Commit SHA', help='Last processed point')
 
+    @api.depends('url')
     def _compute_url_escaped(self):
         for r in self:
             url = r.url
             for i in '@:/':
                 url = url.replace(i, '_')
             r.url_escaped = url
+
+    @api.depends('url')
+    def _compute_vendor(self):
+        for r in self:
+            url = r.url
+            parsed = urlparse(url)
+            r.vendor = parsed.path.split('/')[1]
+
+    @api.depends('url')
+    def _compute_repo_name(self):
+        for r in self:
+            url = r.url
+            parsed = urlparse(url)
+            repo = parsed.path.split('/')[-1]
+            if repo.endswith('.git'):
+                repo = repo[:-4]
+            r.repo_name = repo
 
     def _local_update_repo(self, update_commit=True):
         analysis_root = analysis_dir()

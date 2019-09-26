@@ -1,4 +1,5 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """Quick Demo Databases""",
@@ -17,7 +18,7 @@
     # "currency": "EUR",
 
     "depends": [
-        "saas",
+        "saas_public",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [

@@ -10,6 +10,9 @@ class SaaSPublicController(Controller):
         if not kwargs:
             kwargs = {}
         template = request.env['saas.template'].browse(template_id).sudo()
+        return self._redirect_to_build(template, kwargs)
+
+    def _redirect_to_build(self, template, kwargs):
         if template and template.public_access:
             template_operator_id = template.operator_ids.random_ready_operator()
             build = template_operator_id.create_db(kwargs, with_delay=False)
