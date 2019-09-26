@@ -160,36 +160,27 @@ class Repo(models.Model):
     _description = 'Repository for Demo'
     _rec_name = 'url'
 
-    repo_name = fields.Char('Repo Name', compute='_compute_repo_name', store=True)
+    repo_name = fields.Char('Repo Name', compute='_compute_url_dependent_fields', store=True)
     demo_id = fields.Many2one('saas.demo')
     url = fields.Char('Repo URL', required=True)
-    url_escaped = fields.Char('Repo URL (escaped)', compute='_compute_url_escaped')
-    vendor = fields.Char('Vendor', compute='_compute_vendor', store=True)
+    url_escaped = fields.Char('Repo URL (escaped)', compute='_compute_url_dependent_fields')
+    vendor = fields.Char('Vendor', compute='_compute_url_dependent_fields', store=True)
     branch = fields.Char('Branch', required=True)
     demo_repo = fields.Boolean('Scan for demo', default=True)
     commit = fields.Char('Commit SHA', help='Last processed point')
 
     @api.depends('url')
-    def _compute_url_escaped(self):
+    def _compute_url_dependent_fields(self):
         for r in self:
             url = r.url
             for i in '@:/':
-                url = url.replace(i, '_')
-            r.url_escaped = url
+                url_escaped = url.replace(i, '_')
+            r.url_escaped = url_escaped
 
-    @api.depends('url')
-    def _compute_vendor(self):
-        for r in self:
-            url = r.url
             parsed = urlparse(url)
-            r.vendor = parsed.path.split('/')[1]
-
-    @api.depends('url')
-    def _compute_repo_name(self):
-        for r in self:
-            url = r.url
-            parsed = urlparse(url)
-            repo = parsed.path.split('/')[-1]
+            url_path = parsed.path.split('/')
+            r.vendor = url_path[1]
+            repo = url_path[-1]
             if repo.endswith('.git'):
                 repo = repo[:-4]
             r.repo_name = repo
