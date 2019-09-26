@@ -72,8 +72,8 @@ class Demo(models.Model):
                         'operator_id': operator.id,
                     })
                 demos_for_immediate_update |= demo
-            modules_to_show = [module] + manifest.get('saas_demo_addons')
-            modules_to_install = modules_to_show + manifest.get('saas_demo_addons_hidden')
+            modules_to_show = [module] + (manifest.get('saas_demo_addons') or [])
+            modules_to_install = modules_to_show + (manifest.get('saas_demo_addons_hidden') or [])
             template.write({
                 'name': manifest.get('saas_demo_title'),
                 'template_module_ids': self.get_module_vals(modules_to_install),
