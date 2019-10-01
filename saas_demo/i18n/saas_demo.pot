@@ -1,0 +1,226 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* saas_demo
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__branch
+msgid "Branch"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__commit
+msgid "Commit SHA"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__create_uid
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__create_date
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_operator
+msgid "Database Operator"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_template
+msgid "Database Template"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.actions.act_window,name:saas_demo.saas_demo_action
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__demo_id
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__demo_id
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_id
+msgid "Demo"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_addon_ids
+msgid "Demo Addon"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_branch
+msgid "Demo Branch"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_main_addon_id
+msgid "Demo Main Addon"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.ui.menu,name:saas_demo.saas_demo_main_menu_item
+msgid "Demos"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__display_name
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_demo
+#: model_terms:ir.ui.view,arch_db:saas_demo.saas_demo_form_view
+msgid "Fetch Repositories"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__id
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo____last_update
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__write_uid
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__write_date
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,help:saas_demo.field_saas_demo_repo__commit
+msgid "Last processed point"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__name
+msgid "Name"
+msgstr ""
+
+#. module: saas_demo
+#: selection:saas.operator,update_repos_state:0
+msgid "Not a demo"
+msgstr ""
+
+#. module: saas_demo
+#: selection:saas.operator,update_repos_state:0
+msgid "Not planned"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__operator_ids
+msgid "Operator"
+msgstr ""
+
+#. module: saas_demo
+#: selection:saas.operator,update_repos_state:0
+msgid "Pending"
+msgstr ""
+
+#. module: saas_demo
+#: selection:saas.operator,update_repos_state:0
+msgid "Rebuilding Templates"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__repo_ids
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__repo_id
+msgid "Repo"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__repo_name
+msgid "Repo Name"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__url
+msgid "Repo URL"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__url_escaped
+msgid "Repo URL (escaped)"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_demo
+msgid "Repos Set for Demo"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_demo_repo
+msgid "Repository for Demo"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.ui.menu,name:saas_demo.saas_demo_main_menu
+msgid "SaaS Demo"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__demo_repo
+msgid "Scan for demo"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__needs_restart
+msgid "Server needs to be restarted"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__template_ids
+msgid "Template"
+msgstr ""
+
+#. module: saas_demo
+#: sql_constraint:saas.template:0
+msgid "Template for that demo already exists."
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_template_operator
+msgid "Template's Deployment"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__update_repos_state
+msgid "Update Repos State"
+msgstr ""
+
+#. module: saas_demo
+#: selection:saas.operator,update_repos_state:0
+msgid "Updating Repositories"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__vendor
+msgid "Vendor"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.model.fields,help:saas_demo.field_saas_template__demo_addon_ids
+msgid "Will be used as default filter in Apps section of the builds"
+msgstr ""
+
