@@ -39,3 +39,10 @@ Usage
 * Open the ``build`` you want to delete
 * Click on ``Action``, then press ``Delete``
 * After confirming the action, the build will be deleted
+
+**Delete created Template's deployment**
+
+* Open menu ``[[ SaaS ]] >> Templates``
+* Open the ``Template`` in which you want to make changes
+* Click on ``Edit``
+* Choose ``Template's deployment`` line you want to remove and click on the delete icon on the right
