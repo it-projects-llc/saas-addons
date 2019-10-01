@@ -46,3 +46,12 @@ Usage
 * Open the ``Template`` in which you want to make changes
 * Click on ``Edit``
 * Choose ``Template's deployment`` line you want to remove and click on the delete icon on the right
+
+**Template Changes and rebuild Template's deployments**
+
+The template will be rebuilt automatically during the following steps:
+
+* Open menu ``[[ SaaS ]] >> Templates``
+* Open the ``Template`` in which you want to make changes.
+* Make the changes you need.
+* If among the changed fields there are ``Install demo data``, ``Modules to install`` or ``Template Initialization`` then Template's deployment will be rebuilt.
