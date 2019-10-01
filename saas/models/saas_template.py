@@ -123,6 +123,12 @@ class SAASTemplateLine(models.Model):
     ], default='draft')
 
     @api.model
+    def unlink(self):
+        for rec in self:
+            rec.operator_db_id.unlink()
+        return super(SAASTemplateLine, self).unlink()
+
+    @api.model
     def get_to_rebuild(self):
         return self.search([('to_rebuild', '=', True)])
 

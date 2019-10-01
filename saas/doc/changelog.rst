@@ -1,3 +1,8 @@
+`2.2.0`
+-------
+
+- **Improvement:** delete odoo database after unlink correspond Template's deployment record
+
 `2.1.0`
 -------
 
