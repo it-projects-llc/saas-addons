@@ -32,3 +32,10 @@ Usage
 * Wait for the creation of the build on the template (refresh the page)
 * Click ``[Connect to the build]``
 * RESULT: you will be redirected and logged in to the created build
+
+**Delete created build**
+
+* Open menu ``[[ SaaS ]] >> Builds``
+* Open the ``build`` you want to delete
+* Click on ``Action``, then press ``Delete``
+* After confirming the action, the build will be deleted

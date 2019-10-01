@@ -21,6 +21,11 @@ class SAASDB(models.Model):
     ], default='draft')
 
     @api.multi
+    def unlink(self):
+        self.drop_db()
+        return super(SAASDB, self).unlink()
+
+    @api.multi
     @job
     def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()

@@ -1,3 +1,8 @@
+`2.1.0`
+-------
+
+- **Improvement:** add the ability to delete created builds
+
 `2.0.0`
 -------
 
