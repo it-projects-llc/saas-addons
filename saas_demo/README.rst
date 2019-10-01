@@ -30,6 +30,7 @@ Credits
 Contributors
 ------------
 * `Ivan Yelizariev <https://it-projects.info/team/yelizariev>`__
+* `Denis Mudarisov <https://it-projects.info/team/mudarisov>`__
 
 Sponsors
 --------

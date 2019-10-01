@@ -1,0 +1,16 @@
+<!-- Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record id="saas_demo" model="saas.demo">
+        <field name="name">SaaS Demo Test</field>
+    </record>
+
+    <record id="saas.local_operator" model="saas.operator">
+        <field name="demo_id" ref="saas_demo"/>
+    </record>
+    <record id="saas_demo_repo" model="saas.demo.repo">
+        <field name="demo_id" ref="saas_demo"/>
+        <field name="url">https://gitlab.com/itpp/dev/saas-demo-test.git</field>
+        <field name="branch">12.0</field>
+    </record>
+</odoo>

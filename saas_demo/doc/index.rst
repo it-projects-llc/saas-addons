@@ -17,15 +17,13 @@ Add following attributes to manifest of your modules
 
 ::
 
-    "demo_title": "Super-Duper Reminders",
-    "demo_addons": ["reminder_phonecall", "reminder_task_deadline", "reminder_hr_recruitment"],
-    "demo_addons_hidden": ["website"],
-    "demo_url": "reminders-and-agenda",
+    "saas_demo_title": "Super-Duper Reminders",
+    "saas_demo_addons": ["reminder_phonecall", "reminder_task_deadline", "reminder_hr_recruitment"],
+    "saas_demo_addons_hidden": ["website"],
 
-* ``demo_title`` -- human-readable description of demonstrated modules
-* ``demo_addons`` -- list of additional modules to demostrate
-* ``demo_addons_hidden`` -- additional modules to install
-* ``demo_url`` -- is used as part of url to get demo instance
+* ``saas_demo_title`` -- human-readable description of demonstrated modules
+* ``saas_demo_addons`` -- list of additional modules to demostrate
+* ``saas_demo_addons_hidden`` -- additional modules to install
 
 apps.odoo.com
 -------------
