@@ -1,6 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
-# Copyright 2019 Kildebekov Anvar <https://it-projects.info/team/kildebekov>
+# Copyright 2019 Anvar Kildebekov <https://it-projects.info/team/fedoranvar>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import random
 import string
