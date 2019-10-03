@@ -1,3 +1,7 @@
+`2.3.0`
+
+- **Improvement:** rebuild template database if template is changed
+
 `2.2.0`
 -------
 

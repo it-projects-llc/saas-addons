@@ -62,6 +62,15 @@ class SAASTemplate(models.Model):
                 raise ValidationError(msg)
 
     @api.multi
+    def write(self, vals):
+        # if the following fields are updated, then we need to rebuild the template database
+        trigger_fields = ['template_demo', 'template_module_ids', 'template_post_init']
+        updated = any(val in vals for val in trigger_fields)
+        if updated:
+            self.operator_ids.write({'to_rebuild': True})
+        return super(SAASTemplate, self).write(vals)
+
+    @api.multi
     def action_create_build(self):
         self.ensure_one()
         if any([rec.state == 'done' for rec in self.operator_ids]):
