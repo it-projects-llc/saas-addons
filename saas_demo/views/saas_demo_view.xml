@@ -1,4 +1,5 @@
 <!-- Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+     Copyright 2019 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
 
 <odoo>
@@ -43,7 +44,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="operator_ids"/>
+                        <field name="operator_ids" widget="many2many_tags"/>
                         <field name="template_ids"/>
                         <field name="repo_ids" />
                     </group>

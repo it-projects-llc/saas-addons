@@ -1,4 +1,4 @@
-# Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2018-2019 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import logging
@@ -173,6 +173,8 @@ class Repo(models.Model):
     def _compute_url_dependent_fields(self):
         for r in self:
             url = r.url
+            if not url:
+                continue
             for i in '@:/':
                 url_escaped = url.replace(i, '_')
             r.url_escaped = url_escaped
