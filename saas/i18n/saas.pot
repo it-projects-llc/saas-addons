@@ -430,7 +430,7 @@ msgid "Templates"
 msgstr ""
 
 #. module: saas
-#: code:addons/saas/models/saas_template.py:79
+#: code:addons/saas/models/saas_template.py:88
 #, python-format
 msgid "There are no ready template's deployments. Create new one or wait until it's done."
 msgstr ""
