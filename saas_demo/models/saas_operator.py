@@ -72,7 +72,11 @@ class SAASOperator(models.Model):
                 # no need to pull odoo folder in test mode
                 return
             else:
-                git(root_odoo_path(), ['pull', 'origin'])
+                try:
+                    git(root_odoo_path(), ['pull', 'origin'])
+                except:
+                    # root odoo may be not a git folder
+                    pass
 
     @api.multi
     def update_addons_path(self):
