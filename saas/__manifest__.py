@@ -41,6 +41,7 @@
     ],
     "demo": [
         "demo/saas_template_demo.xml",
+        "demo/saas_security_demo.xml",
     ],
     "qweb": [
     ],

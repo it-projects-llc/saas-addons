@@ -1,3 +1,5 @@
+<!-- Copyright 2019 Anvar Kildebekov <https://it-projects.info/team/fedoranvar>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
 <odoo>
   <record model="ir.module.category" id="module_management">
     <field name="name">SaaS</field>
@@ -8,13 +10,13 @@
   <record model="res.groups" id="group_user">
     <field name="name">User</field>
     <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-    <field name="users" eval="[(4, ref('base.user_root'))]"/>
     <field name="category_id" ref="saas.module_management"/>
   </record>
 
   <record model="res.groups" id="group_manager">
     <field name="name">Manager</field>
     <field name="implied_ids" eval="[(4, ref('saas.group_user'))]"/>
+    <field name="users" eval="[(4, ref('base.user_admin')), (4, ref('base.user_root'))]"/>
     <field name="category_id" ref="saas.module_management"/>
   </record>
 </odoo>
