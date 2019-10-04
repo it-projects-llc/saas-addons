@@ -2,6 +2,9 @@
  Quick Demo Databases
 ======================
 
+.. contents::
+   :local:
+
 Deployment
 ==========
 
