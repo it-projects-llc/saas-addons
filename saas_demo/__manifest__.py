@@ -27,6 +27,7 @@
     ],
     "demo": [
         "demo/demo.xml",
+        "views/saas_template_views.xml",
     ],
     "qweb": [
     ],
