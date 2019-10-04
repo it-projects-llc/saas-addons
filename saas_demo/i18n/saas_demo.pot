@@ -175,11 +175,6 @@ msgid "Repository for Demo"
 msgstr ""
 
 #. module: saas_demo
-#: model:ir.ui.menu,name:saas_demo.saas_demo_main_menu
-msgid "SaaS Demo"
-msgstr ""
-
-#. module: saas_demo
 #: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__demo_repo
 msgid "Scan for demo"
 msgstr ""
