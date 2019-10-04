@@ -84,7 +84,7 @@ Usage
   * click ``[Save]``
 * At the *SaaS Demo* Record click ``[Fetch repositories]``
 *
-* Open url: http://apps.127.0.0.1.nip.io/demo/itpp/saas-demo-test/12.0/web_login_background_test
+* Open url: http://apps.127.0.0.1.nip.io/demo/itpp/saas-demo-test/13.0/web_login_background_test
 * RESULT: you are authenticated in new demo instance
 
 Publishing URL
@@ -95,7 +95,7 @@ Live Preview at apps.odoo.com
 
 To activate ``[Live Preview]`` button at apps-store, add following attrubute to module manifest::
 
-    "live_test_url": "http://apps.example.com/demo/itpp/saas-demo-test/12.0/web_login_background_test",
+    "live_test_url": "http://apps.example.com/demo/itpp/saas-demo-test/13.0/web_login_background_test",
 
 
 Custom Web Page
