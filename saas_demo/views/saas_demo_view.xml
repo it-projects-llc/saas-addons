@@ -11,11 +11,8 @@
         <field name="view_mode">tree,form</field>
     </record>
     <!-- Menu items -->
-    <menuitem name="SaaS Demo"
-              id="saas_demo_main_menu"/>
-
     <menuitem name="Demos"
-              parent="saas_demo_main_menu"
+              parent="saas.saas_main_menu"
               id="saas_demo_main_menu_item"
               sequence="1"
               action="saas_demo_action"/>
