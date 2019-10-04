@@ -26,7 +26,7 @@
         "demo/public_saas_template_demo.xml",
     ],
     "auto_install": False,
-    "installable": True,
+    "installable": False,
 
     # "demo_title": "{MODULE_NAME}",
     # "demo_addons": [

@@ -43,14 +43,14 @@ Maintainers
 Further information
 ===================
 
-Demo: http://runbot.it-projects.info/demo/saas-addons/12.0
+Demo: http://runbot.it-projects.info/demo/saas-addons/13.0
 
-HTML Description: https://apps.odoo.com/apps/modules/12.0/saas_demo/
+HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_demo/
 
 Usage instructions: `<doc/index.rst>`_
 
 Changelog: `<doc/changelog.rst>`_
 
-Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/12.0/saas_demo.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/12.0/saas_demo.atom>`_
+Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_
 
 Tested on Odoo 12.0 8d9e276a9fbf3b4cd8b8251e184d936ff654dd1f
