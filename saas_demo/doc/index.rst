@@ -29,7 +29,9 @@ Following commands deploy the system on 80 port. You may need to change that to 
    git submodule update
 
    # Make dockers
-   # Some bug in odooup requires to call it twice
+   # odooup is tricky, yeah!
+   export COMPOSE_IMPERSONATION='0:0'
+   make info   
    make create
    make create
 
