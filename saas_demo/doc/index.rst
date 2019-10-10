@@ -49,7 +49,16 @@ Following commands deploy the system on 80 port. You may need to change that to 
    # update admin password: set the same as masterpassword
    echo "env.ref('base.user_admin').password = '$(cat .adminpwd)'" | dc run dodoo run -d apps
 
+   # give the Odoo access to the vendor folder
+   sudo chmod -R 777 vendor
+
    # Run!
+   docker-compose up odoo
+
+   # After you create a saas demo record as described in Usage and click Fetch Repositories,
+   # you will need to wait in the logs when odoo restarts and after that restart docker.
+   # This is a temporary measure due to the principle of work odooup
+   # press Ctrl+C and Run again
    # Tip: to run in detach mode add "-d" after "up"
    docker-compose up odoo
 
