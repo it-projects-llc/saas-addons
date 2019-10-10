@@ -28,12 +28,12 @@ Following commands deploy the system on 80 port. You may need to change that to 
    git submodule init
    git submodule update
 
+   # Make dockers
+   make create
+
    # Adapt module to work with odooup
    sed -i -e "s/automatic_addons_path_update = fields\.Boolean(default=True)/automatic_addons_path_update = fields.Boolean(default=False)/g" vendor/it-projects-llc/saas-addons/saas_demo/models/saas_operator.py
    sed -i "s/tools\.config\['data_dir'\], 'repos'/os\.path\.expanduser('~'), 'vendor'/g" vendor/it-projects-llc/saas-addons/saas_demo/os.py
-
-   # Make dockers
-   make create
 
    # change port if needed
    #sed -i s/'80:80'/'8080:80'/  docker-compose.yml
