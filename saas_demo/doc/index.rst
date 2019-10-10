@@ -51,7 +51,7 @@ Following commands deploy the system on 80 port. You may need to change that to 
    docker-compose run dodoo init -n apps -m saas_demo --no-demo --no-cache
 
    # update admin password: set the same as masterpassword
-   echo "env.ref('base.user_admin').password = '$(cat .adminpwd)'" | dc run dodoo run -d apps
+   echo "env.ref('base.user_admin').password = '$(cat .adminpwd)'" | docker-compose run dodoo run -d apps
 
    # give the Odoo access to the vendor folder
    sudo chmod -R 777 vendor
