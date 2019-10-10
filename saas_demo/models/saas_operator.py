@@ -23,6 +23,7 @@ class SAASOperator(models.Model):
         ('rebuilding', 'Rebuilding Templates'),
     ], default='base')
     needs_restart = fields.Boolean(string="Server needs to be restarted", default=True)
+    automatic_addons_path_update = fields.Boolean(default=True)
 
     @api.multi
     def is_local(self):
@@ -86,8 +87,9 @@ class SAASOperator(models.Model):
                 return
             local_root = repos_dir()
             for r in self:
-                for repo in r.demo_id.repo_ids:
-                    update_addons_path(os.path.join(local_root, repo.branch), False)
+                if r.automatic_addons_path_update:
+                    for repo in r.demo_id.repo_ids:
+                        update_addons_path(os.path.join(local_root, repo.branch), False)
 
     @api.multi
     def restart_odoo(self):

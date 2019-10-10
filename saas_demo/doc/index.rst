@@ -21,8 +21,16 @@ Following commands deploy the system on 80 port. You may need to change that to 
 ::
 
    # Clone prepared project. Note, that cloning odoo source could take some time.
-   git clone TODO
+   git clone -b 12.0-saas_demo --single-branch https://github.com/it-projects-llc/dockery-odoo-scaffold.git saas_demo
    cd saas_demo
+
+   # Pull git dependencies
+   git submodule init
+   git submodule update
+
+   # Adapt module to work with odooup
+   sed -i -e "s/automatic_addons_path_update = fields\.Boolean(default=True)/automatic_addons_path_update = fields.Boolean(default=False)/g" vendor/it-projects-llc/saas-addons/saas_demo/models/saas_operator.py
+   sed -i "s/tools\.config\['data_dir'\], 'repos'/os\.path\.expanduser('~'), 'vendor'/g" vendor/it-projects-llc/saas-addons/saas_demo/os.py
 
    # Make dockers
    make create
@@ -36,7 +44,7 @@ Following commands deploy the system on 80 port. You may need to change that to 
    # init saas database
    # Tip: database name "apps" will used as a subdomain in your urls. If you
    # want to use another subdomain, change it here
-   docker-compose run dodoo init -n apps -m saas_demo --no-demo
+   docker-compose run dodoo init -n apps -m saas_demo --no-demo --no-cache
 
    # update admin password: set the same as masterpassword
    echo "env.ref('base.user_admin').password = '$(cat .adminpwd)'" | dc run dodoo run -d apps
