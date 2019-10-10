@@ -14,6 +14,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__automatic_addons_path_update
+msgid "Automatic Addons Path Update"
+msgstr ""
+
+#. module: saas_demo
 #: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__branch
 msgid "Branch"
 msgstr ""
