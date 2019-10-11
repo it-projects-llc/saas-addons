@@ -39,6 +39,13 @@ Following commands deploy the system on 80 port. You may need to change that to 
    sed -i -e "s/automatic_addons_path_update = fields\.Boolean(default=True)/automatic_addons_path_update = fields.Boolean(default=False)/g" vendor/it-projects-llc/saas-addons/saas_demo/models/saas_operator.py
    sed -i "s/tools\.config\['data_dir'\], 'repos'/os\.path\.expanduser('~'), 'vendor'/g" vendor/it-projects-llc/saas-addons/saas_demo/os.py
 
+   # Set up the operator
+   YOUR_DOMAIN="apps.example.com"
+   YOUR_SCHEME="http"
+   # YOUR_SCHEME="https"
+
+   sed -i "s;http://{db_name}.{db_id}.127.0.0.1.nip.io;$YOUR_SCHEME://{db_name}.$YOUR_DOMAIN;g" vendor/it-projects-llc/saas-addons/saas/data/saas_operator_data.xml
+
    # change port if needed
    #sed -i s/'80:80'/'8080:80'/  docker-compose.yml
 
