@@ -7,7 +7,6 @@ from odoo import models, fields, api
 class Template(models.Model):
     _inherit = 'saas.template'
 
-    demo_id = fields.Many2one('saas.demo')
     repo_id = fields.Many2one('saas.demo.repo')
     demo_main_addon_id = fields.Many2one('saas.module')
     # demo_url = fields.Char()
@@ -15,7 +14,7 @@ class Template(models.Model):
     demo_branch = fields.Char()
 
     _sql_constraints = [
-        ('demo_uniq', 'unique (demo_id, demo_main_addon_id, demo_branch)', 'Template for that demo already exists.'),
+        ('demo_uniq', 'unique (demo_main_addon_id, demo_branch)', 'Template for that demo already exists.'),
     ]
 
 

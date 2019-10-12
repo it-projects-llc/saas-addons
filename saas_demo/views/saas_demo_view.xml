@@ -52,7 +52,7 @@
         </field>
     </record>
 
-    <record id='saas_demo_view_tree' model='ir.ui.view'>
+    <record id='saas_demo_repo_view_tree' model='ir.ui.view'>
         <field name="name">saas.demo.repo.tree</field>
         <field name="model">saas.demo.repo</field>
         <field name="arch" type="xml">
