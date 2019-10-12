@@ -24,7 +24,6 @@
             <tree>
                 <field name="name" />
                 <field name="operator_ids" />
-                <field name="template_ids"/>
                 <field name="repo_ids"/>
             </tree>
         </field>
@@ -42,8 +41,46 @@
                     <group>
                         <field name="name"/>
                         <field name="operator_ids" widget="many2many_tags"/>
-                        <field name="template_ids"/>
-                        <field name="repo_ids" />
+                    </group>
+                    <notebook>
+                        <page string="Repos">
+                            <field name="repo_ids" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='saas_demo_view_tree' model='ir.ui.view'>
+        <field name="name">saas.demo.repo.tree</field>
+        <field name="model">saas.demo.repo</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="url"/>
+                <field name="repo_name" />
+                <field name="branch"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_demo_repo_form_view" model="ir.ui.view">
+        <field name="name">saas.demo.repo</field>
+        <field name="model">saas.demo.repo</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group col="2">
+                        <group>
+                            <field name="repo_name"/>
+                            <field name="demo_id"/>
+                            <field name="vendor" />
+                        </group>
+                        <group>
+                            <field name="branch" />
+                            <field name="demo_repo" />
+                            <field name="commit" />
+                        </group>
                     </group>
                 </sheet>
             </form>
