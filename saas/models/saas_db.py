@@ -41,8 +41,8 @@ class SAASDB(models.Model):
     def drop_db(self):
         for r in self:
             r.operator_id._drop_db(r.name)
-            self.state = 'draft'
-            self.env['saas.log'].log_db_dropped(self)
+            r.state = 'draft'
+            self.env['saas.log'].log_db_dropped(r)
 
     def get_url(self):
         # TODO: need possibility to use custom domain

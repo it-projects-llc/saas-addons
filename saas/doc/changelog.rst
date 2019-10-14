@@ -1,4 +1,10 @@
+`2.3.1`
+-------
+
+- **Fix:** multiple build removal
+
 `2.3.0`
+-------
 
 - **Improvement:** rebuild template database if template is changed
 
