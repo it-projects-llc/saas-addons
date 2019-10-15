@@ -1,1 +1,2 @@
 queue https://github.com/OCA/queue.git
+OCA_web https://github.com/it-projects-llc/web
