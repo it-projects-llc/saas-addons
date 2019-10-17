@@ -24,11 +24,9 @@ class SAASOperator(models.Model):
     ], default='base')
     needs_restart = fields.Boolean(string="Server needs to be restarted", default=True)
 
-    @api.multi
     def is_local(self):
         return any((r.type == 'local' for r in self))
 
-    @api.multi
     def update_repos(self):
         """
         * Fetch and checkout Repositories. Clone repository on first call.
@@ -64,7 +62,6 @@ class SAASOperator(models.Model):
         # Restart server
         updated_operators.restart_odoo()
 
-    @api.multi
     def update_odoo(self):
         """Fetch and checkout Repository"""
         if self.is_local():
@@ -78,7 +75,6 @@ class SAASOperator(models.Model):
                     # root odoo may be not a git folder
                     pass
 
-    @api.multi
     def update_addons_path(self):
         if self.is_local():
             if is_test(self):
@@ -89,7 +85,6 @@ class SAASOperator(models.Model):
                 for repo in r.demo_id.repo_ids:
                     update_addons_path(os.path.join(local_root, repo.branch), False)
 
-    @api.multi
     def restart_odoo(self):
         if self.is_local():
             if is_test(self):
@@ -98,7 +93,6 @@ class SAASOperator(models.Model):
             self.write({'needs_restart': False})
             service.server.restart()
 
-    @api.multi
     def _update_repos(self):
         self.ensure_one()
         if self.type != 'local':

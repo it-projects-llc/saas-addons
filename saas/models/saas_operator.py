@@ -28,7 +28,6 @@ class SAASOperator(models.Model):
     db_name_template = fields.Char('DB Names', required=True, help='Avaialble variables: {unique_id}')
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
-    @api.multi
     def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
         if self.type == 'local':
@@ -55,7 +54,6 @@ class SAASOperator(models.Model):
         if test_enable:
             tools.config['test_enable'] = test_enable
 
-    @api.multi
     def _drop_db(self, db_name):
         for r in self:
             if r.type != 'local':
@@ -138,7 +136,6 @@ class SAASOperator(models.Model):
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
-    @api.multi
     def write(self, vals):
         if 'direct_url' in vals:
             self._update_direct_url(vals['direct_url'])

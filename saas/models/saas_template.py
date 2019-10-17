@@ -61,7 +61,6 @@ class SAASTemplate(models.Model):
             if msg:
                 raise ValidationError(msg)
 
-    @api.multi
     def write(self, vals):
         # if the following fields are updated, then we need to rebuild the template database
         trigger_fields = ['template_demo', 'template_module_ids', 'template_post_init']
@@ -70,7 +69,6 @@ class SAASTemplate(models.Model):
             self.operator_ids.write({'to_rebuild': True})
         return super(SAASTemplate, self).write(vals)
 
-    @api.multi
     def action_create_build(self):
         self.ensure_one()
         if any([rec.state == 'done' for rec in self.operator_ids]):
@@ -87,7 +85,6 @@ class SAASTemplate(models.Model):
         else:
             raise UserError(_('There are no ready template\'s deployments. Create new one or wait until it\'s done.'))
 
-    @api.multi
     def refresh_page(self):
         # Empty-function for purpose of refreshing page
         pass
@@ -100,7 +97,6 @@ class SAASModules(models.Model):
     description = fields.Char()
     template_ids = fields.Many2many('saas.template')
 
-    @api.multi
     def name_get(self):
         result = []
         for rec in self:
@@ -194,7 +190,6 @@ class SAASTemplateLine(models.Model):
         self.ensure_one()
         return slugify(db_name)
 
-    @api.multi
     def create_db(self, key_values=None, db_name=None, with_delay=True):
         self.ensure_one()
         if not key_values:
@@ -225,7 +220,6 @@ class SAASTemplateLine(models.Model):
 
         return build
 
-    @api.multi
     def random_ready_operator(self):
         ready_operators = self.filtered(lambda r: r.state == 'done')
         return random.choice(ready_operators)
