@@ -20,12 +20,10 @@ class SAASDB(models.Model):
         ('done', 'Ready'),
     ], default='draft')
 
-    @api.multi
     def unlink(self):
         self.drop_db()
         return super(SAASDB, self).unlink()
 
-    @api.multi
     @job
     def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()
@@ -36,7 +34,6 @@ class SAASDB(models.Model):
         if callback_obj and callback_method:
             getattr(callback_obj, callback_method)()
 
-    @api.multi
     @job
     def drop_db(self):
         for r in self:
