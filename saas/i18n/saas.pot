@@ -271,7 +271,7 @@ msgid "Manager"
 msgstr ""
 
 #. module: saas
-#: model:ir.model.fields,field_description:saas.field_saas_operator__direct_url
+#: model:ir.model.fields,field_description:saas.field_saas_operator__global_url
 msgid "Master URL (Server-to-Server)"
 msgstr ""
 
@@ -456,7 +456,7 @@ msgid "Type"
 msgstr ""
 
 #. module: saas
-#: model:ir.model.fields,help:saas.field_saas_operator__direct_url
+#: model:ir.model.fields,help:saas.field_saas_operator__global_url
 msgid "URL for server-to-server communication "
 msgstr ""
 
