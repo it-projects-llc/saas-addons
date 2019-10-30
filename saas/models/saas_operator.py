@@ -21,7 +21,7 @@ class SAASOperator(models.Model):
     type = fields.Selection([
         ('local', 'Same Instance'),
     ], 'Type')
-    direct_url = fields.Char('Master URL (Server-to-Server)', required=True, help='URL for server-to-server communication ')
+    global_url = fields.Char('Master URL (Server-to-Server)', required=True, help='URL for server-to-server communication ')
     # host = fields.Char()
     # port = fields.Char()
     db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
@@ -109,7 +109,7 @@ class SAASOperator(models.Model):
     def _get_mandatory_args(self, db):
         self.ensure_one()
         return {
-            'master_url': self.direct_url,
+            'master_url': self.global_url,
             'build_id': db.id
         }
 
@@ -140,11 +140,11 @@ class SAASOperator(models.Model):
 
     @api.multi
     def write(self, vals):
-        if 'direct_url' in vals:
-            self._update_direct_url(vals['direct_url'])
+        if 'global_url' in vals:
+            self._update_global_url(vals['global_url'])
         return super(SAASOperator, self).write(vals)
 
-    def _update_direct_url(self, url):
+    def _update_global_url(self, url):
         self.ensure_one()
         code = "env['ir.config_parameter'].set_param('auth_quick.master', '{}')\n".format(url)
         builds = self.env['saas.db'].search([('operator_id', '=', self.id), ('type', '=', 'build')])
