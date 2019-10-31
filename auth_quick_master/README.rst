@@ -57,4 +57,4 @@ Changelog: `<doc/changelog.rst>`_
 
 Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/auth_quick_master.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/auth_quick_master.atom>`_
 
-Tested on Odoo 12.0 1868713dbd07e0b518f91dffe73e62d85e6ab9a6
+Tested on Odoo 13.0 09eb205ed1e4348dd4762263cafa9819e17dba7e
