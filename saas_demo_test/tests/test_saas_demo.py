@@ -22,7 +22,7 @@ class TestSaasDemo(HttpCase):
             'type': 'local',
             'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io',
             'db_name_template': 'fast_build_{unique_id}',
-            'direct_url': 'http://{}.127.0.0.1.nip.io:8069'.format(self.env.cr.dbname),
+            'global_url': 'http://{}.127.0.0.1.nip.io:8069'.format(self.env.cr.dbname),
             'demo_id': self.saas_demo.id,
         })
         self.saas_demo_repo = self.env['saas.demo.repo'].create({
