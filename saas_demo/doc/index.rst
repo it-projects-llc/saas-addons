@@ -45,7 +45,7 @@ Following commands deploy the system on 80 port. You may need to change that to 
    # YOUR_SCHEME="https"
 
    sed -i "s;http://{db_name}.{db_id}.127.0.0.1.nip.io;$YOUR_SCHEME://{db_name}.$YOUR_DOMAIN;g" vendor/it-projects-llc/saas-addons/saas/data/saas_operator_data.xml
-   sed -i "s;'http://' + obj().env.cr.dbname + '.127.0.0.1.nip.io:8069';$YOUR_SCHEME://$YOUR_DOMAIN;g" vendor/it-projects-llc/saas-addons/saas/data/saas_operator_data.xml
+   sed -i "s;'http://' + obj().env.cr.dbname + '.127.0.0.1.nip.io:8069';'$YOUR_SCHEME://$YOUR_DOMAIN';g" vendor/it-projects-llc/saas-addons/saas/data/saas_operator_data.xml
 
    # change port if needed
    #sed -i s/'80:80'/'8080:80'/  docker-compose.yml
