@@ -2,6 +2,9 @@
  Quick Demo Databases
 ======================
 
+.. contents::
+   :local:
+
 Deployment
 ==========
 
@@ -18,11 +21,31 @@ Following commands deploy the system on 80 port. You may need to change that to 
 ::
 
    # Clone prepared project. Note, that cloning odoo source could take some time.
-   git clone TODO
+   git clone -b 12.0-saas_demo --single-branch https://github.com/it-projects-llc/dockery-odoo-scaffold.git saas_demo
    cd saas_demo
 
+   # Pull git dependencies
+   git submodule init
+   git submodule update
+
    # Make dockers
+   # odooup is tricky, yeah!
+   export COMPOSE_IMPERSONATION='0:0'
+   make info   
    make create
+   make create
+
+   # Adapt module to work with odooup
+   sed -i -e "s/automatic_addons_path_update = fields\.Boolean(default=True)/automatic_addons_path_update = fields.Boolean(default=False)/g" vendor/it-projects-llc/saas-addons/saas_demo/models/saas_operator.py
+   sed -i "s/tools\.config\['data_dir'\], 'repos'/os\.path\.expanduser('~'), 'vendor'/g" vendor/it-projects-llc/saas-addons/saas_demo/os.py
+
+   # Set up the operator
+   YOUR_DOMAIN="apps.example.com"
+   YOUR_SCHEME="http"
+   # YOUR_SCHEME="https"
+
+   sed -i "s;http://{db_name}.{db_id}.127.0.0.1.nip.io;$YOUR_SCHEME://{db_name}.$YOUR_DOMAIN;g" vendor/it-projects-llc/saas-addons/saas/data/saas_operator_data.xml
+   sed -i "s;'http://' + obj().env.cr.dbname + '.127.0.0.1.nip.io:8069';$YOUR_SCHEME://$YOUR_DOMAIN;g" vendor/it-projects-llc/saas-addons/saas/data/saas_operator_data.xml
 
    # change port if needed
    #sed -i s/'80:80'/'8080:80'/  docker-compose.yml
@@ -33,12 +56,21 @@ Following commands deploy the system on 80 port. You may need to change that to 
    # init saas database
    # Tip: database name "apps" will used as a subdomain in your urls. If you
    # want to use another subdomain, change it here
-   docker-compose run dodoo init -n apps -m saas_demo --no-demo
+   docker-compose run dodoo init -n apps -m saas_demo --no-demo --no-cache
 
    # update admin password: set the same as masterpassword
-   echo "env.ref('base.user_admin').password = '$(cat .adminpwd)'" | dc run dodoo run -d apps
+   echo "env.ref('base.user_admin').password = '$(cat .adminpwd)'" | docker-compose run dodoo run -d apps
+
+   # give the Odoo access to the vendor folder
+   sudo chmod -R 777 vendor
 
    # Run!
+   docker-compose up odoo
+
+   # After you create a saas demo record as described in Usage and click Fetch Repositories,
+   # you will need to wait in the logs when odoo restarts and after that restart docker.
+   # This is a temporary measure due to the principle of work odooup
+   # press Ctrl+C and Run again
    # Tip: to run in detach mode add "-d" after "up"
    docker-compose up odoo
 

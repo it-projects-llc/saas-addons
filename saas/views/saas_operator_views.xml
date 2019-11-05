@@ -12,7 +12,7 @@
                         <field name="type"/>
                         <field name="db_url_template"/>
                         <field name="db_name_template"/>
-                        <field name="direct_url"/>
+                        <field name="global_url"/>
                     </group>
                 </sheet>
             </form>

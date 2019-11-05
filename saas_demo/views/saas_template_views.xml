@@ -1,0 +1,15 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+
+<odoo>
+    <record id="saas_template_operator_form_view" model="ir.ui.view">
+        <field name="name">saas.template</field>
+        <field name="model">saas.template</field>
+        <field name="inherit_id" ref="saas.saas_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="demo_id" class="oe_read_only"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
