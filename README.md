@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/it-projects-llc/saas-addons.svg?branch=12.0)](https://travis-ci.com/it-projects-llc/saas-addons)
+[![Build Status](https://travis-ci.com/it-projects-llc/saas-addons.svg?branch=13.0)](https://travis-ci.com/it-projects-llc/saas-addons)
 
 # SaaS addons
 
