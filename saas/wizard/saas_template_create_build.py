@@ -7,12 +7,21 @@ class CreateBuildByTemplate(models.TransientModel):
     _name = 'saas.template.create_build'
     _description = 'Wizard to create build by template'
 
+    def _default_template_operator_id(self):
+        template_id = self.env.context.get('active_id')
+        template = self.env['saas.template'].browse(template_id)
+        template_operator = template.operator_ids.filtered(lambda r: r.state == 'done')
+        if len(template_operator) == 1:
+            return template_operator
+
     def _default_template_id(self):
         return self.env.context.get('active_id')
 
     template_operator_id = fields.Many2one(
-        'saas.template.operator', 'Template\'s Deployment', required=True, ondelete='cascade'
-    )
+        'saas.template.operator',
+        'Template\'s Deployment', required=True,
+        ondelete='cascade',
+        default=_default_template_operator_id)
     random = fields.Boolean(string='Use random operator')
     build_post_init_ids = fields.One2many('build.post_init.line', 'build_creation_id',
                                           string="Build Initialization Values",

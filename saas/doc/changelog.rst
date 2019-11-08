@@ -1,3 +1,8 @@
+`2.4.2`
+-------
+
+- **Improvement:** when creating a build, if there is only one Template's deployment, then it will be selected automatically
+
 `2.4.1`
 -------
 
