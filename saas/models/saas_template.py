@@ -70,6 +70,12 @@ class SAASTemplate(models.Model):
             self.operator_ids.write({'to_rebuild': True})
         return super(SAASTemplate, self).write(vals)
 
+    # @api.model
+    # def unlink(self):
+    #     for rec in self:
+    #         rec.operator_ids.unlink()
+    #     return super(SAASTemplate, self).unlink()
+
     @api.multi
     def action_create_build(self):
         self.ensure_one()

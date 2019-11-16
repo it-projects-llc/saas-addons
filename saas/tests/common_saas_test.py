@@ -4,7 +4,8 @@ from odoo.service import db
 
 DB_TEMPLATE_1 = 'db_template_1'
 DB_TEMPLATE_2 = 'db_template_2'
-MODULE_TO_INSTALL = 'mail'
+# MODULE_TO_INSTALL = 'mail'
+MODULES_TO_INSTALL = ['mail', 'account']
 TEMPLATE_TEST_SUBJECT = 'Dummy subject name to test that code is applied on template database'
 BUILD_TEST_SUBJECT = 'Dummy subject name to test that code is applied on build database'
 DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
@@ -25,10 +26,16 @@ class Common(object):
             test_queue_job_no_delay=True,
         ))
 
+        # self.saas_template_1 = self.env['saas.template'].create({
+        #     'template_module_ids': [(0, 0, {
+        #         'name': MODULE_TO_INSTALL,
+        #     })],
+        #     'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
+        #     'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
+        # })
+
         self.saas_template_1 = self.env['saas.template'].create({
-            'template_module_ids': [(0, 0, {
-                'name': MODULE_TO_INSTALL,
-            })],
+            'template_module_ids': [(0, 0, {'name': module}) for module in MODULES_TO_INSTALL],
             'template_post_init': 'env[\'mail.message\'].create({\'subject\': \'' + TEMPLATE_TEST_SUBJECT + '\', })',
             'build_post_init': DEFAULT_BUILD_PYTHON_CODE + 'env[\'{mail_message}\'].create({{\'subject\': \'' + BUILD_TEST_SUBJECT + '\', }})',
         })

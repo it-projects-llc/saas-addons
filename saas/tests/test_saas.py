@@ -1,6 +1,8 @@
 # Copyright 2018-2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from .common_saas_test import Common, DB_TEMPLATE_1, DB_TEMPLATE_2, MODULE_TO_INSTALL, TEMPLATE_TEST_SUBJECT, \
+# from .common_saas_test import Common, DB_TEMPLATE_1, DB_TEMPLATE_2, MODULE_TO_INSTALL, TEMPLATE_TEST_SUBJECT, \
+#     BUILD_TEST_SUBJECT
+from .common_saas_test import Common, DB_TEMPLATE_1, DB_TEMPLATE_2, MODULES_TO_INSTALL, TEMPLATE_TEST_SUBJECT, \
     BUILD_TEST_SUBJECT
 
 import odoo
@@ -21,7 +23,8 @@ class TestSaas(SavepointCase, Common):
         odoo.registry(db_name).check_signaling()
         with odoo.api.Environment.manage(), db.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
-            self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
+            for module in MODULES_TO_INSTALL:
+                self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
 
     def assert_record_is_created(self, db_name, model_name, search_domain):
         db = odoo.sql_db.db_connect(db_name)
@@ -38,7 +41,13 @@ class TestSaas(SavepointCase, Common):
             ('level', 'in', ['WARNING', 'ERROR', 'CRITICAL']),
             ('message', 'not like', 'test_queue_job_no_delay'),
         ])
-        self.assertFalse(template_db_log)
+
+        try:
+            self.assertFalse(template_db_log)
+        except AssertionError:
+            template_db_log.unlink()
+            raise AssertionError('There were errors in the {} database'.format(dbname))
+
 
     @classmethod
     def setUpClass(cls):
@@ -56,7 +65,9 @@ class TestSaas(SavepointCase, Common):
         self.assert_no_error_in_db(DB_TEMPLATE_1)
 
         # Check that module from template_module_ids is installed
-        self.assert_modules_is_installed(DB_TEMPLATE_1, MODULE_TO_INSTALL)
+        # self.assert_modules_is_installed(DB_TEMPLATE_1, MODULE_TO_INSTALL)
+        self.assert_modules_is_installed(DB_TEMPLATE_1, MODULES_TO_INSTALL)
+
         self.assert_record_is_created(DB_TEMPLATE_1, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Actually second template is done by calling preparing_template_next first time but that call
@@ -71,7 +82,8 @@ class TestSaas(SavepointCase, Common):
         self.assert_no_error_in_db(DB_TEMPLATE_2)
 
         # Check that module from template_module_ids is installed
-        self.assert_modules_is_installed(DB_TEMPLATE_2, MODULE_TO_INSTALL)
+        # self.assert_modules_is_installed(DB_TEMPLATE_2, MODULE_TO_INSTALL)
+        self.assert_modules_is_installed(DB_TEMPLATE_2, 'mail')
         self.assert_record_is_created(DB_TEMPLATE_2, 'mail.message', [('subject', '=', TEMPLATE_TEST_SUBJECT)])
 
         # Check that database instance created correctly
