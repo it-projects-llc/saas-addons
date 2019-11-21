@@ -5,7 +5,7 @@
     "summary": """Authentication provider for "Quick Authentication" module""",
     "category": "Extra Tools",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
-    "images": [],
+    "images": ['images/quick_auth_mater.jpg'],
     "version": "12.0.1.1.0",
     "application": False,
 
