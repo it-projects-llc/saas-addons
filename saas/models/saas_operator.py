@@ -77,8 +77,10 @@ class SAASOperator(models.Model):
                 # Some magic to force reloading registry in other workers
                 env.registry.registry_invalidated = True
                 env.registry.signal_changes()
-                template_operator_id.state = 'post_init'
-                self.with_delay().post_init(template_id, template_operator_id)
+
+            template_operator_id.state = 'post_init'
+            self.with_delay().post_init(template_id, template_operator_id)
+
 
     @job
     def post_init(self, template_id, template_operator_id):
