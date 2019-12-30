@@ -5,6 +5,10 @@
 Installation
 ============
 
+* Use ``db-filter=^%d$`` when using Same Instance type in saas.operator model
+* Set ``--limit-time-cpu`` and ``--limit-time-real`` big enough (e.g. 1800 and
+  3600), because with default values (60 and 120 seconds) it may be not enough
+  to install modules in template database
 * Follow instruction of `Job Queue <https://github.com/OCA/queue/tree/12.0/queue_job>`__ module.
 * `Install <https://odoo-development.readthedocs.io/en/latest/odoo/usage/install-module.html>`__ this module in a usual way
 * Restart the odoo as required by the Job Queue module
@@ -12,16 +16,14 @@ Installation
 Configuration
 =============
 
-* Use ``db-filter=^%d$`` when using Same Instance type in saas.operator model
-
-Usage
-=====
-
 **Create template**
 
 * Open menu ``[[ SaaS ]] >> Templates``
 * Click ``[Create]``
 * Fill in the required fields including **Template's deployments**
+
+Usage
+=====
 
 **Create build**
 
