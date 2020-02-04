@@ -1,12 +1,13 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+# Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """Quick Auth (Master)""",
     "summary": """Authentication provider for "Quick Authentication" module""",
     "category": "Extra Tools",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
-    "images": ['images/quick_auth_mater.jpg'],
-    "version": "12.0.1.1.0",
+    "images": ['images/quick_auth_master.jpg'],
+    "version": "13.0.1.1.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -35,7 +36,7 @@
     "uninstall_hook": None,
 
     "auto_install": False,
-    "installable": False,
+    "installable": True,
 
     # "demo_title": "Quick Authentication (Master)",
     # "demo_addons": [
