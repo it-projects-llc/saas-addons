@@ -1,3 +1,8 @@
+`2.4.3`
+-------
+
+- **Fix:** errors on installing some modules in templates
+
 `2.4.2`
 -------
 
