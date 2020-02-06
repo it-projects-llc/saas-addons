@@ -8,6 +8,7 @@ from odoo import models, fields, api, tools, SUPERUSER_ID, sql_db, registry
 from odoo.service import db
 from odoo.service.model import execute
 from odoo.addons.queue_job.job import job
+from odoo.http import _request_stack
 
 MANDATORY_MODULES = ['auth_quick']
 
@@ -70,13 +71,25 @@ class SAASOperator(models.Model):
             db = sql_db.db_connect(template_operator_id.operator_db_name)
             with api.Environment.manage(), db.cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, {})
+
+                # Set odoo.http.request to None.
+                #
+                # Odoo tries to use its values in translation system, which may eventually
+                # change currentThread().dbname to saas master value.
+                _request_stack.push(None)
+
                 module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
                 module_ids.button_immediate_install()
+
                 # Some magic to force reloading registry in other workers
                 env.registry.registry_invalidated = True
                 env.registry.signal_changes()
-                template_operator_id.state = 'post_init'
-                self.with_delay().post_init(template_id, template_operator_id)
+
+                # return request back
+                _request_stack.pop()
+
+            template_operator_id.state = 'post_init'
+            self.with_delay().post_init(template_id, template_operator_id)
 
     @job
     def post_init(self, template_id, template_operator_id):
