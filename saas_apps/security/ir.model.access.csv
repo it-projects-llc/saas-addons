@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_saas_basket,access_saas_basket,model_saas_basket,base.group_user,1,1,1,1
+access_saas_lines,access_saas_lines,model_saas_lines,base.group_user,1,1,1,1
+access_saas_set,access_saas_set,model_saas_set,base.group_user,1,1,1,1

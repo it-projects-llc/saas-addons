@@ -1,0 +1,9 @@
+.main-control-pad{
+    margin-left: 15%;
+    width: auto;
+}
+
+.col-lg-12{
+    flex: 0 0 100%;
+    max-width: 100%;
+}

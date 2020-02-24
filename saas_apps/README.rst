@@ -6,18 +6,16 @@
  Saas Apps
 ===========
 
-short
+Base module for manage modules in saas.
 
-Loong
+Module allows to choose modules that users gona use in their db.
 
 Credits
 =======
 
 Contributors
 ------------
-* `saas apps <https://it-projects.info/team/saas-addons>`__:
-
-      * :one::zero: init version of the module
+* `Vildan Safin <https://www.it-projects.info/team/Enigma228322>`__
 
 Sponsors
 --------

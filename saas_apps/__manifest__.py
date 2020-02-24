@@ -3,10 +3,10 @@
 
 {
     "name": """SaaS Apps""",
-    "summary": """short""",
+    "summary": """Choose your apps""",
     "category": "Marketing",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
-    "images": [],
+    "images": ['/images/attention.jpg'],
     "version": "12.0.1.0.0",
     "application": False,
 
@@ -17,10 +17,13 @@
     # "price": 9.00,
     # "currency": "EUR",
 
-    "depends": [
-    ],
+    "depends": ['website'],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
+        'security/ir.model.access.csv',
+        'views/calculator.xml',
+        'views/manage.xml',
+        'views/assets.xml'
     ],
     "demo": [
     ],

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
+    License LGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
+<odoo>
+    <template id="index">
+        <t t-call="website.layout">
+            <title>Apps</title>
+            <div class="row main-control-pad container">
+                <div class="col-sm-8">
+                    <!-- Users qty -->
+                    <h3 class="mt16 mb8">Choose the number of users</h3>
+                    <div class="row" style="max-width: 30%">
+                        <div class="col-sm">
+                            <input class="openerp_enterprise_pricing_users form-control border text-right pr-2" min="1" id="users" type="number" style="max-width: 120px;" value="1"></input>
+                        </div>
+                        <div class="col-sm">
+                            <label class="px-2 mr-1 mb-0 bg-200 border-top border-right border-bottom">Users</label>
+                        </div>
+                        <div class="col-sm">
+                            <label>
+                                <del class="text-700 ml-1 mr-2 openerp_enterprise_user_pricing_monthly d-none"><span class="openerp_enterprise_pricing_user_amount_monthly_full">15,00</span><span class="openerp_enterprise_pricing_currency">EUR</span></del>
+                                <del class="text-700 ml-1 mr-2 openerp_enterprise_user_pricing_yearly"><span class="openerp_enterprise_pricing_user_amount_yearly_full">12,00</span><span class="openerp_enterprise_pricing_currency">EUR</span></del>
+                                <b class="openerp_enterprise_user_pricing_monthly d-none">
+                                <span class="openerp_enterprise_pricing_user_amount_monthly">12,50</span>;<span class="openerp_enterprise_pricing_currency">EUR</span><small class="fw_semibold">/user/month</small>
+                                </b>
+                                <b class="openerp_enterprise_user_pricing_yearly">
+                                <span class="openerp_enterprise_pricing_user_amount_yearly">10,00</span>;<span class="openerp_enterprise_pricing_currency">EUR</span><small class="fw_semibold">/user/month</small>
+                                </b>
+                            </label>    
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-9">
+                    <!-- App list -->
+                        <h3 class="mt16 mb16">Choose your Apps</h3>
+                        <div class="openerp_enterprise_pricing_step_body mb24">
+                            <div class="form-row">
+                                <t t-foreach="apps" t-as="app">
+                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window"><t t-esc="app.module_name"/></p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <!-- Price window -->
+                    <div class="col-12 col-md-4 col-lg-3 mt16">
+                        <span class="shadow p-3 mb-5 bg-white rounded price-window">
+                            ░░░░░▄▄▄▄▄░░░░▄██▄░░░░░░░░░░░░░
+                            ░░░░░▀████░▄███▀▀██▄▄░░░░░░░░░░
+                            ░░░░░░███████▀░▄▄░▀███▄░░░░░░░░
+                            ░░░░░░█████▀░▄████▄░▀███▄░░░░░░
+                            ░░░░▄███░Here█gonna█be▀███▄▄░░░
+                            ░░▄███▀░▄▄███an░window▄░░▀███▄░
+                            ▄███▀░▄████████▄▄███████▄▄░▀██▄
+                            ▀▀░░▄████████with█price████░░▀▀
+                            ░░░░████▀▀▀▀▀▀▀███▀▀▀▀▀▀▀██░░░░
+                            ░░░░████░██░██░███░██░██░██░░░░
+                            ░░░░████░▄▄░▄▄░███░██░██░██░░░░
+                            ░░░░████░▀▀░▀▀░███▄▄▄▄▄▄▄██░░░░
+                            ░░░░████░██░██░████████████░░░░
+                            ░░░▄████▄▄▄▄▄▄▄████████████▄░░░
+                            ░░░█████████████████████████░░░
+                            ░░░█████████████████████████░░░
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
+    License LGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
+<odoo>
+    <template id="info">
+        <t t-call="website.layout">
+            <title>Apps info</title>
+            <h1 style="text-align: center;">Module info</h1>
+        </t>
+    </template>
+</odoo>
