@@ -23,8 +23,9 @@ class SAASLine(models.Model):
     _name = 'saas.lines'
     _description = 'Model line'
 
-    module_name = fields.Char(default="default")
-    price = fields.Float(default=0.0)
+    module_name = fields.Char(default="default", string="Module Name")
+    price = fields.Float(default=0.0, string="Price")
+    allow_to_sell = fields.Boolean(string="Sellable")
     icon_path = fields.Char(compute='_compute_path', string="icon path")
     dependencies = fields.Many2one('saas.set', string="Module dependences")
     
@@ -38,15 +39,24 @@ class SAASLine(models.Model):
             raise "Price can't be negative."
 
     def add_new_module(self, name):
-        import wdb
-        wdb.set_trace()
         # for module in self:
         #     if(module.module_name == name)
         #         return False
         self.create({
-            'name': name
+            'module_name': name
         })
         return True
+    
+    def create(self, cr, user, vals, context=None):
+        import wdb
+        wdb.set_trace()
+        new_id = super(product_test, self).create(cr, user, vals, context)
+        irmodules = self.env["ir.module.module"].search([])
+        if len(irmodules) > len(self.search([])):
+            for irmodule in irmodules:
+                if len(self.search([('module_name', '=', irmodule.name)])) == 0:
+                    self.create({'module_name': irmodule.name})
+        return new_id
 
 
 class SAASDependence(models.Model):
@@ -69,9 +79,3 @@ class SAASDependence(models.Model):
     def _compute_price(self):
         for module in self.modules:
             self.final_set_price = self.final_set_price + module.price
-
-
-# class IrModuleModule(models.Model):
-#     _inherit = "ir.module.module"
-
-#     allow_to_sell = fields.Boolean(default=False)
