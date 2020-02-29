@@ -9,11 +9,9 @@ import json
 class SaaSAppsController(Controller):
     @route('/price', auth='public', website=True)
     def user_page(self, **kw):
-        import wdb
-        wdb.set_trace()
         apps = http.request.env['saas.lines']
         return http.request.render('saas_apps.index', {
-            'apps': apps.search([])
+            'apps': apps.search([('allow_to_sell', '=', True)])
         })
 
     @route('/manage', auth='public', website=True)
@@ -27,15 +25,9 @@ class SaaSAppsController(Controller):
     # def module_information(self, name):
     #     return http.request.render('saas_apps.info', {})
     
-    @http.route(['/test'], type='json', auth='public', website=True)
+    @http.route(['/refresh'], type='json', auth='public', website=True)
     def catch_app_click(self, **kw):
-        import wdb
-        wdb.set_trace()
-        # Mark choosen module as saleable
-        http.request.env['ir.module.module'].search([('name', '=', kw['args'][0])]).allow_to_sell = True
         apps = http.request.env['saas.lines']
-        apps.add_new_module(kw['args'][0])
+        apps.refresh()
         # request.redirect('/manage/%s' % name)
-        return {
-            'apps': kw['args'][0]
-        }
+        return {}
