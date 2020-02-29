@@ -47,16 +47,12 @@ class SAASLine(models.Model):
         })
         return True
     
-    def create(self, cr, user, vals, context=None):
-        import wdb
-        wdb.set_trace()
-        new_id = super(product_test, self).create(cr, user, vals, context)
+    def refresh(self):
         irmodules = self.env["ir.module.module"].search([])
         if len(irmodules) > len(self.search([])):
             for irmodule in irmodules:
                 if len(self.search([('module_name', '=', irmodule.name)])) == 0:
                     self.create({'module_name': irmodule.name})
-        return new_id
 
 
 class SAASDependence(models.Model):

@@ -57,15 +57,9 @@
     </record>
     
     <menuitem name="Manage Apps"
-            id="menu_website_redirect_list"
+            id="menu_website_manage_apps_list"
             action="action_website_manage_apps_list"
             parent="website.menu_website_global_configuration"
             sequence="40"
             />
-    
-    <t t-extend="ListView.buttons">
-        <t t-jquery="button.oe_list_add" t-operation="after">
-            <button class="oe_button oe_new_button oe_highlight" type="button">New Button</button>
-        </t>
-    </t>
 </odoo>

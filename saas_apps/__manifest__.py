@@ -28,6 +28,7 @@
     "demo": [
     ],
     "qweb": [
+        'views/refresh.xml'
     ],
 
     "post_load": None,
