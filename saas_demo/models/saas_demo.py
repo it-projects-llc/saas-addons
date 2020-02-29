@@ -19,10 +19,9 @@ class Demo(models.Model):
     _name = 'saas.demo'
     _description = 'Repos Set for Demo'
 
-    name = fields.Char()
-    operator_ids = fields.One2many('saas.operator', 'demo_id')
-    template_ids = fields.One2many('saas.template', 'demo_id')
-    repo_ids = fields.One2many('saas.demo.repo', 'demo_id', copy=True)
+    name = fields.Char(required=True)
+    operator_ids = fields.One2many('saas.operator', 'demo_id', string='Operators')
+    repo_ids = fields.One2many('saas.demo.repo', 'demo_id', copy=True, string='Repos')
 
     @api.model
     def fetch_and_generate_templates(self):
