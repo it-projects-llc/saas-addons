@@ -54,7 +54,6 @@ msgstr ""
 #: model:ir.actions.act_window,name:saas_demo.saas_demo_action
 #: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__demo_id
 #: model:ir.model.fields,field_description:saas_demo.field_saas_operator__demo_id
-#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_id
 msgid "Demo"
 msgstr ""
 
@@ -135,7 +134,7 @@ msgstr ""
 
 #. module: saas_demo
 #: model:ir.model.fields,field_description:saas_demo.field_saas_demo__operator_ids
-msgid "Operator"
+msgid "Operators"
 msgstr ""
 
 #. module: saas_demo
@@ -149,7 +148,6 @@ msgid "Rebuilding Templates"
 msgstr ""
 
 #. module: saas_demo
-#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__repo_ids
 #: model:ir.model.fields,field_description:saas_demo.field_saas_template__repo_id
 msgid "Repo"
 msgstr ""
@@ -170,6 +168,12 @@ msgid "Repo URL (escaped)"
 msgstr ""
 
 #. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__repo_ids
+#: model_terms:ir.ui.view,arch_db:saas_demo.saas_demo_form_view
+msgid "Repos"
+msgstr ""
+
+#. module: saas_demo
 #: model:ir.model,name:saas_demo.model_saas_demo
 msgid "Repos Set for Demo"
 msgstr ""
@@ -187,11 +191,6 @@ msgstr ""
 #. module: saas_demo
 #: model:ir.model.fields,field_description:saas_demo.field_saas_operator__needs_restart
 msgid "Server needs to be restarted"
-msgstr ""
-
-#. module: saas_demo
-#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__template_ids
-msgid "Template"
 msgstr ""
 
 #. module: saas_demo
