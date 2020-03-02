@@ -39,7 +39,7 @@
         <field name="name">saas.lines.list</field>
         <field name="model">saas.lines</field>
         <field name="arch" type="xml">
-            <tree string="Manage Apps" editable="bottom">
+            <tree string="Manage Apps">
                 <field name="module_name"/>
                 <field name="allow_to_sell"/>
             </tree>
