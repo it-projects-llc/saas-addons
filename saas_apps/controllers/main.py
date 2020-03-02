@@ -31,3 +31,12 @@ class SaaSAppsController(Controller):
         apps.refresh()
         # request.redirect('/manage/%s' % name)
         return {}
+
+    @http.route(['/what_dependencies'], type='json', auth='public', website=True)
+    def put_in_basket(self, **kw):
+        app_name = kw['args'][0]
+        app = http.request.env['saas.lines'].search([('module_name', '=', app_name)])
+        return {
+            'dependencies': app.dependencies_info(),
+            'price': app.final_set_price
+        }
