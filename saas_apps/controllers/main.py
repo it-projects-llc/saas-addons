@@ -14,22 +14,10 @@ class SaaSAppsController(Controller):
             'apps': apps.search([('allow_to_sell', '=', True)])
         })
 
-    @route('/manage', auth='public', website=True)
-    def manager_page(self, **kw):
-        apps = http.request.env['ir.module.module']
-        return http.request.render('saas_apps.manage', {
-            'apps': apps.search([])
-        })
-    
-    # @route('/manage/<name>', auth='public', website=True)
-    # def module_information(self, name):
-    #     return http.request.render('saas_apps.info', {})
-    
     @http.route(['/refresh'], type='json', auth='public', website=True)
     def catch_app_click(self, **kw):
         apps = http.request.env['saas.line']
         apps.refresh()
-        # request.redirect('/manage/%s' % name)
         return {}
 
     @http.route(['/what_dependencies'], type='json', auth='public', website=True)

@@ -35,35 +35,26 @@
                         <div class="openerp_enterprise_pricing_step_body mb24">
                             <div class="form-row">
                                 <t t-foreach="apps" t-as="app">
-                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window application"><t t-esc="app.name"/></p>
+                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate application"><t t-esc="app.name"/></p>
                                 </t>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <!-- Price window -->
-                    <div class="col-12 col-md-4 col-lg-3 mt16">
-                        <span class="shadow p-3 mb-5 bg-white rounded price-window">
-                            ░░░░░▄▄▄▄▄░░░░▄██▄░░░░░░░░░░░░░
-                            ░░░░░▀████░▄███▀▀██▄▄░░░░░░░░░░
-                            ░░░░░░███████▀░▄▄░▀███▄░░░░░░░░
-                            ░░░░░░█████▀░▄████▄░▀███▄░░░░░░
-                            ░░░░▄███░Here█gonna█be▀███▄▄░░░
-                            ░░▄███▀░▄▄███an░window▄░░▀███▄░
-                            ▄███▀░▄████████▄▄███████▄▄░▀██▄
-                            ▀▀░░▄████████with█price████░░▀▀
-                            ░░░░████▀▀▀▀▀▀▀███▀▀▀▀▀▀▀██░░░░
-                            ░░░░████░██░██░███░██░██░██░░░░
-                            ░░░░████░▄▄░▄▄░███░██░██░██░░░░
-                            ░░░░████░▀▀░▀▀░███▄▄▄▄▄▄▄██░░░░
-                            ░░░░████░██░██░████████████░░░░
-                            ░░░▄████▄▄▄▄▄▄▄████████████▄░░░
-                            ░░░█████████████████████████░░░
-                            ░░░█████████████████████████░░░
-                        </span>
-                    </div>
-                </div>
+            </div>
+            <!-- Price window -->
+            <div>
+                <span id="price-window" class="shadow p-3 mb-5 bg-white rounded">
+                    <ul class="nav nav-tabs card-header-tabs" style="">
+                          <li class="nav-item" data-type="yearly">
+                            <a data-toggle="tab" href="#yearly" class="nav-link px-3 border-top-0 rounded-0 fw_bold active">Annually</a>
+                          </li>
+                          <li data-type="monthly" class="nav-item">
+                            <a data-toggle="tab" href="#monthly" class="nav-link px-2 border-top-0 rounded-0 fw_bold">Monthly</a>
+                          </li>
+                    </ul>
+                    
+                </span>
             </div>
         </t>
     </template>
