@@ -25,22 +25,22 @@
     </template>
 
     <record id="view_manage_apps_search" model="ir.ui.view">
-        <field name="name">saas.lines.search</field>
-        <field name="model">saas.lines</field>
+        <field name="name">saas.line.search</field>
+        <field name="model">saas.line</field>
         <field name="arch" type="xml">
             <search string="Search Redirect">
-                <field name="module_name"/>
+                <field name="name"/>
                 <field name="allow_to_sell"/>
             </search>
         </field>
     </record>
 
     <record id="website_manage_apps_tree_view" model="ir.ui.view">
-        <field name="name">saas.lines.list</field>
-        <field name="model">saas.lines</field>
+        <field name="name">saas.line.list</field>
+        <field name="model">saas.line</field>
         <field name="arch" type="xml">
             <tree string="Manage Apps">
-                <field name="module_name"/>
+                <field name="name"/>
                 <field name="allow_to_sell"/>
             </tree>
         </field>
@@ -48,7 +48,7 @@
 
     <record id="action_website_manage_apps_list" model="ir.actions.act_window">
         <field name="name">Website Apps</field>
-        <field name="res_model">saas.lines</field>
+        <field name="res_model">saas.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="website_manage_apps_tree_view"/>

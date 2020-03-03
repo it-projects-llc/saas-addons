@@ -14,7 +14,7 @@ odoo.define('whatever.filter_button', function (require) {
             }
         },
         filter_button: function () {
-            // Loading all modules in saas.lines from ir.module.module
+            // Loading all modules in saas.line from ir.module.module
             session.rpc('/refresh', {
             }).then(function (result) {
                 window.location.reload()
