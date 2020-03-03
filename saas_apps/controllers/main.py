@@ -38,8 +38,6 @@ class SaaSAppsController(Controller):
         app = http.request.env['saas.line'].search([('name', '=', app_name)])
         price = 0
         if which_price == 'month':
-            import wdb
-            wdb.set_trace()
             price = app.month_price
         else:
             price = app.year_price

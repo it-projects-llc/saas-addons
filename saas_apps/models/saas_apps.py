@@ -80,3 +80,12 @@ class SAASDependence(models.Model):
         for app in self.dependencies:
             apps.append(app.name)
         return apps
+
+    @api.multi
+    def write(self, vals):
+        last_value = self.allow_to_sell
+        res = super(SAASDependence, self).write(vals)
+        if vals['allow_to_sell'] != last_value and not last_value:
+            for app in self.dependencies:
+                self.search([('name', '=', app.name)]).allow_to_sell = True
+        return res
