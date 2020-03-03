@@ -6,50 +6,35 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-# class SAASBasket(models.Model):
-#     _name = 'saas.basket'
-#     _description = 'Module for selecting applications'
 
-#     users = fields.Integer(default=0)
-#     name = fields.Char(default="Basket", string="Basket Name")
-#     modules_in_basket = fields.One2many('saas.lines', 'basket', ondelete="cascade", delegate=True)
-#     final_basket_price = fields.Float(default=0.0, compute='_compute_price', string="Price of the set")
-
-#     def _compute_price(self):
-#         if len(self.modules_in_basket) > 0:
-#             for module in self.modules_in_basket:
-#                 self.final_basket_price += module.final_set_price
-
-
-class SAASLine(models.Model):
-    _name = 'saas.lines'
+class SAASModule(models.Model):
+    _name = 'saas.module'
     _description = 'Model line'
 
-    module_name = fields.Char(default="default", string="Module Name")
-    price = fields.Float(default=0.0, string="Price")
-    allow_to_sell = fields.Boolean(string="Sellable")
+    name = fields.Char(default="default", string="Module Name")
+    month_price = fields.Float(default=0.0, string="Month price")
+    year_price = fields.Float(default=0.0, string="Year price")
     icon_path = fields.Char(compute='_compute_path', string="icon path")
-    dependencies = fields.One2many('saas.set', 'saas_modules', ondelete='cascade', delegate=True)
-    final_set_price = fields.Float(default=0.0, compute='_compute_price', string="Price of the set")
-    # basket = fields.Many2one('saas.basket', string='Modules in basket')
+    saas_modules = fields.Many2one('saas.line', string="Module dependencies")
     
     def _compute_path(self): 
-        self.icon_path = "/saas_apps/static/src/img/%s.png" % self.module_name
-        
-    def _compute_price(self):
-        self.final_set_price = self.price
-        for module in self.dependencies:
-            self.final_set_price += module.saas_modules.price
+        self.icon_path = "/saas_apps/static/src/img/%s.png" % self.name
     
-    @api.constrains('price')
+    @api.model
+    def create(self, vals):
+        rec = super(SAASModule, self).create(vals)
+        if len(self.saas_modules) > 0:
+            self.name = self.saas_modules.name
+        return rec
+    
+    @api.constrains('month_price', 'year_price')
     def _validate_price(self):
-        if self.price < 0:
-            self.price = 0
+        if self.month_price < 0 or self.year_price < 0:
             raise "Price can't be negative."
 
     def add_new_module(self, name):
         self.create({
-            'module_name': name
+            'name': name
         })
         return True
     
@@ -57,19 +42,41 @@ class SAASLine(models.Model):
         irmodules = self.env["ir.module.module"].search([])
         if len(irmodules) > len(self.search([])):
             for irmodule in irmodules:
-                if len(self.search([('module_name', '=', irmodule.name)])) == 0:
-                    self.create({'module_name': irmodule.name})
-    
-    def dependencies_info(self):
-        apps = []
-        for app in self.dependencies:
-            apps.append(app.saas_modules.module_name)
-        return apps
+                if len(self.search([('name', '=', irmodule.name)])) == 0:
+                    self.create({'name': irmodule.name})
 
 
 class SAASDependence(models.Model):
-    _name = 'saas.set'
+    _name = 'saas.line'
     _description = 'Module dependencies'
 
-    saas_modules = fields.Many2one('saas.lines', string="Module dependencies")
-    # module = fields.One2many()
+    # First dependence is root module
+    name = fields.Char(default="default", string="Module Name")
+    allow_to_sell = fields.Boolean(string="Sellable")
+    dependencies = fields.One2many('saas.module', 'saas_modules', ondelete='cascade', delegate=True)
+    year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
+    month_price = fields.Float(default=0.0, compute='_compute_month_price', string="Price per month")
+
+    def refresh(self):
+        apps = self.env["saas.module"]
+        apps.refresh()
+        apps = apps.search([])
+        if len(apps) > len(self.search([])):
+            for app in apps:
+                if len(self.search([('name', '=', app.name)])) == 0:
+                    new = self.create({'name': app.name})
+                    new.dependencies += app
+
+    def _compute_year_price(self):
+        for module in self.dependencies:
+            self.year_price += module.year_price
+
+    def _compute_month_price(self):
+        for module in self.dependencies:
+            self.month_price += module.month_price
+
+    def dependencies_info(self):
+        apps = []
+        for app in self.dependencies:
+            apps.append(app.name)
+        return apps

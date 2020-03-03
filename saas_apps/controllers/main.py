@@ -9,7 +9,7 @@ import json
 class SaaSAppsController(Controller):
     @route('/price', auth='public', website=True)
     def user_page(self, **kw):
-        apps = http.request.env['saas.lines']
+        apps = http.request.env['saas.line']
         return http.request.render('saas_apps.index', {
             'apps': apps.search([('allow_to_sell', '=', True)])
         })
@@ -27,16 +27,23 @@ class SaaSAppsController(Controller):
     
     @http.route(['/refresh'], type='json', auth='public', website=True)
     def catch_app_click(self, **kw):
-        apps = http.request.env['saas.lines']
+        apps = http.request.env['saas.line']
         apps.refresh()
         # request.redirect('/manage/%s' % name)
         return {}
 
     @http.route(['/what_dependencies'], type='json', auth='public', website=True)
-    def put_in_basket(self, **kw):
-        app_name = kw['args'][0]
-        app = http.request.env['saas.lines'].search([('module_name', '=', app_name)])
+    def what_dependencies(self, **kw):
+        app_name, which_price = kw['args']
+        app = http.request.env['saas.line'].search([('name', '=', app_name)])
+        price = 0
+        if which_price == 'month':
+            import wdb
+            wdb.set_trace()
+            price = app.month_price
+        else:
+            price = app.year_price
         return {
             'dependencies': app.dependencies_info(),
-            'price': app.final_set_price
+            'price': price
         }

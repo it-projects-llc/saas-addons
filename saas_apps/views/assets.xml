@@ -8,7 +8,7 @@
             <script type="text/javascript" src="/saas_apps/static/src/js/apps.js"></script>
        </xpath>
   </template>
-  <template id="assets_backend" name="saas_lines assets" inherit_id="web.assets_backend">
+  <template id="assets_backend" name="saas_line assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/saas_apps/static/src/js/refresh_button.js"></script>
         </xpath>
