@@ -30,7 +30,7 @@
         <field name="arch" type="xml">
             <search string="Search Redirect">
                 <field name="name"/>
-                <field name="allow_to_sell"/>
+                <field name="allow_to_sell" on_change="on_change_price(allow_to_sell)"/>
             </search>
         </field>
     </record>
@@ -41,7 +41,7 @@
         <field name="arch" type="xml">
             <tree string="Manage Apps">
                 <field name="name"/>
-                <field name="allow_to_sell"/>
+                <field name="allow_to_sell" on_change="on_change_price(allow_to_sell)"/>
             </tree>
         </field>
     </record>
