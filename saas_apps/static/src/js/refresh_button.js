@@ -9,7 +9,7 @@ odoo.define('whatever.filter_button', function (require) {
         renderButtons: function($node) {
         this._super.apply(this, arguments);
             if (this.$buttons) {
-                let filter_button = this.$buttons.find('.oe_filter_button');
+                var filter_button = this.$buttons.find('.oe_filter_button');
                 filter_button && filter_button.click(this.proxy('filter_button')) ;
             }
         },

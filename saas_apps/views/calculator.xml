@@ -59,7 +59,7 @@
                         </ul>
                     </div>
                     <div class="card-body">
-                        <h2 class="card-title pricing-card-title">$15 
+                        <h2 id="price" class="card-title pricing-card-title">$15 
                         <small class="text-muted">/ mo</small></h2>
                         <ul class="list-unstyled mt-3 mb-4">
                             <li>20 users included</li>

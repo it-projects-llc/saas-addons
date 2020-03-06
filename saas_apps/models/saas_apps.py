@@ -44,6 +44,12 @@ class SAASModule(models.Model):
             for irmodule in irmodules:
                 if len(self.search([('name', '=', irmodule.name)])) == 0:
                     self.create({'name': irmodule.name})
+    
+    def cost(self, month):
+        if month:
+            return self.month_price
+        else:
+            return self.year_price
 
 
 class SAASDependence(models.Model):
@@ -75,17 +81,35 @@ class SAASDependence(models.Model):
         for module in self.dependencies:
             self.month_price += module.month_price
 
-    def dependencies_info(self):
+    def dependencies_info(self, for_month):
         apps = []
+        # Looking to the period
+        import wdb
+        wdb.set_trace()
         for app in self.dependencies:
-            apps.append(app.name)
+            if app.name != self.name:
+                set = self.search([('name', '=', app.name)])
+                leafs = set.dependencies_info(for_month)
+            item = {
+                'name': app.name,
+                'price': app.cost(for_month)
+            }
+            if not(item in apps):
+                apps.append(item)
         return apps
 
     @api.multi
     def write(self, vals):
         last_value = self.allow_to_sell
         res = super(SAASDependence, self).write(vals)
-        if vals['allow_to_sell'] != last_value and not last_value:
-            for app in self.dependencies:
-                self.search([('name', '=', app.name)]).allow_to_sell = True
+        # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
+        # If it's not, then if root modules(self) allow_to_sell value is True, then other sets allow_to_sell values should be True
+        if "allow_to_sell" in vals:
+            if vals['allow_to_sell'] != last_value and not last_value:
+                for app in self.dependencies:
+                    self.search([('name', '=', app.name)]).allow_to_sell = vals['allow_to_sell']
+        else:
+            if last_value:
+                for app in self.dependencies:
+                    self.search([('name', '=', app.name)]).allow_to_sell = True
         return res
