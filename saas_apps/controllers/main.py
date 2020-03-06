@@ -24,12 +24,9 @@ class SaaSAppsController(Controller):
     def what_dependencies(self, **kw):
         app_name, which_price = kw['args']
         app = http.request.env['saas.line'].search([('name', '=', app_name)])
-        price = 0
+        month = False
         if which_price == 'month':
-            price = app.month_price
-        else:
-            price = app.year_price
+            month = True
         return {
-            'dependencies': app.dependencies_info(),
-            'price': price
+            'dependencies': app.dependencies_info(month)
         }
