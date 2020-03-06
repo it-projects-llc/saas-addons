@@ -1,11 +1,12 @@
-.main-control-pad{
-    margin-left: 15%;
-    width: auto;
-}
-
 .col-lg-12{
     flex: 0 0 100%;
     max-width: 100%;
+}
+
+.img{
+    float: left;
+    width: 30%;
+    padding: 10px;
 }
 
 @media (min-width: 1000px) {
@@ -15,7 +16,7 @@
         right: 30%;
         top: 20%;
         width: 15%;
-        height: 40%;
+        z-index: 1;
     }
 }
 
@@ -26,7 +27,7 @@
         right: 15%;
         top: 20%;
         width: 25%;
-        height: 30%;
+        z-index: 1;
     }
 }
 
@@ -37,7 +38,6 @@
         right: 0;
         bottom: -10%;
         width: 100%;
-        height: 30%;
         z-index: 1;
     }
 }
