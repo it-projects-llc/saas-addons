@@ -5,8 +5,8 @@
     <template id="index">
         <t t-call="website.layout">
             <title>Apps</title>
-            <div class="row main-control-pad container">
-                <div class="col-sm-8">
+            <div class="row container">
+                <div class="col-sm-8 center">
                     <!-- Users qty -->
                     <h3 class="mt16 mb8">Choose the number of users</h3>
                     <div class="row" style="max-width: 30%">
@@ -35,7 +35,10 @@
                         <div class="openerp_enterprise_pricing_step_body mb24">
                             <div class="form-row">
                                 <t t-foreach="apps" t-as="app">
-                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate application"><t t-esc="app.name"/></p>
+                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate application">
+                                        <img class="img"/>
+                                        <t t-esc="app.name"/>
+                                    </p>
                                 </t>
                             </div>
                         </div>
@@ -44,16 +47,28 @@
             </div>
             <!-- Price window -->
             <div>
-                <span id="price-window" class="shadow p-3 mb-5 bg-white rounded">
-                    <ul class="nav nav-tabs card-header-tabs" style="">
-                          <li class="nav-item" data-type="yearly">
-                            <a data-toggle="tab" href="#yearly" class="nav-link px-3 border-top-0 rounded-0 fw_bold active">Annually</a>
-                          </li>
-                          <li data-type="monthly" class="nav-item">
-                            <a data-toggle="tab" href="#monthly" class="nav-link px-2 border-top-0 rounded-0 fw_bold">Monthly</a>
-                          </li>
-                    </ul>
-                    
+                <span id="price-window" class="shadow mb-5 bg-white rounded">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" style="">
+                            <li class="nav-item" data-type="yearly">
+                                <a data-toggle="tab" href="#yearly" class="nav-link px-3 border-top-0 rounded-0 fw_bold active">Annually</a>
+                            </li>
+                            <li data-type="monthly" class="nav-item">
+                                <a data-toggle="tab" href="#monthly" class="nav-link px-2 border-top-0 rounded-0 fw_bold">Monthly</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title pricing-card-title">$15 
+                        <small class="text-muted">/ mo</small></h2>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>20 users included</li>
+                            <li>10 GB of storage</li>
+                            <li>Priority email support</li>
+                            <li>Help center access</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+                    </div>
                 </span>
             </div>
         </t>
