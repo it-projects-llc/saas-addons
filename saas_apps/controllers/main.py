@@ -28,5 +28,5 @@ class SaaSAppsController(Controller):
         if which_price == 'month':
             month = True
         return {
-            'dependencies': app.dependencies_info(month)
+            'dependencies': app.dependencies_info(month, 0)
         }

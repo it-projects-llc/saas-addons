@@ -21,6 +21,8 @@ odoo.define('saas_apps.model', function (require){
         return -1;
     }
 
+    // Finding all the links up to the tree,
+    // and push them to delete_list
     delete_list = [];
     function leaf_to_root(name){
         if(!delete_list.includes(name))
@@ -29,15 +31,10 @@ odoo.define('saas_apps.model', function (require){
         if(roots === undefined)
             return;
         if(roots.length > 0){
-            if(typeof(roots) === "string"){
-                delete_list.push(roots);
-                leaf_to_root(roots);
-            }else{
-                roots.forEach(function(root){
-                    delete_list.push(root);
-                    leaf_to_root(root);
-                });
-            }
+            roots.forEach(function(root){
+                delete_list.push(root);
+                leaf_to_root(root);
+            });
         }
     }
 
@@ -50,36 +47,19 @@ odoo.define('saas_apps.model', function (require){
                 session.rpc('/what_dependencies', {
                     args: [e.target.innerText, price_period]
                 }).then(function (result) {
-                    console.log(result);
+
                     /* Be carefull with dependecies when changing programm logic,
-                        cause first dependence - is module himself*/
+                    cause first dependence - is module himself*/
                     var i = 0, choosing_new = false;
                     for(; i < result.dependencies.length; ++i){
-                        leaf_name = result.dependencies[i].name;
-                        if(includes_module(leaf_name) === -1)
-                        {
-                            choosen.push(result.dependencies[i]);
-                            $(".application:contains('"+leaf_name+"')")[0].style.color = "green";
-                            choosing_new = true;
-                        }else{
-                            if(choosing_new)
-                                break;
-                            leaf_to_root(leaf_name);
-                            delete_list.forEach(function(module){
-                                choosen.splice(includes_module(module), 1);
-                                $(".application:contains('"+module+"')")[0].style.color = "black";
-                            });
-                            delete_list = [];
-                            break;
-                        }
                         // Add new element to the dependencies tree, cause we'll restablish a path from leaf to the root
                         // when we'll have to delete one of leafs
                         if(i > 0){
                             modules_parents = tree.get(result.dependencies[i].name);
-                            root_module_name = result.dependencies[0].name;
+                            root_module_name = result.dependencies[i].parent;
                             leaf_name = result.dependencies[i].name;
-                            if(modules_parents !== "undefined"){
-                                tree.set(leaf_name, root_module_name);
+                            if(modules_parents === undefined){
+                                tree.set(leaf_name, [root_module_name]);
                                 console.log("INFO:Added new leaf '"+leaf_name+"' with root module '"+root_module_name+"'.");
                             }
                             else if(!modules_parents.includes(root_module_name)){
@@ -89,6 +69,23 @@ odoo.define('saas_apps.model', function (require){
                             else{
                                 console.log("WARNING:Root module '"+root_module_name+"' already in tree!");
                             }
+                        }
+                        leaf_name = result.dependencies[i].name;
+                        if(includes_module(leaf_name) === -1)
+                        {
+                            choosen.push(result.dependencies[i]);
+                            $(".application:contains('"+leaf_name+"')")[0].style.color = "green";
+                            choosing_new = true;
+                        }else{
+                            if(choosing_new)
+                                continue;
+                            leaf_to_root(leaf_name);
+                            delete_list.forEach(function(module){
+                                choosen.splice(includes_module(module), 1);
+                                $(".application:contains('"+module+"')")[0].style.color = "black";
+                            });
+                            delete_list = [];
+                            break;
                         }
                     }
                 });
