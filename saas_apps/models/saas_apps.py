@@ -81,16 +81,24 @@ class SAASDependence(models.Model):
         for module in self.dependencies:
             self.month_price += module.month_price
 
-    def dependencies_info(self, for_month):
+    def dependencies_info(self, for_month, deep):
         apps = []
+        # Root module
+        if not deep:
+            apps.append({
+                'parent': 'root',
+                'name': self.name,
+                'price': self.dependencies[0].cost(for_month)
+            })
         # Looking to the period
-        import wdb
-        wdb.set_trace()
-        for app in self.dependencies:
-            if app.name != self.name:
-                set = self.search([('name', '=', app.name)])
-                leafs = set.dependencies_info(for_month)
+        for app in self.dependencies - self.dependencies[0]:
+            set = self.search([('name', '=', app.name)])
+            leafs = set.dependencies_info(for_month, deep + 1)
+            for leaf in leafs:
+                if not(leaf in apps):
+                    apps.append(leaf)
             item = {
+                'parent': self.name,
                 'name': app.name,
                 'price': app.cost(for_month)
             }
