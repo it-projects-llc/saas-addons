@@ -17,7 +17,7 @@
     # "price": 9.00,
     # "currency": "EUR",
 
-    "depends": ['website'],
+    "depends": ['website', 'saas'],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         'security/ir.model.access.csv',

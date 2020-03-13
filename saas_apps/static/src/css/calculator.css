@@ -26,7 +26,7 @@
         position: fixed;
         right: 15%;
         top: 20%;
-        width: 25%;
+        width: 20%;
         z-index: 1;
     }
 }
@@ -40,4 +40,11 @@
         width: 100%;
         z-index: 1;
     }
+    .container{
+        margin-left: auto !important;
+    }
+}
+
+.col-lg-9{
+    padding-left: 0px;
 }
