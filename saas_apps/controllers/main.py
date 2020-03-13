@@ -22,11 +22,8 @@ class SaaSAppsController(Controller):
 
     @http.route(['/what_dependencies'], type='json', auth='public', website=True)
     def what_dependencies(self, **kw):
-        app_name, which_price = kw['args']
-        app = http.request.env['saas.line'].search([('name', '=', app_name)])
-        month = False
-        if which_price == 'month':
-            month = True
+        app_name = kw['args'][0]
+        app = http.request.env['saas.line'].search([('module_name', '=', app_name)])
         return {
-            'dependencies': app.dependencies_info(month, 0)
+            'dependencies': app.dependencies_info('root')
         }

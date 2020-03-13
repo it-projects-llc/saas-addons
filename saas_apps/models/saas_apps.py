@@ -1,24 +1,19 @@
 # Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, modules
 import logging
 
 _logger = logging.getLogger(__name__)
 
 
 class SAASModule(models.Model):
-    _name = 'saas.module'
-    _description = 'Model line'
+    _inherit = 'saas.module'
 
-    name = fields.Char(default="default", string="Module Name")
     month_price = fields.Float(default=0.0, string="Month price")
     year_price = fields.Float(default=0.0, string="Year price")
-    icon_path = fields.Char(compute='_compute_path', string="icon path")
+    icon_path = fields.Char(string="Icon path")
     saas_modules = fields.Many2one('saas.line', string="Module dependencies")
-    
-    def _compute_path(self): 
-        self.icon_path = "/saas_apps/static/src/img/%s.png" % self.name
     
     @api.model
     def create(self, vals):
@@ -40,16 +35,11 @@ class SAASModule(models.Model):
     
     def refresh(self):
         irmodules = self.env["ir.module.module"].search([])
+        ir_module_obj = self.env["ir.module.module"]
         if len(irmodules) > len(self.search([])):
             for irmodule in irmodules:
                 if len(self.search([('name', '=', irmodule.name)])) == 0:
                     self.create({'name': irmodule.name})
-    
-    def cost(self, month):
-        if month:
-            return self.month_price
-        else:
-            return self.year_price
 
 
 class SAASDependence(models.Model):
@@ -57,7 +47,8 @@ class SAASDependence(models.Model):
     _description = 'Module dependencies'
 
     # First dependence is root module
-    name = fields.Char(default="default", string="Module Name")
+    name = fields.Char(default="default", string="Module technical name")
+    module_name = fields.Char(default="default", string="Module name")
     allow_to_sell = fields.Boolean(string="Sellable")
     dependencies = fields.One2many('saas.module', 'saas_modules', ondelete='cascade', delegate=True)
     year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
@@ -65,13 +56,23 @@ class SAASDependence(models.Model):
 
     def refresh(self):
         apps = self.env["saas.module"]
+        apps.search([]).unlink()
+        self.search([]).unlink()
         apps.refresh()
-        apps = apps.search([])
-        if len(apps) > len(self.search([])):
-            for app in apps:
+        for app in apps.search([]):
+            try:
                 if len(self.search([('name', '=', app.name)])) == 0:
-                    new = self.create({'name': app.name})
-                    new.dependencies += app
+                    new = self.create({
+                        'name': app.name,
+                        'module_name': app.module_name
+                    })
+                    if len(ir_module_obj.get_module_info(app.name)):
+                        for dep_name in ir_module_obj.get_module_info(app.name)['depends']:
+                            new.dependencies += app.search([('name', '=', dep_name)])
+            except:
+                # import wdb
+                # wdb.set_trace()
+                _logger.error("Fuck!")
 
     def _compute_year_price(self):
         for module in self.dependencies:
@@ -81,29 +82,26 @@ class SAASDependence(models.Model):
         for module in self.dependencies:
             self.month_price += module.month_price
 
-    def dependencies_info(self, for_month, deep):
+    def dependencies_info(self, root):
         apps = []
-        # Root module
-        if not deep:
-            apps.append({
-                'parent': 'root',
-                'name': self.name,
-                'price': self.dependencies[0].cost(for_month)
-            })
+        childs = []
+        for child in self.dependencies - self.dependencies[0]:
+            childs.append(child.module_name)
+        apps.append({
+            'parent': root,
+            'name': self.module_name,
+            'year_price': self.dependencies[0].year_price,
+            'month_price': self.dependencies[0].month_price,
+            'childs': childs,
+            'icon_path': self.dependencies[0].icon_path
+        })
         # Looking to the period
         for app in self.dependencies - self.dependencies[0]:
             set = self.search([('name', '=', app.name)])
-            leafs = set.dependencies_info(for_month, deep + 1)
+            leafs = set.dependencies_info(self.name)
             for leaf in leafs:
                 if not(leaf in apps):
                     apps.append(leaf)
-            item = {
-                'parent': self.name,
-                'name': app.name,
-                'price': app.cost(for_month)
-            }
-            if not(item in apps):
-                apps.append(item)
         return apps
 
     @api.multi

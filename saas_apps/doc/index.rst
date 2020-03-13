@@ -17,17 +17,21 @@ Configuration
 
 * `Log in as SUPERUSER <https://odoo-development.readthedocs.io/en/latest/odoo/usage/login-as-superuser.html>`__
 * `Activate Developer Mode <https://odoo-development.readthedocs.io/en/latest/odoo/usage/debug-mode.html>`__
-* Open menu ``[[ {Menu} ]] >> {Submenu} >> {Subsubmenu}``
-* Click ``[{Button Name}]``
+* Open menu ``[[ Website ]] >> Configuration >> Manage Apps``
+* Click ``[ Refresh ]``
+* Choose modules that you want to make saleable by clicking to ``[ Saleable ]``
 
 Usage
 =====
 
 {Instruction for daily usage. It should describe how to check that module works. What shall user do and what would user get.}
 
-* Open menu ``[[ {Menu} ]]>> {Submenu} >> {Subsubmenu}``
-* Click ``[{Button Name}]``
-* RESULT: {what user gets, how the modules changes default behaviour}
+* Open ``[http://odoo-saas.sh/]``
+* Click ``[{Make new Odoo instance}]``
+* Choose modules that you want to buy by on them
+* Choose the using period year/month
+* Click ``[Buy now]``
+* RESULT: you will be redirected and logged in to the created build with choosen modules
 
 Uninstallation
 ==============
