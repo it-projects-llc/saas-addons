@@ -11,7 +11,7 @@
 `2.4.1`
 -------
 
-**Fix:** change the name of the direct_url field to global_url to avoid misunderstanding
+- **Fix:** change the name of the direct_url field to global_url to avoid misunderstanding
 
 `2.4.0`
 -------
