@@ -6,13 +6,13 @@
     <record model='ir.actions.act_window' id="saas_template_action" >
         <field name="name">Templates</field>
         <field name="res_model">saas.template</field>
-        <field name="view_type">form</field>
+        <field name="views">[(False, 'form')]</field>
         <field name="view_mode">tree,form</field>
     </record>
     <record model='ir.actions.act_window' id="saas_db_action" >
         <field name="name">Builds</field>
         <field name="res_model">saas.db</field>
-        <field name="view_type">form</field>
+        <field name="views">[(False, 'form')]</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('type', '=', 'build')]</field>
     </record>
