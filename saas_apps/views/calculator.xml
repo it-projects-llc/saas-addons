@@ -6,6 +6,7 @@
         <t t-call="website.layout">
             <title>Apps</title>
             <div class="row container">
+                <div class="mx-auto">
                     <!-- Users qty -->
                     <div class="openerp_enterprise_pricing_step mb-5">
                         <div class="openerp_enterprise_pricing_step_head">
@@ -66,6 +67,7 @@
                             </div>
                         </span>
                     </div>
+                </div>
             </div>
         </t>
     </template>
