@@ -57,6 +57,15 @@ odoo.define('saas_apps.model', function (require){
         }
     }
 
+    function add_price(module){
+        var price = per_month ? module.month_price : module.year_price;
+        $(".app_tech_name:contains('"+module.name+"')").filter(function(_, el) {
+                return $(el).html() == module.name 
+            })[0].previousElementSibling.children[1].innerText = ' / ' + String(price) + ' $';
+        if(prices.get(module.name) === undefined)
+            prices.set(module.name, [module.month_price, module.year_price])
+    }
+
     window.onload = function() {
         var apps = $('.app_tech_name'), i = 0;
         for(; i < apps.length; ++i){
@@ -99,25 +108,33 @@ odoo.define('saas_apps.model', function (require){
                             });
                         }
                     }
-                    if(prices.get(result.dependencies[i].name) === undefined)
-                        prices.set(result.dependencies[i].name, [result.dependencies[i].month_price, result.dependencies[i].year_price])
+                    
+                    add_price(result.dependencies[i]);
                 }
             });
         }
     };
-
+    
     function add_to_basket(module_name){
         if(choosen.get(module_name) === undefined){
             var price = per_month ? prices.get(module_name)[0] : prices.get(module_name)[1];
-            choosen.set(module_name, price);
-            $(".app_tech_name:contains('"+module_name+"')")[0].previousElementSibling.style.color = "green";
+            choosen.set(module_name, price),
+                elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
+                    return $(el).html() == module_name 
+                })
+            elem[0].previousElementSibling.style.color = "green";
+            elem[0].previousElementSibling.lastElementChild.style.opacity = 1;
         }
     }
 
     function delete_from_basket(module_name){
         if(choosen.get(module_name) !== undefined){
-            choosen.delete(module_name);
-            $(".app_tech_name:contains('"+module_name+"')")[0].previousElementSibling.style.color = "black";
+            choosen.delete(module_name),
+            elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
+                return $(el).html() == module_name 
+            })
+        elem[0].previousElementSibling.style.color = "black";
+        elem[0].previousElementSibling.lastElementChild.style.opacity = 0;
         }
     }
 
