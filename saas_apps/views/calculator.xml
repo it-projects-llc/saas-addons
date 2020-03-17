@@ -28,8 +28,9 @@
                         <div class="openerp_enterprise_pricing_step_body mb24">
                             <div class="form-row">
                                 <t t-foreach="apps" t-as="app">
-                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate application">
+                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate app">
                                         <t t-esc="app.module_name"/>
+                                        <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
                                     </p>
                                 </t>
                             </div>

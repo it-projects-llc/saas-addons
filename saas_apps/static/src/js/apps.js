@@ -10,25 +10,17 @@ odoo.define('saas_apps.model', function (require){
     var price = 0;
     var per_month = false;
     /* Also need to add this https://odoo-development.readthedocs.io/en/latest/dev/pos/send-pos-orders-to-server.html#saving-removed-products-of-pos-order-module*/
-    var choosen = []
+    var choosen = new Map()
     var parent_tree  = new Map()
     var child_tree  = new Map()
     var prices  = new Map()
-    
-    // Returns element index if element exist in choosen
-    function includes_module(name){
-        for(var i = 0; i < choosen.length; ++i){
-            if(choosen[i].name === name) return i;
-        }
-        return -1;
-    }
 
     function Calc_Price(){
         // Calculate general price
         price = 0;
         var users_price_period = per_month ? 12.5 : 10.0;
-        for(var i = 0; i < choosen.length; ++i){
-            price += choosen[i].price;
+        for (var value of choosen.values()) {
+            price += value;
         }
         return price + parseInt($('#users')[0].value, 10)*users_price_period;
     }
@@ -37,14 +29,14 @@ odoo.define('saas_apps.model', function (require){
     // and push them to delete_list
     delete_list = [];
     function leaf_to_root(name){
-        if(!delete_list.includes(name) )
-            delete_list.push(name);
+        if(delete_list.includes(name)) 
+            return;
+        delete_list.push(name);
         roots = parent_tree.get(name);
         if(roots === undefined)
             return;
         if(roots.length > 0){
             roots.forEach(function(root){
-                delete_list.push(root);
                 leaf_to_root(root);
             });
         }
@@ -52,21 +44,21 @@ odoo.define('saas_apps.model', function (require){
 
     leafs = [];
     function root_to_leafs(name){
-        if(!leafs.includes(name) )
-            leafs.push(name);
+        if(leafs.includes(name)) 
+            return;
+        leafs.push(name);
         deps = child_tree.get(name);
         if(deps === undefined)
             return;
         if(deps.length > 0){
             deps.forEach(function(leaf){
-                leafs.push(leaf);
                 root_to_leafs(leaf);
             });
         }
     }
 
     window.onload = function() {
-        var apps = $('.application'), i = 0;
+        var apps = $('.app_tech_name'), i = 0;
         for(; i < apps.length; ++i){
             session.rpc('/what_dependencies', {
                 args: [apps[i].innerText]
@@ -114,29 +106,37 @@ odoo.define('saas_apps.model', function (require){
         }
     };
 
+    function add_to_basket(module_name){
+        if(choosen.get(module_name) === undefined){
+            var price = per_month ? prices.get(module_name)[0] : prices.get(module_name)[1];
+            choosen.set(module_name, price);
+            $(".app_tech_name:contains('"+module_name+"')")[0].previousElementSibling.style.color = "green";
+        }
+    }
+
+    function delete_from_basket(module_name){
+        if(choosen.get(module_name) !== undefined){
+            choosen.delete(module_name);
+            $(".app_tech_name:contains('"+module_name+"')")[0].previousElementSibling.style.color = "black";
+        }
+    }
+
     window.onclick=function(e){
         if(window.location.pathname === "/price"){
-            if(e.target.className.includes("application")){
-                var app = e.target.innerText;
-                if(includes_module(app) === -1)
+            if(e.target.className.includes("app")){
+                // App technical name
+                var app = e.target.nextElementSibling.innerText;
+                if(choosen.get(app) === undefined)
                 {
                     root_to_leafs(app);
                     leafs.forEach(function(leaf){
-                        choosen.push({
-                            'name': leaf,
-                            'price': per_month ? prices.get(leaf)[0] : prices.get(leaf)[1]
-                        });
-                        $(".application:contains('"+leaf+"')")[0].style.color = "green";
+                        add_to_basket(leaf);
                     });
                     leafs = [];
                 }else{
                     leaf_to_root(app);
                     delete_list.forEach(function(module){
-                        var delete_id = includes_module(module);
-                        if(delete_id !== -1){
-                            choosen.splice(includes_module(module), 1);
-                            $(".application:contains('"+module+"')")[0].style.color = "black";
-                        }
+                        delete_from_basket(module);
                     });
                     delete_list = [];
                 }
@@ -154,10 +154,10 @@ odoo.define('saas_apps.model', function (require){
     // var Price = Widget.extend({
     //     template: 'price.template',
     //     init: function(){
-    //         this.$('p.application').click(function() {
+    //         this.$('p.app_tech_name').click(function() {
     //             // Looking at choosen period
     //             var price_period = per_month ? 'month' : 'year';
-    //             var app_name = $('p.application')[0].innerText;
+    //             var app_name = $('p.app_tech_name')[0].innerText;
     //             // Getting choosen module dependecies
     //             session.rpc('/what_dependencies', {
     //                 args: [app_name, price_period]
@@ -170,11 +170,11 @@ odoo.define('saas_apps.model', function (require){
     //                     if(!choosen.includes(result.dependencies[i]))
     //                     {
     //                         choosen.push(result.dependencies[i]);
-    //                         $(".application:contains('"+result.dependencies[i]+"')")[0].style.color = "green";
+    //                         $(".app_tech_name:contains('"+result.dependencies[i]+"')")[0].style.color = "green";
     //                     }else{
     //                         choosen.splice(choosen.indexOf(result.dependencies[i]), 1);
     //                         if(i == 0){
-    //                             $(".application:contains('"+result.dependencies[i]+"')")[0].style.color = "black";
+    //                             $(".app_tech_name:contains('"+result.dependencies[i]+"')")[0].style.color = "black";
     //                             break;
     //                         }
     //                     }
