@@ -3,10 +3,8 @@
     max-width: 100%;
 }
 
-.img{
-    float: left;
-    width: 30%;
-    padding: 10px;
+.transition {
+    transition: 0.5s;
 }
 
 @media (min-width: 1000px) {
@@ -36,7 +34,7 @@
     {   
         position: fixed;
         right: 0;
-        bottom: -10%;
+        bottom: -6%;
         width: 100%;
         z-index: 1;
     }
