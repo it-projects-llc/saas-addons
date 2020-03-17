@@ -8,7 +8,7 @@
             <div class="row container">
                 <div class="mx-auto">
                     <!-- Users qty -->
-                    <div class="openerp_enterprise_pricing_step mb-5">
+                    <div class="openerp_enterprise_pricing_step">
                         <div class="openerp_enterprise_pricing_step_head">
                             <h3 class="mt16 mb8">Choose the number of <b>Users</b></h3>
                         </div>
@@ -28,13 +28,11 @@
                         <div class="openerp_enterprise_pricing_step_body mb24">
                             <div class="form-row">
                                 <t t-foreach="apps" t-as="app">
-                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate app">
+                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app">
                                         <img t-if="app.icon_path"
                                             t-att-src="to_text(app.icon_path)"
                                             style="max-width: 40px;max-height: 40px;"/>
                                         <t t-esc="app.module_name"/><small class="module-price"></small>
-                                        <img src="saas_apps/static/description/icons8-check-all-100.png"
-                                            style="max-width: 30px;max-height: 30px;float: right; opacity: 0;" class="transition check-mark"/>
                                         <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
                                     </p>
                                 </t>
@@ -54,15 +52,14 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="card-body">
-                                <h4 id="price" class="card-title pricing-card-title">$15
-                                <small class="text-muted">/ year</small></h4>
-                                <ul class="list-unstyled mt-3 mb-4">
-                                    <li>20 users included</li>
-                                    <li>10 GB of storage</li>
-                                    <li>Priority email support</li>
-                                    <li>Help center access</li>
+                            <div class="card-body" style="margin-top: -30px;font-size: 18px;">
+                                <ul class="list-unstyled mt-3 mb-4 transition">
+                                    <li><b id="users-qty">1</b> Users</li>
+                                    <li><b id="price-users">10</b> EUR</li>
+                                    <li><b id="apps-qty">0</b> Apps in busket</li>
                                 </ul>
+                                <h4 id="price" class="card-title pricing-card-title" style="font-size: 32px;">$10 
+                                <small class="text-muted">/ year</small></h4>
                                 <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
                             </div>
                         </span>
