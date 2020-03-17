@@ -22,8 +22,8 @@ class SaaSAppsController(Controller):
 
     @http.route(['/what_dependencies'], type='json', auth='public', website=True)
     def what_dependencies(self, **kw):
-        app_name = kw['args'][0]
-        app = http.request.env['saas.line'].search([('module_name', '=', app_name)])
+        app_tech_name = kw['args'][0]
+        app = http.request.env['saas.line'].search([('name', '=', app_tech_name)])
         return {
             'dependencies': app.dependencies_info('root')
         }

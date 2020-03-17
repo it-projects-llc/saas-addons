@@ -12,8 +12,7 @@ class SAASModule(models.Model):
 
     month_price = fields.Float(default=0.0, string="Month price")
     year_price = fields.Float(default=0.0, string="Year price")
-    icon_path = fields.Char(string="Icon path")
-    saas_modules = fields.Many2one('saas.line', string="Module dependencies")
+    saas_modules = fields.Many2many('saas.line')
     
     @api.model
     def create(self, vals):
@@ -36,10 +35,9 @@ class SAASModule(models.Model):
     def refresh(self):
         irmodules = self.env["ir.module.module"].search([])
         ir_module_obj = self.env["ir.module.module"]
-        if len(irmodules) > len(self.search([])):
-            for irmodule in irmodules:
-                if len(self.search([('name', '=', irmodule.name)])) == 0:
-                    self.create({'name': irmodule.name})
+        for irmodule in irmodules:
+            if len(self.search([('name', '=', irmodule.name)])) == 0:
+                self.create({'name': irmodule.name})
 
 
 class SAASDependence(models.Model):
@@ -49,8 +47,9 @@ class SAASDependence(models.Model):
     # First dependence is root module
     name = fields.Char(default="default", string="Module technical name")
     module_name = fields.Char(default="default", string="Module name")
+    icon_path = fields.Char(string="Icon path")
     allow_to_sell = fields.Boolean(string="Sellable")
-    dependencies = fields.One2many('saas.module', 'saas_modules', ondelete='cascade', delegate=True)
+    dependencies = fields.Many2many('saas.module')
     year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
     month_price = fields.Float(default=0.0, compute='_compute_month_price', string="Price per month")
 
@@ -62,17 +61,20 @@ class SAASDependence(models.Model):
         for app in apps.search([]):
             try:
                 if len(self.search([('name', '=', app.name)])) == 0:
-                    new = self.create({
-                        'name': app.name,
-                        'module_name': app.module_name
-                    })
-                    if len(ir_module_obj.get_module_info(app.name)):
-                        for dep_name in ir_module_obj.get_module_info(app.name)['depends']:
-                            new.dependencies += app.search([('name', '=', dep_name)])
+                    ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
+                    if len(ir_module_obj):
+                        new = self.create({
+                            'name': app.name,
+                            'module_name': ir_module_obj['name'],
+                            'icon_path': ir_module_obj['icon']
+                        })
+                        new.dependencies += apps.search([('name', '=', app.name)])
+                        for dep_name in ir_module_obj['depends']:
+                            new.dependencies += apps.search([('name', '=', dep_name)])
+                    else:
+                        new = self.create({ 'name': app.name })
             except:
-                # import wdb
-                # wdb.set_trace()
-                _logger.error("Fuck!")
+                _logger.error("Fuck!Fuck!Fuck!Fuck!Fuck!Fuck!")
 
     def _compute_year_price(self):
         for module in self.dependencies:
@@ -85,18 +87,19 @@ class SAASDependence(models.Model):
     def dependencies_info(self, root):
         apps = []
         childs = []
-        for child in self.dependencies - self.dependencies[0]:
-            childs.append(child.module_name)
+        saas_module = self.dependencies.search([('name', '=', self.name)])
+        for child in self.dependencies - saas_module:
+            childs.append(child.name)
         apps.append({
             'parent': root,
-            'name': self.module_name,
-            'year_price': self.dependencies[0].year_price,
-            'month_price': self.dependencies[0].month_price,
+            'name': self.name,
+            'year_price': saas_module.year_price,
+            'month_price': saas_module.month_price,
             'childs': childs,
-            'icon_path': self.dependencies[0].icon_path
+            'icon_path': self.icon_path
         })
         # Looking to the period
-        for app in self.dependencies - self.dependencies[0]:
+        for app in self.dependencies - saas_module:
             set = self.search([('name', '=', app.name)])
             leafs = set.dependencies_info(self.name)
             for leaf in leafs:
