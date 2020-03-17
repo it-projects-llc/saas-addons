@@ -10,10 +10,10 @@ odoo.define('saas_apps.model', function (require){
     var price = 0;
     var per_month = false;
     /* Also need to add this https://odoo-development.readthedocs.io/en/latest/dev/pos/send-pos-orders-to-server.html#saving-removed-products-of-pos-order-module*/
-    var choosen = new Map()
-    var parent_tree  = new Map()
-    var child_tree  = new Map()
-    var prices  = new Map()
+    var choosen = new Map();
+    var parent_tree  = new Map();
+    var child_tree  = new Map();
+    var prices  = new Map();
 
     function Calc_Price(){
         // Calculate general price
@@ -122,8 +122,7 @@ odoo.define('saas_apps.model', function (require){
                 elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
                     return $(el).html() == module_name 
                 })
-            elem[0].previousElementSibling.style.color = "green";
-            elem[0].previousElementSibling.lastElementChild.style.opacity = 1;
+            elem[0].previousElementSibling.style = "border: 2px solid green"
         }
     }
 
@@ -133,9 +132,20 @@ odoo.define('saas_apps.model', function (require){
             elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
                 return $(el).html() == module_name 
             })
-        elem[0].previousElementSibling.style.color = "black";
-        elem[0].previousElementSibling.lastElementChild.style.opacity = 0;
+        elem[0].previousElementSibling.style = "border: 2px solid #FFFFFF"
         }
+    }
+    
+    function calc_price_window_vals(choosen_qty){
+        price = Calc_Price();
+        var period = per_month ? "month" : "year";
+        $('#price')[0].innerHTML = '<h4 id="price" class="card-title pricing-card-title">$'+String(price)+
+        ' <small class="text-muted">/ '+ period +'</small></h4>';
+        $('#users-qty')[0].innerText = String($('#users')[0].value);
+        users_price_period = per_month ? 12.5 : 10.0;
+        $('#price-users')[0].innerText = String(users_price_period);
+        $('#apps-qty')[0].innerText = String(choosen_qty);
+
     }
 
     window.onclick=function(e){
@@ -161,10 +171,7 @@ odoo.define('saas_apps.model', function (require){
                 // Check choosen period
                 per_month = e.target.innerText === "Monthly" ? true : false;
             }
-            price = Calc_Price();
-            var period = per_month ? "month" : "year";
-            $('#price')[0].innerHTML = '<h4 id="price" class="card-title pricing-card-title">$'+String(price)+
-            ' <small class="text-muted">/ '+ period +'</small></h4>';
+            calc_price_window_vals(choosen.size);
         }
     }
 
