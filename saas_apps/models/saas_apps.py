@@ -109,16 +109,10 @@ class SAASDependence(models.Model):
 
     @api.multi
     def write(self, vals):
-        last_value = self.allow_to_sell
         res = super(SAASDependence, self).write(vals)
         # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
-        # If it's not, then if root modules(self) allow_to_sell value is True, then other sets allow_to_sell values should be True
         if "allow_to_sell" in vals:
-            if vals['allow_to_sell'] != last_value and not last_value:
-                for app in self.dependencies:
-                    self.search([('name', '=', app.name)]).allow_to_sell = vals['allow_to_sell']
-        else:
-            if last_value:
-                for app in self.dependencies:
-                    self.search([('name', '=', app.name)]).allow_to_sell = True
+            this_app = self.dependencies.search([('name', '=', self.name)])
+            for app in self.dependencies - this_app:
+                self.search([('name', '=', app.name)]).allow_to_sell = vals['allow_to_sell']
         return res

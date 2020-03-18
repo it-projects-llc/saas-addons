@@ -60,7 +60,7 @@
                                 </ul>
                                 <h4 id="price" class="card-title pricing-card-title" style="font-size: 32px;">$10 
                                 <small class="text-muted">/ year</small></h4>
-                                <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+                                <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
                             </div>
                         </span>
                     </div>

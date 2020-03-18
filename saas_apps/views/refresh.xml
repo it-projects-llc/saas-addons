@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!--Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
+    License LGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
 <template xml:space="preserve">
         <t t-extend="ListView.buttons">
             <t  t-jquery="button.o_list_button_add" t-operation="after">
