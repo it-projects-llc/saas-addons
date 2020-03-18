@@ -5,6 +5,7 @@ from odoo.http import route, request, Controller
 from odoo import http
 from openerp.http import request
 import json
+from odoo.addons.saas_public.controllers.saas_public import SaaSPublicController
 
 class SaaSAppsController(Controller):
     @route('/price', auth='public', website=True)
@@ -27,3 +28,22 @@ class SaaSAppsController(Controller):
         return {
             'dependencies': app.dependencies_info('root')
         }
+
+class SaaSAppsPublicController(SaaSPublicController):
+    @http.route(['/create_saas_template'], type='json', auth='public', website=True)
+    def what_dependencies(self, **kw):
+        templates = http.request.env['saas.template']
+        installing_modules_names = kw['args'][0]
+        import wdb
+        wdb.set_trace()
+        installing_modules = []
+        for name in installing_modules_names:
+            installing_modules += http.request.env['saas.lines'].search([('name', '=', name)])
+        new_template = templates.create({
+            'name': 'Template ' + str(len(templates.search([]))),
+            'template_demo': True,
+            'public_access': True,
+            'template_module_ids': installing_modules,
+        })
+        new_template.operator_ids += templates.action_create_build()
+        self.create_fast_build(new_template.id)

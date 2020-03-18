@@ -1,6 +1,5 @@
 /* Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
-
 odoo.define('saas_apps.model', function (require){
     'use_strict';
 
@@ -23,6 +22,17 @@ odoo.define('saas_apps.model', function (require){
             price += value;
         }
         return price + parseInt($('#users')[0].value, 10)*users_price_period;
+    }
+    
+    // Need to check this in backend
+    function redirect_to_build(){
+        modules_to_install = [];
+        for (var key of choosen.keys()) {
+            modules_to_install.push(key);
+        }
+        session.rpc('/create_saas_template', {
+            args: [modules_to_install]
+        }).then(function (result) {});
     }
 
     // Finding all the links up to the parent_tree,
@@ -118,21 +128,21 @@ odoo.define('saas_apps.model', function (require){
     function add_to_basket(module_name){
         if(choosen.get(module_name) === undefined){
             var price = per_month ? prices.get(module_name)[0] : prices.get(module_name)[1];
-            choosen.set(module_name, price),
-                elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
-                    return $(el).html() == module_name 
-                })
+            choosen.set(module_name, price);
+            elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
+                return $(el).html() == module_name 
+            })
             elem[0].previousElementSibling.style = "border: 2px solid green"
         }
     }
 
     function delete_from_basket(module_name){
         if(choosen.get(module_name) !== undefined){
-            choosen.delete(module_name),
+            choosen.delete(module_name);
             elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
                 return $(el).html() == module_name 
             })
-        elem[0].previousElementSibling.style = "border: 2px solid #FFFFFF"
+            elem[0].previousElementSibling.style = "border: 2px solid #FFFFFF"
         }
     }
     
@@ -170,6 +180,9 @@ odoo.define('saas_apps.model', function (require){
             }else if(e.target.className.includes("nav-link") && (e.target.innerText === "Annually" || e.target.innerText === "Monthly")){
                 // Check choosen period
                 per_month = e.target.innerText === "Monthly" ? true : false;
+            }
+            else if(e.target.id === "get-started"){
+                redirect_to_build();
             }
             calc_price_window_vals(choosen.size);
         }
