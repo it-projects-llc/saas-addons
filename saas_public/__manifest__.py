@@ -5,7 +5,7 @@
     "summary": """Module for creating public builds""",
     "category": "SaaS",
     "images": [],
-    "version": "12.0.1.0.0",
+    "version": "13.0.1.0.0",
     "application": False,
 
     "author": "IT-Projects LLC, Denis Mudarisov",
@@ -26,7 +26,7 @@
         "demo/public_saas_template_demo.xml",
     ],
     "auto_install": False,
-    "installable": False,
+    "installable": True,
 
     # "demo_title": "{MODULE_NAME}",
     # "demo_addons": [
