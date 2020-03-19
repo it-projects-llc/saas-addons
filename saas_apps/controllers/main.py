@@ -8,9 +8,9 @@ import json
 from odoo.addons.saas_public.controllers.saas_public import SaaSPublicController
 
 class SaaSAppsController(Controller):
-    @route('/price', auth='public', website=True)
+    @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
-        apps = http.request.env['saas.line']
+        apps = http.request.env['saas.line'].sudo()
         return http.request.render('saas_apps.index', {
             'apps': apps.search([('allow_to_sell', '=', True)])
         })
