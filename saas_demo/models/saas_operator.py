@@ -4,7 +4,7 @@
 import logging
 import os.path
 
-from odoo import models, fields, api, service
+from odoo import models, fields, service
 from ..os import repos_dir, update_addons_path, root_odoo_path, git, update_repo
 from ..odoo import is_test
 

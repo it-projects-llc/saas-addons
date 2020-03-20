@@ -7,7 +7,7 @@
     <record model='ir.actions.act_window' id="saas_demo_action" >
         <field name="name">Demo</field>
         <field name="res_model">saas.demo</field>
-        <field name="view_type">form</field>
+        <field name="views">[(False, 'form')]</field>
         <field name="view_mode">tree,form</field>
     </record>
     <!-- Menu items -->
