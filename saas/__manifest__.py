@@ -8,7 +8,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=13.0",
     "images": [],
-    "version": "13.0.2.4.3",
+    "version": "13.0.2.4.5",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -19,6 +19,7 @@
     # "currency": "EUR",
 
     "depends": [
+        "auth_quick",
         "auth_quick_master",
         "queue_job",
         "web_editor",

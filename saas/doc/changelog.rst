@@ -1,3 +1,8 @@
+`2.4.5`
+-------
+
+- **Improvement:** make sure auth_quick is installable by adding it to its dependecies
+
 `2.4.3`
 -------
 
