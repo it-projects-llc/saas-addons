@@ -7,7 +7,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
-    "version": "13.0.1.0.1",
+    "version": "13.0.1.0.2",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -20,7 +20,7 @@
     "depends": [
         "saas_public",
     ],
-    "external_dependencies": {"python": [], "bin": []},
+    "external_dependencies": {"python": [], "bin": ["git"]},
     "data": [
         "security/ir.model.access.csv",
         "views/saas_demo_view.xml",

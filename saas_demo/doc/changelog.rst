@@ -1,3 +1,8 @@
+`1.0.2`
+-------
+
+- **Improvement:*** on installation, make sure git is installed
+
 `1.0.1`
 -------
 
