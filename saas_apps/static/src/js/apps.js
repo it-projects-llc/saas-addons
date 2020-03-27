@@ -23,7 +23,24 @@ odoo.define('saas_apps.model', function (require){
         }
         return price + parseInt($('#users')[0].value, 10)*users_price_period;
     }
-    
+
+    function check_saas_template(data){
+        session.rpc('/check_saas_template', {
+            args: [data]
+        }).then(function (data) {
+            if(data.Error !== '0'){
+                alert("Error!");
+                return;
+            }
+            if(data.link !== '0'){
+                window.location.href = data.link;
+            }
+            else if(data.template !== '0'){
+                setTimeout(check_saas_template, 10000, data);
+            }
+        });
+    }
+
     // Need to check this in backend
     function redirect_to_build(){
         modules_to_install = [];
@@ -32,7 +49,9 @@ odoo.define('saas_apps.model', function (require){
         }
         session.rpc('/create_saas_template', {
             args: [modules_to_install]
-        }).then(function (result) {});
+        }).then(function (data) {
+            setTimeout(check_saas_template, 20000, data);
+        });
     }
 
     // Finding all the links up to the parent_tree,
