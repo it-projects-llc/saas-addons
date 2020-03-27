@@ -1,7 +1,7 @@
 # Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, modules
+from odoo import api, fields, models
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -13,14 +13,14 @@ class SAASModule(models.Model):
     month_price = fields.Float(default=0.0, string="Month price")
     year_price = fields.Float(default=0.0, string="Year price")
     saas_modules = fields.Many2many('saas.line')
-    
+
     @api.model
     def create(self, vals):
         rec = super(SAASModule, self).create(vals)
         if len(self.saas_modules) > 0:
             self.name = self.saas_modules.name
         return rec
-    
+
     @api.constrains('month_price', 'year_price')
     def _validate_price(self):
         if self.month_price < 0 or self.year_price < 0:
@@ -31,10 +31,9 @@ class SAASModule(models.Model):
             'name': name
         })
         return True
-    
+
     def refresh(self):
         irmodules = self.env["ir.module.module"].search([])
-        ir_module_obj = self.env["ir.module.module"]
         for irmodule in irmodules:
             if len(self.search([('name', '=', irmodule.name)])) == 0:
                 self.create({'name': irmodule.name})
@@ -72,7 +71,7 @@ class SAASDependence(models.Model):
                         for dep_name in ir_module_obj['depends']:
                             new.dependencies += apps.search([('name', '=', dep_name)])
                     else:
-                        new = self.create({ 'name': app.name })
+                        new = self.create({'name': app.name})
             except:
                 _logger.error("Fuck!Fuck!Fuck!Fuck!Fuck!Fuck!")
 
@@ -116,3 +115,21 @@ class SAASDependence(models.Model):
             for app in self.dependencies - this_app:
                 self.search([('name', '=', app.name)]).allow_to_sell = vals['allow_to_sell']
         return res
+
+
+class SAASTemplateLine(models.Model):
+    _inherit = 'saas.template.operator'
+
+
+    @api.multi
+    def write(self, vals):
+        if 'state' in vals:
+            _logger.debug(vals['state'])
+        return super(SAASTemplateLine, self).write(vals)
+
+    @api.multi
+    def random_ready_operator_check(self):
+        ready_operators = self.filtered(lambda r: r.state == 'done')
+        if len(ready_operators) > 0:
+            return True
+        return False
