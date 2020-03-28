@@ -47,7 +47,7 @@ class SAASDependence(models.Model):
     name = fields.Char(default="default", string="Module technical name")
     module_name = fields.Char(default="default", string="Module name")
     icon_path = fields.Char(string="Icon path")
-    allow_to_sell = fields.Boolean(string="Sellable")
+    allow_to_sell = fields.Boolean(default=True, string="Sellable")
     dependencies = fields.Many2many('saas.module')
     year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
     month_price = fields.Float(default=0.0, compute='_compute_month_price', string="Price per month")
