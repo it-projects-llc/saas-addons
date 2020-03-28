@@ -201,41 +201,11 @@ odoo.define('saas_apps.model', function (require){
                 per_month = e.target.innerText === "Monthly" ? true : false;
             }
             else if(e.target.id === "get-started"){
+                alert('We started creating the build, you will be redirected to new db webpage automaticaly. Wait a minute please.')
                 redirect_to_build();
             }
             calc_price_window_vals(choosen.size);
         }
     }
 
-    // var Price = Widget.extend({
-    //     template: 'price.template',
-    //     init: function(){
-    //         this.$('p.app_tech_name').click(function() {
-    //             // Looking at choosen period
-    //             var price_period = per_month ? 'month' : 'year';
-    //             var app_name = $('p.app_tech_name')[0].innerText;
-    //             // Getting choosen module dependecies
-    //             session.rpc('/what_dependencies', {
-    //                 args: [app_name, price_period]
-    //             }).then(function (result) {
-    //                 console.log(result);
-    //                 /* Be carefull with dependecies when changing programm logic,
-    //                     cause first dependence - is module himself*/
-    //                 var i = 0;
-    //                 for(; i < result.dependencies.length; ++i) 
-    //                     if(!choosen.includes(result.dependencies[i]))
-    //                     {
-    //                         choosen.push(result.dependencies[i]);
-    //                         $(".app_tech_name:contains('"+result.dependencies[i]+"')")[0].style.color = "green";
-    //                     }else{
-    //                         choosen.splice(choosen.indexOf(result.dependencies[i]), 1);
-    //                         if(i == 0){
-    //                             $(".app_tech_name:contains('"+result.dependencies[i]+"')")[0].style.color = "black";
-    //                             break;
-    //                         }
-    //                     }
-    //             });
-    //         });
-    //     }
-    // });
 });
