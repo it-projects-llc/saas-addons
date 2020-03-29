@@ -33,11 +33,19 @@ class SaaSAppsController(Controller):
             'dependencies': app.dependencies_info('root')
         }
 
+    # @http.route(['/what_dependencies_optimized'], type='json', auth='public')
+    # def what_dependencies_optimized(self, **kw):
+    #     apps = []
+    #     for app_name in kw['args'][0]:
+    #         app = http.request.env['saas.line'].sudo().search([('name', '=', app_name)])
+    #         apps.append({app_name: app.dependencies_info('root')})
+    #     return {
+    #         'dependencies': apps
+    #     }
+
 class SaaSAppsPublicController(SaaSPublicController):
     @http.route(['/create_saas_template'], type='json', auth='public', website=True)
     def create_saas_template(self, **kw):
-        # import wdb
-        # wdb.set_trace()
         templates = http.request.env['saas.template']
         installing_modules_names = kw['args'][0]
         saas_template = templates.sudo().create({
