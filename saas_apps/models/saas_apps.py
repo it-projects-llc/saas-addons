@@ -94,8 +94,7 @@ class SAASDependence(models.Model):
             'name': self.name,
             'year_price': saas_module.year_price,
             'month_price': saas_module.month_price,
-            'childs': childs,
-            'icon_path': self.icon_path
+            'childs': childs
         })
         # Looking to the period
         for app in self.dependencies - saas_module:
