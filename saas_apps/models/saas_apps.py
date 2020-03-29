@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 import logging
+from slugify import slugify
 
 _logger = logging.getLogger(__name__)
 
@@ -57,23 +58,25 @@ class SAASDependence(models.Model):
         apps.search([]).unlink()
         self.search([]).unlink()
         apps.refresh()
+        base_icon_path = '/base/static/description/icon.png'
         for app in apps.search([]):
-            try:
-                if len(self.search([('name', '=', app.name)])) == 0:
-                    ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
-                    if len(ir_module_obj):
-                        new = self.create({
-                            'name': app.name,
-                            'module_name': ir_module_obj['name'],
-                            'icon_path': ir_module_obj['icon']
-                        })
-                        new.dependencies += apps.search([('name', '=', app.name)])
-                        for dep_name in ir_module_obj['depends']:
-                            new.dependencies += apps.search([('name', '=', dep_name)])
-                    else:
-                        new = self.create({'name': app.name})
-            except:
-                _logger.error("Fuck!Fuck!Fuck!Fuck!Fuck!Fuck!")
+            if len(self.search([('name', '=', app.name)])) == 0:
+                ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
+                if len(ir_module_obj):
+                    new = self.create({
+                        'name': app.name,
+                        'module_name': ir_module_obj['name'],
+                        'icon_path': ir_module_obj['icon']
+                    })
+                    new.dependencies += apps.search([('name', '=', app.name)])
+                    for dep_name in ir_module_obj['depends']:
+                        new.dependencies += apps.search([('name', '=', dep_name)])
+                else:
+                    new = self.create({
+                        'name': app.name,
+                        'module_name': app.name,
+                        'icon_path': base_icon_path
+                    })
 
     def _compute_year_price(self):
         for module in self.dependencies:
