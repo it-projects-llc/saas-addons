@@ -63,14 +63,15 @@ class SAASDependence(models.Model):
             if len(self.search([('name', '=', app.name)])) == 0:
                 ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
                 if len(ir_module_obj):
-                    new = self.create({
-                        'name': app.name,
-                        'module_name': ir_module_obj['name'],
-                        'icon_path': ir_module_obj['icon']
-                    })
-                    new.dependencies += apps.search([('name', '=', app.name)])
-                    for dep_name in ir_module_obj['depends']:
-                        new.dependencies += apps.search([('name', '=', dep_name)])
+                    if ir_module_obj['application']:
+                        new = self.create({
+                            'name': app.name,
+                            'module_name': ir_module_obj['name'],
+                            'icon_path': ir_module_obj['icon']
+                        })
+                        new.dependencies += apps.search([('name', '=', app.name)])
+                        for dep_name in ir_module_obj['depends']:
+                            new.dependencies += apps.search([('name', '=', dep_name)])
                 else:
                     new = self.create({
                         'name': app.name,
@@ -91,7 +92,8 @@ class SAASDependence(models.Model):
         childs = []
         saas_module = self.dependencies.search([('name', '=', self.name)])
         for child in self.dependencies - saas_module:
-            childs.append(child.name)
+            if len(self.search([('name', '=', child.name)])):
+                childs.append(child.name)
         apps.append({
             'parent': root,
             'name': self.name,
@@ -102,6 +104,8 @@ class SAASDependence(models.Model):
         # Looking to the period
         for app in self.dependencies - saas_module:
             set = self.search([('name', '=', app.name)])
+            if len(set) == 0:
+                continue
             leafs = set.dependencies_info(self.name)
             for leaf in leafs:
                 if not(leaf in apps):
@@ -115,7 +119,9 @@ class SAASDependence(models.Model):
         if "allow_to_sell" in vals:
             this_app = self.dependencies.search([('name', '=', self.name)])
             for app in self.dependencies - this_app:
-                self.search([('name', '=', app.name)]).allow_to_sell = vals['allow_to_sell']
+                temp_app = self.search([('name', '=', app.name)])
+                if len(temp_app) > 0:
+                    temp_app.allow_to_sell = vals['allow_to_sell']
         return res
 
 

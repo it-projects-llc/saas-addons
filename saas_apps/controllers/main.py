@@ -14,7 +14,6 @@ class SaaSAppsController(Controller):
     @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
         apps = http.request.env['saas.line'].sudo()
-        apps.refresh()
         return http.request.render('saas_apps.index', {
             'apps': apps.search([('allow_to_sell', '=', True)])
         })
@@ -62,6 +61,9 @@ class SaaSAppsPublicController(SaaSPublicController):
             'operator_db_name': DB_TEMPLATE + str(len(http.request.env['saas.template.operator'].sudo().search([])) + 1),
         })
         http.request.env['saas.template.operator'].sudo().preparing_template_next()
+        # message = '''Template\'s deployment with name {} is creating
+        # and will be ready in a few minutes.'''.format(r.operator_db_name)
+        # self.operator_id.notify_users(message, message_type='info')
         return {
             'template': saas_template.id,
             'template_operator': saas_template_operator.id,
