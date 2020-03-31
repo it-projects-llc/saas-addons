@@ -1,6 +1,6 @@
 /* Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
- odoo.define('whatever.filter_button', function (require) {
+ odoo.define('saas_apps.filter_button', function (require) {
     "use strict";
     
     var core = require('web.core');

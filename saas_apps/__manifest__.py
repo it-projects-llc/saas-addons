@@ -1,5 +1,5 @@
 # Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 {
     "name": """SaaS Apps""",
@@ -13,11 +13,11 @@
     "author": "IT-Projects LLC, Vildan Safin",
     "support": "apps@it-projects.info",
     "website": "https://apps.odoo.com/apps/modules/12.0/saas_apps/",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
 
-    "depends": ['website', 'saas'],
+    "depends": ['website', 'saas_public'],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         'security/ir.model.access.csv',

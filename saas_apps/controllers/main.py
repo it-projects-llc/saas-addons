@@ -21,7 +21,7 @@ class SaaSAppsController(Controller):
     @http.route(['/refresh'], type='json', auth='public')
     def catch_app_click(self, **kw):
         apps = http.request.env['saas.line']
-        apps.refresh()
+        apps.refresh_lines()
         return {}
 
     @http.route(['/what_dependencies'], type='json', auth='public')

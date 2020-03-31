@@ -33,7 +33,7 @@ odoo.define('saas_apps.model', function (require){
                 return;
             }
             if(data.link !== '0'){
-                $('.loader')[0].style = 'opacity: 0.5;z-index: 0;';
+                $('.loader')[0].style = 'visibility: hidden;';
                 window.location.href = data.link;
             }
             else if(data.template !== '0'){
@@ -97,22 +97,22 @@ odoo.define('saas_apps.model', function (require){
             prices.set(module.name, [module.month_price, module.year_price])
     }
 
+    // Downloading apps dependencies
     window.onload = function() {
-        var apps = $('.app_tech_name'), i = 0;
-        for(; i < apps.length; ++i){
+        $.each($('.app_tech_name'), function(key, app){
             session.rpc('/what_dependencies', {
-                args: [apps[i].innerText]
+                args: [app.innerText]
             }).then(function (result) {
                 /* Be carefull with dependecies when changing programm logic,
                 cause first dependence - is module himself*/
-                var i = 0;
-                for(; i < result.dependencies.length; ++i){
+                var first_dependence = true;
+                result.dependencies.forEach(dependence => {
                     // Add new element to the dependencies parent_tree, cause we'll restablish a path from leaf to the root
                     // when we'll have to delete one of leafs
-                    if(i > 0){
-                        var modules_parents = parent_tree.get(result.dependencies[i].name),
-                            root_module_name = result.dependencies[i].parent,
-                            leaf_name = result.dependencies[i].name;
+                    if(!first_dependence){
+                        var modules_parents = parent_tree.get(dependence.name),
+                            root_module_name = dependence.parent,
+                            leaf_name = dependence.name;
                         if(modules_parents === undefined){
                             parent_tree.set(leaf_name, [root_module_name]);
                             console.log("INFO:Added new leaf '"+leaf_name+"' with root module '"+root_module_name+"'.");
@@ -123,16 +123,16 @@ odoo.define('saas_apps.model', function (require){
                             console.log("WARNING:Root module '"+root_module_name+"' already in parent_tree!");
                         }
                     }
-                    if(result.dependencies[i].childs){
-                        var root = result.dependencies[i].name, 
+                    if(dependence.childs){
+                        var root = dependence.name, 
                             in_tree_childs = child_tree.get(root);
-                            // Here we get new elements from result.dependencies[i].childs, difference btw
-                            // result.dependencies[i].childs and in_tree_childs.
+                            // Here we get new elements from dependence.childs, difference btw
+                            // dependence.childs and in_tree_childs.
                         if(in_tree_childs === undefined){
-                            child_tree.set(root, result.dependencies[i].childs);
-                            console.log("INFO:Added new root '"+root+"' with childs '"+result.dependencies[i].childs[0]+"...'");
+                            child_tree.set(root, dependence.childs);
+                            console.log("INFO:Added new root '"+root+"' with childs '"+dependence.childs[0]+"...'");
                         }else{
-                            var new_childs = result.dependencies[i].childs.filter(x => !in_tree_childs.includes(x));
+                            var new_childs = dependence.childs.filter(x => !in_tree_childs.includes(x));
                             new_childs.forEach(function(child){
                                 in_tree_childs.push(child);
                                 console.log("INFO:Added new child module '"+child+"' to root '"+root+"'.");
@@ -140,10 +140,11 @@ odoo.define('saas_apps.model', function (require){
                         }
                     }
                     
-                    add_price(result.dependencies[i]);
-                }
+                    add_price(dependence);
+                    first_dependence = false;
+                });
             });
-        }
+        });
     };
     
     function add_to_basket(module_name){
