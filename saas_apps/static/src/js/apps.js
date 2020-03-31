@@ -33,10 +33,12 @@ odoo.define('saas_apps.model', function (require){
                 return;
             }
             if(data.link !== '0'){
+                $('.loader')[0].style = 'opacity: 0.5;z-index: 0;';
                 window.location.href = data.link;
             }
             else if(data.template !== '0'){
-                setTimeout(check_saas_template, 10000, data);
+                $('.status')[0].innerText = "Stage: " + data.state;
+                setTimeout(check_saas_template, 3000, data);
             }
         });
     }
@@ -50,7 +52,7 @@ odoo.define('saas_apps.model', function (require){
         session.rpc('/create_saas_template', {
             args: [modules_to_install]
         }).then(function (data) {
-            setTimeout(check_saas_template, 20000, data);
+            setTimeout(check_saas_template, 3000, data);
         });
     }
 
@@ -201,7 +203,7 @@ odoo.define('saas_apps.model', function (require){
                 per_month = e.target.innerText === "Monthly" ? true : false;
             }
             else if(e.target.id === "get-started"){
-                alert('We started creating the build, you will be redirected to new db webpage automaticaly. Wait a minute please.')
+                $('.loader')[0].style = 'visibility: visible;';
                 redirect_to_build();
             }
             calc_price_window_vals(choosen.size);

@@ -66,6 +66,11 @@
                     </div>
                 </div>
             </div>
+            <div class="loader transition">
+                <img src="/saas_apps/static/src/img/loader.gif" draggable="false" alt="Stage: Draft">
+                    <p class="status">Stage: Draft</p>
+                </img>
+            </div>
         </t>
     </template>
 </odoo>

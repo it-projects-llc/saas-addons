@@ -6,7 +6,7 @@ from odoo import http
 from odoo.addons.saas_public.controllers.saas_public import SaaSPublicController
 import urllib.parse
 
-DB_TEMPLATE = 'db_template_'
+DB_TEMPLATE = 'new_build_'
 
 class SaaSAppsController(Controller):
 
@@ -68,7 +68,8 @@ class SaaSAppsPublicController(SaaSPublicController):
             'template': saas_template.id,
             'template_operator': saas_template_operator.id,
             'link': '0',
-            'Error': '0'
+            'Error': '0',
+            'state': 'Draft'
         }
 
     @http.route(['/check_saas_template'], type='json', auth='public', website=True)
@@ -89,19 +90,22 @@ class SaaSAppsPublicController(SaaSPublicController):
                     'template': '0',
                     'template_operator': '0',
                     'link': urllib.parse.urljoin(build_url, '/auth_quick/check-token?token={}'.format(token_obj.token)),
-                    'Error': '0'
+                    'Error': '0',
+                    'state': template_operator.state
                 }
             else:
                 return {
                     'template': '0',
                     'template_operator': '0',
                     'link': '0',
-                    'Error': '1'
+                    'Error': '1',
+                    'state': template_operator.state
                 }
         else:
             return {
                 'template': template.id,
                 'template_operator': template_operator.id,
                 'link': '0',
-                'Error': '0'
+                'Error': '0',
+                'state': template_operator.state
             }
