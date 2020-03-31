@@ -1,3 +1,8 @@
+`2.5.0`
+-------
+
+- **Improvement:** mandatory modules can be redefined in dependant modules
+
 `2.4.3`
 -------
 
