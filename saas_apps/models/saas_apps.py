@@ -15,17 +15,15 @@ class SAASModule(models.Model):
     year_price = fields.Float(default=0.0, string="Year price")
     saas_modules = fields.Many2many('saas.line')
 
-    @api.model
-    def create(self, vals):
-        rec = super(SAASModule, self).create(vals)
-        if len(self.saas_modules) > 0:
-            self.name = self.saas_modules.name
-        return rec
+    @api.constrains('month_price')
+    def _validate_month_price(self):
+        if self.month_price < 0:
+            raise ValidationError("Month price can't be negative.")
 
-    @api.constrains('month_price', 'year_price')
-    def _validate_price(self):
-        if self.month_price < 0 or self.year_price < 0:
-            raise "Price can't be negative."
+    @api.constrains('year_price')
+    def _validate_year_price(self):
+        if self.year_price < 0:
+            raise ValidationError("Year price can't be negative.")
 
     def add_new_module(self, name):
         self.create({
@@ -33,7 +31,9 @@ class SAASModule(models.Model):
         })
         return True
 
-    def refresh(self):
+    def refresh_modules(self):
+        for app in map(self.browse, self._search([])):
+            app.unlink()
         irmodules = self.env["ir.module.module"].search([])
         for irmodule in irmodules:
             if len(self.search([('name', '=', irmodule.name)])) == 0:
@@ -53,11 +53,11 @@ class SAASDependence(models.Model):
     year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
     month_price = fields.Float(default=0.0, compute='_compute_month_price', string="Price per month")
 
-    def refresh(self):
+    def refresh_lines(self):
         apps = self.env["saas.module"]
-        apps.search([]).unlink()
-        self.search([]).unlink()
-        apps.refresh()
+        for line in map(self.browse, self._search([])):
+            line.unlink()
+        apps.refresh_modules()
         base_icon_path = '/base/static/description/icon.png'
         for app in apps.search([]):
             if len(self.search([('name', '=', app.name)])) == 0:
@@ -80,10 +80,12 @@ class SAASDependence(models.Model):
                     })
 
     def _compute_year_price(self):
+        self.year_price = 0
         for module in self.dependencies:
             self.year_price += module.year_price
 
     def _compute_month_price(self):
+        self.month_price = 0
         for module in self.dependencies:
             self.month_price += module.month_price
 
@@ -116,7 +118,7 @@ class SAASDependence(models.Model):
     def write(self, vals):
         res = super(SAASDependence, self).write(vals)
         # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
-        if "allow_to_sell" in vals:
+        if "allow_to_sell" in vals and vals['allow_to_sell']:
             this_app = self.dependencies.search([('name', '=', self.name)])
             for app in self.dependencies - this_app:
                 temp_app = self.search([('name', '=', app.name)])
