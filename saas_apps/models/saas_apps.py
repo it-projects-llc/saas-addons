@@ -11,8 +11,8 @@ _logger = logging.getLogger(__name__)
 class SAASModule(models.Model):
     _inherit = 'saas.module'
 
-    month_price = fields.Float(default=0.0, string="Month price")
-    year_price = fields.Float(default=0.0, string="Year price")
+    month_price = fields.Float('Month price', default=0.0)
+    year_price = fields.Float('Year price', default=0.0)
     saas_modules = fields.Many2many('saas.line')
 
     @api.constrains('month_price')
@@ -24,12 +24,6 @@ class SAASModule(models.Model):
     def _validate_year_price(self):
         if self.year_price < 0:
             raise ValidationError("Year price can't be negative.")
-
-    def add_new_module(self, name):
-        self.create({
-            'name': name
-        })
-        return True
 
     def refresh_modules(self):
         for app in map(self.browse, self._search([])):

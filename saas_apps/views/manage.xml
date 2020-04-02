@@ -62,4 +62,16 @@
             parent="website.menu_website_global_configuration"
             sequence="40"
             />
+
+    <record id="saas_module_form_view" model="ir.ui.view">
+    <field name="name">saas.module.form.view</field>
+    <field name="model">saas.module</field>
+    <field name="inherit_id" ref="saas.saas_module_form_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//form/sheet/group" position="inside">
+            <field name="month_price"/>
+            <field name="year_price"/>
+        </xpath>
+    </field>
+    </record>
 </odoo>
