@@ -6,13 +6,12 @@ odoo.define('saas_apps.model', function (require){
     var session = require('web.session');
     var Widget = require('web.Widget');
 
-    var price = 0;
-    var per_month = false;
-    /* Also need to add this https://odoo-development.readthedocs.io/en/latest/dev/pos/send-pos-orders-to-server.html#saving-removed-products-of-pos-order-module*/
-    var choosen = new Map();
-    var parent_tree  = new Map();
-    var child_tree  = new Map();
-    var prices  = new Map();
+    var price = 0,
+        per_month = false,
+        choosen = new Map(),
+        parent_tree  = new Map(),
+        child_tree  = new Map(),
+        prices  = new Map();
 
     function Calc_Price(){
         // Calculate general price
@@ -37,7 +36,10 @@ odoo.define('saas_apps.model', function (require){
                 window.location.href = data.link;
             }
             else if(data.template !== '0'){
-                $('.status')[0].innerText = "Stage: " + data.state;
+                if(data.state === 'installing_modules') data.state = "Module installation...";
+                else if(data.state === 'post_init') data.state = "The database successfully created!";
+                else if(data.state === 'creating') data.state = "Database creating...";
+                $('.status')[0].innerText = data.state;
                 setTimeout(check_saas_template, 3000, data);
             }
         });
@@ -89,22 +91,68 @@ odoo.define('saas_apps.model', function (require){
     }
 
     function add_price(module){
-        var price = per_month ? module.month_price : module.year_price;
-        app = $(".app_tech_name:contains('"+module.name+"')").filter(function(_, el) {
-                return $(el).html() == module.name 
-            })[0].previousElementSibling.children[1].innerText = String(price) + ' $';
+        // var price = per_month ? module.month_price : module.year_price;
+        // app = $(".app_tech_name:contains('"+module.name+"')").filter(function(_, el) {
+        //         return $(el).html() == module.name 
+        //     })[0].previousElementSibling.children[1].innerText = String(price) + ' $';
         if(prices.get(module.name) === undefined)
             prices.set(module.name, [module.month_price, module.year_price])
     }
 
     // Downloading apps dependencies
     window.onload = function() {
+        // Catching click to the app
+        $(".app").click(function(){
+            // Get app technical name
+            var app = this.children[2].innerText;
+            // If app isn't in basket right now, put it in
+            if(choosen.get(app) === undefined)
+            {
+                // Get app dependencies and add them to the basket
+                root_to_leafs(app);
+                leafs.forEach(function(leaf){
+                    add_to_basket(leaf);
+                });
+                leafs = [];
+            }else{
+                // Get app dependencies and take them off from the basket
+                leaf_to_root(app);
+                delete_list.forEach(function(module){
+                    delete_from_basket(module);
+                });
+                delete_list = [];
+            }
+            calc_price_window_vals(choosen.size);
+        });
+        // Catching click to the 'Annually' button
+        $(".nav-link:contains('Annually')").click(function(){
+            console.log(this);
+            per_month = false;
+            change_period();
+            calc_price_window_vals(choosen.size);
+        });
+        // Catching click to the 'Monthly' button
+        $(".nav-link:contains('Monthly')").click(function(){
+            console.log(this);
+            per_month = true;
+            change_period();
+            calc_price_window_vals(choosen.size);
+        });
+        // Catching click to the 'Get Started' button
+        $("#get-started").click(function(){
+            // Showing the loader
+            $('.loader')[0].style = 'visibility: visible;';
+            redirect_to_build();
+        });
+
         $.each($('.app_tech_name'), function(key, app){
             session.rpc('/what_dependencies', {
                 args: [app.innerText]
             }).then(function (result) {
                 /* Be carefull with dependecies when changing programm logic,
-                cause first dependence - is module himself*/
+                cause first dependence - is module himself.
+                Now result contains app's themself and their dependencies,
+                now parse incoming data in child and parent tree, to save dependencies.*/
                 var first_dependence = true;
                 result.dependencies.forEach(dependence => {
                     // Add new element to the dependencies parent_tree, cause we'll restablish a path from leaf to the root
@@ -148,25 +196,65 @@ odoo.define('saas_apps.model', function (require){
             });
         });
     };
+
+    function change_border_color(elem){
+        if(elem.classList.contains('green-border')){
+            elem.classList.add('normal-border');
+            elem.classList.remove('green-border');
+        }else{
+            elem.classList.add('green-border');
+            elem.classList.remove('normal-border');
+        }
+    }
+
+    function change_period(){
+        var i = 0,
+            monthly = $('.monthly-price'),
+            yearly = $('.yearly-price'),
+            n = yearly.length;
+        if(per_month){
+            for(; i < n; ++i){
+                monthly[i].classList.remove('hid');
+                yearly[i].classList.add('hid');
+            }
+        }
+        else{
+            for(; i < n; ++i){
+                monthly[i].classList.add('hid');
+                yearly[i].classList.remove('hid');
+            }
+        }
+    }
     
     function add_to_basket(module_name){
         if(choosen.get(module_name) === undefined){
-            var price = per_month ? prices.get(module_name)[0] : prices.get(module_name)[1];
+            var price = 0;
+            // Get choosen app price
+            if(prices.get(module_name) !== undefined)
+                price = per_month ? prices.get(module_name)[0] : prices.get(module_name)[1];
+            // Insert new app in to the basket
             choosen.set(module_name, price);
+            // Finding choosen element
             elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
                 return $(el).html() == module_name 
             })
-            elem[0].previousElementSibling.style = "border: 2px solid green"
+            // Changing border color
+            if(elem.length > 0)
+                change_border_color(elem[0].parentElement);
         }
     }
 
     function delete_from_basket(module_name){
         if(choosen.get(module_name) !== undefined){
+            // Delete app from the basket
             choosen.delete(module_name);
+            // Finding choosen element
             elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
                 return $(el).html() == module_name 
             })
-            elem[0].previousElementSibling.style = "border: 2px solid #FFFFFF"
+            // Changing border color
+            if(elem.length > 0)
+                change_border_color(elem[0].parentElement);
         }
     }
     
@@ -179,45 +267,6 @@ odoo.define('saas_apps.model', function (require){
         users_price_period = per_month ? 12.5 : 10.0;
         $('#price-users')[0].innerText = String(users_price_period);
         $('#apps-qty')[0].innerText = String(choosen_qty);
-
-    }
-
-    window.onclick=function(e){
-        $(".app").off().click(function(){
-            console.log(this);
-            // App technical name
-            // var app = this.children[2].innerText;
-            // if(choosen.get(app) === undefined)
-            // {
-            //     root_to_leafs(app);
-            //     leafs.forEach(function(leaf){
-            //         add_to_basket(leaf);
-            //     });
-            //     leafs = [];
-            // }else{
-            //     leaf_to_root(app);
-            //     delete_list.forEach(function(module){
-            //         delete_from_basket(module);
-            //     });
-            //     delete_list = [];
-            // }
-        });
-        $(".nav-link:contains('Annually')").off().click(function(){
-            console.log(this);
-            // per_month = false;
-            // set_period();
-        });
-        $(".nav-link:contains('Monthly')").off().click(function(){
-            console.log(this);
-            // per_month = true;
-            // set_period();
-        });
-        $("#get-started").off().click(function(){
-            console.log(this);
-            // $('.loader')[0].style = 'visibility: visible;';
-            // redirect_to_build();
-        });
-        calc_price_window_vals(choosen.size);
     }
 
 });

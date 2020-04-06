@@ -57,6 +57,18 @@
     display: inline;
 }
 
+.green-border{
+    border: 2px solid green;
+}
+
+.normal-border{
+    border: 2px solid #FFFFFF;
+}
+
+.hid{
+    display: none;
+}
+
 @media (min-width: 1400px) {
     #price-window
     {   
