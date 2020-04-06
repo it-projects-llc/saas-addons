@@ -46,6 +46,7 @@ class SAASDependence(models.Model):
     dependencies = fields.Many2many('saas.module')
     year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
     month_price = fields.Float(default=0.0, compute='_compute_month_price', string="Price per month")
+    application = fields.Boolean(default=False, string="Application")
 
     def refresh_lines(self):
         apps = self.env["saas.module"]
@@ -57,15 +58,16 @@ class SAASDependence(models.Model):
             if len(self.search([('name', '=', app.name)])) == 0:
                 ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
                 if len(ir_module_obj):
+                    new = self.create({
+                        'name': app.name,
+                        'module_name': ir_module_obj['name'],
+                        'icon_path': ir_module_obj['icon']
+                    })
                     if ir_module_obj['application']:
-                        new = self.create({
-                            'name': app.name,
-                            'module_name': ir_module_obj['name'],
-                            'icon_path': ir_module_obj['icon']
-                        })
-                        new.dependencies += apps.search([('name', '=', app.name)])
-                        for dep_name in ir_module_obj['depends']:
-                            new.dependencies += apps.search([('name', '=', dep_name)])
+                        new.application = True
+                    new.dependencies += apps.search([('name', '=', app.name)])
+                    for dep_name in ir_module_obj['depends']:
+                        new.dependencies += apps.search([('name', '=', dep_name)])
                 else:
                     new = self.create({
                         'name': app.name,
@@ -95,7 +97,8 @@ class SAASDependence(models.Model):
             'name': self.name,
             'year_price': saas_module.year_price,
             'month_price': saas_module.month_price,
-            'childs': childs
+            'childs': childs,
+            'application': self.application
         })
         # Looking to the period
         for app in self.dependencies - saas_module:
