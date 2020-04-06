@@ -69,7 +69,7 @@ class SaaSAppsPublicController(SaaSPublicController):
             'template_operator': saas_template_operator.id,
             'link': '0',
             'Error': '0',
-            'state': 'Draft'
+            'state': 'Database creating...'
         }
 
     @http.route(['/check_saas_template'], type='json', auth='public', website=True)

@@ -38,8 +38,14 @@
                                             <div class="app-data">
                                                 <div><t t-esc="app.module_name"/></div>
                                                 <div id="app-price">
-                                                    <div class="value">0 $</div>
-                                                    <div class="period"> / year</div>
+                                                    <div class="yearly-price">
+                                                        <div class="price-value"><t t-esc="app[0].year_price"/> $</div>
+                                                        <div class="period"> / year</div>
+                                                    </div>
+                                                    <div class="monthly-price hid">
+                                                        <div class="price-value"><t t-esc="app[0].month_price"/> $</div>
+                                                        <div class="period"> / month</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
@@ -77,8 +83,8 @@
                 </div>
             </div>
             <div class="loader transition">
-                <img src="/saas_apps/static/src/img/loader.gif" draggable="false" alt="Stage: Draft">
-                    <p class="status">Stage: Draft</p>
+                <img src="/saas_apps/static/src/img/loader.gif" draggable="false">
+                    <p class="status">Database creating...</p>
                 </img>
             </div>
         </t>
