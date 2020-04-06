@@ -28,13 +28,23 @@
                         <div class="openerp_enterprise_pricing_step_body mb24">
                             <div class="form-row">
                                 <t t-foreach="apps" t-as="app">
-                                    <p class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app">
-                                        <img t-if="app.icon_path"
-                                            t-att-src="to_text(app.icon_path)"
-                                            style="max-width: 40px;max-height: 40px;"/>
-                                        <t t-esc="app.module_name"/><small class="module-price"></small>
-                                        <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
-                                    </p>
+                                    <t t-if="app.application">
+                                        <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app">
+                                            <div class="app-icon">
+                                                <img t-if="app.icon_path"
+                                                t-att-src="to_text(app.icon_path)"
+                                                style="max-width: 40px;max-height: 40px;"/>
+                                            </div>
+                                            <div class="app-data">
+                                                <div><t t-esc="app.module_name"/></div>
+                                                <div id="app-price">
+                                                    <div class="value">0 $</div>
+                                                    <div class="period"> / year</div>
+                                                </div>
+                                            </div>
+                                            <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
+                                        </div>
+                                    </t>
                                 </t>
                             </div>
                         </div>

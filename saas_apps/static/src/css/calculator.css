@@ -41,6 +41,20 @@
 
 .app{
     max-height: 70px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.app-data{
+    margin-left: 5%;
+}
+
+.price-value{
+    display: inline;
+}
+
+.period{
+    display: inline;
 }
 
 @media (min-width: 1400px) {

@@ -90,9 +90,9 @@ odoo.define('saas_apps.model', function (require){
 
     function add_price(module){
         var price = per_month ? module.month_price : module.year_price;
-        $(".app_tech_name:contains('"+module.name+"')").filter(function(_, el) {
+        app = $(".app_tech_name:contains('"+module.name+"')").filter(function(_, el) {
                 return $(el).html() == module.name 
-            })[0].previousElementSibling.children[1].innerText = ' / ' + String(price) + ' $';
+            })[0].previousElementSibling.children[1].innerText = String(price) + ' $';
         if(prices.get(module.name) === undefined)
             prices.set(module.name, [module.month_price, module.year_price])
     }
@@ -109,6 +109,9 @@ odoo.define('saas_apps.model', function (require){
                 result.dependencies.forEach(dependence => {
                     // Add new element to the dependencies parent_tree, cause we'll restablish a path from leaf to the root
                     // when we'll have to delete one of leafs
+                    if(!dependence.application)
+                        return;
+                    add_price(dependence);
                     if(!first_dependence){
                         var modules_parents = parent_tree.get(dependence.name),
                             root_module_name = dependence.parent,
@@ -140,7 +143,6 @@ odoo.define('saas_apps.model', function (require){
                         }
                     }
                     
-                    add_price(dependence);
                     first_dependence = false;
                 });
             });
@@ -181,34 +183,41 @@ odoo.define('saas_apps.model', function (require){
     }
 
     window.onclick=function(e){
-        if(window.location.pathname === "/price"){
-            if(e.target.className.includes("app")){
-                // App technical name
-                var app = e.target.nextElementSibling.innerText;
-                if(choosen.get(app) === undefined)
-                {
-                    root_to_leafs(app);
-                    leafs.forEach(function(leaf){
-                        add_to_basket(leaf);
-                    });
-                    leafs = [];
-                }else{
-                    leaf_to_root(app);
-                    delete_list.forEach(function(module){
-                        delete_from_basket(module);
-                    });
-                    delete_list = [];
-                }
-            }else if(e.target.className.includes("nav-link") && (e.target.innerText === "Annually" || e.target.innerText === "Monthly")){
-                // Check choosen period
-                per_month = e.target.innerText === "Monthly" ? true : false;
-            }
-            else if(e.target.id === "get-started"){
-                $('.loader')[0].style = 'visibility: visible;';
-                redirect_to_build();
-            }
-            calc_price_window_vals(choosen.size);
-        }
+        $(".app").off().click(function(){
+            console.log(this);
+            // App technical name
+            // var app = this.children[2].innerText;
+            // if(choosen.get(app) === undefined)
+            // {
+            //     root_to_leafs(app);
+            //     leafs.forEach(function(leaf){
+            //         add_to_basket(leaf);
+            //     });
+            //     leafs = [];
+            // }else{
+            //     leaf_to_root(app);
+            //     delete_list.forEach(function(module){
+            //         delete_from_basket(module);
+            //     });
+            //     delete_list = [];
+            // }
+        });
+        $(".nav-link:contains('Annually')").off().click(function(){
+            console.log(this);
+            // per_month = false;
+            // set_period();
+        });
+        $(".nav-link:contains('Monthly')").off().click(function(){
+            console.log(this);
+            // per_month = true;
+            // set_period();
+        });
+        $("#get-started").off().click(function(){
+            console.log(this);
+            // $('.loader')[0].style = 'visibility: visible;';
+            // redirect_to_build();
+        });
+        calc_price_window_vals(choosen.size);
     }
 
 });
