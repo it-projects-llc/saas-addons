@@ -25,7 +25,7 @@ odoo.define('saas_apps.model', function (require){
 
     function check_saas_template(data){
         session.rpc('/check_saas_template', {
-            args: [data]
+            templates: [data]
         }).then(function (data) {
             if(data.Error !== '0'){
                 alert("Error!");
@@ -52,7 +52,7 @@ odoo.define('saas_apps.model', function (require){
             modules_to_install.push(key);
         }
         session.rpc('/create_saas_template', {
-            args: [modules_to_install]
+            module_names: [modules_to_install]
         }).then(function (data) {
             setTimeout(check_saas_template, 3000, data);
         });
@@ -147,7 +147,7 @@ odoo.define('saas_apps.model', function (require){
 
         $.each($('.app_tech_name'), function(key, app){
             session.rpc('/what_dependencies', {
-                args: [app.innerText]
+                root: [app.innerText]
             }).then(function (result) {
                 /* Be carefull with dependecies when changing programm logic,
                 cause first dependence - is module himself.

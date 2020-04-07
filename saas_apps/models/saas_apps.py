@@ -25,12 +25,20 @@ class SAASModule(models.Model):
         if self.year_price < 0:
             raise ValidationError("Year price can't be negative.")
 
+    @api.multi
+    def write(self, vals):
+        res = super(SAASModule, self).write(vals)
+        if 'month_price' in vals or 'year_price' in vals:
+            for line in self.saas_modules:
+                line.compute_price()
+        return res
+
     def refresh_modules(self):
         for app in map(self.browse, self._search([])):
             app.unlink()
         irmodules = self.env["ir.module.module"].search([])
         for irmodule in irmodules:
-            if len(self.search([('name', '=', irmodule.name)])) == 0:
+            if self.search_count([('name', '=', irmodule.name)]) == 0:
                 self.create({'name': irmodule.name})
 
 
@@ -44,8 +52,8 @@ class SAASDependence(models.Model):
     icon_path = fields.Char(string="Icon path")
     allow_to_sell = fields.Boolean(default=True, string="Sellable")
     dependencies = fields.Many2many('saas.module')
-    year_price = fields.Float(default=0.0, compute='_compute_year_price', string="Price per year")
-    month_price = fields.Float(default=0.0, compute='_compute_month_price', string="Price per month")
+    year_price = fields.Float(default=0.0, string="Price per year")
+    month_price = fields.Float(default=0.0, string="Price per month")
     application = fields.Boolean(default=False, string="Application")
 
     def refresh_lines(self):
@@ -55,7 +63,7 @@ class SAASDependence(models.Model):
         apps.refresh_modules()
         base_icon_path = '/base/static/description/icon.png'
         for app in apps.search([]):
-            if len(self.search([('name', '=', app.name)])) == 0:
+            if self.search_count([('name', '=', app.name)]) == 0:
                 ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
                 if len(ir_module_obj):
                     new = self.create({
@@ -75,22 +83,23 @@ class SAASDependence(models.Model):
                         'icon_path': base_icon_path
                     })
 
-    def _compute_year_price(self):
-        self.year_price = 0
+    @api.multi
+    def compute_price(self):
+        sum = 0
         for module in self.dependencies:
-            self.year_price += module.year_price
-
-    def _compute_month_price(self):
-        self.month_price = 0
+            sum += module.year_price
+        self.year_price = sum
+        sum = 0
         for module in self.dependencies:
-            self.month_price += module.month_price
+            sum += module.month_price
+        self.month_price = sum
 
     def dependencies_info(self, root):
         apps = []
         childs = []
         saas_module = self.dependencies.search([('name', '=', self.name)])
         for child in self.dependencies - saas_module:
-            if len(self.search([('name', '=', child.name)])):
+            if self.search_count([('name', '=', child.name)]):
                 childs.append(child.name)
         apps.append({
             'parent': root,
@@ -117,7 +126,7 @@ class SAASDependence(models.Model):
         for app in self.dependencies - this_app:
             temp_app = self.search([('name', '=', app.name)])
             if len(temp_app) > 0:
-                temp_app.allow_to_sell = vals['allow_to_sell']
+                temp_app.allow_to_sell = True
 
     @api.multi
     def write(self, vals):
@@ -130,13 +139,6 @@ class SAASDependence(models.Model):
 
 class SAASTemplateLine(models.Model):
     _inherit = 'saas.template.operator'
-
-
-    @api.multi
-    def write(self, vals):
-        if 'state' in vals:
-            _logger.debug(vals['state'])
-        return super(SAASTemplateLine, self).write(vals)
 
     @api.multi
     def random_ready_operator_check(self):
