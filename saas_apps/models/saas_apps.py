@@ -112,15 +112,19 @@ class SAASDependence(models.Model):
         return apps
 
     @api.multi
+    def change_allow_to_sell(self):
+        this_app = self.dependencies.search([('name', '=', self.name)])
+        for app in self.dependencies - this_app:
+            temp_app = self.search([('name', '=', app.name)])
+            if len(temp_app) > 0:
+                temp_app.allow_to_sell = vals['allow_to_sell']
+
+    @api.multi
     def write(self, vals):
         res = super(SAASDependence, self).write(vals)
         # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
         if "allow_to_sell" in vals and vals['allow_to_sell']:
-            this_app = self.dependencies.search([('name', '=', self.name)])
-            for app in self.dependencies - this_app:
-                temp_app = self.search([('name', '=', app.name)])
-                if len(temp_app) > 0:
-                    temp_app.allow_to_sell = vals['allow_to_sell']
+            self.change_allow_to_sell()
         return res
 
 

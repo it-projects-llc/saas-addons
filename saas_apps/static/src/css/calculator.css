@@ -5,6 +5,7 @@
 
 #price{
     font-size: 32px;
+    display: inline;
 }
 
 .loader{
@@ -67,6 +68,10 @@
 
 .hid{
     display: none;
+}
+
+.fnt-24{
+    font-size: 24px;
 }
 
 @media (min-width: 1400px) {
