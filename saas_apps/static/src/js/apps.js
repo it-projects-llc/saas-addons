@@ -261,12 +261,12 @@ odoo.define('saas_apps.model', function (require){
     function calc_price_window_vals(choosen_qty){
         price = Calc_Price();
         var period = per_month ? "month" : "year";
-        $('#price')[0].innerHTML = '<h4 id="price" class="card-title pricing-card-title">$'+String(price)+
-        ' <small class="text-muted">/ '+ period +'</small></h4>';
-        $('#users-qty')[0].innerText = String($('#users')[0].value);
+        $('#price').text('$'+String(price)+' / ');
+        $('#box-period').text(String(period));
+        $('#users-qty').text(String($('#users')[0].value));
         users_price_period = per_month ? 12.5 : 10.0;
-        $('#price-users')[0].innerText = String(users_price_period);
-        $('#apps-qty')[0].innerText = String(choosen_qty);
+        $('#price-users').text(String(users_price_period));
+        $('#apps-qty').text(String(choosen_qty));
     }
 
 });

@@ -74,8 +74,8 @@
                                     <li><b id="price-users">10</b> EUR</li>
                                     <li><b id="apps-qty">0</b> Apps in basket</li>
                                 </ul>
-                                <h4 id="price" class="card-title pricing-card-title">$10 
-                                <small class="text-muted">/ year</small></h4>
+                                <h4 id="price" class="card-title pricing-card-title">$10 / </h4>
+                                <small id="box-period" class="text-muted period fnt-24">year</small>
                                 <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
                             </div>
                         </span>

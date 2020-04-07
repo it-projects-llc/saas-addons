@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
-    License AGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
+    License AGPL-3.0 (https://www.gnu.org/licenses/agpl-3.0.html).-->
 <odoo>
     <template id="manage">
         <t t-call="website.layout">
