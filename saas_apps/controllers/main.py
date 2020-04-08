@@ -31,6 +31,14 @@ class SaaSAppsController(Controller):
             'dependencies': app.dependencies_info('root')
         }
 
+    @route(['/check_currency'], type='json', auth='public')
+    def what_company_cuurency_to_use(self, **kw):
+        apps = request.env['saas.line'].sudo()
+        return {
+            'currency': apps.search([])[0].currency_id.display_name,
+            'symbol': apps.search([])[0].currency_id.symbol
+        }
+
     # @route(['/what_dependencies_optimized'], type='json', auth='public')
     # def what_dependencies_optimized(self, **kw):
     #     apps = []

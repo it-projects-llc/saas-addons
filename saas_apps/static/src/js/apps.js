@@ -11,7 +11,10 @@ odoo.define('saas_apps.model', function (require){
         choosen = new Map(),
         parent_tree  = new Map(),
         child_tree  = new Map(),
-        prices  = new Map();
+        prices  = new Map(),
+        apps_in_basket = 0,
+        currency = "",
+        currency_symbol = "";
 
     function Calc_Price(){
         // Calculate general price
@@ -90,15 +93,6 @@ odoo.define('saas_apps.model', function (require){
         }
     }
 
-    function add_price(module){
-        // var price = per_month ? module.month_price : module.year_price;
-        // app = $(".app_tech_name:contains('"+module.name+"')").filter(function(_, el) {
-        //         return $(el).html() == module.name 
-        //     })[0].previousElementSibling.children[1].innerText = String(price) + ' $';
-        if(prices.get(module.name) === undefined)
-            prices.set(module.name, [module.month_price, module.year_price])
-    }
-
     // Downloading apps dependencies
     window.onload = function() {
         // Catching click to the app
@@ -122,27 +116,36 @@ odoo.define('saas_apps.model', function (require){
                 });
                 delete_list = [];
             }
-            calc_price_window_vals(choosen.size);
+            calc_price_window_vals();
         });
         // Catching click to the 'Annually' button
         $(".nav-link:contains('Annually')").click(function(){
             console.log(this);
             per_month = false;
             change_period();
-            calc_price_window_vals(choosen.size);
+            calc_price_window_vals();
         });
         // Catching click to the 'Monthly' button
         $(".nav-link:contains('Monthly')").click(function(){
             console.log(this);
             per_month = true;
             change_period();
-            calc_price_window_vals(choosen.size);
+            calc_price_window_vals();
         });
         // Catching click to the 'Get Started' button
         $("#get-started").click(function(){
             // Showing the loader
             $('.loader')[0].style = 'visibility: visible;';
             redirect_to_build();
+        });
+        $('#users').click(function(){
+            calc_price_window_vals();
+        });
+
+        session.rpc('/check_currency', {
+        }).then(function (result) {
+            currency = result.currency;
+            currency_symbol = result.symbol;
         });
 
         $.each($('.app_tech_name'), function(key, app){
@@ -157,9 +160,6 @@ odoo.define('saas_apps.model', function (require){
                 result.dependencies.forEach(dependence => {
                     // Add new element to the dependencies parent_tree, cause we'll restablish a path from leaf to the root
                     // when we'll have to delete one of leafs
-                    if(!dependence.application)
-                        return;
-                    add_price(dependence);
                     if(!first_dependence){
                         var modules_parents = parent_tree.get(dependence.name),
                             root_module_name = dependence.parent,
@@ -228,19 +228,21 @@ odoo.define('saas_apps.model', function (require){
     
     function add_to_basket(module_name){
         if(choosen.get(module_name) === undefined){
-            var price = 0;
-            // Get choosen app price
-            if(prices.get(module_name) !== undefined)
-                price = per_month ? prices.get(module_name)[0] : prices.get(module_name)[1];
-            // Insert new app in to the basket
-            choosen.set(module_name, price);
             // Finding choosen element
             elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
                 return $(el).html() == module_name 
             })
-            // Changing border color
-            if(elem.length > 0)
+            price = 0;
+            // Get choosen app price
+            if(elem.length > 0) {
+                price_i = per_month ? 1 : 0;
+                price = parseInt(elem[0].previousElementSibling.children[1].children[price_i].children[0].innerText, 10);
+                // Changing border color
+                ++apps_in_basket;
                 change_border_color(elem[0].parentElement);
+            }
+            // Insert new app in to the basket
+            choosen.set(module_name, price);
         }
     }
 
@@ -253,20 +255,22 @@ odoo.define('saas_apps.model', function (require){
                 return $(el).html() == module_name 
             })
             // Changing border color
-            if(elem.length > 0)
+            if(elem.length > 0){
+                --apps_in_basket;
                 change_border_color(elem[0].parentElement);
+            }
         }
     }
     
-    function calc_price_window_vals(choosen_qty){
+    function calc_price_window_vals(){
         price = Calc_Price();
         var period = per_month ? "month" : "year";
-        $('#price').text('$'+String(price)+' / ');
+        $('#price').text(String(price) + ' ' + currency_symbol + ' / ');
         $('#box-period').text(String(period));
-        $('#users-qty').text(String($('#users')[0].value));
+        $('#users-qty').text($('#users')[0].value)
         users_price_period = per_month ? 12.5 : 10.0;
         $('#price-users').text(String(users_price_period));
-        $('#apps-qty').text(String(choosen_qty));
+        $('#apps-qty').text(String(apps_in_basket));
     }
 
 });

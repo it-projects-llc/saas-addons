@@ -17,7 +17,7 @@
                             <label class="px-2 mr-1 mb-0 bg-200 border-top border-right border-bottom">Users</label>
                             <label>
                                 <b>
-                                    <span class="openerp_enterprise_pricing_user_amount_yearly">10,00</span><span class="openerp_enterprise_pricing_currency">EUR</span><small class="fw_semibold">/user/month</small>
+                                    <span class="openerp_enterprise_pricing_user_amount_yearly">10,00</span><span class="openerp_enterprise_pricing_currency"><t t-esc="apps[0].currency_id.display_name"/></span><small class="fw_semibold">/user/month</small>
                                 </b>
                             </label>
                         </div>
@@ -39,12 +39,12 @@
                                                 <div><t t-esc="app.module_name"/></div>
                                                 <div id="app-price">
                                                     <div class="yearly-price">
-                                                        <div class="price-value"><t t-esc="app[0].year_price"/> $</div>
-                                                        <div class="period"> / year</div>
+                                                        <div class="price-value"><t t-esc="app[0].year_price"/></div>
+                                                        <div class="period"> <t t-esc="app.currency_id.symbol"/> / year</div>
                                                     </div>
                                                     <div class="monthly-price hid">
-                                                        <div class="price-value"><t t-esc="app[0].month_price"/> $</div>
-                                                        <div class="period"> / month</div>
+                                                        <div class="price-value"><t t-esc="app[0].month_price"/></div>
+                                                        <div class="period">  <t t-esc="app.currency_id.symbol"/>  / month</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -71,10 +71,10 @@
                             <div class="card-body" style="margin-top: -30px;font-size: 18px;">
                                 <ul class="list-unstyled mt-3 mb-4 transition">
                                     <li><b id="users-qty">1</b> Users</li>
-                                    <li><b id="price-users">10</b> EUR</li>
+                                    <li><b id="price-users">10</b> <t t-esc="apps[0].currency_id.display_name"/></li>
                                     <li><b id="apps-qty">0</b> Apps in basket</li>
                                 </ul>
-                                <h4 id="price" class="card-title pricing-card-title">$10 / </h4>
+                                <h4 id="price" class="card-title pricing-card-title">10 <t t-esc="apps[0].currency_id.symbol"/> / </h4>
                                 <small id="box-period" class="text-muted period fnt-24">year</small>
                                 <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
                             </div>
