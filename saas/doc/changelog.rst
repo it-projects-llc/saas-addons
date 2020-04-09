@@ -2,6 +2,7 @@
 -------
 
 - **Improvement:** mandatory modules can be redefined in dependant modules
+- **New:** added "Refresh" in build view to get data from build database
 
 `2.4.3`
 -------

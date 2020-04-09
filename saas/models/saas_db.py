@@ -1,7 +1,8 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields, api
+from odoo import models, fields, api, sql_db, SUPERUSER_ID
 from odoo.addons.queue_job.job import job
 
 
@@ -56,3 +57,26 @@ class SAASDB(models.Model):
             'target': 'new',
             'url': auth_url,
         }
+
+    @api.multi
+    def write(self, vals):
+        res = super(SAASDB, self).write(vals)
+        if not self.env.context.get("writing_from_refresh_data"):  # Do not run "refresh_data", if already running it
+            self.refresh_data()
+        return res
+
+    def refresh_data(self, should_read_from_build=True, should_write_to_build=True):
+        for record in self.filtered(lambda record: (record.type, record.state) == ("build", "done")).with_context(writing_from_refresh_data=True):
+            if should_read_from_build:
+                vals = record.read_values_from_build()
+                if vals:
+                    record.write(vals)
+
+            if should_write_to_build:
+                record.write_values_to_build()
+
+    def write_values_to_build(self):
+        pass
+
+    def read_values_from_build(self):
+        return {}
