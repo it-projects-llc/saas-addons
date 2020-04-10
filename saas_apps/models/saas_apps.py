@@ -56,7 +56,16 @@ class SAASDependence(models.Model):
     year_price = fields.Float(default=0.0, string="Price per year")
     month_price = fields.Float(default=0.0, string="Price per month")
     application = fields.Boolean(default=False, string="Application")
-    currency_id = fields.Many2one("res.currency", default=lambda self: self.env.user.company_id.currency_id)
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda s: s.env.user.company_id,
+    )
+    currency_id = fields.Many2one("res.currency", compute="_compute_currency_id")
+
+    def _compute_currency_id(self):
+        self.currency_id = self.company_id.currency_id
 
     def refresh_lines(self):
         apps = self.env["saas.module"]
