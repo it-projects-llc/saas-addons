@@ -40,8 +40,8 @@ odoo.define('saas_apps.model', function (require){
             }
             else if(data.template !== '0'){
                 if(data.state === 'installing_modules') data.state = "Module installation...";
-                else if(data.state === 'post_init') data.state = "The database successfully created!";
-                else if(data.state === 'creating') data.state = "Database creating...";
+                else if(data.state === 'post_init'|| data.state === 'done') data.state = "The database successfully created!";
+                else if(data.state === 'creating' || data.state === 'draft') data.state = "Database creating...";
                 $('.status')[0].innerText = data.state;
                 setTimeout(check_saas_template, 3000, data);
             }

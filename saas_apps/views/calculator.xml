@@ -40,11 +40,11 @@
                                                 <div id="app-price">
                                                     <div class="yearly-price">
                                                         <div class="price-value"><t t-esc="app[0].year_price"/></div>
-                                                        <div class="period"> <t t-esc="app.currency_id.symbol"/> / year</div>
+                                                        <div class="period"> <t t-esc="app[0].currency_id.symbol"/> / year</div>
                                                     </div>
                                                     <div class="monthly-price hid">
                                                         <div class="price-value"><t t-esc="app[0].month_price"/></div>
-                                                        <div class="period">  <t t-esc="app.currency_id.symbol"/>  / month</div>
+                                                        <div class="period">  <t t-esc="app[0].currency_id.symbol"/>  / month</div>
                                                     </div>
                                                 </div>
                                             </div>

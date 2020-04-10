@@ -39,16 +39,6 @@ class SaaSAppsController(Controller):
             'symbol': apps.search([])[0].currency_id.symbol
         }
 
-    # @route(['/what_dependencies_optimized'], type='json', auth='public')
-    # def what_dependencies_optimized(self, **kw):
-    #     apps = []
-    #     for app_name in kw['root'][0]:
-    #         app = request.env['saas.line'].sudo().search([('name', '=', app_name)])
-    #         apps.append({app_name: app.dependencies_info('root')})
-    #     return {
-    #         'dependencies': apps
-    #     }
-
 class SaaSAppsPublicController(SaaSPublicController):
     @route(['/create_saas_template'], type='json', auth='public', website=True)
     def create_saas_template(self, **kw):
