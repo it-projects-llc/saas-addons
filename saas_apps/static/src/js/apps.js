@@ -26,38 +26,32 @@ odoo.define('saas_apps.model', function (require){
         return price + parseInt($('#users')[0].value, 10)*users_price_period;
     }
 
-    function check_saas_template(data){
-        session.rpc('/check_saas_template', {
-            templates: [data]
-        }).then(function (data) {
-            if(data.Error !== '0'){
-                alert("Error!");
-                return;
+    function redirect_to_build(modules_to_install){
+        if(!modules_to_install){
+            modules_to_install = '?installing_modules=['
+            // Collecting choosen modules in string
+            for (var key of choosen.keys()) {
+                modules_to_install += ','
+                modules_to_install += '"' + String(key) + '"';
             }
-            if(data.link !== '0'){
-                $('.loader')[0].style = 'visibility: hidden;';
-                window.location.href = data.link;
-            }
-            else if(data.template !== '0'){
-                if(data.state === 'installing_modules') data.state = "Module installation...";
-                else if(data.state === 'post_init'|| data.state === 'done') data.state = "The database successfully created!";
-                else if(data.state === 'creating' || data.state === 'draft') data.state = "Database creating...";
-                $('.status')[0].innerText = data.state;
-                setTimeout(check_saas_template, 3000, data);
-            }
-        });
-    }
-
-    // Need to check this in backend
-    function redirect_to_build(){
-        modules_to_install = [];
-        for (var key of choosen.keys()) {
-            modules_to_install.push(key);
+            modules_to_install += ']';
+            // Deleting extra coma
+            modules_to_install = modules_to_install.replace(',', '');
         }
-        session.rpc('/create_saas_template', {
-            module_names: [modules_to_install]
-        }).then(function (data) {
-            setTimeout(check_saas_template, 3000, data);
+        if(!choosen.size){
+            modules_to_install = '?installing_modules=["mail"]';
+        }
+        session.rpc('/take_template_id', {
+        }).then(function (template) {
+            if(template.state === 'ready'){
+                console.log("Redirect to: " + "/saas_public/"+template.id+"/create-fast-build" + modules_to_install);
+                // When there's ready saas_template_operator obj, then start creating new build
+                window.location.href = "/saas_public/"+template.id+"/create-fast-build" + modules_to_install;
+            }else{
+                // If there's no ready saas_template_operator,
+                // recalling this func till the saas_template_operator obj isn't ready
+                setTimeout(redirect_to_build, 5000, modules_to_install);
+            }
         });
     }
 
@@ -136,7 +130,7 @@ odoo.define('saas_apps.model', function (require){
         $("#get-started").click(function(){
             // Showing the loader
             $('.loader')[0].style = 'visibility: visible;';
-            redirect_to_build();
+            redirect_to_build(null);
         });
         $('#users').click(function(){
             calc_price_window_vals();

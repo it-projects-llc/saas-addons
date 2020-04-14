@@ -14,7 +14,6 @@ class SAASModule(models.Model):
     month_price = fields.Float('Month price', default=0.0)
     year_price = fields.Float('Year price', default=0.0)
     saas_modules = fields.Many2many('saas.line')
-    currency_id = fields.Many2one("res.currency", default=lambda self: self.env.user.company_id.currency_id)
 
     @api.constrains('month_price')
     def _validate_month_price(self):
