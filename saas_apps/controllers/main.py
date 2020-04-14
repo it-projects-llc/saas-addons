@@ -5,7 +5,7 @@ from odoo.http import route, request, Controller
 from odoo.addons.saas_public.controllers.saas_public import SaaSPublicController
 import urllib.parse
 
-DB_TEMPLATE = 'new_build_'
+DB_TEMPLATE = 'template_deployment_'
 
 class SaaSAppsController(Controller):
 
@@ -40,68 +40,37 @@ class SaaSAppsController(Controller):
         }
 
 class SaaSAppsPublicController(SaaSPublicController):
-    @route(['/create_saas_template'], type='json', auth='public', website=True)
-    def create_saas_template(self, **kw):
-        templates = request.env['saas.template']
-        installing_modules_names = kw.get('module_names', [])
-        saas_template = templates.sudo().create({
-            'name': 'Template ' + str(templates.sudo().search_count([]) - 1),
-            'template_demo': True,
-            'public_access': True
-        })
-        for name in installing_modules_names:
-            saas_template.template_module_ids += request.env['saas.module'].sudo().search([('name', '=', name)])
+    @route(['/take_template_id'], type='json', auth='public')
+    def is_build_created(self, **kw):
+        template_name = kw.get('template_name', [])
+        if not template_name:
+            template_name = 'Base'
+        templates = request.env['saas.template'].sudo()
+        template = templates.search([('name', '=', template_name)])
+        if not template:
+            template, saas_template_operator = self.create_new_template()
+            return {
+                'id': template.id,
+                'state': 'creating'
+            }
+        return {
+            'id': template.id,
+            'state': 'ready'
+        }
+
+    def create_new_template(self):
+        saas_template = request.env['saas.template'].sudo().create({
+                'name': 'Base',
+                'template_demo': True,
+                'public_access': True,
+                'template_module_ids': request.env['saas.module'].sudo().search([('name', '=', 'mail')]),
+                'build_post_init': "env['ir.module.module'].search([('name', 'in', {installing_modules})]).button_immediate_install()"
+            })
         saas_operator = request.env['saas.operator'].sudo().search([('db_url_template', '=', 'http://{db_name}.{db_id}.127.0.0.1.nip.io')])
         saas_template_operator = request.env['saas.template.operator'].sudo().create({
             'template_id': saas_template.id,
             'operator_id': saas_operator.id,
-            'operator_db_name': DB_TEMPLATE + str(request.env['saas.template.operator'].sudo().search_count([]) + 1),
+            'operator_db_name': DB_TEMPLATE + '1',
         })
-        request.env['saas.template.operator'].sudo().preparing_template_next()
-        # message = '''Template\'s deployment with name {} is creating
-        # and will be ready in a few minutes.'''.format(r.operator_db_name)
-        # self.operator_id.notify_users(message, message_type='info')
-        return {
-            'template': saas_template.id,
-            'template_operator': saas_template_operator.id,
-            'link': '0',
-            'Error': '0',
-            'state': 'Database creating...'
-        }
-
-    @route(['/check_saas_template'], type='json', auth='public', website=True)
-    def is_build_created(self, **kw):
-        template = request.env['saas.template'].sudo().browse(kw['templates'][0]['template'])
-        template_operator = request.env['saas.template.operator'].sudo().browse(kw['templates'][0]['template_operator'])
-        if len(template) > 0 and template_operator.random_ready_operator_check():
-            kwargs = {}
-            if template and template.public_access:
-                template_operator_id = template.operator_ids.random_ready_operator()
-                build = template_operator_id.create_db(kwargs, with_delay=False)
-                build_url = build.get_url()
-                token_obj = request.env['auth_quick_master.token'].sudo().create({
-                    'build': build.id,
-                    'build_login': 'admin',
-                })
-                return {
-                    'template': '0',
-                    'template_operator': '0',
-                    'link': urllib.parse.urljoin(build_url, '/auth_quick/check-token?token={}'.format(token_obj.token)),
-                    'Error': '0',
-                    'state': template_operator.state
-                }
-            return {
-                'template': '0',
-                'template_operator': '0',
-                'link': '0',
-                'Error': '1',
-                'state': template_operator.state
-            }
-        else:
-            return {
-                'template': template.id,
-                'template_operator': template_operator.id,
-                'link': '0',
-                'Error': '0',
-                'state': template_operator.state
-            }
+        saas_template_operator.sudo().preparing_template_next()
+        return saas_template, saas_template_operator
