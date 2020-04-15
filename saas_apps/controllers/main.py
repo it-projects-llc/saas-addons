@@ -5,7 +5,7 @@ from odoo.http import route, request, Controller
 from odoo.addons.saas_public.controllers.saas_public import SaaSPublicController
 import urllib.parse
 
-DB_TEMPLATE = 'template_deployment_'
+DB_TEMPLATE = 'template_database_'
 
 class SaaSAppsController(Controller):
 
@@ -13,6 +13,8 @@ class SaaSAppsController(Controller):
     @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
         apps = request.env['saas.line'].sudo()
+        if not apps.search_count([]):
+            apps.refresh_lines()
         return request.render('saas_apps.index', {
             'apps': apps.search([('allow_to_sell', '=', True)])
         })
@@ -42,13 +44,15 @@ class SaaSAppsController(Controller):
 class SaaSAppsPublicController(SaaSPublicController):
     @route(['/take_template_id'], type='json', auth='public')
     def is_build_created(self, **kw):
-        template_name = kw.get('template_name', [])
-        if not template_name:
-            template_name = 'Base'
         templates = request.env['saas.template'].sudo()
-        template = templates.search([('name', '=', template_name)])
+        template = templates.search([('set_as_base', '=', True)])
         if not template:
             template, saas_template_operator = self.create_new_template()
+            return {
+                'id': template.id,
+                'state': 'creating'
+            }
+        if not template.operator_ids.random_ready_operator_check():
             return {
                 'id': template.id,
                 'state': 'creating'
@@ -63,6 +67,7 @@ class SaaSAppsPublicController(SaaSPublicController):
                 'name': 'Base',
                 'template_demo': True,
                 'public_access': True,
+                'set_as_base': True,
                 'template_module_ids': request.env['saas.module'].sudo().search([('name', '=', 'mail')]),
                 'build_post_init': "env['ir.module.module'].search([('name', 'in', {installing_modules})]).button_immediate_install()"
             })

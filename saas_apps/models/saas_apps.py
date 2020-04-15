@@ -156,3 +156,15 @@ class SAASTemplateLine(models.Model):
         if len(ready_operators) > 0:
             return True
         return False
+
+
+class SAASTemplate(models.Model):
+    _inherit = 'saas.template'
+
+    set_as_base = fields.Boolean("Base template")
+
+    @api.onchange('set_as_base')
+    def change_base_template(self):
+        old_base_template = self.search([('set_as_base', '=', True)])
+        if old_base_template:
+            old_base_template.write({'set_as_base': False})
