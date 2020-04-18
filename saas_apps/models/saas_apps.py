@@ -25,7 +25,6 @@ class SAASModule(models.Model):
         if self.year_price < 0:
             raise ValidationError("Year price can't be negative.")
 
-    @api.multi
     def write(self, vals):
         res = super(SAASModule, self).write(vals)
         if 'month_price' in vals or 'year_price' in vals:
@@ -93,7 +92,6 @@ class SAASDependence(models.Model):
                         'icon_path': base_icon_path
                     })
 
-    @api.multi
     def compute_price(self):
         sum = 0
         for module in self.dependencies:
@@ -130,7 +128,6 @@ class SAASDependence(models.Model):
                     apps.append(leaf)
         return apps
 
-    @api.multi
     def change_allow_to_sell(self):
         this_app = self.dependencies.search([('name', '=', self.name)])
         for app in self.dependencies - this_app:
@@ -138,7 +135,6 @@ class SAASDependence(models.Model):
             if len(temp_app) > 0:
                 temp_app.allow_to_sell = True
 
-    @api.multi
     def write(self, vals):
         res = super(SAASDependence, self).write(vals)
         # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
@@ -150,7 +146,6 @@ class SAASDependence(models.Model):
 class SAASTemplateLine(models.Model):
     _inherit = 'saas.template.operator'
 
-    @api.multi
     def random_ready_operator_check(self):
         ready_operators = self.filtered(lambda r: r.state == 'done')
         if len(ready_operators) > 0:
