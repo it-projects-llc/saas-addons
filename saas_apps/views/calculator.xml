@@ -70,9 +70,20 @@
                             </div>
                             <div class="card-body" style="margin-top: -30px;font-size: 18px;">
                                 <ul class="list-unstyled mt-3 mb-4 transition">
-                                    <li><b id="users-qty">1</b> Users</li>
-                                    <li><b id="price-users">10</b> <t t-esc="apps[0].currency_id.display_name"/></li>
-                                    <li><b id="apps-qty">0</b> Apps in basket</li>
+                                    <li>
+                                        <div class="leftstr"><b id="users-qty" class="left-align-price">1</b> Users</div>
+                                        <div class="rightstr">
+                                            <div id="users-cnt-cost" class="d-inline">0 </div>
+                                            <div id="users-cnt-currency" class="d-inline"><t t-esc="apps[0].currency_id.symbol"/></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="leftstr"><b id="apps-qty" class="left-align-price">0</b> Apps</div>
+                                        <div class="rightstr">
+                                            <div id="apps-cost" class="d-inline">0 </div>
+                                            <div id="apps-cost-currency" class="d-inline"><t t-esc="apps[0].currency_id.symbol"/></div>
+                                        </div>
+                                    </li>
                                 </ul>
                                 <h4 id="price" class="card-title pricing-card-title">10 <t t-esc="apps[0].currency_id.symbol"/> / </h4>
                                 <small id="box-period" class="text-muted period fnt-24">year</small>
