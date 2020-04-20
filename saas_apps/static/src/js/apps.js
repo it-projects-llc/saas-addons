@@ -16,14 +16,18 @@ odoo.define('saas_apps.model', function (require){
         currency = "",
         currency_symbol = "";
 
-    function Calc_Price(){
-        // Calculate general price
+    function calc_apps_price(){
         price = 0;
-        var users_price_period = per_month ? 12.5 : 10.0;
         for (var value of choosen.values()) {
             price += value;
         }
-        return price + parseInt($('#users')[0].value, 10)*users_price_period;
+        return price;
+    }
+
+    function Calc_Price(){
+        // Calculate general price
+        var users_price_period = per_month ? 12.5 : 10.0;
+        return calc_apps_price() + parseInt($('#users')[0].value, 10)*users_price_period;
     }
 
     function redirect_to_build(modules_to_install){
@@ -114,17 +118,13 @@ odoo.define('saas_apps.model', function (require){
         });
         // Catching click to the 'Annually' button
         $(".nav-link:contains('Annually')").click(function(){
-            console.log(this);
             per_month = false;
             change_period();
-            calc_price_window_vals();
         });
         // Catching click to the 'Monthly' button
         $(".nav-link:contains('Monthly')").click(function(){
-            console.log(this);
             per_month = true;
             change_period();
-            calc_price_window_vals();
         });
         // Catching click to the 'Get Started' button
         $("#get-started").click(function(){
@@ -218,6 +218,14 @@ odoo.define('saas_apps.model', function (require){
                 yearly[i].classList.remove('hid');
             }
         }
+        var size = choosen.size, i = 0;
+        for (var key of choosen.keys()) {
+            if(i >= size) break;
+            delete_from_basket(key);
+            add_to_basket(key);
+            ++i;
+        }
+        calc_price_window_vals();
     }
     
     function add_to_basket(module_name){
@@ -255,16 +263,26 @@ odoo.define('saas_apps.model', function (require){
             }
         }
     }
+
+    function blink_anim(elems){
+        elems.forEach( (elem) =>{
+            elem.animate({opacity: "0"}, 200);
+            elem.animate({opacity: "1"}, 200);
+        });
+    }
     
     function calc_price_window_vals(){
         price = Calc_Price();
         var period = per_month ? "month" : "year";
         $('#price').text(String(price) + ' ' + currency_symbol + ' / ');
         $('#box-period').text(String(period));
-        $('#users-qty').text($('#users')[0].value)
+        $('#users-qty').text($('#users').val())
         users_price_period = per_month ? 12.5 : 10.0;
         $('#price-users').text(String(users_price_period));
         $('#apps-qty').text(String(apps_in_basket));
+        $('#users-cnt-cost').text(String(users_price_period * $('#users').val()));
+        $('#apps-cost').text(String(calc_apps_price()));
+        blink_anim([$('#apps-cost'), $('#users-cnt-cost'),
+        $('#apps-qty'), $('#price-users'), $('#users-qty'), $('#price')]);
     }
-
 });
