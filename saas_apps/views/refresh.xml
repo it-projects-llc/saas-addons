@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
+<!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
     License AGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
 <template xml:space="preserve">
         <t t-extend="ListView.buttons">

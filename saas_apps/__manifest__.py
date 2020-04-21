@@ -1,4 +1,4 @@
-# Copyright 2020 Vildan Safin <https://github.com/Enigma228322>
+# Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 {
@@ -23,6 +23,7 @@
         'security/ir.model.access.csv',
         'views/calculator.xml',
         'views/manage.xml',
+        "data/saas_base_template.xml",
         'views/assets.xml'
     ],
     "demo": [
