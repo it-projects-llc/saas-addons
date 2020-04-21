@@ -285,4 +285,16 @@ odoo.define('saas_apps.model', function (require){
         blink_anim([$('#apps-cost'), $('#users-cnt-cost'),
         $('#apps-qty'), $('#price-users'), $('#users-qty'), $('#price')]);
     }
+
+    function get_modules_to_install(){
+        modules = [];
+        for (var key of choosen.keys()) {
+            modules.push(key);
+        }
+        return modules;
+    }
+
+    return {
+        "get_modules_to_install": get_modules_to_install,
+    }
 });
