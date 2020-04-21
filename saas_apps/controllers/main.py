@@ -71,11 +71,11 @@ class SaaSAppsPublicController(SaaSPublicController):
                 'template_module_ids': request.env['saas.module'].sudo().search([('name', '=', 'mail')]),
                 'build_post_init': "env['ir.module.module'].search([('name', 'in', {installing_modules})]).button_immediate_install()"
             })
-        saas_operator = request.env['saas.operator'].sudo().search([('db_url_template', '=', 'http://{db_name}.{db_id}.127.0.0.1.nip.io')])
+        saas_operator = request.env.ref("saas.local_operator")
         saas_template_operator = request.env['saas.template.operator'].sudo().create({
             'template_id': saas_template.id,
             'operator_id': saas_operator.id,
-            'operator_db_name': DB_TEMPLATE + '1',
+            'operator_db_name': DB_TEMPLATE + str(saas_template.operator_ids.search_count([]) + 1),
         })
         saas_template_operator.sudo().preparing_template_next()
         return saas_template, saas_template_operator
