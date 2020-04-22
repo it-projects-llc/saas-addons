@@ -93,9 +93,9 @@
                     </div>
                 </div>
             </div>
-            <div class="loader transition">
+            <div class="loader hid transition">
                 <img src="/saas_apps/static/src/img/loader.gif" draggable="false">
-                    <p class="status">Database creating...</p>
+                    <p class="status">Please wait...</p>
                 </img>
             </div>
         </t>

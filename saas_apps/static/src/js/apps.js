@@ -129,11 +129,16 @@ odoo.define('saas_apps.model', function (require){
         // Catching click to the 'Get Started' button
         $("#get-started").click(function(){
             // Showing the loader
-            $('.loader')[0].style = 'visibility: visible;';
+            $('.loader')[0].classList.remove('hid');
             redirect_to_build(null);
         });
         $('#users').click(function(){
             calc_price_window_vals();
+        });
+        $('#users').keyup(function(event){
+            if(event.keyCode === 13){
+                calc_price_window_vals();
+            }
         });
 
         session.rpc('/check_currency', {
@@ -142,10 +147,28 @@ odoo.define('saas_apps.model', function (require){
             currency_symbol = result.symbol;
         });
 
+        // Check session storage
+        old_modules = get_modules_from_session_storage();
+        if(old_modules.length){
+            old_modules.forEach(elem => {
+                add_to_basket(elem);
+            });
+            calc_price_window_vals();
+        }
+        // Activate loader
+        $('.loader')[0].classList.remove('hid');
+
+        // Counting reqests and answers
+        var requests_stack = 0;
         $.each($('.app_tech_name'), function(key, app){
+            ++requests_stack;
             session.rpc('/what_dependencies', {
                 root: [app.innerText]
             }).then(function (result) {
+                --requests_stack;
+                if(requests_stack < 5){
+                    $('.loader')[0].classList.add('hid');
+                }
                 /* Be carefull with dependecies when changing programm logic,
                 cause first dependence - is module himself.
                 Now result contains app's themself and their dependencies,
@@ -246,6 +269,7 @@ odoo.define('saas_apps.model', function (require){
             // Insert new app in to the basket
             choosen.set(module_name, price);
         }
+        save_modules_to_session_storage();
     }
 
     function delete_from_basket(module_name){
@@ -262,6 +286,7 @@ odoo.define('saas_apps.model', function (require){
                 change_border_color(elem[0].parentElement);
             }
         }
+        save_modules_to_session_storage();
     }
 
     function blink_anim(elems){
@@ -287,11 +312,35 @@ odoo.define('saas_apps.model', function (require){
     }
 
     function get_modules_to_install(){
-        modules = [];
+        var modules = [];
         for (var key of choosen.keys()) {
             modules.push(key);
         }
         return modules;
+    }
+
+    function save_modules_to_session_storage(){
+        localStorage.removeItem('modules');
+        localStorage.setItem('modules',get_modules_to_install());
+    }
+
+    function get_modules_from_session_storage(){
+        // localStorage returns a string,
+        // therefore need to collect modules array from that string
+        modules = localStorage.getItem('modules');
+        if(modules){
+            var i = 0, j = 1, modules_arr = [];
+            for(; j < modules.length; ++j){
+                if(modules[j] === ','){
+                    modules_arr.push(modules.slice(i, j));
+                    i = j + 1;
+                    j += 2;
+                }
+            }
+            modules_arr.push(modules.slice(i, j));
+            return modules_arr;
+        }
+        return [];
     }
 
     return {
