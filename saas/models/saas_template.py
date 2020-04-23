@@ -231,4 +231,6 @@ class SAASTemplateLine(models.Model):
     @api.multi
     def random_ready_operator(self):
         ready_operators = self.filtered(lambda r: r.state == 'done')
+        if not ready_operators:
+            return ready_operators
         return random.choice(ready_operators)
