@@ -3,6 +3,7 @@
 
 - **Improvement:** mandatory modules can be redefined in dependant modules
 - **New:** added "Refresh" in build view to get data from build database
+- **Fix:** random_ready_operator does not throw exceptions if no operators are ready
 
 `2.4.3`
 -------
