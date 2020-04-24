@@ -5,7 +5,7 @@
     <template id="index">
         <t t-call="website.layout">
             <title>Apps</title>
-            <div class="row container">
+            <div class="row container main-column">
                 <div class="mx-auto">
                     <!-- Users qty -->
                     <div class="openerp_enterprise_pricing_step">
@@ -87,7 +87,8 @@
                                 </ul>
                                 <h4 id="price" class="card-title pricing-card-title">10 <t t-esc="apps[0].currency_id.symbol"/> / </h4>
                                 <small id="box-period" class="text-muted period fnt-24">year</small>
-                                <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+                                <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary fnt-larger">Try trial</button>
+                                <button id="buy-now" type="button" class="btn btn-lg btn-block btn-primary fnt-larger">Buy now</button>
                             </div>
                         </span>
                     </div>

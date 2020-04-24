@@ -3,6 +3,7 @@
 
 from odoo.http import route, request, Controller
 from odoo.addons.saas_public.controllers.saas_public import SaaSPublicController
+from odoo.addons.website_sale.controllers.main import WebsiteSale
 import urllib.parse
 
 DB_TEMPLATE = 'template_database_'
@@ -13,6 +14,7 @@ class SaaSAppsController(Controller):
     @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
         apps = request.env['saas.line'].sudo()
+        # apps.delete_app_duplicates()
         if not apps.search_count([]):
             apps.refresh_lines()
         return request.render('saas_apps.index', {
@@ -27,7 +29,7 @@ class SaaSAppsController(Controller):
 
     @route(['/what_dependencies'], type='json', auth='public')
     def search_incoming_app_dependencies(self, **kw):
-        app_tech_name = kw['root'][0]
+        app_tech_name = kw.get('root')[0]
         app = request.env['saas.line'].sudo().search([('name', '=', app_tech_name)])
         return {
             'dependencies': app.dependencies_info('root')
@@ -41,7 +43,6 @@ class SaaSAppsController(Controller):
             'symbol': apps.search([])[0].currency_id.symbol
         }
 
-class SaaSAppsPublicController(SaaSPublicController):
     @route(['/take_template_id'], type='json', auth='public')
     def is_build_created(self, **kw):
         templates = request.env['saas.template'].sudo()
@@ -79,3 +80,61 @@ class SaaSAppsPublicController(SaaSPublicController):
         })
         saas_template_operator.sudo().preparing_template_next()
         return saas_template, saas_template_operator
+
+    @route(['/price/take_product_ids'], type='json', auth='public')
+    def take_product_ids(self, **kw):
+        module_names = kw.get('module_names', [])
+        modules = request.env['saas.line'].sudo()
+        apps_product_ids = []
+        apps = modules.search([('name', 'in', module_names), ('application', '=', True)])
+        for app in apps:
+            apps_product_ids.append(app.product_id.id)
+        return {
+            'ids': apps_product_ids
+        }
+
+
+class SaasAppsCart(WebsiteSale):
+
+
+    @route('/price/cart_update', type='json', auth='public', website=True)
+    def cart_update(self, **kw):
+        sale_order = request.website.sale_get_order(force_create=True)
+        pr_pr = request.env['product.product'].sudo()
+        product_ids = kw.get('old_apps_ids', [])
+        # Adding user as product in cart
+        user_product = request.env.ref("saas_apps.product_user").sudo()
+        user_product.price = kw.get('user_price')
+        sale_order._cart_update(
+                product_id=int(user_product.id),
+                add_qty=(float(kw.get('user_cnt')) - float(kw.get('old_user_cnt')))
+            )
+
+        # Delete old products from cart
+        for id in product_ids:
+            sale_order._cart_update(
+                product_id=int(id),
+                add_qty=-1
+            )
+
+        # Changing prices
+        product_ids = kw.get('product_ids', [])
+        period = kw.get('period')
+        for id in product_ids:
+            product = pr_pr.browse(id)
+            app = request.env['saas.line'].sudo().search([('module_name', '=', product.name)])
+            if period == 'm':
+                app.change_product_price(app, app.month_price)
+            else:
+                app.change_product_price(app, app.year_price)
+
+        # Add new ones
+        sale_order = request.website.sale_get_order(force_create=True)
+        for id in product_ids:
+            sale_order._cart_update(
+                product_id=int(id),
+                add_qty=1
+            )
+        return {
+            "link": "/shop/cart"
+        }

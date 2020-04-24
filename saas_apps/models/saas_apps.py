@@ -62,6 +62,7 @@ class SAASDependence(models.Model):
         default=lambda s: s.env.user.company_id,
     )
     currency_id = fields.Many2one("res.currency", compute="_compute_currency_id")
+    product_id = fields.Many2many('product.product', ondelete='cascade')
 
     def _compute_currency_id(self):
         self.currency_id = self.company_id.currency_id
@@ -79,13 +80,10 @@ class SAASDependence(models.Model):
                     new = self.create({
                         'name': app.name,
                         'module_name': ir_module_obj['name'],
-                        'icon_path': ir_module_obj['icon']
+                        'icon_path': ir_module_obj['icon'],
+                        'application': ir_module_obj['application'],
+                        'dependencies': app + apps.search([('name', 'in', ir_module_obj['depends'])])
                     })
-                    if ir_module_obj['application']:
-                        new.application = True
-                    new.dependencies += apps.search([('name', '=', app.name)])
-                    for dep_name in ir_module_obj['depends']:
-                        new.dependencies += apps.search([('name', '=', dep_name)])
                 else:
                     new = self.create({
                         'name': app.name,
@@ -94,11 +92,40 @@ class SAASDependence(models.Model):
                     })
 
     @api.multi
+    def make_product(self, app):
+        prod_templ = self.env["product.product"]
+        ready_product = prod_templ.search([('name', '=', app.module_name)])
+        if ready_product:
+            if not len(app.product_id):
+                app.product_id += ready_product
+        elif not app.application:
+            return
+        else:
+            app.product_id += prod_templ.create({
+                'name': app.module_name,
+                'price': app.year_price
+            })
+
+    def delete_app_duplicates(self):
+        apps = self.search([('application', '=', True)])
+        prod_templ = self.env["product.product"]
+        for app in apps:
+            products = prod_templ.search([('name', '=', app.module_name)])
+            if products > 1:
+                for product in products - products[0]:
+                    product.unlink()
+            for extra in app - app[0]:
+                extra.unlink()
+
+    def change_product_price(self, app, price):
+        app.product_id.price = price
+
     def compute_price(self):
         sum = 0
         for module in self.dependencies:
             sum += module.year_price
         self.year_price = sum
+        self.change_product_price(self, sum)
         sum = 0
         for module in self.dependencies:
             sum += module.month_price
@@ -114,8 +141,6 @@ class SAASDependence(models.Model):
         apps.append({
             'parent': root,
             'name': self.name,
-            'year_price': saas_module.year_price,
-            'month_price': saas_module.month_price,
             'childs': childs,
             'application': self.application
         })
@@ -144,6 +169,15 @@ class SAASDependence(models.Model):
         # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
         if "allow_to_sell" in vals and vals['allow_to_sell']:
             self.change_allow_to_sell()
+        if "year_price" in vals:
+            self.change_product_price(self, vals["year_price"])
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super(SAASDependence, self).create(vals)
+        if "module_name" in vals:
+            self.make_product(res)
         return res
 
 
@@ -168,3 +202,8 @@ class SAASTemplate(models.Model):
         old_base_template = self.search([('set_as_base', '=', True)])
         if old_base_template:
             old_base_template.write({'set_as_base': False})
+
+class SAASProduct(models.Model):
+    _inherit = 'product.product'
+
+    application = fields.Many2many('saas.line')
