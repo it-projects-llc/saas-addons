@@ -45,7 +45,7 @@ class SAASDB(models.Model):
     def get_url(self):
         # TODO: need possibility to use custom domain
         self.ensure_one()
-        return self.operator_id.get_db_url(self)
+        return self.sudo().operator_id.get_db_url(self)
 
     def action_get_build_access(self):
         auth_url = '/saas/auth-to-build/' + str(self.id)
