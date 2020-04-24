@@ -11,10 +11,10 @@ odoo.define('saas_apps.model', function (require){
         choosen = new Map(),
         parent_tree  = new Map(),
         child_tree  = new Map(),
-        prices  = new Map(),
         apps_in_basket = 0,
         currency = "",
-        currency_symbol = "";
+        currency_symbol = "",
+        apps_in_cart = [];
 
     function calc_apps_price(){
         price = 0;
@@ -24,10 +24,13 @@ odoo.define('saas_apps.model', function (require){
         return price;
     }
 
+    function user_price(){
+        return per_month ? 12.5 : 10.0;
+    }
+
     function Calc_Price(){
         // Calculate general price
-        var users_price_period = per_month ? 12.5 : 10.0;
-        return calc_apps_price() + parseInt($('#users')[0].value, 10)*users_price_period;
+        return calc_apps_price() + parseInt($('#users')[0].value, 10)*user_price();
     }
 
     function redirect_to_build(modules_to_install){
@@ -56,6 +59,28 @@ odoo.define('saas_apps.model', function (require){
                 // recalling this func till the saas_template_operator obj isn't ready
                 setTimeout(redirect_to_build, 5000, modules_to_install);
             }
+        });
+    }
+
+    function redirect_to_cart(){
+        var modules = [];
+        for (var key of choosen.keys()) {
+            modules.push(key);
+        }
+        session.rpc('/price/take_product_ids', {
+            module_names: modules
+        }).then(function (product_ids) {
+            session.rpc('/price/cart_update', {
+                product_ids: product_ids.ids,
+                old_apps_ids: get_old_products(),
+                period: per_month ? 'm' : 'y',
+                user_price: user_price(),
+                old_user_cnt: get_old_user_cnt(),
+                user_cnt: $('#users').val()
+            }).then(function (response) {
+                window.location.href = response.link;
+            });
+            save_old_products(product_ids.ids);
         });
     }
 
@@ -93,6 +118,9 @@ odoo.define('saas_apps.model', function (require){
 
     // Downloading apps dependencies
     window.onload = function() {
+        // Check needs to avoid js code loading on another pages
+        if(!window.location.pathname.includes('/price'))
+            return;
         // Catching click to the app
         $(".app").click(function(){
             // Get app technical name
@@ -126,11 +154,16 @@ odoo.define('saas_apps.model', function (require){
             per_month = true;
             change_period();
         });
-        // Catching click to the 'Get Started' button
+        // Catching click to the 'Try trial' button
         $("#get-started").click(function(){
             // Showing the loader
             $('.loader')[0].classList.remove('hid');
             redirect_to_build(null);
+        });
+        // Catching click to the 'Buy now' button
+        $("#buy-now").click(function(){
+            // Showing the loader
+            redirect_to_cart();
         });
 
         $('#users').click(function(){
@@ -320,28 +353,42 @@ odoo.define('saas_apps.model', function (require){
         return modules;
     }
 
+    function save_old_products(ids){
+        localStorage.removeItem('old_user_cnt');
+        localStorage.removeItem('old_products');
+        localStorage.setItem('old_products', ids);
+        localStorage.setItem('old_user_cnt', $('#users').val());
+    }
+
+    function get_old_user_cnt(){return localStorage.getItem('old_user_cnt');}
+
+    function get_old_products(){
+        return parse_string_to_arr(localStorage.getItem('old_products'));
+    }
+
     function save_modules_to_session_storage(){
         localStorage.removeItem('modules');
         localStorage.setItem('modules',get_modules_to_install());
     }
 
-    function get_modules_from_session_storage(){
-        // localStorage returns a string,
-        // therefore need to collect modules array from that string
-        modules = localStorage.getItem('modules');
-        if(modules){
-            var i = 0, j = 1, modules_arr = [];
-            for(; j < modules.length; ++j){
-                if(modules[j] === ','){
-                    modules_arr.push(modules.slice(i, j));
+    function parse_string_to_arr(str){
+        if(str){
+            var i = 0, j = 1, arr = [];
+            for(; j < str.length; ++j){
+                if(str[j] === ','){
+                    arr.push(str.slice(i, j));
                     i = j + 1;
                     j += 2;
                 }
             }
-            modules_arr.push(modules.slice(i, j));
-            return modules_arr;
+            arr.push(str.slice(i, j));
+            return arr;
         }
         return [];
+    }
+
+    function get_modules_from_session_storage(){
+        return parse_string_to_arr(localStorage.getItem('modules'));
     }
 
     return {
