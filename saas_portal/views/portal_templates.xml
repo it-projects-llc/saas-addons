@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+
+    <template id="portal_my_home" name="Portal My Home: saas.db entries" inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="build_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Builds</t>
+                <t t-set="url" t-value="'/my/builds'"/>
+                <t t-set="count" t-value="build_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_builds" name="My Builds">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Builds</t>
+            </t>
+            <t t-if="not builds">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no builds
+                </div>
+            </t>
+            <t t-if="builds" t-call="portal.portal_table">
+                <tbody>
+                    <tr t-foreach="builds" t-as="build">
+                        <td>
+                            <span class="float-left">
+                                <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name"/></a>
+                                <t t-if="build.admin_user != user_id">
+                                    (Admin: <t t-if="not build.admin_user">None</t><t t-else="" t-esc="build.admin_user.name" />)
+                                </t>
+                            </span>
+                            <span class="float-right">
+                                <t t-if="build.state == 'done'">
+                                    <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                        Link
+                                    </a>
+                                </t>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_build" name="My Build">
+        <t t-call="portal.portal_layout">
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <h5 class="mb-0">
+                        <small class="text-muted">Build - </small><span t-field="build.name"/>
+                        <span t-if="build.state == 'draft'">(Draft)</span>
+                        <span class="float-right">
+                            <t t-if="build.state == 'done'">
+                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                    Link
+                                </a>
+                            </t>
+                        </span>
+                    </h5>
+                </t>
+                <t t-set="card_body">
+                    <div class="row">
+                        <div class="col">
+                            <b>Expiration date</b>
+                        </div>
+                        <div class="col">
+                            <span t-field="build.expiration_date" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Number of users</b>
+                        </div>
+                        <div class="col">
+                            <span t-field="build.users_count" /> / <span t-field="build.max_users_limit" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Pending processes</b>
+                        </div>
+                        <div class="col">
+                            <span t-field="build.number_of_queue_jobs_to_be_done" />
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
