@@ -1,12 +1,12 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* saas
+# 	* saas
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: <>\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -125,22 +125,22 @@ msgid "DB URLs"
 msgstr ""
 
 #. module: saas
-#: selection:saas.log,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__creation
 msgid "DB is being created"
 msgstr ""
 
 #. module: saas
-#: selection:saas.log,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__created
 msgid "DB is created"
 msgstr ""
 
 #. module: saas
-#: selection:saas.log,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__dropped
 msgid "DB is dropped"
 msgstr ""
 
 #. module: saas
-#: selection:saas.template.operator,state:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__creating
 msgid "Database Creating"
 msgstr ""
 
@@ -187,8 +187,8 @@ msgid "Display Name"
 msgstr ""
 
 #. module: saas
-#: selection:saas.db,state:0
-#: selection:saas.template.operator,state:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__state__draft
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__draft
 msgid "Draft"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgid "Extra data"
 msgstr ""
 
 #. module: saas
-#: selection:saas.template.operator,state:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__post_init
 msgid "Extra initialization"
 msgstr ""
 
@@ -276,7 +276,7 @@ msgid "Master URL (Server-to-Server)"
 msgstr ""
 
 #. module: saas
-#: selection:saas.template.operator,state:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__installing_modules
 msgid "Modules installation"
 msgstr ""
 
@@ -293,14 +293,14 @@ msgid "Name"
 msgstr ""
 
 #. module: saas
-#: selection:saas.db,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__type__build
 msgid "Normal Build"
 msgstr ""
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__operator_id
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_id
-#: selection:saas.log,data_id:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__saas_operator
 msgid "Operator"
 msgstr ""
 
@@ -323,17 +323,18 @@ msgstr ""
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_template__template_post_init
-msgid "Python code to be executed once db is created and modules are installed"
+msgid ""
+"Python code to be executed once db is created and modules are installed"
 msgstr ""
 
 #. module: saas
-#: selection:saas.log,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__authed
 msgid "Quick Authentication"
 msgstr ""
 
 #. module: saas
-#: selection:saas.db,state:0
-#: selection:saas.template.operator,state:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__state__done
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__done
 msgid "Ready"
 msgstr ""
 
@@ -354,7 +355,7 @@ msgid "SaaS"
 msgstr ""
 
 #. module: saas
-#: selection:saas.operator,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_operator__type__local
 msgid "Same Instance"
 msgstr ""
 
@@ -383,7 +384,7 @@ msgid "Template"
 msgstr ""
 
 #. module: saas
-#: selection:saas.db,type:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__type__template
 msgid "Template DB"
 msgstr ""
 
@@ -430,14 +431,17 @@ msgid "Templates"
 msgstr ""
 
 #. module: saas
-#: code:addons/saas/models/saas_template.py:88
+#: code:addons/saas/models/saas_template.py:0
 #, python-format
-msgid "There are no ready template's deployments. Create new one or wait until it's done."
+msgid ""
+"There are no ready template's deployments. Create new one or wait until it's"
+" done."
 msgstr ""
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_template_create_build__build_post_init_ids
-msgid "These values will be used on execution template's Build Initialization code"
+msgid ""
+"These values will be used on execution template's Build Initialization code"
 msgstr ""
 
 #. module: saas
@@ -446,7 +450,7 @@ msgid "To Rebuild"
 msgstr ""
 
 #. module: saas
-#: selection:saas.log,data_id:0
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__auth_quick_master_token
 msgid "Token"
 msgstr ""
 
@@ -485,4 +489,3 @@ msgstr ""
 #: model:ir.model,name:saas.model_saas_template_create_build
 msgid "Wizard to create build by template"
 msgstr ""
-
