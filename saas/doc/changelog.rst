@@ -5,6 +5,7 @@
 - **New:** added "Refresh" in build view to get data from build database
 - **Fix:** random_ready_operator does not throw exceptions if no operators are ready
 - **Fix:** no extra rigths required to read build's URL
+- **Improvement:** Removed {db_id} variable for generating database name
 
 `2.4.3`
 -------
