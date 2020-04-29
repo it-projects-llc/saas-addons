@@ -23,7 +23,7 @@ class SAASOperator(models.Model):
     global_url = fields.Char('Master URL (Server-to-Server)', required=True, help='URL for server-to-server communication ')
     # host = fields.Char()
     # port = fields.Char()
-    db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_id}, {db_name}')
+    db_url_template = fields.Char('DB URLs', help='Avaialble variables: {db_name}')
     db_name_template = fields.Char('DB Names', required=True, help='Avaialble variables: {unique_id}')
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
@@ -113,7 +113,7 @@ class SAASOperator(models.Model):
     def get_db_url(self, db):
         # TODO: use mako for url templating
         self.ensure_one()
-        return self.db_url_template.format(db_id=db.id, db_name=db.name)
+        return self.db_url_template.format(db_name=db.name)
 
     def generate_db_name(self):
         self.ensure_one()
