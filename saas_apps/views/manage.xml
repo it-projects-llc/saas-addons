@@ -82,6 +82,9 @@
         <field name="arch" type="xml">
             <xpath expr="//form/sheet/group" position="inside">
                 <field name="set_as_base"/>
+                <field name="set_as_package"/>
+                <field attrs="{'invisible':[('set_as_package','=',False)]}" name="month_price"/>
+                <field attrs="{'invisible':[('set_as_package','=',False)]}" name="year_price"/>
             </xpath>
         </field>
     </record>
