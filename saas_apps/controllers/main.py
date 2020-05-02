@@ -14,11 +14,13 @@ class SaaSAppsController(Controller):
     @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
         apps = request.env['saas.line'].sudo()
+        packages = request.env['saas.template'].sudo()
         # apps.delete_app_duplicates()
         if not apps.search_count([]):
             apps.refresh_lines()
         return request.render('saas_apps.index', {
-            'apps': apps.search([('allow_to_sell', '=', True)])
+            'apps': apps.search([('allow_to_sell', '=', True)]),
+            'packages': packages.search([('set_as_package', '=', True)])
         })
 
     @route(['/refresh'], type='json', auth='public')
@@ -36,7 +38,7 @@ class SaaSAppsController(Controller):
         }
 
     @route(['/check_currency'], type='json', auth='public')
-    def what_company_cuurency_to_use(self, **kw):
+    def what_company_curency_to_use(self, **kw):
         apps = request.env['saas.line'].sudo()
         return {
             'currency': apps.search([])[0].currency_id.display_name,
@@ -45,8 +47,13 @@ class SaaSAppsController(Controller):
 
     @route(['/take_template_id'], type='json', auth='public')
     def is_build_created(self, **kw):
+        package = kw.get('package')
         templates = request.env['saas.template'].sudo()
-        template = templates.search([('set_as_base', '=', True)])
+        # If package exist, use package saas_template
+        template = templates.search([('set_as_package', '=', True), ('name', '=', package)])
+        if not template:
+            # If package wasn't selected, use base saas_template
+            template = templates.search([('set_as_base', '=', True)])
         if not template:
             template, saas_template_operator = self.create_new_template()
             return {
@@ -87,10 +94,24 @@ class SaaSAppsController(Controller):
         modules = request.env['saas.line'].sudo()
         apps_product_ids = []
         apps = modules.search([('name', 'in', module_names), ('application', '=', True)])
-        for app in apps:
-            apps_product_ids.append(app.product_id.id)
+        templates = request.env['saas.template'].sudo().search([('name', 'in', module_names)])
+        for app in apps.product_id + templates.product_id:
+            apps_product_ids.append(app.id)
+
         return {
             'ids': apps_product_ids
+        }
+
+    @route(['/price/get_package_modules'], type='json', auth='public')
+    def take_package_product_ids(self, **kw):
+        packages = kw.get('package', [])
+        templates = request.env['saas.template'].sudo().search([('name', 'in', packages)])
+        modules = []
+        for template in templates:
+            for module in template.template_module_ids:
+                modules.append(module.name)
+        return {
+            'modules': modules
         }
 
 
@@ -105,9 +126,12 @@ class SaasAppsCart(WebsiteSale):
         # Adding user as product in cart
         user_product = request.env.ref("saas_apps.product_user").sudo()
         user_product.price = kw.get('user_price')
+        old_user_cnt = kw.get('old_user_cnt')
+        if not old_user_cnt:
+            old_user_cnt = '0'
         sale_order._cart_update(
                 product_id=int(user_product.id),
-                add_qty=(float(kw.get('user_cnt')) - float(kw.get('old_user_cnt')))
+                add_qty=(float(kw.get('user_cnt')) - float(old_user_cnt))
             )
 
         # Delete old products from cart
@@ -123,10 +147,13 @@ class SaasAppsCart(WebsiteSale):
         for id in product_ids:
             product = pr_pr.browse(id)
             app = request.env['saas.line'].sudo().search([('module_name', '=', product.name)])
+            packages = request.env['saas.template'].sudo().search([('name', '=', product.name)])
             if period == 'm':
                 app.change_product_price(app, app.month_price)
+                packages.change_product_price(packages, packages.month_price)
             else:
                 app.change_product_price(app, app.year_price)
+                packages.change_product_price(packages, packages.year_price)
 
         # Add new ones
         sale_order = request.website.sale_get_order(force_create=True)

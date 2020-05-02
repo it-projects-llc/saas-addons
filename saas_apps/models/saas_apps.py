@@ -31,6 +31,8 @@ class SAASModule(models.Model):
         if 'month_price' in vals or 'year_price' in vals:
             for line in self.saas_modules:
                 line.compute_price()
+            for template in self.template_ids:
+                template.compute_price()
         return res
 
     def refresh_modules(self):
@@ -192,10 +194,15 @@ class SAASTemplateLine(models.Model):
         return False
 
 
-class SAASTemplate(models.Model):
+class SAASAppsTemplate(models.Model):
     _inherit = 'saas.template'
 
     set_as_base = fields.Boolean("Base template")
+    set_as_package = fields.Boolean("Package")
+    month_price = fields.Float()
+    year_price = fields.Float()
+    icon_path = fields.Char(string="Icon path")
+    product_id = fields.Many2many('product.product', ondelete='cascade')
 
     @api.onchange('set_as_base')
     def change_base_template(self):
@@ -203,7 +210,35 @@ class SAASTemplate(models.Model):
         if old_base_template:
             old_base_template.write({'set_as_base': False})
 
+    def compute_price(self):
+        sum = 0
+        for module in self.template_module_ids:
+            sum += module.year_price
+        self.year_price = sum
+        self.change_product_price(self, sum)
+        sum = 0
+        for module in self.template_module_ids:
+            sum += module.month_price
+        self.month_price = sum
+
+    def change_product_price(self, package, price):
+        package.product_id.price = price
+
+    @api.model
+    def create(self, vals):
+        res = super(SAASAppsTemplate, self).create(vals)
+        if res.set_as_package:
+            res.compute_price()
+            res.icon_path = 'saas_apps/static/src/img/idea.png'
+            res.product_id += self.env['product.product'].create({
+                'name': res.name,
+                'price': res.year_price
+            })
+        return res
+
+
 class SAASProduct(models.Model):
     _inherit = 'product.product'
 
     application = fields.Many2many('saas.line')
+    package = fields.Many2many('saas.template')
