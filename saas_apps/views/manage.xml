@@ -83,9 +83,33 @@
             <xpath expr="//form/sheet/group" position="inside">
                 <field name="set_as_base"/>
                 <field name="set_as_package"/>
+                <field attrs="{'invisible':[('set_as_package','=',False)]}" name="package_image" widget="image" class="oe_left oe_avatar"/>
                 <field attrs="{'invisible':[('set_as_package','=',False)]}" name="month_price"/>
                 <field attrs="{'invisible':[('set_as_package','=',False)]}" name="year_price"/>
             </xpath>
+        </field>
+    </record>
+
+    <record id="saas_line_form_view" model="ir.ui.view">
+        <field name="name">saas.line.form.view</field>
+        <field name="model">saas.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="app_image" widget="image" class="oe_avatar o_field_image"/>
+                    <group>
+                        <field name="module_name"/>
+                        <field name="allow_to_sell"/>
+                        <field name="month_price" class="oe_inline" 
+                        widget='monetary'/>
+                        <field name="year_price" class="oe_inline" 
+                        widget='monetary'/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="dependencies"/>
+                        <field name="product_id"/>
+                    </group>
+                </sheet>
+            </form>
         </field>
     </record>
 </odoo>

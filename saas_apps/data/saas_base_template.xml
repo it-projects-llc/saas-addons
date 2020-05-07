@@ -13,4 +13,16 @@
         <field name="template_id" eval="ref('base_template')"/>
         <field name="operator_id" ref="saas.local_operator"/>
     </record>
+
+    <record id="saas_apps_base_image" model="ir.attachment">
+        <field name="public" eval="True" />
+        <field name="name">Application base icon</field>
+        <field name="store_fname">base.png</field>
+        <field name="type">binary</field>
+        <field
+            name="datas"
+            type="base64"
+            file="saas_apps/static/src/img/base.png"
+        />
+    </record>
 </odoo>

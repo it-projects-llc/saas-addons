@@ -31,9 +31,8 @@
                                     <t t-if="app.application">
                                         <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app">
                                             <div class="app-icon">
-                                                <img t-if="app.icon_path"
-                                                t-att-src="to_text(app.icon_path)"
-                                                style="max-width: 40px;max-height: 40px;"/>
+                                                <img t-att-src="'data:image/png;base64,%s' % to_text(app.app_image)"
+                                                    style="max-width: 40px;max-height: 40px;"/>
                                             </div>
                                             <div class="app-data">
                                                 <div><t t-esc="app.module_name"/></div>
@@ -65,9 +64,8 @@
                                 <t t-foreach="packages" t-as="package">
                                     <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app package">
                                         <div class="app-icon">
-                                            <img t-if="package.icon_path"
-                                            t-att-src="to_text(package.icon_path)"
-                                            style="max-width: 40px;max-height: 40px;"/>
+                                            <img t-att-src="'data:image/png;base64,%s' % to_text(package.package_image)"
+                                                    style="max-width: 40px;max-height: 40px;"/>
                                         </div>
                                         <div class="app-data">
                                             <div><t t-esc="package.name"/></div>

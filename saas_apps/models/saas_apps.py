@@ -4,6 +4,7 @@
 from odoo import api, fields, models
 import logging
 from slugify import slugify
+import base64
 
 _logger = logging.getLogger(__name__)
 
@@ -64,25 +65,34 @@ class SAASDependence(models.Model):
         default=lambda s: s.env.user.company_id,
     )
     currency_id = fields.Many2one("res.currency", compute="_compute_currency_id")
-    product_id = fields.Many2many('product.product', ondelete='cascade')
+    product_id = fields.Many2many('product.product')
 
     def _compute_currency_id(self):
         self.currency_id = self.company_id.currency_id
+
+    def _compute_default_image(self):
+        return self.env.ref("saas_apps.saas_apps_base_image").datas
+
+    app_image = fields.Image(
+        string='App image',
+        default=_compute_default_image
+    )
 
     def refresh_lines(self):
         apps = self.env["saas.module"]
         for line in map(self.browse, self._search([])):
             line.unlink()
         apps.refresh_modules()
-        base_icon_path = '/base/static/description/icon.png'
+        base_icon = self.env["ir.module.module"].search([('name', '=', 'base')]).icon_image
         for app in apps.search([]):
+            self.delete_shit(app.name)
             if self.search_count([('name', '=', app.name)]) == 0:
                 ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
                 if len(ir_module_obj):
                     new = self.create({
                         'name': app.name,
                         'module_name': ir_module_obj['name'],
-                        'icon_path': ir_module_obj['icon'],
+                        'app_image': self.env["ir.module.module"].search([('name', '=', app.name)]).icon_image,
                         'application': ir_module_obj['application'],
                         'dependencies': app + apps.search([('name', 'in', ir_module_obj['depends'])])
                     })
@@ -90,7 +100,7 @@ class SAASDependence(models.Model):
                     new = self.create({
                         'name': app.name,
                         'module_name': app.name,
-                        'icon_path': base_icon_path
+                        'app_image': base_icon
                     })
 
     @api.multi
@@ -105,7 +115,8 @@ class SAASDependence(models.Model):
         else:
             app.product_id += prod_templ.create({
                 'name': app.module_name,
-                'price': app.year_price
+                'price': app.year_price,
+                'image_1920': app.app_image
             })
 
     def delete_app_duplicates(self):
@@ -201,8 +212,15 @@ class SAASAppsTemplate(models.Model):
     set_as_package = fields.Boolean("Package")
     month_price = fields.Float()
     year_price = fields.Float()
-    icon_path = fields.Char(string="Icon path")
     product_id = fields.Many2many('product.product', ondelete='cascade')
+
+    def _compute_default_image(self):
+        return self.env.ref("saas_apps.saas_apps_base_image").datas
+
+    package_image = fields.Image(
+        string='Package image',
+        default=_compute_default_image
+    )
 
     @api.onchange('set_as_base')
     def change_base_template(self):
@@ -229,11 +247,17 @@ class SAASAppsTemplate(models.Model):
         res = super(SAASAppsTemplate, self).create(vals)
         if res.set_as_package:
             res.compute_price()
-            res.icon_path = 'saas_apps/static/src/img/idea.png'
-            res.product_id += self.env['product.product'].create({
-                'name': res.name,
-                'price': res.year_price
-            })
+            prod = self.env['product.product']
+            ready_product = prod.search([('name', '=', res.name)])
+            if ready_product:
+                if not len(res.product_id):
+                    res.product_id += ready_product
+            else:
+                res.product_id += prod.create({
+                    'name': res.name,
+                    'price': res.year_price,
+                    'image_1920': res.package_image
+                })
         return res
 
 

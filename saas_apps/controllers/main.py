@@ -15,7 +15,7 @@ class SaaSAppsController(Controller):
     def user_page(self, **kw):
         apps = request.env['saas.line'].sudo()
         packages = request.env['saas.template'].sudo()
-        # apps.delete_app_duplicates()
+        apps.delete_app_duplicates()
         if not apps.search_count([]):
             apps.refresh_lines()
         return request.render('saas_apps.index', {
