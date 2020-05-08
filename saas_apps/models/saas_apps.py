@@ -119,17 +119,6 @@ class SAASDependence(models.Model):
                 'image_1920': app.app_image
             })
 
-    def delete_app_duplicates(self):
-        apps = self.search([('application', '=', True)])
-        prod_templ = self.env["product.product"]
-        for app in apps:
-            products = prod_templ.search([('name', '=', app.module_name)])
-            if products > 1:
-                for product in products - products[0]:
-                    product.unlink()
-            for extra in app - app[0]:
-                extra.unlink()
-
     def change_product_price(self, app, price):
         app.product_id.price = price
 
