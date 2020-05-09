@@ -4,6 +4,6 @@
     <record id="product_user" model="product.product">
         <field name="name">User</field>
         <field name="price">10</field>
-        <field file="saas_apps/static/src/img/user.png" name="image_1920" type="base64" />
+        <field file="saas_apps/static/src/img/user.png" name="image" type="base64" />
     </record>
 </odoo>

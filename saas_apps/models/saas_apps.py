@@ -70,12 +70,11 @@ class SAASDependence(models.Model):
     def _compute_currency_id(self):
         self.currency_id = self.company_id.currency_id
 
-    def _compute_default_image(self):
-        return self.env.ref("saas_apps.saas_apps_base_image").datas
+    # def _compute_default_image(self):
+    #     return self.env.ref("saas_apps.saas_apps_base_image").datas
 
-    app_image = fields.Image(
-        string='App image',
-        default=_compute_default_image
+    app_image = fields.Binary(
+        string='App image'
     )
 
     def refresh_lines(self):
@@ -85,7 +84,6 @@ class SAASDependence(models.Model):
         apps.refresh_modules()
         base_icon = self.env["ir.module.module"].search([('name', '=', 'base')]).icon_image
         for app in apps.search([]):
-            self.delete_shit(app.name)
             if self.search_count([('name', '=', app.name)]) == 0:
                 ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
                 if len(ir_module_obj):
@@ -93,9 +91,9 @@ class SAASDependence(models.Model):
                         'name': app.name,
                         'module_name': ir_module_obj['name'],
                         'app_image': self.env["ir.module.module"].search([('name', '=', app.name)]).icon_image,
-                        'application': ir_module_obj['application'],
-                        'dependencies': app + apps.search([('name', 'in', ir_module_obj['depends'])])
+                        'application': ir_module_obj['application']
                     })
+                    new.dependencies = app + apps.search([('name', 'in', ir_module_obj['depends'])])
                 else:
                     new = self.create({
                         'name': app.name,
@@ -116,11 +114,12 @@ class SAASDependence(models.Model):
             app.product_id += prod_templ.create({
                 'name': app.module_name,
                 'price': app.year_price,
-                'image_1920': app.app_image
+                'image': app.app_image
             })
 
     def change_product_price(self, app, price):
-        app.product_id.price = price
+        if len(app) == 1:
+            app.product_id.price = price
 
     def compute_price(self):
         sum = 0
@@ -203,12 +202,11 @@ class SAASAppsTemplate(models.Model):
     year_price = fields.Float()
     product_id = fields.Many2many('product.product', ondelete='cascade')
 
-    def _compute_default_image(self):
-        return self.env.ref("saas_apps.saas_apps_base_image").datas
+    # def _compute_default_image(self):
+        # return self.env.ref("saas_apps.saas_apps_base_image").datas
 
-    package_image = fields.Image(
-        string='Package image',
-        default=_compute_default_image
+    package_image = fields.Binary(
+        string='Package image'
     )
 
     @api.onchange('set_as_base')
@@ -229,13 +227,15 @@ class SAASAppsTemplate(models.Model):
         self.month_price = sum
 
     def change_product_price(self, package, price):
-        package.product_id.price = price
+        if len(package) == 1:
+            package.product_id.price = price
 
     @api.model
     def create(self, vals):
         res = super(SAASAppsTemplate, self).create(vals)
         if res.set_as_package:
-            res.compute_price()
+            if not (res.year_price + res.month_price):
+                res.compute_price()
             prod = self.env['product.product']
             ready_product = prod.search([('name', '=', res.name)])
             if ready_product:
@@ -245,7 +245,7 @@ class SAASAppsTemplate(models.Model):
                 res.product_id += prod.create({
                     'name': res.name,
                     'price': res.year_price,
-                    'image_1920': res.package_image
+                    'image': res.package_image
                 })
         return res
 

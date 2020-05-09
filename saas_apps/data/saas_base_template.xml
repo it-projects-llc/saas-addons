@@ -15,10 +15,9 @@
     </record>
 
     <record id="saas_apps_base_image" model="ir.attachment">
-        <field name="public" eval="True" />
         <field name="name">Application base icon</field>
-        <field name="store_fname">base.png</field>
-        <field name="type">binary</field>
+        <field name="datas_fname">base.png</field>
+        <field name="use_as_background">True</field>
         <field
             name="datas"
             type="base64"

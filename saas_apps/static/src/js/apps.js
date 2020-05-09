@@ -230,7 +230,7 @@ odoo.define('saas_apps.model', function (require){
         $.each($('.app_tech_name'), function(key, app){
             ++requests_stack;
             session.rpc('/what_dependencies', {
-                root: [app.innerText]
+                root: app.innerText
             }).then(function (result) {
                 --requests_stack;
                 if(requests_stack < 5){

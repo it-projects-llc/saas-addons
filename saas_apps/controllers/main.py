@@ -30,7 +30,7 @@ class SaaSAppsController(Controller):
 
     @route(['/what_dependencies'], type='json', auth='public')
     def search_incoming_app_dependencies(self, **kw):
-        app_tech_name = kw.get('root')[0]
+        app_tech_name = kw.get('root')
         app = request.env['saas.line'].sudo().search([('name', '=', app_tech_name)])
         return {
             'dependencies': app.dependencies_info('root')
@@ -94,8 +94,10 @@ class SaaSAppsController(Controller):
         apps_product_ids = []
         apps = modules.search([('name', 'in', module_names), ('application', '=', True)])
         templates = request.env['saas.template'].sudo().search([('name', 'in', module_names)])
-        for app in apps.product_id + templates.product_id:
-            apps_product_ids.append(app.id)
+        for app in apps:
+            apps_product_ids.append(app.product_id.id)
+        for package in templates:
+            apps_product_ids.append(package.product_id.id)
 
         return {
             'ids': apps_product_ids
