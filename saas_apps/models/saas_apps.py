@@ -233,7 +233,8 @@ class SAASAppsTemplate(models.Model):
     def create(self, vals):
         res = super(SAASAppsTemplate, self).create(vals)
         if res.set_as_package:
-            res.compute_price()
+            if not (res.year_price + res.month_price):
+                res.compute_price()
             prod = self.env['product.product']
             ready_product = prod.search([('name', '=', res.name)])
             if ready_product:
