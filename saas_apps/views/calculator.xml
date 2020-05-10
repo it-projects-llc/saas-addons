@@ -12,15 +12,10 @@
                         <div class="openerp_enterprise_pricing_step_head">
                             <h3 class="mt16 mb8">Choose the number of <b>Users</b></h3>
                         </div>
-                        <div class="openerp_enterprise_pricing_step_body d-flex align-items-stretch form-inline">
-                            <input class="openerp_enterprise_pricing_users form-control border text-right pr-2" id="users" name="num_users" type="number" style="max-width: 100px;" min="1" value="1"/>
-                            <label class="px-2 mr-1 mb-0 bg-200 border-top border-right border-bottom">Users</label>
-                            <label>
-                                <b>
-                                    <span class="openerp_enterprise_pricing_user_amount_yearly">10,00</span><span class="openerp_enterprise_pricing_currency"><t t-esc="apps[0].currency_id.display_name"/></span><small class="fw_semibold">/user/month</small>
-                                </b>
-                            </label>
-                        </div>
+                        <img id="substr-users" src="/saas_apps/static/src/img/substr-users.png" alt="Decrease users qty" class="users-qty-change-buttons"/>
+                        <input class="openerp_enterprise_pricing_users form-control border text-right pr-2"
+                        id="users" name="num_users" type="text" value="1" style="max-width: 100px;display: inline;text-align: center !important;"/>
+                        <img id="add-users" src="/saas_apps/static/src/img/add-users.png" alt="Increase users qty" class="users-qty-change-buttons"/>
                     </div>
                     <!-- App list -->
                     <div class="openerp_enterprise_pricing_step">

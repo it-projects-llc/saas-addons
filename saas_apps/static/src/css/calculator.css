@@ -8,6 +8,12 @@
     display: inline;
 }
 
+.users-qty-change-buttons{
+    max-width: 30px;
+    max-height: 30px;
+    opacity: 0.5;
+}
+
 .loader{
     position: fixed;
     z-index: 99;
