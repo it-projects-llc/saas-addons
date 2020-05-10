@@ -2,27 +2,6 @@
 <!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
     License AGPL-3.0 (https://www.gnu.org/licenses/agpl-3.0.html).-->
 <odoo>
-    <template id="manage">
-        <t t-call="website.layout">
-            <title>Apps</title>
-            <div class="row container" style="margin-left: 25%">
-                <div class="col-sm-8">
-                    <!-- App list -->
-                    <div class="col-12 col-md-8 col-lg-9">
-                        <h3 class="mt16 mb16">Choose your Apps</h3>
-                        <h6 class="mt16 mb16">Choosen apps will be available in the store</h6>
-                        <div class="openerp_enterprise_pricing_step_body mb24">
-                            <div class="form-row">
-                                <t t-foreach="apps" t-as="app">
-                                    <p id="application" class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window"><t t-esc="app.module_name"/></p>
-                                </t>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </t>
-    </template>
 
     <record id="view_manage_apps_search" model="ir.ui.view">
         <field name="name">saas.line.search</field>

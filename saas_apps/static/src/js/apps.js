@@ -207,6 +207,17 @@ odoo.define('saas_apps.model', function (require){
                 calc_price_window_vals();
             }
         });
+        // Changing users qty buttons
+        $('#substr-users').click(function(){
+            check_users_input();
+            $('#users').val(parseInt($('#users').val(), 10) - 1);
+            calc_price_window_vals();
+        });
+        $('#add-users').click(function(){
+            check_users_input();
+            $('#users').val(parseInt($('#users').val(), 10) + 1);
+            calc_price_window_vals();
+        });
 
         session.rpc('/check_currency', {
         }).then(function (result) {
@@ -386,14 +397,18 @@ odoo.define('saas_apps.model', function (require){
 
     function blink_anim(elems){
         elems.forEach( (elem) =>{
-            elem.animate({opacity: "0"}, 200);
-            elem.animate({opacity: "1"}, 200);
+            elem.animate({opacity: "0"}, 250);
+            elem.animate({opacity: "1"}, 250);
         });
     }
     
     function calc_price_window_vals(){
+        check_users_input();
         // This method refreshes data in price window
         price = Calc_Price();
+        // Adding blink animation
+        blink_anim([$('#apps-cost'), $('#users-cnt-cost'),
+        $('#apps-qty'), $('#price-users'), $('#users-qty'), $('#price')]);
         var period = per_month ? "month" : "year";
         $('#price').text(String(price) + ' ' + currency_symbol + ' / ');
         $('#box-period').text(String(period));
@@ -403,9 +418,11 @@ odoo.define('saas_apps.model', function (require){
         $('#apps-qty').text(String(apps_in_basket));
         $('#users-cnt-cost').text(String(users_price_period * $('#users').val()));
         $('#apps-cost').text(String(calc_apps_price()));
-        // Adding blink animation
-        blink_anim([$('#apps-cost'), $('#users-cnt-cost'),
-        $('#apps-qty'), $('#price-users'), $('#users-qty'), $('#price')]);
+    }
+
+    function check_users_input(){
+        if(parseInt($('#users').val(), 10) <= 0 || $('#users').val() === '') 
+            $('#users').val(1);
     }
 
     function get_modules_to_install(){
