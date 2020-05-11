@@ -13,7 +13,7 @@ class SaaSAppsController(Controller):
 
     @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
-        res = request.env['res.config.settings'].get_values()
+        res = request.env['res.config.settings'].sudo().get_values()
         apps = request.env['saas.line'].sudo()
         packages = request.env['saas.template'].sudo()
         if not apps.search_count([]):
