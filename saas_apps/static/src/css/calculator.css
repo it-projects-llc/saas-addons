@@ -49,6 +49,7 @@
     max-height: 70px;
     display: flex;
     margin-bottom: 10px;
+    min-width: 174px;
 }
 
 .app-data{

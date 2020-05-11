@@ -13,13 +13,16 @@ class SaaSAppsController(Controller):
 
     @route('/price', type='http', auth='public', website=True)
     def user_page(self, **kw):
+        res = request.env['res.config.settings'].get_values()
         apps = request.env['saas.line'].sudo()
         packages = request.env['saas.template'].sudo()
         if not apps.search_count([]):
             apps.refresh_lines()
         return request.render('saas_apps.index', {
             'apps': apps.search([('allow_to_sell', '=', True)]),
-            'packages': packages.search([('set_as_package', '=', True)])
+            'packages': packages.search([('set_as_package', '=', True)]),
+            'show_apps': bool(res['show_apps']),
+            'show_packages': bool(res['show_packages'])
         })
 
     @route(['/refresh'], type='json', auth='public')
