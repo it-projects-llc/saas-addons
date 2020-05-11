@@ -255,3 +255,24 @@ class SAASProduct(models.Model):
 
     application = fields.Many2many('saas.line')
     package = fields.Many2many('saas.template')
+
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    show_packages = fields.Boolean('Show packages',
+    config_parameter='saas_apps.show_packages')
+    show_apps = fields.Boolean('Show apps',
+    config_parameter='saas_apps.show_apps')
+
+    @api.model
+    def get_values(self):
+        res = super(ResConfigSettings, self).get_values()
+        select_type = self.env['ir.config_parameter'].sudo()
+        packages = select_type.get_param('saas_apps.show_packages')
+        apps = select_type.get_param('saas_apps.show_apps')
+        res.update({
+            'show_packages' : packages,
+            'show_apps' : apps
+        })
+        return res

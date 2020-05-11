@@ -1,6 +1,6 @@
 /* Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
-odoo.define('saas_apps.model', function (require){
+odoo.define('saas_apps.model', function (require) {
     'use_strict';
 
     var session = require('web.session');
@@ -9,13 +9,13 @@ odoo.define('saas_apps.model', function (require){
     var price = 0,
         per_month = false,
         choosen = new Map(),
-        parent_tree  = new Map(),
-        child_tree  = new Map(),
+        parent_tree = new Map(),
+        child_tree = new Map(),
         apps_in_basket = 0,
         currency = "",
         currency_symbol = "";
 
-    function calc_apps_price(){
+    function calc_apps_price() {
         price = 0;
         for (var value of choosen.values()) {
             price += value;
@@ -23,34 +23,34 @@ odoo.define('saas_apps.model', function (require){
         return price;
     }
 
-    function user_price(){
+    function user_price() {
         return per_month ? 12.5 : 10.0;
     }
 
-    function Calc_Price(){
+    function Calc_Price() {
         // Calculate general price
-        return calc_apps_price() + parseInt($('#users')[0].value, 10)*user_price();
+        return calc_apps_price() + parseInt($('#users')[0].value, 10) * user_price();
     }
 
-    function get_choosen_package(){
+    function get_choosen_package() {
         var packages = [];
-        $.each($('.package'), function( index, value ) {
+        $.each($('.package'), function (index, value) {
             packages.push(value.children[2].innerText);
         });
         for (var key of choosen.keys()) {
-            if(packages.includes(key)){
+            if (packages.includes(key)) {
                 return key;
             }
         }
     }
 
-    function redirect_to_build(modules_to_install){
+    function redirect_to_build(modules_to_install) {
         // Checking for choosen packages
         var package = get_choosen_package();
         // If the package selected, we'll use packages saas_template to create build
-        if(!package){
+        if (!package) {
             // If package wasn't selected, then collect choosen modules
-            if(!modules_to_install){
+            if (!modules_to_install) {
                 modules_to_install = '?installing_modules=['
                 // Collecting choosen modules in string
                 for (var key of choosen.keys()) {
@@ -61,7 +61,7 @@ odoo.define('saas_apps.model', function (require){
                 // Deleting extra coma
                 modules_to_install = modules_to_install.replace(',', '');
             }
-            if(!choosen.size){
+            if (!choosen.size) {
                 alert("You haven't chosen any application!")
                 return;
                 // modules_to_install = '?installing_modules=["mail"]';
@@ -70,17 +70,17 @@ odoo.define('saas_apps.model', function (require){
         go_to_build(modules_to_install, package);
     }
 
-    function go_to_build(modules_to_install, package){
+    function go_to_build(modules_to_install, package) {
         // Checking for choosen packages
-        if(package) modules_to_install = '';
+        if (package) modules_to_install = '';
         session.rpc('/take_template_id', {
             package: package
         }).then(function (template) {
-            if(template.state === 'ready'){
-                console.log("Redirect to: " + "/saas_public/"+template.id+"/create-fast-build" + modules_to_install);
+            if (template.state === 'ready') {
+                console.log("Redirect to: " + "/saas_public/" + template.id + "/create-fast-build" + modules_to_install);
                 // When there's ready saas_template_operator obj, then start creating new build
-                window.location.href = "/saas_public/"+template.id+"/create-fast-build" + modules_to_install;
-            }else{
+                window.location.href = "/saas_public/" + template.id + "/create-fast-build" + modules_to_install;
+            } else {
                 // If there's no ready saas_template_operator,
                 // recalling this func till the saas_template_operator obj isn't ready
                 setTimeout(redirect_to_build, 5000, modules_to_install, package);
@@ -88,12 +88,12 @@ odoo.define('saas_apps.model', function (require){
         });
     }
 
-    function redirect_to_cart(){
+    function redirect_to_cart() {
         var modules = [];
         for (var key of choosen.keys()) {
             modules.push(key);
         }
-        if(!modules) {
+        if (!modules) {
             alert("You haven't chosen any application!")
             return;
         }
@@ -120,57 +120,56 @@ odoo.define('saas_apps.model', function (require){
     // Finding all the links up to the parent_tree,
     // and push them to delete_list
     delete_list = [];
-    function leaf_to_root(name){
-        if(delete_list.includes(name)) 
+    function leaf_to_root(name) {
+        if (delete_list.includes(name))
             return;
         delete_list.push(name);
         roots = parent_tree.get(name);
-        if(roots === undefined)
+        if (roots === undefined)
             return;
-        if(roots.length > 0){
-            roots.forEach(function(root){
+        if (roots.length > 0) {
+            roots.forEach(function (root) {
                 leaf_to_root(root);
             });
         }
     }
 
     leafs = [];
-    function root_to_leafs(name){
-        if(leafs.includes(name)) 
+    function root_to_leafs(name) {
+        if (leafs.includes(name))
             return;
         leafs.push(name);
         deps = child_tree.get(name);
-        if(deps === undefined)
+        if (deps === undefined)
             return;
-        if(deps.length > 0){
-            deps.forEach(function(leaf){
+        if (deps.length > 0) {
+            deps.forEach(function (leaf) {
                 root_to_leafs(leaf);
             });
         }
     }
 
     // Downloading apps dependencies
-    window.onload = function() {
+    window.onload = function () {
         // Check needs to avoid js code loading on another pages
-        if(!window.location.pathname.includes('/price'))
+        if (!window.location.pathname.includes('/price'))
             return;
         // Catching click to the app
-        $(".app").click(function(){
+        $(".app").click(function () {
             // Get app technical name
             var app = this.children[2].innerText;
             // If app isn't in basket right now, put it in
-            if(choosen.get(app) === undefined)
-            {
+            if (choosen.get(app) === undefined) {
                 // Get app dependencies and add them to the basket
                 root_to_leafs(app);
-                leafs.forEach(function(leaf){
+                leafs.forEach(function (leaf) {
                     add_to_basket(leaf);
                 });
                 leafs = [];
-            }else{
+            } else {
                 // Get app dependencies and take them off from the basket
                 leaf_to_root(app);
-                delete_list.forEach(function(module){
+                delete_list.forEach(function (module) {
                     delete_from_basket(module);
                 });
                 delete_list = [];
@@ -178,42 +177,42 @@ odoo.define('saas_apps.model', function (require){
             calc_price_window_vals();
         });
         // Catching click to the 'Annually' button
-        $(".nav-link:contains('Annually')").click(function(){
+        $(".nav-link:contains('Annually')").click(function () {
             per_month = false;
             change_period();
         });
         // Catching click to the 'Monthly' button
-        $(".nav-link:contains('Monthly')").click(function(){
+        $(".nav-link:contains('Monthly')").click(function () {
             per_month = true;
             change_period();
         });
         // Catching click to the 'Try trial' button
-        $("#get-started").click(function(){
+        $("#get-started").click(function () {
             // Showing the loader
             $('.loader')[0].classList.remove('hid');
             redirect_to_build(null, null);
         });
         // Catching click to the 'Buy now' button
-        $("#buy-now").click(function(){
+        $("#buy-now").click(function () {
             // Showing the loader
             redirect_to_cart();
         });
 
-        $('#users').click(function(){
+        $('#users').click(function () {
             calc_price_window_vals();
         });
-        $('#users').keyup(function(event){
-            if(event.keyCode === 13){
+        $('#users').keyup(function (event) {
+            if (event.keyCode === 13) {
                 calc_price_window_vals();
             }
         });
         // Changing users qty buttons
-        $('#substr-users').click(function(){
+        $('#substr-users').click(function () {
             check_users_input();
             $('#users').val(parseInt($('#users').val(), 10) - 1);
             calc_price_window_vals();
         });
-        $('#add-users').click(function(){
+        $('#add-users').click(function () {
             check_users_input();
             $('#users').val(parseInt($('#users').val(), 10) + 1);
             calc_price_window_vals();
@@ -227,7 +226,7 @@ odoo.define('saas_apps.model', function (require){
 
         // Check session storage
         old_modules = get_modules_from_session_storage();
-        if(old_modules.length){
+        if (old_modules.length) {
             old_modules.forEach(elem => {
                 add_to_basket(elem);
             });
@@ -238,13 +237,13 @@ odoo.define('saas_apps.model', function (require){
 
         // Counting reqests and answers
         var requests_stack = 0;
-        $.each($('.app_tech_name'), function(key, app){
+        $.each($('.app_tech_name'), function (key, app) {
             ++requests_stack;
             session.rpc('/what_dependencies', {
                 root: app.innerText
             }).then(function (result) {
                 --requests_stack;
-                if(requests_stack < 5){
+                if (requests_stack < 5) {
                     $('.loader')[0].classList.add('hid');
                 }
                 /* Be carefull with dependecies when changing programm logic,
@@ -255,73 +254,76 @@ odoo.define('saas_apps.model', function (require){
                 result.dependencies.forEach(dependence => {
                     // Add new element to the dependencies parent_tree, cause we'll restablish a path from leaf to the root
                     // when we'll have to delete one of leafs
-                    if(!first_dependence){
+                    if (!first_dependence) {
                         var modules_parents = parent_tree.get(dependence.name),
                             root_module_name = dependence.parent,
                             leaf_name = dependence.name;
-                        if(modules_parents === undefined){
+                        if (modules_parents === undefined) {
                             parent_tree.set(leaf_name, [root_module_name]);
-                            console.log("INFO:Added new leaf '"+leaf_name+"' with root module '"+root_module_name+"'.");
-                        }else if(!modules_parents.includes(root_module_name)){
+                            console.log("INFO:Added new leaf '" + leaf_name + "' with root module '" + root_module_name + "'.");
+                        } else if (!modules_parents.includes(root_module_name)) {
                             modules_parents.push(root_module_name);
-                            console.log("INFO:Added new root module '"+root_module_name+"' to leaf '"+leaf_name+"'.");
-                        }else{
-                            console.log("WARNING:Root module '"+root_module_name+"' already in parent_tree!");
+                            console.log("INFO:Added new root module '" + root_module_name + "' to leaf '" + leaf_name + "'.");
+                        } else {
+                            console.log("WARNING:Root module '" + root_module_name + "' already in parent_tree!");
                         }
                     }
-                    if(dependence.childs){
-                        var root = dependence.name, 
+                    if (dependence.childs) {
+                        var root = dependence.name,
                             in_tree_childs = child_tree.get(root);
-                            // Here we get new elements from dependence.childs, difference btw
-                            // dependence.childs and in_tree_childs.
-                        if(in_tree_childs === undefined){
+                        // Here we get new elements from dependence.childs, difference btw
+                        // dependence.childs and in_tree_childs.
+                        if (in_tree_childs === undefined) {
                             child_tree.set(root, dependence.childs);
-                            console.log("INFO:Added new root '"+root+"' with childs '"+dependence.childs[0]+"...'");
-                        }else{
+                            console.log("INFO:Added new root '" + root + "' with childs '" + dependence.childs[0] + "...'");
+                        } else {
                             var new_childs = dependence.childs.filter(x => !in_tree_childs.includes(x));
-                            new_childs.forEach(function(child){
+                            new_childs.forEach(function (child) {
                                 in_tree_childs.push(child);
-                                console.log("INFO:Added new child module '"+child+"' to root '"+root+"'.");
+                                console.log("INFO:Added new child module '" + child + "' to root '" + root + "'.");
                             });
                         }
                     }
-                    
+
                     first_dependence = false;
                 });
             });
         });
+        if (requests_stack === 0) {
+            $('.loader')[0].classList.add('hid');
+        }
     };
 
-    function change_border_color(elem){
-        if(elem.classList.contains('green-border')){
+    function change_border_color(elem) {
+        if (elem.classList.contains('green-border')) {
             elem.classList.add('normal-border');
             elem.classList.remove('green-border');
-        }else{
+        } else {
             elem.classList.add('green-border');
             elem.classList.remove('normal-border');
         }
     }
 
-    function change_period(){
+    function change_period() {
         var i = 0,
             monthly = $('.monthly-price'),
             yearly = $('.yearly-price'),
             n = yearly.length;
-        if(per_month){
-            for(; i < n; ++i){
+        if (per_month) {
+            for (; i < n; ++i) {
                 monthly[i].classList.remove('hid');
                 yearly[i].classList.add('hid');
             }
         }
-        else{
-            for(; i < n; ++i){
+        else {
+            for (; i < n; ++i) {
                 monthly[i].classList.add('hid');
                 yearly[i].classList.remove('hid');
             }
         }
         var size = choosen.size, i = 0;
         for (var key of choosen.keys()) {
-            if(i >= size) break;
+            if (i >= size) break;
             delete_from_basket(key);
             add_to_basket(key);
             ++i;
@@ -329,43 +331,43 @@ odoo.define('saas_apps.model', function (require){
         calc_price_window_vals();
     }
 
-    function check_for_packages(module_name){
-        if(choosen.size == 0){
+    function check_for_packages(module_name) {
+        if (choosen.size == 0) {
             return;
         }
         // Collect all packages names in array
         var packages = [];
-        $.each($('.package'), function( index, value ) {
+        $.each($('.package'), function (index, value) {
             packages.push(value.children[2].innerText);
         });
         // if package choosen, then delete other products from cart
-        if(packages.includes(module_name)){
+        if (packages.includes(module_name)) {
             for (var key of choosen.keys()) {
                 delete_from_basket(key);
             }
             choosen.clear();
         }
-        else{
+        else {
             // If app choosen, then delete package from cart
             for (var key of choosen.keys()) {
-                if(packages.includes(key)){
+                if (packages.includes(key)) {
                     delete_from_basket(key);
                     return;
                 }
             }
         }
     }
-    
-    function add_to_basket(module_name){
+
+    function add_to_basket(module_name) {
         check_for_packages(module_name);
-        if(choosen.get(module_name) === undefined){
+        if (choosen.get(module_name) === undefined) {
             // Finding choosen element
-            elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
-                return $(el).html() == module_name 
+            elem = $(".app_tech_name:contains('" + module_name + "')").filter(function (_, el) {
+                return $(el).html() == module_name
             })
             price = 0;
             // Get choosen app price
-            if(elem.length > 0) {
+            if (elem.length > 0) {
                 price_i = per_month ? 1 : 0;
                 price = parseInt(elem[0].previousElementSibling.children[1].children[price_i].children[0].innerText, 10);
                 // Changing border color
@@ -378,16 +380,16 @@ odoo.define('saas_apps.model', function (require){
         }
     }
 
-    function delete_from_basket(module_name){
-        if(choosen.get(module_name) !== undefined){
+    function delete_from_basket(module_name) {
+        if (choosen.get(module_name) !== undefined) {
             // Delete app from the basket
             choosen.delete(module_name);
             // Finding choosen element
-            elem = $(".app_tech_name:contains('"+module_name+"')").filter(function(_, el) {
-                return $(el).html() == module_name 
+            elem = $(".app_tech_name:contains('" + module_name + "')").filter(function (_, el) {
+                return $(el).html() == module_name
             })
             // Changing border color
-            if(elem.length > 0){
+            if (elem.length > 0) {
                 --apps_in_basket;
                 change_border_color(elem[0].parentElement);
             }
@@ -395,14 +397,14 @@ odoo.define('saas_apps.model', function (require){
         save_modules_to_session_storage();
     }
 
-    function blink_anim(elems){
-        elems.forEach( (elem) =>{
-            elem.animate({opacity: "0"}, 250);
-            elem.animate({opacity: "1"}, 250);
+    function blink_anim(elems) {
+        elems.forEach((elem) => {
+            elem.animate({ opacity: "0" }, 250);
+            elem.animate({ opacity: "1" }, 250);
         });
     }
-    
-    function calc_price_window_vals(){
+
+    function calc_price_window_vals() {
         check_users_input();
         // This method refreshes data in price window
         price = Calc_Price();
@@ -420,12 +422,12 @@ odoo.define('saas_apps.model', function (require){
         $('#apps-cost').text(String(calc_apps_price()));
     }
 
-    function check_users_input(){
-        if(parseInt($('#users').val(), 10) <= 0 || $('#users').val() === '') 
+    function check_users_input() {
+        if (parseInt($('#users').val(), 10) <= 0 || $('#users').val() === '')
             $('#users').val(1);
     }
 
-    function get_modules_to_install(){
+    function get_modules_to_install() {
         var modules = [];
         for (var key of choosen.keys()) {
             modules.push(key);
@@ -433,29 +435,29 @@ odoo.define('saas_apps.model', function (require){
         return modules;
     }
 
-    function save_old_products(ids){
+    function save_old_products(ids) {
         localStorage.removeItem('old_user_cnt');
         localStorage.removeItem('old_products');
         localStorage.setItem('old_products', ids);
         localStorage.setItem('old_user_cnt', $('#users').val());
     }
 
-    function get_old_user_cnt(){return localStorage.getItem('old_user_cnt');}
+    function get_old_user_cnt() { return localStorage.getItem('old_user_cnt'); }
 
-    function get_old_products(){
+    function get_old_products() {
         return parse_string_to_arr(localStorage.getItem('old_products'));
     }
 
-    function save_modules_to_session_storage(){
+    function save_modules_to_session_storage() {
         localStorage.removeItem('modules');
-        localStorage.setItem('modules',get_modules_to_install());
+        localStorage.setItem('modules', get_modules_to_install());
     }
 
-    function parse_string_to_arr(str){
-        if(str){
+    function parse_string_to_arr(str) {
+        if (str) {
             var i = 0, j = 1, arr = [];
-            for(; j < str.length; ++j){
-                if(str[j] === ','){
+            for (; j < str.length; ++j) {
+                if (str[j] === ',') {
                     arr.push(str.slice(i, j));
                     i = j + 1;
                     j += 2;
@@ -467,7 +469,7 @@ odoo.define('saas_apps.model', function (require){
         return [];
     }
 
-    function get_modules_from_session_storage(){
+    function get_modules_from_session_storage() {
         return parse_string_to_arr(localStorage.getItem('modules'));
     }
 

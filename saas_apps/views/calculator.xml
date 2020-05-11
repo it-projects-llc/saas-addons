@@ -8,78 +8,82 @@
             <div class="row container main-column">
                 <div class="mx-auto">
                     <!-- Users qty -->
-                    <div class="openerp_enterprise_pricing_step">
-                        <div class="openerp_enterprise_pricing_step_head">
-                            <h3 class="mt16 mb8">Choose the number of <b>Users</b></h3>
+                    <t t-if="show_apps or show_packages">
+                        <div class="openerp_enterprise_pricing_step">
+                            <div class="openerp_enterprise_pricing_step_head">
+                                <h3 class="mt16 mb8">Choose the number of <b>Users</b></h3>
+                            </div>
+                            <img id="substr-users" src="/saas_apps/static/src/img/substr-users.png" alt="Decrease users qty" class="users-qty-change-buttons"/>
+                            <input class="openerp_enterprise_pricing_users form-control border text-right pr-2"
+                            id="users" name="num_users" type="text" value="1" style="max-width: 100px;display: inline;text-align: center !important;"/>
+                            <img id="add-users" src="/saas_apps/static/src/img/add-users.png" alt="Increase users qty" class="users-qty-change-buttons"/>
                         </div>
-                        <img id="substr-users" src="/saas_apps/static/src/img/substr-users.png" alt="Decrease users qty" class="users-qty-change-buttons"/>
-                        <input class="openerp_enterprise_pricing_users form-control border text-right pr-2"
-                        id="users" name="num_users" type="text" value="1" style="max-width: 100px;display: inline;text-align: center !important;"/>
-                        <img id="add-users" src="/saas_apps/static/src/img/add-users.png" alt="Increase users qty" class="users-qty-change-buttons"/>
-                    </div>
+                    </t>
                     <!-- App list -->
-                    <div class="openerp_enterprise_pricing_step">
-                        <h3 class="mt16 mb16">Choose your Apps</h3>
-                        <div class="openerp_enterprise_pricing_step_body mb24">
-                            <div class="form-row">
-                                <t t-foreach="apps" t-as="app">
-                                    <t t-if="app.application">
-                                        <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app">
-                                            <div class="app-icon">
-                                                <img t-att-src="'data:image/png;base64,%s' % to_text(app.app_image)"
-                                                    style="max-width: 40px;max-height: 40px;"/>
-                                            </div>
-                                            <div class="app-data">
-                                                <div><t t-esc="app.module_name"/></div>
-                                                <div id="app-price">
-                                                    <div class="yearly-price">
-                                                        <div class="price-value"><t t-esc="app[0].year_price"/></div>
-                                                        <div class="period"> <t t-esc="app[0].currency_id.symbol"/> / year</div>
-                                                    </div>
-                                                    <div class="monthly-price hid">
-                                                        <div class="price-value"><t t-esc="app[0].month_price"/></div>
-                                                        <div class="period">  <t t-esc="app[0].currency_id.symbol"/>  / month</div>
+                    <t t-if="show_apps">
+                        <div class="openerp_enterprise_pricing_step">
+                            <h3 class="mt16 mb16">Choose your Apps</h3>
+                            <div class="openerp_enterprise_pricing_step_body mb24">
+                                <div class="form-row">
+                                    <t t-foreach="apps" t-as="app">
+                                        <t t-if="app.application">
+                                            <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app">
+                                                <div class="app-icon">
+                                                    <img t-att-src="'data:image/png;base64,%s' % to_text(app.app_image)"
+                                                        style="max-width: 40px;max-height: 40px;"/>
+                                                </div>
+                                                <div class="app-data">
+                                                    <div><t t-esc="app.module_name"/></div>
+                                                    <div id="app-price">
+                                                        <div class="yearly-price">
+                                                            <div class="price-value"><t t-esc="app[0].year_price"/></div>
+                                                            <div class="period"> <t t-esc="app[0].currency_id.symbol"/> / year</div>
+                                                        </div>
+                                                        <div class="monthly-price hid">
+                                                            <div class="price-value"><t t-esc="app[0].month_price"/></div>
+                                                            <div class="period">  <t t-esc="app[0].currency_id.symbol"/>  / month</div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
                                             </div>
-                                            <div class="app_tech_name" style="display: none"><t t-esc="app.name"/></div>
-                                        </div>
+                                        </t>
                                     </t>
-                                </t>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </t>
                     <!-- Packages -->
                     <div class="openerp_enterprise_pricing_step">
-                        <t t-if="len(packages)">
+                        <t t-if="show_packages">
                             <h3 class="mt16 mb16">Choose your Packages</h3>
-                        </t>
-                        <div class="openerp_enterprise_pricing_step_body mb24">
-                            <div class="form-row">
-                                <t t-foreach="packages" t-as="package">
-                                    <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app package">
-                                        <div class="app-icon">
-                                            <img t-att-src="'data:image/png;base64,%s' % to_text(package.package_image)"
-                                                    style="max-width: 40px;max-height: 40px;"/>
-                                        </div>
-                                        <div class="app-data">
-                                            <div><t t-esc="package.name"/></div>
-                                            <div id="app-price">
-                                                <div class="yearly-price">
-                                                    <div class="price-value"><t t-esc="package.year_price"/></div>
-                                                    <div class="period"> <t t-esc="apps[0].currency_id.symbol"/> / year</div>
-                                                </div>
-                                                <div class="monthly-price hid">
-                                                    <div class="price-value"><t t-esc="package.month_price"/></div>
-                                                    <div class="period">  <t t-esc="apps[0].currency_id.symbol"/>  / month</div>
+                            <div class="openerp_enterprise_pricing_step_body mb24">
+                                <div class="form-row">
+                                    <t t-foreach="packages" t-as="package">
+                                        <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app package">
+                                            <div class="app-icon">
+                                                <img t-att-src="'data:image/png;base64,%s' % to_text(package.package_image)"
+                                                        style="max-width: 40px;max-height: 40px;"/>
+                                            </div>
+                                            <div class="app-data">
+                                                <div><t t-esc="package.name"/></div>
+                                                <div id="app-price">
+                                                    <div class="yearly-price">
+                                                        <div class="price-value"><t t-esc="package.year_price"/></div>
+                                                        <div class="period"> <t t-esc="apps[0].currency_id.symbol"/> / year</div>
+                                                    </div>
+                                                    <div class="monthly-price hid">
+                                                        <div class="price-value"><t t-esc="package.month_price"/></div>
+                                                        <div class="period">  <t t-esc="apps[0].currency_id.symbol"/>  / month</div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="app_tech_name" style="display: none"><t t-esc="package.name"/></div>
                                         </div>
-                                        <div class="app_tech_name" style="display: none"><t t-esc="package.name"/></div>
-                                    </div>
-                                </t>
+                                    </t>
+                                </div>
                             </div>
-                        </div>
+                        </t>
                     </div>
                     <!-- Price window -->
                     <div>
