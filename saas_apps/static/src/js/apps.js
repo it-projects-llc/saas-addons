@@ -29,7 +29,9 @@ odoo.define('saas_apps.model', function (require) {
 
     function Calc_Price() {
         // Calculate general price
-        return calc_apps_price() + parseInt($('#users')[0].value, 10) * user_price();
+        if($('#users')[0] !== undefined)
+            return calc_apps_price() + parseInt($('#users')[0].value, 10) * user_price();
+        return 0;
     }
 
     function get_choosen_package() {
