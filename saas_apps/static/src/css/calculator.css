@@ -104,6 +104,10 @@
         z-index: 1;
     }
 
+    .page-alignment{
+        min-width: 640px;
+    }
+
     .main-column{
         margin-right: auto;
         margin-left: 10%;
@@ -125,6 +129,10 @@
         margin-right: auto;
         margin-left: 10%;
         max-width: 50%;
+    }
+
+    .page-alignment{
+        min-width: 640px;
     }
 
     .app{

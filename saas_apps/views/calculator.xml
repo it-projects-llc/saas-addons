@@ -6,7 +6,7 @@
         <t t-call="website.layout">
             <title>Apps</title>
             <div class="row container main-column">
-                <div class="mx-auto">
+                <div class="mx-auto page-alignment">
                     <!-- Users qty -->
                     <t t-if="show_apps or show_packages">
                         <div class="openerp_enterprise_pricing_step">
