@@ -80,3 +80,9 @@ class SAASDB(models.Model):
 
     def read_values_from_build(self):
         return {}
+
+    def execute_kw(self, model, method, *args, **kwargs):
+        return self.operator_id.build_execute_kw(self, model, method, args, kwargs)
+
+    def xmlid_lookup(self, xmlid):
+        return self.execute_kw("ir.model.data", "xmlid_lookup", xmlid)
