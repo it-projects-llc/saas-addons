@@ -69,12 +69,8 @@ class SAASDependence(models.Model):
     def _compute_currency_id(self):
         self.currency_id = self.company_id.currency_id
 
-    def _compute_default_image(self):
-        return self.env.ref("saas_apps.saas_apps_base_image").datas
-
     app_image = fields.Image(
-        string='App image',
-        default=_compute_default_image
+        string='App image'
     )
 
     def refresh_lines(self):
@@ -205,8 +201,7 @@ class SAASAppsTemplate(models.Model):
         return self.env.ref("saas_apps.saas_apps_base_image").datas
 
     package_image = fields.Image(
-        string='Package image',
-        default=_compute_default_image
+        string='Package image'
     )
 
     @api.onchange('set_as_base')
@@ -233,6 +228,7 @@ class SAASAppsTemplate(models.Model):
     def create(self, vals):
         res = super(SAASAppsTemplate, self).create(vals)
         if res.set_as_package:
+            res.package_image = self._compute_default_image()
             if not (res.year_price + res.month_price):
                 res.compute_price()
             prod = self.env['product.product']
