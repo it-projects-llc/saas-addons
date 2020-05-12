@@ -234,6 +234,7 @@ class SAASAppsTemplate(models.Model):
     def create(self, vals):
         res = super(SAASAppsTemplate, self).create(vals)
         if res.set_as_package:
+            res.package_image = self._compute_default_image()
             if not (res.year_price + res.month_price):
                 res.compute_price()
             prod = self.env['product.product']

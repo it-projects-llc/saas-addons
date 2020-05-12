@@ -18,7 +18,7 @@ class SaaSAppsController(Controller):
         packages = request.env['saas.template'].sudo()
         if not apps.search_count([]):
             apps.refresh_lines()
-        return request.render('saas_apps.index', {
+        return request.render('saas_apps.Price', {
             'apps': apps.search([('allow_to_sell', '=', True)]),
             'packages': packages.search([('set_as_package', '=', True)]),
             'show_apps': bool(res['show_apps']),
