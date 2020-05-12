@@ -2,7 +2,7 @@
 <!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
     License AGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
 <odoo>
-    <template id="index">
+    <template id="Price">
         <t t-call="website.layout">
             <title>Apps</title>
             <div class="row container main-column">
