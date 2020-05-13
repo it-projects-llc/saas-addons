@@ -1,3 +1,4 @@
 queue https://github.com/OCA/queue.git
 OCA_web https://github.com/OCA/web.git
 OCA_server_auth https://github.com/OCA/server-auth
+access_addons https://github.com/itpp-labs/access-addons
