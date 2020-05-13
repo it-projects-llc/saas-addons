@@ -39,7 +39,7 @@ class SaasDb(models.Model):
             )
             vals.update(
                 max_users_limit=self.execute_kw(
-                    model, "search_count", [("id", "=", res_id)], ["max_records"]
+                    model, "search_read", [("id", "=", res_id)], ["max_records"]
                 )[0]["max_records"]
             )
 
