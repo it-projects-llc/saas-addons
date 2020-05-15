@@ -18,6 +18,12 @@ Configuration
 * Click ``[ Refresh ]``
 * Choose modules that you want to make saleable by clicking to ``[ Saleable ]``
 
+{Instruction for make apps and packages visible on ``Price`` page.}
+
+* Open menu ``[[ Website ]] >> Configuration >> Settings >> SaaS pricing page``
+* Click ``[[ Show packages ]]`` to show packages
+* Click ``[[ Show apps ]]`` to show packages
+
 Usage
 =====
 
@@ -27,7 +33,7 @@ Usage
 * Click ``[{Make new Odoo instance}]``
 * Choose modules that you want to buy by on them
 * Choose the using period year/month
-* Click ``[Buy now]``
+* Click ``[Buy now]`` or ``[Try trial]``
 * RESULT: you will be redirected and logged in to the created build with choosen modules
 
 Uninstallation
