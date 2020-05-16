@@ -55,7 +55,6 @@ class SAASDB(models.Model):
             'url': auth_url,
         }
 
-    @api.multi
     def write(self, vals):
         res = super(SAASDB, self).write(vals)
         if not self.env.context.get("writing_from_refresh_data"):  # Do not run "refresh_data", if already running it
