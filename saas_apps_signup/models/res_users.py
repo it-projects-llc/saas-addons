@@ -90,7 +90,6 @@ class ResUsers(models.Model):
             db_record.admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
         return res
 
-    @api.multi
     def action_reset_password(self):
         # prepare reset password signup
         create_mode = bool(self.env.context.get('create_user'))
@@ -102,3 +101,13 @@ class ResUsers(models.Model):
             return super(ResUsers, self).action_reset_password()
 
         return super(ResUsers, self.with_context(web_base_url=db_record.get_url())).action_reset_password()
+
+    @api.model
+    def _signup_create_user(self, values):
+        """
+        Take away excessive fields to escape SignupError: Invalid field '*' on model 'res.users'
+        """
+
+        values.pop("installing_modules", "")
+
+        return super(ResUsers, self)._signup_create_user(values)

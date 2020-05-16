@@ -20,7 +20,7 @@
     "depends": [
         "auth_signup_verify_email", "saas_apps", "saas_portal"
     ],
-    "external_dependencies": {"python": ["slugify"], "bin": []},
+    "external_dependencies": {"python": ["python-slugify"], "bin": []},
     "data": [
         'data/auth_signup_data.xml',
         'views/auth_signup.xml',
