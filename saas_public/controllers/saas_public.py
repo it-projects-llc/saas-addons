@@ -7,6 +7,7 @@ from odoo.http import route, request, Controller
 class SaaSPublicController(Controller):
     @route('/saas_public/<int:template_id>/create-fast-build', type='http', auth='public')
     def create_fast_build(self, template_id, **kwargs):
+        import wdb;wdb.set_trace()
         if not kwargs:
             kwargs = {}
         template = request.env['saas.template'].browse(template_id).sudo()

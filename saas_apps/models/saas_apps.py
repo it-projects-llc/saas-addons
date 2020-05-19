@@ -114,7 +114,12 @@ class SAASDependence(models.Model):
             app.product_id += prod_templ.create({
                 'name': app.module_name,
                 'price': app.year_price,
+<<<<<<< HEAD
                 'image': app.app_image
+=======
+                'image_1920': app.app_image,
+                'website_published': True
+>>>>>>> 1ea9415... :bomb: Now product.product 'website_published' field related to saas.line's 'allow_to_sell' field
             })
 
     def change_product_price(self, app, price):
@@ -156,6 +161,7 @@ class SAASDependence(models.Model):
                     apps.append(leaf)
         return apps
 
+<<<<<<< HEAD
     @api.multi
     def change_allow_to_sell(self):
         this_app = self.dependencies.search([('name', '=', self.name)])
@@ -163,13 +169,34 @@ class SAASDependence(models.Model):
             temp_app = self.search([('name', '=', app.name)])
             if len(temp_app) > 0:
                 temp_app.allow_to_sell = True
+=======
+    def change_allow_to_sell(self, vals, used_apps):
+        if not vals['allow_to_sell']:
+            vals['used'] = [self] + used_apps
+            apps = self.dependencies.filtered(lambda r: r.name == self.name).saas_modules
+            for app in apps - self:
+                if not app in vals['used']:
+                    app.write(vals)
+        else:
+            this_app = self.dependencies.search([('name', '=', self.name)])
+            for app in self.dependencies - this_app:
+                temp_app = self.search([('name', '=', app.name)])
+                if len(temp_app) > 0:
+                    temp_app.allow_to_sell = True
+>>>>>>> 1ea9415... :bomb: Now product.product 'website_published' field related to saas.line's 'allow_to_sell' field
 
     @api.multi
     def write(self, vals):
+        used_apps = []
+        if 'used' in vals:
+            used_apps = vals['used']
+            del vals['used']
         res = super(SAASDependence, self).write(vals)
         # If value of allow_to_sell changed, other sets allow_to_sell vars should be changed too
-        if "allow_to_sell" in vals and vals['allow_to_sell']:
-            self.change_allow_to_sell()
+        if "allow_to_sell" in vals:
+            self.change_allow_to_sell(vals, used_apps)
+            if len(self.product_id) == 1:
+                self.product_id.website_published = vals['allow_to_sell']
         if "year_price" in vals:
             self.change_product_price(self, vals["year_price"])
         return res
@@ -246,7 +273,12 @@ class SAASAppsTemplate(models.Model):
                 res.product_id += prod.create({
                     'name': res.name,
                     'price': res.year_price,
+<<<<<<< HEAD
                     'image': res.package_image
+=======
+                    'image_1920': res.package_image,
+                    'website_published': True
+>>>>>>> 1ea9415... :bomb: Now product.product 'website_published' field related to saas.line's 'allow_to_sell' field
                 })
         return res
 

@@ -4,6 +4,11 @@
     <record id="product_user" model="product.product">
         <field name="name">User</field>
         <field name="price">10</field>
+<<<<<<< HEAD
         <field file="saas_apps/static/src/img/user.png" name="image" type="base64" />
+=======
+        <field name="website_published">True</field>
+        <field file="saas_apps/static/src/img/user.png" name="image_1920" type="base64" />
+>>>>>>> 1ea9415... :bomb: Now product.product 'website_published' field related to saas.line's 'allow_to_sell' field
     </record>
 </odoo>

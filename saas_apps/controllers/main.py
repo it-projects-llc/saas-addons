@@ -123,7 +123,7 @@ class SaasAppsCart(WebsiteSale):
 
 
     @route('/price/cart_update', type='json', auth='public', website=True)
-    def cart_update(self, **kw):
+    def cart_update_price_page(self, **kw):
         sale_order = request.website.sale_get_order(force_create=True)
         pr_pr = request.env['product.product'].sudo()
         product_ids = kw.get('old_apps_ids', [])
