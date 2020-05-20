@@ -4,7 +4,7 @@ odoo.define('saas_apps.model', function (require) {
     'use_strict';
 
     var session = require('web.session');
-    var Widget = require('web.Widget');
+    var base = require('web_editor.base');
 
     var price = 0,
         per_month = false,
@@ -152,7 +152,9 @@ odoo.define('saas_apps.model', function (require) {
     }
 
     // Downloading apps dependencies
-    window.onload = function () {
+
+    
+    base.ready().then(function() {
         // Check needs to avoid js code loading on another pages
         if (!window.location.pathname.includes('/price'))
             return;
@@ -294,7 +296,7 @@ odoo.define('saas_apps.model', function (require) {
         if (requests_stack === 0) {
             $('.loader')[0].classList.add('hid');
         }
-    };
+    });
 
     function change_border_color(elem) {
         if (elem.classList.contains('green-border')) {
