@@ -98,22 +98,10 @@ class SaaSAppsController(Controller):
         apps = modules.search([('name', 'in', module_names), ('application', '=', True)])
         templates = request.env['saas.template'].sudo().search([('name', 'in', module_names)])
         for app in apps.product_id + templates.product_id:
-            apps_product_ids.append(app.id)
+            apps_product_ids.append(app.product_variant_id.id)
 
         return {
             'ids': apps_product_ids
-        }
-
-    @route(['/price/get_package_modules'], type='json', auth='public')
-    def take_package_product_ids(self, **kw):
-        packages = kw.get('package', [])
-        templates = request.env['saas.template'].sudo().search([('name', 'in', packages)])
-        modules = []
-        for template in templates:
-            for module in template.template_module_ids:
-                modules.append(module.name)
-        return {
-            'modules': modules
         }
 
 
@@ -122,18 +110,21 @@ class SaasAppsCart(WebsiteSale):
 
     @route('/price/cart_update', type='json', auth='public', website=True)
     def cart_update_price_page(self, **kw):
+        period = kw.get('period')
         sale_order = request.website.sale_get_order(force_create=True)
-        pr_pr = request.env['product.product'].sudo()
         product_ids = kw.get('old_apps_ids', [])
         # Adding user as product in cart
-        user_product = request.env.ref("saas_apps.product_user").sudo()
+        user_product_tmp = request.env.ref("saas_apps.product_user").sudo()
+        user_product = user_product_tmp.product_variant_id
         user_product.price = kw.get('user_price')
-        old_user_cnt = kw.get('old_user_cnt')
+        if not period == 'm':
+            user_product.price *= 12
+        old_user_cnt, user_cnt = float(kw.get('old_user_cnt')), float(kw.get('user_cnt'))
         if not old_user_cnt:
-            old_user_cnt = '0'
+            old_user_cnt = 0
         sale_order._cart_update(
                 product_id=int(user_product.id),
-                add_qty=(float(kw.get('user_cnt')) - float(old_user_cnt))
+                add_qty=(user_cnt - old_user_cnt)
             )
 
         # Delete old products from cart
@@ -145,20 +136,19 @@ class SaasAppsCart(WebsiteSale):
 
         # Changing prices
         product_ids = kw.get('product_ids', [])
-        period = kw.get('period')
+        pr_tmp = request.env['product.template'].sudo()
         for id in product_ids:
-            product = pr_pr.browse(id)
+            product = pr_tmp.browse(id).product_variant_id
             app = request.env['saas.line'].sudo().search([('module_name', '=', product.name)])
             packages = request.env['saas.template'].sudo().search([('name', '=', product.name)])
             if period == 'm':
                 app.change_product_price(app, app.month_price)
                 packages.change_product_price(packages, packages.month_price)
             else:
-                app.change_product_price(app, app.year_price)
+                app.change_product_price(app, app.year_price * 12)
                 packages.change_product_price(packages, packages.year_price)
 
         # Add new ones
-        sale_order = request.website.sale_get_order(force_create=True)
         for id in product_ids:
             sale_order._cart_update(
                 product_id=int(id),

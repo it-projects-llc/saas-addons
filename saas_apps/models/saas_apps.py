@@ -64,7 +64,7 @@ class SAASDependence(models.Model):
         default=lambda s: s.env.user.company_id,
     )
     currency_id = fields.Many2one("res.currency", compute="_compute_currency_id")
-    product_id = fields.Many2many('product.product')
+    product_id = fields.Many2many('product.template')
 
     def _compute_currency_id(self):
         self.currency_id = self.company_id.currency_id
@@ -99,10 +99,10 @@ class SAASDependence(models.Model):
                     })
 
     def delete_shit(self, app_name):
-        self.env['product.product'].search([('name', '=', app_name)]).unlink()
+        self.env['product.template'].search([('name', '=', app_name)]).unlink()
 
     def make_product(self, app):
-        prod_templ = self.env["product.product"]
+        prod_templ = self.env["product.template"]
         ready_product = prod_templ.search([('name', '=', app.module_name)])
         if ready_product:
             if not len(app.product_id):
@@ -182,6 +182,8 @@ class SAASDependence(models.Model):
                 self.product_id.website_published = vals['allow_to_sell']
         if "year_price" in vals:
             self.change_product_price(self, vals["year_price"])
+        if "month_price" in vals:
+            self.year_price = self.month_price*12
         return res
 
     @api.model
@@ -209,7 +211,7 @@ class SAASAppsTemplate(models.Model):
     set_as_package = fields.Boolean("Package")
     month_price = fields.Float()
     year_price = fields.Float()
-    product_id = fields.Many2many('product.product', ondelete='cascade')
+    product_id = fields.Many2many('product.template', ondelete='cascade')
 
     def _compute_default_image(self):
         return self.env.ref("saas_apps.saas_apps_base_image").datas
@@ -245,7 +247,7 @@ class SAASAppsTemplate(models.Model):
             res.package_image = self._compute_default_image()
             if not (res.year_price + res.month_price):
                 res.compute_price()
-            prod = self.env['product.product']
+            prod = self.env['product.template']
             ready_product = prod.search([('name', '=', res.name)])
             if ready_product:
                 if not len(res.product_id):
@@ -259,9 +261,17 @@ class SAASAppsTemplate(models.Model):
                 })
         return res
 
+    def write(self, vals):
+        res = super(SAASAppsTemplate, self).write(vals)
+        if "year_price" in vals:
+            self.change_product_price(self, self.year_price)
+        if "month_price" in vals:
+            self.year_price = self.month_price*12
+        return res
+
 
 class SAASProduct(models.Model):
-    _inherit = 'product.product'
+    _inherit = 'product.template'
 
     application = fields.Many2many('saas.line')
     package = fields.Many2many('saas.template')
