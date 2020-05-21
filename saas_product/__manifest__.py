@@ -15,7 +15,7 @@
     "license": "Other OSI approved licence",  # MIT
     # "price": 9.00,
     # "currency": "EUR",
-    "depends": ["product", "account"],
+    "depends": ["sale"],
     "external_dependencies": {"python": [], "bin": []},
     "data": ["data/product_data.xml"],
     "demo": [],
