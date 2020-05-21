@@ -5,6 +5,7 @@
     <record id="product_attribute_subscription" model="product.attribute">
         <field name="name">Subscription (SaaS)</field>
         <field name="sequence">30</field>
+        <field name="display_type">select</field>
     </record>
 
     <record id="product_attribute_value_subscription_anually" model="product.attribute.value">
