@@ -9,7 +9,7 @@
     </record>
 
     <record id="product_attribute_value_subscription_anually" model="product.attribute.value">
-        <field name="name">Anually</field>
+        <field name="name">Annually</field>
         <field name="attribute_id" ref="product_attribute_subscription"/>
         <field name="sequence">10</field>
     </record>
@@ -27,6 +27,7 @@
         <field name="type">service</field>
         <field name="list_price">0</field>
         <field name="taxes_id" eval="[(5,)]" />
+        <field name="supplier_taxes_id" eval="[(5,)]" />
     </record>
 
     <record id="product_users_attribute_subscription_line" model="product.template.attribute.line">
@@ -54,5 +55,17 @@
     <record id="product_users_attribute_subscription_value_monthly" model="product.template.attribute.value">
         <field name="price_extra">12.5</field>
     </record>
+
+    <function model="ir.model.data" name="_update_xmlids">
+        <value model="base" eval="[{
+            'xml_id': 'saas_product.product_users_monthly',
+            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_monthly')),
+            'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_annually',
+            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_annually')),
+            'noupdate': True,
+        },]"/>
+    </function>
 
 </odoo>
