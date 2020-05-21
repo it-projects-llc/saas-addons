@@ -1,3 +1,13 @@
+`3.0.0`
+-------
+
+- **Improvement:** mandatory modules can be redefined in dependent modules
+- **New:** added "Refresh" in build view to get data from build database
+- **Fix:** random_ready_operator does not throw exceptions if no operators are ready
+- **Fix:** no extra rigths required to read build's URL
+- **Improvement:** Removed {db_id} variable for generating database name
+- **Improvement:** Added helper methods `execute_kw` and `xmlid_lookup` on `saas.db` model
+
 `2.4.3`
 -------
 
