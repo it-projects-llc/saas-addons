@@ -18,7 +18,7 @@
     # "currency": "EUR",
 
     "depends": [
-        "auth_signup_verify_email", "saas_apps", "saas_portal"
+        "auth_signup_verify_email", "saas_apps", "saas_portal", "saas_contract",
     ],
     "external_dependencies": {"python": ["python-slugify"], "bin": []},
     "data": [

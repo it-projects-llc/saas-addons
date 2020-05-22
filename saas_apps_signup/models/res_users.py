@@ -78,16 +78,22 @@ class ResUsers(models.Model):
         res = super(ResUsers, self).signup(values, *args, **kwargs)
 
         if database_name:
+            installing_modules = values.get("installing_modules", "").split(",")
             installing_modules_var = "[" + ",".join(map(
                 lambda item: '"{}"'.format(item.strip().replace('"', '')),
-                values.get("installing_modules", "").split(",")
+                installing_modules
             )) + "]"
-            db_record = template_operator.create_db(
+            admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
+
+            db_record = template_operator.with_context(
+                build_admin_user_id=admin_user.id,
+                build_partner_id=self.env['res.partner'].search([('user_ids', 'in', [admin_user.id])], limit=1).id,
+                installing_modules=installing_modules
+            ).create_db(
                 key_values={"installing_modules": installing_modules_var},
                 db_name=database_name,
                 with_delay=True
             )
-            db_record.admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
         return res
 
     def action_reset_password(self):
