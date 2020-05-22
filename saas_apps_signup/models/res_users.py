@@ -71,7 +71,10 @@ class ResUsers(models.Model):
         if not template_operator:
             raise OperatorNotAvailable("No template operators are ready. Try again later")
 
+        # popping out values before creating user
         database_name = values.pop("database_name", None)
+        build_installing_modules = values.pop("installing_modules", "").split(",")
+        build_max_users_limit = int(values.pop("max_users_limit", 1))
 
         self.prepare_signup_values(values, self.env)
 
@@ -80,14 +83,20 @@ class ResUsers(models.Model):
         if database_name:
             installing_modules_var = "[" + ",".join(map(
                 lambda item: '"{}"'.format(item.strip().replace('"', '')),
-                values.get("installing_modules", "").split(",")
+                build_installing_modules
             )) + "]"
-            db_record = template_operator.create_db(
+            admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
+
+            db_record = template_operator.with_context(
+                build_admin_user_id=admin_user.id,
+                build_partner_id=admin_user.partner_id.id,
+                build_installing_modules=build_installing_modules,
+                build_max_users_limit=build_max_users_limit
+            ).with_user(SUPERUSER_ID).create_db(
                 key_values={"installing_modules": installing_modules_var},
                 db_name=database_name,
                 with_delay=True
             )
-            db_record.admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
         return res
 
     def action_reset_password(self):
@@ -101,13 +110,3 @@ class ResUsers(models.Model):
             return super(ResUsers, self).action_reset_password()
 
         return super(ResUsers, self.with_context(web_base_url=db_record.get_url())).action_reset_password()
-
-    @api.model
-    def _signup_create_user(self, values):
-        """
-        Take away excessive fields to escape SignupError: Invalid field '*' on model 'res.users'
-        """
-
-        values.pop("installing_modules", "")
-
-        return super(ResUsers, self)._signup_create_user(values)
