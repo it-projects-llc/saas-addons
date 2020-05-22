@@ -4,7 +4,6 @@ odoo.define('saas_apps.model', function (require) {
     'use_strict';
 
     var session = require('web.session');
-    var base = require('web_editor.base');
 
     var price = 0,
         per_month = false,
@@ -153,8 +152,8 @@ odoo.define('saas_apps.model', function (require) {
 
     // Downloading apps dependencies
 
-    
-    base.ready().then(function() {
+
+    $(document).ready(function() {
         // Check needs to avoid js code loading on another pages
         if (!window.location.pathname.includes('/price'))
             return;
