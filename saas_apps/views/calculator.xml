@@ -55,7 +55,7 @@
                     </t>
                     <!-- Packages -->
                     <div class="openerp_enterprise_pricing_step">
-                        <t t-if="show_packages">
+                        <t t-if="show_packages and packages">
                             <h3 class="mt16 mb16">Choose your Packages</h3>
                             <div class="openerp_enterprise_pricing_step_body mb24">
                                 <div class="form-row">
