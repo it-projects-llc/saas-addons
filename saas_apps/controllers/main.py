@@ -119,7 +119,10 @@ class SaasAppsCart(WebsiteSale):
         user_product.price = kw.get('user_price')
         if not period == 'm':
             user_product.price *= 12
-        old_user_cnt, user_cnt = float(kw.get('old_user_cnt')), float(kw.get('user_cnt'))
+        old_user_cnt = 0
+        if kw.get('old_user_cnt'):
+            old_user_cnt = float(kw.get('old_user_cnt'))
+        user_cnt = float(kw.get('user_cnt'))
         if not old_user_cnt:
             old_user_cnt = 0
         sale_order._cart_update(
