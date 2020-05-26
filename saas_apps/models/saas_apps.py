@@ -70,9 +70,6 @@ class SAASDependence(models.Model):
     def _compute_currency_id(self):
         self.currency_id = self.company_id.currency_id
 
-    # def _compute_default_image(self):
-    #     return self.env.ref("saas_apps.saas_apps_base_image").datas
-
     app_image = fields.Binary(
         string='App image'
     )
@@ -217,8 +214,8 @@ class SAASAppsTemplate(models.Model):
     year_price = fields.Float()
     product_id = fields.Many2many('product.template', ondelete='cascade')
 
-    # def _compute_default_image(self):
-        # return self.env.ref("saas_apps.saas_apps_base_image").datas
+    def _compute_default_image(self):
+        return self.env.ref("saas_apps.saas_apps_base_image").datas
 
     package_image = fields.Binary(
         string='Package image'
@@ -245,6 +242,10 @@ class SAASAppsTemplate(models.Model):
         if len(package) == 1:
             package.product_id.price = price
 
+    def compute_year_price(self, vals):
+        if "month_price" in vals:
+            self.year_price = self.month_price*12
+
     @api.model
     def create(self, vals):
         res = super(SAASAppsTemplate, self).create(vals)
@@ -264,14 +265,14 @@ class SAASAppsTemplate(models.Model):
                     'image_1920': res.package_image,
                     'website_published': True
                 })
+        res.compute_year_price(vals)
         return res
 
     def write(self, vals):
         res = super(SAASAppsTemplate, self).write(vals)
         if "year_price" in vals:
             self.change_product_price(self, self.year_price)
-        if "month_price" in vals:
-            self.year_price = self.month_price*12
+        self.compute_year_price(vals)
         return res
 
 
