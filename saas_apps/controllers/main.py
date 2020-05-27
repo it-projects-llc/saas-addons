@@ -119,7 +119,6 @@ class SaasAppsCart(WebsiteSale):
         user_product.price = kw.get('user_price')
         if not period == 'm':
             user_product.price *= 12
-        import wdb;wdb.set_trace()
         old_user_cnt = 0
         if kw.get('old_user_cnt'):
             old_user_cnt = float(kw.get('old_user_cnt'))
