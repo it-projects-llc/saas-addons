@@ -14,6 +14,13 @@ _logger = logging.getLogger(__name__)
 class Main(SignupVerifyEmail):
     def get_auth_signup_qcontext(self):
         d = super(Main, self).get_auth_signup_qcontext()
+        if any([k in d for k in ("installing_modules", "max_users_limit", "period")]):
+            try:
+                assert d["period"] in ("annually", "monthly")
+                assert int(d["max_users_limit"]) > 0
+                assert d["installing_modules"]
+            except KeyError as e:
+                raise AssertionError("{} is not given".format(e))
         d['langs'] = odoo.service.db.exp_list_lang()
         d['countries'] = odoo.service.db.exp_list_countries()
         return d

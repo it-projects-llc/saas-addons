@@ -17,6 +17,8 @@ class SaasDb(models.Model):
         if max_users_limit:
             vals["max_users_limit"] = max_users_limit
 
+        subscription_period = self.env.context.get("subscription_period")
+
         installing_modules = self.env.context.get("build_installing_modules")
         installing_products = None
         if installing_modules:
@@ -34,7 +36,8 @@ class SaasDb(models.Model):
         """
         # остановился тут
         partner_id = self.env.context.get("build_partner_id")
-        if partner_id and installing_products:
+        contract = None
+        if partner_id and installing_products and subscription_period:
             partner = self.env['res.partner'].browse(partner_id)
             vals["contract_id"] = self.env["contract.contract"].create({
                 "name": "{}'s SaaS Contract".format(partner.name),

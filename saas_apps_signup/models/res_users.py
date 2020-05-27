@@ -75,6 +75,7 @@ class ResUsers(models.Model):
         database_name = values.pop("database_name", None)
         build_installing_modules = values.pop("installing_modules", "").split(",")
         build_max_users_limit = int(values.pop("max_users_limit", 1))
+        subscription_period = values.pop("period", "")
 
         self.prepare_signup_values(values, self.env)
 
@@ -91,7 +92,8 @@ class ResUsers(models.Model):
                 build_admin_user_id=admin_user.id,
                 build_partner_id=admin_user.partner_id.id,
                 build_installing_modules=build_installing_modules,
-                build_max_users_limit=build_max_users_limit
+                build_max_users_limit=build_max_users_limit,
+                subscription_period=subscription_period
             ).with_user(SUPERUSER_ID).create_db(
                 key_values={"installing_modules": installing_modules_var},
                 db_name=database_name,
