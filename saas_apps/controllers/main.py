@@ -114,7 +114,7 @@ class SaasAppsCart(WebsiteSale):
         sale_order = request.website.sale_get_order(force_create=True)
         product_ids = kw.get('old_apps_ids', [])
         # Adding user as product in cart
-        user_product_tmp = request.env.ref("saas_apps.product_user").sudo()
+        user_product_tmp = request.env.ref("saas_product.product_users").sudo()
         user_product = user_product_tmp.product_variant_id
         user_product.price = kw.get('user_price')
         if not period == 'm':
