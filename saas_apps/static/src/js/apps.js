@@ -478,5 +478,6 @@ odoo.define('saas_apps.model', function (require) {
 
     return {
         "get_modules_to_install": get_modules_to_install,
+        "get_subscription_period": function() {return per_month ? "monthly" : "annually";},
     }
 });
