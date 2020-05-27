@@ -26,6 +26,7 @@
         'views/auth_signup.xml',
         'views/assets.xml',
         'views/saas_db.xml',
+        'views/contract.xml',
     ],
     "demo": [
     ],
