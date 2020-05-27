@@ -40,6 +40,8 @@ class ResUsers(models.Model):
         db = sql_db.db_connect(db_record.name)
         with api.Environment.manage(), db.cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
+            if "lang" not in values:
+                values["lang"] = admin_user.lang
             self.prepare_signup_values(values, env)
             env.ref('base.user_admin').write(values)
 
@@ -47,8 +49,10 @@ class ResUsers(models.Model):
     def signup(self, values, *args, **kwargs):
 
         if values.get("password"):
+            self = self.with_user(SUPERUSER_ID)
+
             # TODO: это очень шарлатанский метод вычисления базы данных, в которой нужно пароль установить
-            admin_user = self.env['res.users'].sudo().search([('login', '=', values["login"])], limit=1)
+            admin_user = self.env['res.users'].search([('login', '=', values["login"])], limit=1)
             db_record = self.env['saas.db'].search([('admin_user', '=', admin_user.id)])
             db_record.ensure_one()
 
