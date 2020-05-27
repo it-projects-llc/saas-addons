@@ -8,4 +8,4 @@ class Contract(models.Model):
 
     _inherit = 'contract.contract'
 
-    build_id = fields.Many2one("saas.db")
+    build_id = fields.Many2one("saas.db", readonly=True)
