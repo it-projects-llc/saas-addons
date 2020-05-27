@@ -24,25 +24,17 @@ class SaasDb(models.Model):
         if installing_modules:
             # TODO: эту часть надо будет переписывать, когда модули уже будут иметь свои продукты
             installing_products = self.env['saas.line'].search([("name", "in", installing_modules), ('application', '=', True)]).mapped('product_id.product_variant_id')
+            installing_products += self.env.ref("saas_product.product_users").product_variant_id  # TODO: implement anually or monthly
 
-        """
-        <field name="name" eval="obj(ref('saas_product.product_users_monthly')).name" model="product.product" />
-        <field name="quantity">1</field>
-        <field name="uom_id" ref="uom.product_uom_unit" />
-        <field name="price_unit" eval="obj(ref('saas_product.product_users_monthly')).lst_price" model="product.product" />
-        <field name="recurring_interval">1</field>
-        <field name="recurring_rule_type">monthly</field>
-        <field name="recurring_invoicing_type">pre-paid</field>
-        """
         # остановился тут
         partner_id = self.env.context.get("build_partner_id")
         contract = None
         if partner_id and installing_products and subscription_period:
             partner = self.env['res.partner'].browse(partner_id)
-            vals["contract_id"] = self.env["contract.contract"].create({
+            contract = self.env["contract.contract"].create({
                 "name": "{}'s SaaS Contract".format(partner.name),
                 "partner_id": partner.id,
-                "contract_template_id": self.env.ref("saas_contract.contract_template_annually").id,
+                "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,
                 "contract_line_ids": installing_products.mapped(lambda p: (0, 0, {
                     "name": p.name,
                     "product_id": p.id,
@@ -50,15 +42,20 @@ class SaasDb(models.Model):
                     "quantity": 1,
                     "price_unit": p.lst_price,
                     "recurring_interval": 1,
-                    "recurring_rule_type": "monthly",
+                    "recurring_rule_type": "yearly" if subscription_period == "annually" else subscription_period,
                     "recurring_invoicing_type": "pre-paid",
+                    "recurring_next_date": vals.get("expiration_date", self._fields["expiration_date"].default(self)),
                     "date_start": self._fields["expiration_date"].default(self),
                     "date_end": date.today() + timedelta(days=365)
-                })),
-            }).id
+                }))
+            })
+            vals["contract_id"] = contract.id
 
         admin_user_id = self.env.context.get("build_admin_user_id")
         if admin_user_id:
             vals["admin_user"] = admin_user_id
 
-        return super(SaasDb, self).create(vals)
+        record = super(SaasDb, self).create(vals)
+        if contract:
+            contract.write({"build_id": record.id})
+        return record

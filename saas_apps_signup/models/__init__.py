@@ -2,3 +2,4 @@
 
 from . import res_users
 from . import saas_db
+from . import contract_contract
