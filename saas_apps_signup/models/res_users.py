@@ -47,9 +47,21 @@ class ResUsers(models.Model):
 
     @api.model
     def signup(self, values, *args, **kwargs):
-
+        self = self.with_user(SUPERUSER_ID)
         if values.get("password"):
-            self = self.with_user(SUPERUSER_ID)
+            return self.signup_to_try(values)  # TODO: надо тут отдельный обработчик, а пока используется старый
+
+        elif "sale_order_id" in values:
+            return self.signup_to_buy(values)
+
+        elif "period" in values:
+            return self.signup_to_try(values)
+
+        else:
+            return super(ResUsers, self).signup(values, *args, **kwargs)
+
+    def signup_to_try(self, values):
+        if values.get("password"):
 
             # TODO: это очень шарлатанский метод вычисления базы данных, в которой нужно пароль установить
             admin_user = self.env['res.users'].search([('login', '=', values["login"])], limit=1)
@@ -104,3 +116,6 @@ class ResUsers(models.Model):
                 with_delay=True
             )
         return res
+
+    def signup_to_buy(self, values):
+        raise NotImplementedError("TODO")
