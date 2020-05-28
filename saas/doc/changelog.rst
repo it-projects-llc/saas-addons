@@ -7,6 +7,7 @@
 - **Fix:** no extra rigths required to read build's URL
 - **Improvement:** Removed {db_id} variable for generating database name
 - **Improvement:** Added helper methods `execute_kw` and `xmlid_lookup` on `saas.db` model
+- **Fix:** attempt to update global_url on draft builds
 
 `2.4.3`
 -------
