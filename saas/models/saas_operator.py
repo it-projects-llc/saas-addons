@@ -165,7 +165,7 @@ class SAASOperator(models.Model):
             'model_id': 1,
             'code': code,
         }
-        for build in builds:
+        for build in builds.filtered(lambda build: build.state == "done"):
             action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
             self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
