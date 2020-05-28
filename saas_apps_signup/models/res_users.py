@@ -104,15 +104,3 @@ class ResUsers(models.Model):
                 with_delay=True
             )
         return res
-
-    def action_reset_password(self):
-        # prepare reset password signup
-        create_mode = bool(self.env.context.get('create_user'))
-        if not create_mode:
-            return super(ResUsers, self).action_reset_password()
-
-        db_record = self.env['saas.db'].search([('admin_user', '=', self.id)])
-        if not db_record:
-            return super(ResUsers, self).action_reset_password()
-
-        return super(ResUsers, self.with_context(web_base_url=db_record.get_url())).action_reset_password()
