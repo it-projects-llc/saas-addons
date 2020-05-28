@@ -43,7 +43,7 @@ class Main(SignupVerifyEmail):
         if database_name:
             db_record = request.env['saas.db'].sudo().search([('name', '=', database_name)], limit=1)
             if db_record:
-                qcontext["error"] = "Database %s already exist" % (db_record,)
+                qcontext["error"] = "Database %s already exist" % (database_name,)
                 return request.render("auth_signup.signup", qcontext)
 
         try:
