@@ -4,3 +4,4 @@ from . import res_users
 from . import saas_db
 from . import contract_contract
 from . import res_partner
+from . import account_move
