@@ -17,7 +17,7 @@
     # "currency": "EUR",
     "depends": ["sale"],
     "external_dependencies": {"python": [], "bin": []},
-    "data": ["data/product_data.xml"],
+    "data": ["views/product_template.xml", "data/product_data.xml"],
     "demo": [],
     "qweb": [],
     "post_load": None,

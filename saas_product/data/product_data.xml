@@ -24,6 +24,7 @@
         <field name="name">Users</field>
         <field name="sale_ok" eval="True" />
         <field name="purchase_ok" eval="False" />
+        <field name="is_saas_product" eval="True" />
         <field name="type">service</field>
         <field name="list_price">0</field>
         <field name="taxes_id" eval="[(5,)]" />
