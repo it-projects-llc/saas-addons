@@ -40,29 +40,30 @@ class ResUsers(models.Model):
         db = sql_db.db_connect(db_record.name)
         with api.Environment.manage(), db.cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
+            if "lang" not in values:
+                values["lang"] = admin_user.lang
             self.prepare_signup_values(values, env)
             env.ref('base.user_admin').write(values)
 
     @api.model
     def signup(self, values, *args, **kwargs):
-
+        self = self.with_user(SUPERUSER_ID)
         if values.get("password"):
-            # TODO: это очень шарлатанский метод вычисления базы данных, в которой нужно пароль установить
-            admin_user = self.env['res.users'].sudo().search([('login', '=', values["login"])], limit=1)
-            db_record = self.env['saas.db'].search([('admin_user', '=', admin_user.id)])
-            db_record.ensure_one()
-
-            if db_record.type == "done":
-                self.set_admin_on_build(db_record, values, admin_user)
-            else:
-                _logger.warning("%s is not ready for setting admin on it" % (db_record,))
-                self.with_delay().set_admin_on_build(db_record, values.copy(), admin_user)
-
-            return super(ResUsers, self).signup(values, *args, **kwargs)
+            return self.activate_saas_user(values, *args, **kwargs)  # TODO: надо тут отдельный обработчик, а пока используется старый
 
         elif not self.env.context.get("create_user"):
             return super(ResUsers, self).signup(values, *args, **kwargs)
 
+        elif "sale_order_id" in values:
+            return self.signup_to_buy(values, *args, **kwargs)
+
+        elif "period" in values:
+            return self.signup_to_try(values, *args, **kwargs)
+
+        else:
+            return super(ResUsers, self).signup(values, *args, **kwargs)
+
+    def signup_to_try(self, values, *args, **kwargs):
         template_operators = self.env.ref("saas_apps.base_template").operator_ids
         if not template_operators:
             raise OperatorNotAvailable("No template operators in base template. Contact administrator")
@@ -71,7 +72,11 @@ class ResUsers(models.Model):
         if not template_operator:
             raise OperatorNotAvailable("No template operators are ready. Try again later")
 
+        # popping out values before creating user
         database_name = values.pop("database_name", None)
+        build_installing_modules = values.pop("installing_modules", "").split(",")
+        build_max_users_limit = int(values.pop("max_users_limit", 1))
+        subscription_period = values.pop("period", "")
 
         self.prepare_signup_values(values, self.env)
 
@@ -80,34 +85,65 @@ class ResUsers(models.Model):
         if database_name:
             installing_modules_var = "[" + ",".join(map(
                 lambda item: '"{}"'.format(item.strip().replace('"', '')),
-                values.get("installing_modules", "").split(",")
+                build_installing_modules
             )) + "]"
-            db_record = template_operator.create_db(
+            admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
+
+            db_record = template_operator.with_context(
+                build_admin_user_id=admin_user.id,
+                build_partner_id=admin_user.partner_id.id,
+                build_installing_modules=build_installing_modules,
+                build_max_users_limit=build_max_users_limit,
+                subscription_period=subscription_period
+            ).with_user(SUPERUSER_ID).create_db(
                 key_values={"installing_modules": installing_modules_var},
                 db_name=database_name,
                 with_delay=True
             )
-            db_record.admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
         return res
 
-    def action_reset_password(self):
-        # prepare reset password signup
-        create_mode = bool(self.env.context.get('create_user'))
-        if not create_mode:
-            return super(ResUsers, self).action_reset_password()
+    def signup_to_buy(self, values, *args, **kwargs):
+        sale_order = self.env["sale.order"].browse(int(values.pop("sale_order_id")))
 
-        db_record = self.env['saas.db'].search([('admin_user', '=', self.id)])
-        if not db_record:
-            return super(ResUsers, self).action_reset_password()
+        '''
+        # detecting period by "Users" product
+        products = sale_order.order_line.mapped("product_id")
+        user_product = products.filtered(lambda p: p.product_tmpl_id == env.ref("saas_product.product_users"))
+        user_product_attribute_value = user_product.product_template_attribute_value_ids.product_attribute_value_id
+        if user_product_attribute_value == self.env.ref("saas_product.product_users_attribute_subscription_value_annually"):
+            subscription_period = "annually"
+        elif user_product_attribute_value == self.env.ref("saas_product.product_users_attribute_subscription_value_monthly"):
+            subscription_period = "monthly"
+        else:
+            raise NotImplementedError("Could not detect period")
+        '''
 
-        return super(ResUsers, self.with_context(web_base_url=db_record.get_url())).action_reset_password()
+        database_name = values.pop("database_name", None)
 
-    @api.model
-    def _signup_create_user(self, values):
-        """
-        Take away excessive fields to escape SignupError: Invalid field '*' on model 'res.users'
-        """
+        self.prepare_signup_values(values, self.env)
 
-        values.pop("installing_modules", "")
+        res = super(ResUsers, self).signup(values, *args, **kwargs)
+        admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
+        sale_order.partner_id = admin_user.partner_id
 
-        return super(ResUsers, self)._signup_create_user(values)
+        self.env["saas.db"].create({
+            "name": database_name,
+            "operator_id": self.env.ref("saas.local_operator").id,
+            "admin_user": admin_user.id,
+        })
+
+        return res
+
+    def activate_saas_user(self, values, *args, **kwargs):
+        admin_user = self.env['res.users'].search([('login', '=', values["login"])], limit=1)
+        db_record = self.env['saas.db'].search([('admin_user', '=', admin_user.id)])
+        db_record.ensure_one()
+
+        if db_record.contract_id:
+            if db_record.type == "done":
+                self.set_admin_on_build(db_record, values, admin_user)
+            else:
+                _logger.warning("%s is not ready for setting admin on it" % (db_record,))
+            self.with_delay().set_admin_on_build(db_record, values.copy(), admin_user)
+
+        return super(ResUsers, self).signup(values, *args, **kwargs)

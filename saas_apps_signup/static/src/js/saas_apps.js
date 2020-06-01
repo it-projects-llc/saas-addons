@@ -4,6 +4,7 @@ odoo.define('saas_apps_signup.saas_apps', function (require) {
     "use strict";
 
     var get_modules_to_install = require("saas_apps.model").get_modules_to_install;
+    var get_subscription_period = require("saas_apps.model").get_subscription_period;
 
     var onGetStartedClick = function() {
         var modules_to_install = get_modules_to_install();
@@ -11,7 +12,12 @@ odoo.define('saas_apps_signup.saas_apps', function (require) {
             alert("Please choose modules to install");
             return;
         }
-        window.location = "/web/signup?installing_modules=" + modules_to_install.join(",");
+        var maxUsersCount = $("#users").val();
+        if (!parseInt(maxUsersCount)) {
+            alert("Could not parse number of users");
+            return;
+        }
+        window.location = "/web/signup?installing_modules=" + modules_to_install.join(",") + "&max_users_limit=" + maxUsersCount + "&period=" + get_subscription_period();
     }
 
     // один из самых костыльных способов отвязать событие с кнопки

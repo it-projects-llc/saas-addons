@@ -35,8 +35,6 @@
                     </small>
                 </div>
 
-                <input type="hidden" name="installing_modules" t-att-value="installing_modules" />
-
                 <div class="form-group field-phone">
                     <label for="phone">Phone</label>
                     <input type="text" name="phone" id="phone" class="form-control form-control-sm"

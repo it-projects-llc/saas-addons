@@ -14,6 +14,23 @@ _logger = logging.getLogger(__name__)
 class Main(SignupVerifyEmail):
     def get_auth_signup_qcontext(self):
         d = super(Main, self).get_auth_signup_qcontext()
+        try_now_args = ("installing_modules", "max_users_limit", "period")
+
+        if any([k in d for k in try_now_args]):
+            # "Try now" is pressed
+            try:
+                assert d["period"] in ("annually", "monthly")
+                assert int(d["max_users_limit"]) > 0
+                assert d["installing_modules"]
+                assert not d.get("sale_order_id")  # making sure, that sale order is not used
+            except KeyError as e:
+                raise AssertionError("{} is not given".format(e))
+
+        elif "sale_order_id" in d:
+            # "Buy now" is pressed
+            d["sale_order_id"] = int(d["sale_order_id"])
+            assert all(map(lambda k: not d.get(k), try_now_args))  # making sure, that "Try now" args are not used
+
         d['langs'] = odoo.service.db.exp_list_lang()
         d['countries'] = odoo.service.db.exp_list_countries()
         return d
@@ -26,7 +43,7 @@ class Main(SignupVerifyEmail):
         if database_name:
             db_record = request.env['saas.db'].sudo().search([('name', '=', database_name)], limit=1)
             if db_record:
-                qcontext["error"] = "Database %s already exist" % (db_record,)
+                qcontext["error"] = "Database %s already exist" % (database_name,)
                 return request.render("auth_signup.signup", qcontext)
 
         try:

@@ -17,6 +17,9 @@ class SaasDb(models.Model):
     def write_values_to_build(self):
         super(SaasDb, self).write_values_to_build()
 
+        if not self.expiration_date:
+            return
+
         self.execute_kw(
             "ir.config_parameter",
             "set_param",

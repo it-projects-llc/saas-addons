@@ -29,7 +29,14 @@
                 <tbody>
                     <tr t-foreach="builds" t-as="build">
                         <td>
-                            <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name"/></a>
+                            <span class="float-left">
+                                <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name"/></a>
+                            </span>
+                            <span class="float-right">
+                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                    Link
+                                </a>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
