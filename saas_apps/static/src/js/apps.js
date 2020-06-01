@@ -423,6 +423,17 @@ odoo.define('saas_apps.model', function (require) {
         $('#apps-qty').text(String(apps_in_basket));
         $('#users-cnt-cost').text(String(users_price_period * $('#users').val()));
         $('#apps-cost').text(String(calc_apps_price()));
+        if(!apps_in_basket){
+            $('#get-started')[0].classList.add('hid');
+            if($('#buy-now').length){
+                $('#buy-now')[0].classList.add('hid');
+            }
+        }else{
+            $('#get-started')[0].classList.remove('hid');
+            if($('#buy-now').length){
+                $('#buy-now')[0].classList.remove('hid');
+            }
+        }
     }
 
     function check_users_input() {
