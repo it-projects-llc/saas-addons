@@ -4,8 +4,11 @@
 }
 
 #price{
-    font-size: 32px;
     display: inline;
+}
+
+.pricing-card-title{
+    font-size: 32px;
 }
 
 .users-qty-change-buttons{

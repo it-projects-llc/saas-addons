@@ -116,7 +116,8 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <h4 id="price" class="card-title pricing-card-title">10 <t t-esc="apps[0].currency_id.symbol"/> / </h4>
+                                    <h4 id="price" class="card-title pricing-card-title">10</h4>
+                                    <h4 class="card-title pricing-card-title" style="display: inline;"> <t t-esc="apps[0].currency_id.symbol"/> / </h4>
                                     <small id="box-period" class="text-muted period fnt-24">year</small>
                                     <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary fnt-larger">Try trial</button>
                                     <t t-if="show_buy_now_button">

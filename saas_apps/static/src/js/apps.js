@@ -416,7 +416,7 @@ odoo.define('saas_apps.model', function (require) {
         blink_anim([$('#apps-cost'), $('#users-cnt-cost'),
         $('#apps-qty'), $('#price-users'), $('#users-qty'), $('#price')]);
         var period = per_month ? "month" : "year";
-        $('#price').text(String(price) + ' ' + currency_symbol + ' / ');
+        $('#price').text(String(price));
         $('#box-period').text(String(period));
         $('#users-qty').text($('#users').val())
         users_price_period = per_month ? 12.5 : 10.0;
