@@ -1,0 +1,10 @@
+<!-- Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <record id="product_user" model="product.template">
+        <field name="name">User</field>
+        <field name="price">10</field>
+        <field name="website_published">True</field>
+        <field file="saas_apps/static/src/img/user.png" name="image_1920" type="base64" />
+    </record>
+</odoo>
