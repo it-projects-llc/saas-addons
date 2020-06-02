@@ -80,7 +80,6 @@ class SAASDependence(models.Model):
         apps.refresh_modules()
         base_icon = self.env["ir.module.module"].search([('name', '=', 'base')]).icon_image
         for app in apps.search([]):
-            self.delete_shit(app.name)
             if self.search_count([('name', '=', app.name)]) == 0:
                 ir_module_obj = self.env["ir.module.module"].get_module_info(app.name)
                 if len(ir_module_obj):
@@ -98,9 +97,6 @@ class SAASDependence(models.Model):
                         'app_image': base_icon
                     })
 
-    def delete_shit(self, app_name):
-        self.env['product.template'].search([('name', '=', app_name)]).unlink()
-
     def make_product(self, app):
         prod_templ = self.env["product.template"]
         ready_product = prod_templ.search([('name', '=', app.module_name)])
@@ -114,7 +110,8 @@ class SAASDependence(models.Model):
                 'name': app.module_name,
                 'price': app.year_price,
                 'image_1920': app.app_image,
-                'website_published': True
+                'website_published': True,
+                'is_saas_product': True
             })
 
     def change_product_price(self, app, price):
@@ -257,7 +254,8 @@ class SAASAppsTemplate(models.Model):
                     'name': res.name,
                     'price': res.year_price,
                     'image_1920': res.package_image,
-                    'website_published': True
+                    'website_published': True,
+                    'is_saas_product': True
                 })
         return res
 
