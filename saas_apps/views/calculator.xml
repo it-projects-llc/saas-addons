@@ -55,7 +55,7 @@
                     </t>
                     <!-- Packages -->
                     <div>
-                        <t t-if="show_packages">
+                        <t t-if="show_packages and packages">
                             <h3 class="mt16 mb16">Choose your Packages</h3>
                             <div class="mb24">
                                 <div class="form-row">
