@@ -109,11 +109,17 @@ class SaaSAppsController(Controller):
 class SaasAppsCart(WebsiteSale):
 
 
+    def clear_cart(self):
+        order = request.website.sale_get_order()
+        if order:
+            for line in order.website_order_line:
+                line.unlink()
+
     @route('/price/cart_update', type='json', auth='public', website=True)
     def cart_update_price_page(self, **kw):
+        self.clear_cart()
         period = kw.get('period')
         sale_order = request.website.sale_get_order(force_create=True)
-        product_ids = kw.get('old_apps_ids', [])
         # Adding user as product in cart
         if period == "m":
             user_product = request.env.ref("saas_product.product_users_monthly")
@@ -121,22 +127,10 @@ class SaasAppsCart(WebsiteSale):
             user_product = request.env.ref("saas_product.product_users_annually")
         else:
             raise NotImplementedError("No 'Users' product for period '{}'".format(period))
-        old_user_cnt = 0
-        if kw.get('old_user_cnt'):
-            old_user_cnt = float(kw.get('old_user_cnt'))
         user_cnt = float(kw.get('user_cnt'))
-        if not old_user_cnt:
-            old_user_cnt = 0
         sale_order._cart_update(
                 product_id=int(user_product.id),
-                add_qty=(user_cnt - old_user_cnt)
-            )
-
-        # Delete old products from cart
-        for id in product_ids:
-            sale_order._cart_update(
-                product_id=int(id),
-                add_qty=-1
+                add_qty=user_cnt
             )
 
         # Changing prices

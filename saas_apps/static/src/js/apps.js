@@ -105,16 +105,12 @@ odoo.define('saas_apps.model', function (require) {
             // If ids are know, redirect to cart
             session.rpc('/price/cart_update', {
                 product_ids: product_ids.ids,
-                old_apps_ids: get_old_products(),
                 period: per_month ? 'm' : 'y',
                 user_price: user_price(),
-                old_user_cnt: get_old_user_cnt(),
                 user_cnt: $('#users').val()
             }).then(function (response) {
                 window.location.href = response.link;
             });
-            // This method is necessary, to delete old products from cart
-            save_old_products(product_ids.ids);
         });
     }
 
@@ -415,7 +411,7 @@ odoo.define('saas_apps.model', function (require) {
         blink_anim([$('#apps-cost'), $('#users-cnt-cost'),
         $('#apps-qty'), $('#price-users'), $('#users-qty'), $('#price')]);
         var period = per_month ? "month" : "year";
-        $('#price').text(String(price) + ' ' + currency_symbol + ' / ');
+        $('#price').text(String(price));
         $('#box-period').text(String(period));
         $('#users-qty').text($('#users').val())
         users_price_period = per_month ? 12.5 : 10.0;
@@ -423,6 +419,17 @@ odoo.define('saas_apps.model', function (require) {
         $('#apps-qty').text(String(apps_in_basket));
         $('#users-cnt-cost').text(String(users_price_period * $('#users').val()));
         $('#apps-cost').text(String(calc_apps_price()));
+        if(!apps_in_basket){
+            $('#get-started')[0].classList.add('hid');
+            if($('#buy-now').length){
+                $('#buy-now')[0].classList.add('hid');
+            }
+        }else{
+            $('#get-started')[0].classList.remove('hid');
+            if($('#buy-now').length){
+                $('#buy-now')[0].classList.remove('hid');
+            }
+        }
     }
 
     function check_users_input() {
@@ -436,19 +443,6 @@ odoo.define('saas_apps.model', function (require) {
             modules.push(key);
         }
         return modules;
-    }
-
-    function save_old_products(ids) {
-        localStorage.removeItem('old_user_cnt');
-        localStorage.removeItem('old_products');
-        localStorage.setItem('old_products', ids);
-        localStorage.setItem('old_user_cnt', $('#users').val());
-    }
-
-    function get_old_user_cnt() { return localStorage.getItem('old_user_cnt'); }
-
-    function get_old_products() {
-        return parse_string_to_arr(localStorage.getItem('old_products'));
     }
 
     function save_modules_to_session_storage() {

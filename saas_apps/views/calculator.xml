@@ -9,21 +9,21 @@
                 <div class="mx-auto page-alignment">
                     <!-- Users qty -->
                     <t t-if="show_apps or show_packages">
-                        <div class="openerp_enterprise_pricing_step">
-                            <div class="openerp_enterprise_pricing_step_head">
+                        <div>
+                            <div>
                                 <h3 class="mt16 mb8">Choose the number of <b>Users</b></h3>
                             </div>
                             <img id="substr-users" src="/saas_apps/static/src/img/substr-users.png" alt="Decrease users qty" class="users-qty-change-buttons"/>
-                            <input class="openerp_enterprise_pricing_users form-control border text-right pr-2"
+                            <input class="form-control border text-right pr-2"
                             id="users" name="num_users" type="text" value="1" style="max-width: 100px;display: inline;text-align: center !important;"/>
                             <img id="add-users" src="/saas_apps/static/src/img/add-users.png" alt="Increase users qty" class="users-qty-change-buttons"/>
                         </div>
                     </t>
                     <!-- App list -->
                     <t t-if="show_apps">
-                        <div class="openerp_enterprise_pricing_step">
+                        <div>
                             <h3 class="mt16 mb16">Choose your Apps</h3>
-                            <div class="openerp_enterprise_pricing_step_body mb24">
+                            <div class="mb24">
                                 <div class="form-row">
                                     <t t-foreach="apps" t-as="app">
                                         <t t-if="app.application">
@@ -54,10 +54,10 @@
                         </div>
                     </t>
                     <!-- Packages -->
-                    <div class="openerp_enterprise_pricing_step">
+                    <div>
                         <t t-if="show_packages and packages">
                             <h3 class="mt16 mb16">Choose your Packages</h3>
-                            <div class="openerp_enterprise_pricing_step_body mb24">
+                            <div class="mb24">
                                 <div class="form-row">
                                     <t t-foreach="packages" t-as="package">
                                         <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app package">
@@ -116,7 +116,8 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <h4 id="price" class="card-title pricing-card-title">10 <t t-esc="apps[0].currency_id.symbol"/> / </h4>
+                                    <h4 id="price" class="card-title pricing-card-title">10</h4>
+                                    <h4 class="card-title pricing-card-title" style="display: inline;"> <t t-esc="apps[0].currency_id.symbol"/> / </h4>
                                     <small id="box-period" class="text-muted period fnt-24">year</small>
                                     <button id="get-started" type="button" class="btn btn-lg btn-block btn-primary fnt-larger">Try trial</button>
                                     <t t-if="show_buy_now_button">
