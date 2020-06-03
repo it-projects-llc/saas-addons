@@ -11,5 +11,8 @@ class MySaasAppsCart(SaasAppsCart):
         response = super(MySaasAppsCart, self).cart_update_price_page(**kw)
         sale_order = request.website.sale_get_order(force_create=False)
         if sale_order:
-            response.update(link="/web/signup?sale_order_id={}".format(sale_order.id))
+            if request.env.user == request.env.ref("base.public_user"):
+                response.update(link="/web/signup?sale_order_id={}".format(sale_order.id))
+            else:
+                response.update(link="/shop/checkout")
         return response
