@@ -27,8 +27,6 @@
         <field name="is_saas_product" eval="True" />
         <field name="type">service</field>
         <field name="list_price">0</field>
-        <field name="taxes_id" eval="[(5,)]" />
-        <field name="supplier_taxes_id" eval="[(5,)]" />
     </record>
 
     <record id="product_users_attribute_subscription_line" model="product.template.attribute.line">
