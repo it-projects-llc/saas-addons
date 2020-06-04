@@ -14,5 +14,8 @@ class MySaasAppsCart(SaasAppsCart):
             if request.env.user == request.env.ref("base.public_user"):
                 response.update(link="/web/signup?sale_order_id={}".format(sale_order.id))
             else:
-                response.update(link="/shop/checkout")
+                if request.env["saas.db"].search_count([("state", "=", "draft")]) == 0:
+                    response.update(link="/my/builds/create?redirect=/shop/checkout")
+                else:
+                    response.update(link="/shop/checkout")
         return response

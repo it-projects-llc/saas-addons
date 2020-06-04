@@ -23,6 +23,10 @@ class SaasDb(models.Model):
 
     def create(self, vals):
 
+        if not self.env.user.has_group("saas.group_manager"):
+            if self.env['saas.db']._search([("state", "=", "draft")], limit=1):
+                raise Exception("You cannot create more than one draft database")
+
         max_users_limit = self.env.context.get("build_max_users_limit")
         if max_users_limit:
             vals["max_users_limit"] = max_users_limit

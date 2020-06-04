@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.http import request, route, Controller
-from odoo.service.db import exp_db_exist
 import logging
 from slugify import slugify
 import werkzeug
@@ -28,19 +27,24 @@ class Main(Controller):
 
     @route("/my/builds/create", auth="user", type="http", website=True)
     def portal_build_selector(self, database_name=None, redirect=None, **kw):
-        # TODO: надо запретить создавать базы просто так
         qcontext = {}
         redirect = redirect or "/my/builds"
 
         if request.httprequest.method == "POST" and database_name:
             res = self.is_available(database_name)
-            if "domain" in res:  # it means that database can be created
-                request.env["saas.db"].sudo().create({
-                    "name": database_name,
-                    "operator_id": request.env.ref("saas.local_operator").id,
-                    "admin_user": request.env.user.id,
-                })
-                return werkzeug.utils.redirect(redirect)
+            if "domain" in res:
+                try:
+                    request.env["saas.db"].sudo().create({
+                        "name": database_name,
+                        "operator_id": request.env.ref("saas.local_operator").id,
+                        "admin_user": request.env.user.id,
+                    })
+                    return werkzeug.utils.redirect(redirect)
+                except Exception as e:
+                    _logger.exception("Something went wrong, when creating draft build")
+                    qcontext.update({
+                        "error": str(e),
+                    })
             else:
                 qcontext.update({
                     "error": res["answer"],
