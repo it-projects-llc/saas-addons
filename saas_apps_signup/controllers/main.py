@@ -5,6 +5,7 @@ from odoo.http import request, route, Controller
 from odoo.service.db import exp_db_exist
 import logging
 from slugify import slugify
+import werkzeug
 
 _logger = logging.getLogger(__name__)
 
@@ -24,3 +25,26 @@ class Main(Controller):
             return {"domain": request.env.ref("saas.local_operator").sudo().db_url_template.format(db_name=database_name)}
         else:
             return {"answer": "Database already exists"}
+
+    @route("/my/builds/create", auth="user", type="http", website=True)
+    def portal_build_selector(self, database_name=None, redirect=None, **kw):
+        # TODO: надо запретить создавать базы просто так
+        qcontext = {}
+        redirect = redirect or "/my/builds"
+
+        if request.httprequest.method == "POST" and database_name:
+            res = self.is_available(database_name)
+            if "domain" in res:  # it means that database can be created
+                request.env["saas.db"].sudo().create({
+                    "name": database_name,
+                    "operator_id": request.env.ref("saas.local_operator").id,
+                    "admin_user": request.env.user.id,
+                })
+                return werkzeug.utils.redirect(redirect)
+            else:
+                qcontext.update(res)
+
+        qcontext.update(
+            redirect=redirect,
+        )
+        return request.render("saas_apps_signup.portal_create_build", qcontext)
