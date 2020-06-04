@@ -33,9 +33,11 @@
                                 <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name"/></a>
                             </span>
                             <span class="float-right">
-                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
-                                    Link
-                                </a>
+                                <t t-if="build.state == 'done'">
+                                    <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                        Link
+                                    </a>
+                                </t>
                             </span>
                         </td>
                     </tr>
@@ -50,10 +52,13 @@
                 <t t-set="card_header">
                     <h5 class="mb-0">
                         <small class="text-muted">Build - </small><span t-field="build.name"/>
+                        <span t-if="build.state == 'draft'">(Draft)</span>
                         <span class="float-right">
-                            <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
-                                Link
-                            </a>
+                            <t t-if="build.state == 'done'">
+                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                    Link
+                                </a>
+                            </t>
                         </span>
                     </h5>
                 </t>
