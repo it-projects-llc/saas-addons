@@ -20,7 +20,7 @@ class Main(Controller):
         if database_name != slugify(database_name):
             return {"answer": "Invalid database name"}
 
-        is_free_slot = not exp_db_exist(database_name)
+        is_free_slot = not request.env["saas.db"].sudo().search([("name", "=", database_name)])
         if is_free_slot:
             return {"domain": request.env.ref("saas.local_operator").sudo().db_url_template.format(db_name=database_name)}
         else:
@@ -42,9 +42,12 @@ class Main(Controller):
                 })
                 return werkzeug.utils.redirect(redirect)
             else:
-                qcontext.update(res)
+                qcontext.update({
+                    "error": res["answer"],
+                })
 
         qcontext.update(
             redirect=redirect,
+            database_name=database_name or "",
         )
         return request.render("saas_apps_signup.portal_create_build", qcontext)

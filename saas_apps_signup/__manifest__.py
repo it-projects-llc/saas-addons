@@ -28,6 +28,7 @@
         'views/assets.xml',
         'views/saas_db.xml',
         'views/contract.xml',
+        'views/portal_templates.xml',
     ],
     "demo": [
     ],
