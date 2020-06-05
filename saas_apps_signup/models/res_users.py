@@ -64,6 +64,7 @@ class ResUsers(models.Model):
             return super(ResUsers, self).signup(values, *args, **kwargs)
 
     def signup_to_try(self, values, *args, **kwargs):
+        # TODO: перенеси логику создания базы в contract.contract.create
         template_operators = self.env.ref("saas_apps.base_template").operator_ids
         if not template_operators:
             raise OperatorNotAvailable("No template operators in base template. Contact administrator")

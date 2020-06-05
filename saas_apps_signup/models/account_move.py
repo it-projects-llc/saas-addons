@@ -3,6 +3,9 @@
 
 from odoo import models
 from datetime import date, timedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountMove(models.Model):
@@ -37,8 +40,8 @@ class AccountMove(models.Model):
             else:
                 continue
 
-            # TODO: в контракте надо еще указывать build
             partner = record.partner_id
+
             contract_line_ids = saas_invoice_line_ids.mapped(lambda line: (0, 0, {
                 "name": line.product_id.name,
                 "product_id": line.product_id.id,
@@ -53,7 +56,8 @@ class AccountMove(models.Model):
             }))
 
             if not record.contract_id:
-                record.contract_id = self.env["contract.contract"].create({
+
+                record.contract_id = self.env["contract.contract"].with_context(create_build=True).create({
                     "name": "{}'s SaaS Contract".format(partner.name),
                     "partner_id": partner.id,
                     "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscribtion_period)).id,
