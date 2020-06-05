@@ -135,9 +135,9 @@ class SaasAppsCart(WebsiteSale):
 
         # Changing prices
         product_ids = kw.get('product_ids', [])
-        pr_tmp = request.env['product.template'].sudo()
+        pr_tmp = request.env['product.product'].sudo()
         for id in product_ids:
-            product = pr_tmp.browse(id).product_variant_id
+            product = pr_tmp.browse(id)
             app = request.env['saas.line'].sudo().search([('module_name', '=', product.name)])
             packages = request.env['saas.template'].sudo().search([('name', '=', product.name)])
             if period == 'm':
