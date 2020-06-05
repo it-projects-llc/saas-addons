@@ -34,10 +34,10 @@ class SaasDb(models.Model):
         subscription_period = self.env.context.get("subscription_period")
 
         installing_modules = self.env.context.get("build_installing_modules")
-        installing_products = None
+        installing_products = []
         if installing_modules and max_users_limit:
             # TODO: эту часть надо будет переписывать, когда модули уже будут иметь свои продукты
-            installing_products = self.env['saas.line']\
+            installing_products += self.env['saas.line']\
                                       .search([("name", "in", installing_modules), ('application', '=', True)])\
                                       .mapped('product_id.product_variant_id')\
                                       .mapped(lambda p: {
@@ -46,6 +46,8 @@ class SaasDb(models.Model):
                                           "price": p.lst_price,
                                           "quantity": 1,
                                       })
+
+        if subscription_period:
             installing_products += self.env.ref("saas_product.product_users_{}".format(subscription_period)).mapped(lambda p: {
                 "id": p.id,
                 "name": p.name,
