@@ -8,6 +8,7 @@
 - **Improvement:** Removed {db_id} variable for generating database name
 - **Improvement:** Added helper methods `execute_kw` and `xmlid_lookup` on `saas.db` model
 - **Fix:** attempt to update global_url on draft builds
+- **Improvement:** Added option to deploy database on draft builds
 
 `2.4.3`
 -------
