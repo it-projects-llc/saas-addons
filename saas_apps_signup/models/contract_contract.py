@@ -25,6 +25,17 @@ class Contract(models.Model):
 
         return record
 
+    def write(self, vals):
+        res = super(Contract, self).write(vals)
+
+        if "build_id" in vals:
+            build = self.env["saas.db"].sudo().browse(vals["build_id"])
+            build.write({
+                "expiration_date": self.recurring_next_date,
+                "contract_id": self.id,
+            })
+        return res
+
     @job
     def _create_build(self):
         for contract in self:
@@ -50,7 +61,6 @@ class Contract(models.Model):
 
             contract_products = contract.contract_line_ids.mapped('product_id.product_tmpl_id')
 
-            database_name = build.name
             build_installing_modules = self.env['saas.line'].sudo().search([('product_id', 'in', contract_products.ids)]).mapped('name')
             build_max_users_limit = int(contract_line_users.quantity)
             build_admin_user_id = build.admin_user.id
@@ -68,17 +78,14 @@ class Contract(models.Model):
                 build_installing_modules
             )) + "]"
 
-            # removing old draft build
-            build.unlink()
-
-            new_build = template_operator.with_context(
+            build = template_operator.with_context(
                 build_admin_user_id=build_admin_user_id,
                 build_installing_modules=build_installing_modules,
                 build_max_users_limit=build_max_users_limit,
             ).create_db(
                 key_values={"installing_modules": installing_modules_var},
-                db_name=database_name,
-                with_delay=False
+                with_delay=False,
+                draft_build_id=build.id
             )
 
-            contract.build_id = new_build.id
+            contract.build_id = build.id
