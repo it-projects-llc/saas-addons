@@ -66,7 +66,19 @@ class Contract(models.Model):
             build_max_users_limit = int(contract_line_users.quantity)
             build_admin_user_id = build.admin_user.id
 
-            template_operators = self.env.ref("saas_apps.base_template").operator_ids
+            template = self.env["saas.template"].search([
+                ("set_as_package", "=", True),
+                ("product_id", "in", contract_products.ids),
+            ])
+            if not template:
+                template = self.env.ref("saas_apps.base_template")
+            elif len(template) > 1:
+                _logger.warning("Expected only one template. Using first one from {} (given using {})".format(
+                    repr(template),
+                    repr(template.mapped("product_id")),
+                ))
+                template = template[0]
+            template_operators = template.operator_ids
             if not template_operators:
                 raise OperatorNotAvailable("No template operators in base template. Contact administrator")
 
