@@ -41,6 +41,7 @@ class Contract(models.Model):
         for contract in self:
             partner = self.partner_id
             build = self.env["saas.db"].search([
+                ("type", "=", "build"),
                 ("state", "=", "draft"),
                 ("admin_user", "in", partner.user_ids.ids),
             ], order='id DESC', limit=1)
