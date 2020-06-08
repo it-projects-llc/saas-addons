@@ -31,6 +31,9 @@
                         <td>
                             <span class="float-left">
                                 <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name"/></a>
+                                <t t-if="build.admin_user != user_id">
+                                    (Admin: <t t-if="not build.admin_user">None</t><t t-else="" t-esc="build.admin_user.name" />)
+                                </t>
                             </span>
                             <span class="float-right">
                                 <t t-if="build.state == 'done'">

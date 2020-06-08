@@ -10,7 +10,9 @@ from odoo.exceptions import AccessError, MissingError
 class Main(CustomerPortal):
     def _prepare_portal_layout_values(self):
         values = super(Main, self)._prepare_portal_layout_values()
-        values["build_count"] = request.env["saas.db"].search_count([])
+        values["build_count"] = request.env["saas.db"].search_count([
+            ("type", "=", "build"),
+        ])
         return values
 
     @http.route(
@@ -22,7 +24,7 @@ class Main(CustomerPortal):
     def portal_my_projects(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         Build = request.env["saas.db"]
-        domain = []
+        domain = [("type", "=", "build")]
 
         searchbar_sortings = {
             "name": {"label": _("Name"), "order": "name"},
