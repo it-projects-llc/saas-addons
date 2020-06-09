@@ -24,6 +24,7 @@
     "data": [
         'data/auth_signup_data.xml',
         'data/base_automation.xml',
+        'data/website.xml',
         'views/auth_signup.xml',
         'views/assets.xml',
         'views/saas_db.xml',
