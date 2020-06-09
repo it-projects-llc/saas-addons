@@ -45,7 +45,7 @@ class SaasDb(models.Model):
 
         if self.admin_user.country_id:
             res = self.execute_kw(
-                "res.country", "search_read", [("code", "=", self.country_id.code)], ["id"]
+                "res.country", "search_read", [("code", "=", self.admin_user.country_id.code)], ["id"]
             )
             if res:
                 vals["country_id"] = res[0]["id"]
