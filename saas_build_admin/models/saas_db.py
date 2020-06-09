@@ -32,7 +32,7 @@ class SaasDb(models.Model):
         )
         if not is_admin_language_installed:
             lang_install_id = self.execute_kw(
-                "base.language.install", "create", {"lang": "ru_RU", "overwrite": False}
+                "base.language.install", "create", {"lang": self.admin_user.lang, "overwrite": False}
             )
             self.execute_kw("base.languange.install", "lang_install", lang_install_id)
 
@@ -45,7 +45,7 @@ class SaasDb(models.Model):
 
         if self.admin_user.country_id:
             res = self.execute_kw(
-                "res.country", "search_read", [("code", "=", "RU")], ["id"]
+                "res.country", "search_read", [("code", "=", self.country_id.code)], ["id"]
             )
             if res:
                 vals["country_id"] = res[0]["id"]
@@ -53,6 +53,7 @@ class SaasDb(models.Model):
             vals["country_id"] = None
 
         vals["login"] = self.admin_user.login
+        vals["name"] = self.admin_user.name
 
         _, model, res_id = self.xmlid_lookup("base.user_admin")
 
