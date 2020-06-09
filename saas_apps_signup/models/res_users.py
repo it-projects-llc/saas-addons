@@ -14,37 +14,6 @@ class ResUsers(models.Model):
 
     _inherit = 'res.users'
 
-    @classmethod
-    def prepare_signup_values(cls, values, env):
-        if values['lang'] not in env['res.lang'].sudo().search([]).mapped('code'):
-            env['base.language.install'].sudo().create({
-                'lang': values["lang"],
-                "overwrite": False,
-            }).lang_install()
-
-        country_code = values.pop("country_code")
-        if country_code:
-            country_code = str(country_code).upper()
-            country_ids = env['res.country']._search([('code', '=', country_code)])
-            if country_ids:
-                values['country_id'] = country_ids[0]
-
-    @job
-    def set_admin_on_build(self, db_record, values, admin_user):
-        _logger.debug("Setting admin password on %s" % (db_record,))
-        values = values.copy()
-        values.pop("login", None)
-        if admin_user.country_id:
-            values['country_code'] = admin_user.country_id.code
-
-        db = sql_db.db_connect(db_record.name)
-        with api.Environment.manage(), db.cursor() as cr:
-            env = api.Environment(cr, SUPERUSER_ID, {})
-            if "lang" not in values:
-                values["lang"] = admin_user.lang
-            self.prepare_signup_values(values, env)
-            env.ref('base.user_admin').write(values)
-
     @api.model
     def signup(self, values, *args, **kwargs):
         self = self.with_user(SUPERUSER_ID)
@@ -78,8 +47,6 @@ class ResUsers(models.Model):
         build_installing_modules = values.pop("installing_modules", "").split(",")
         build_max_users_limit = int(values.pop("max_users_limit", 1))
         subscription_period = values.pop("period", "")
-
-        self.prepare_signup_values(values, self.env)
 
         res = super(ResUsers, self).signup(values, *args, **kwargs)
 
