@@ -15,7 +15,7 @@
     "license": "AGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
-    "depends": ["saas", "portal", "saas_expiration", "saas_limit_max_users"],
+    "depends": ["saas", "portal", "saas_expiration", "saas_limit_max_users", "saas_build_admin"],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/ir.model.access.csv",
