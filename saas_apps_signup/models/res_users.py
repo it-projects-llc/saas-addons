@@ -17,8 +17,16 @@ class ResUsers(models.Model):
     @api.model
     def signup(self, values, *args, **kwargs):
         self = self.with_user(SUPERUSER_ID)
-        if values.get("password"):
-            return self.activate_saas_user(values, *args, **kwargs)  # TODO: надо тут отдельный обработчик, а пока используется старый
+
+        if values.get("country_code"):
+            values["country_id"] = self.env["res.country"].search([("code", "=", values["country_code"])]).id
+            del values["country_code"]
+
+        if values.get('lang') and values["lang"] not in self.env['res.lang'].sudo().search([]).mapped('code'):
+            self.env['base.language.install'].sudo().create({
+                'lang': values["lang"],
+                "overwrite": False,
+            }).lang_install()
 
         elif not self.env.context.get("create_user"):
             return super(ResUsers, self).signup(values, *args, **kwargs)
@@ -101,17 +109,3 @@ class ResUsers(models.Model):
         })
 
         return res
-
-    def activate_saas_user(self, values, *args, **kwargs):
-        admin_user = self.env['res.users'].search([('login', '=', values["login"])], limit=1)
-        db_record = self.env['saas.db'].search([('admin_user', '=', admin_user.id)])
-        db_record.ensure_one()
-
-        if db_record.contract_id:
-            if db_record.type == "done":
-                self.set_admin_on_build(db_record, values, admin_user)
-            else:
-                _logger.warning("%s is not ready for setting admin on it" % (db_record,))
-            self.with_delay().set_admin_on_build(db_record, values.copy(), admin_user)
-
-        return super(ResUsers, self).signup(values, *args, **kwargs)
