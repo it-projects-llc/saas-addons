@@ -64,7 +64,6 @@ class Contract(models.Model):
 
             build_installing_modules = self.env['saas.line'].sudo().search([('product_id', 'in', contract_products.ids)]).mapped('name')
             build_max_users_limit = int(contract_line_users.quantity)
-            build_admin_user_id = build.admin_user.id
 
             template = self.env["saas.template"].search([
                 ("set_as_package", "=", True),
@@ -91,14 +90,14 @@ class Contract(models.Model):
                 build_installing_modules
             )) + "]"
 
-            build = template_operator.with_context(
-                build_admin_user_id=build_admin_user_id,
-                build_installing_modules=build_installing_modules,
-                build_max_users_limit=build_max_users_limit,
-            ).create_db(
+            build = template_operator.create_db(
                 key_values={"installing_modules": installing_modules_var},
                 with_delay=False,
                 draft_build_id=build.id
             )
+
+            build.write({
+                "max_users_limit": build_max_users_limit,
+            })
 
             contract.build_id = build.id
