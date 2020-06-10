@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
-from datetime import date, timedelta
 
 
 class SaasDb(models.Model):
@@ -24,7 +23,10 @@ class SaasDb(models.Model):
     def create(self, vals):
 
         if not self.env.user.has_group("saas.group_manager"):
-            if self.env['saas.db']._search([("state", "=", "draft")], limit=1):
+            if self.env['saas.db']._search([
+                ("state", "=", "draft"),
+                ("admin_user", "=", self.env.user.id),
+            ], limit=1):
                 raise Exception("You cannot create more than one draft database")
 
         return super(SaasDb, self).create(vals)
