@@ -23,7 +23,7 @@ odoo.define('saas_apps.model', function (require) {
     }
 
     function user_price() {
-        return per_month ? 12.5 : 10.0;
+        return per_month ? 12.5 : 120.0;
     }
 
     function Calc_Price() {
@@ -414,7 +414,7 @@ odoo.define('saas_apps.model', function (require) {
         $('#price').text(String(price));
         $('#box-period').text(String(period));
         $('#users-qty').text($('#users').val())
-        users_price_period = per_month ? 12.5 : 10.0;
+        users_price_period = user_price();
         $('#price-users').text(String(users_price_period));
         $('#apps-qty').text(String(apps_in_basket));
         $('#users-cnt-cost').text(String(users_price_period * $('#users').val()));
