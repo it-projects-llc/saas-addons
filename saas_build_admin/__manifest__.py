@@ -17,7 +17,7 @@
     # "currency": "EUR",
     "depends": ["saas"],
     "external_dependencies": {"python": [], "bin": []},
-    "data": [],
+    "data": ["data/mail_template.xml"],
     "demo": [],
     "qweb": [],
     "post_load": None,

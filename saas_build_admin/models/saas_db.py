@@ -2,6 +2,10 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import fields, models
+import string
+import random
+
+LETTERS_FOR_PASSWORD = string.ascii_lowercase + string.digits + "_-"
 
 
 class SaasDb(models.Model):
@@ -52,11 +56,16 @@ class SaasDb(models.Model):
         else:
             vals["country_id"] = None
 
+        password = ''.join(random.choice(LETTERS_FOR_PASSWORD) for i in range(8))
         vals["login"] = self.admin_user.login
         vals["name"] = self.admin_user.name
+        vals["password"] = password
 
         _, model, res_id = self.xmlid_lookup("base.user_admin")
 
         self.execute_kw(model, "write", res_id, vals)
+
+        template = self.env.ref("saas_build_admin.template_build_admin_is_set")
+        template.with_context(build=self, build_admin_password=password).send_mail(self.admin_user.id, force_send=True, raise_exception=True)
 
         self.is_admin_user_updated_on_build = True
