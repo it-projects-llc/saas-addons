@@ -36,7 +36,9 @@
             <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
                 <tr><td valign="top" style="font-size: 13px;">
                     <div>
-                        Dear ${object.name},<br /><br />
+                        Dear ${object.name},<br />
+                        <br />
+                        Your database has been created successfully.<br />
                         Build URI: <a href="${ctx.get('build').get_url()}">${ctx.get('build').get_url()}</a><br />
                         Admin login: ${object.login}<br/>
                         Admin password: ${ctx.get('build_admin_password')}<br/>
