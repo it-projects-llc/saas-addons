@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, models, SUPERUSER_ID
-from datetime import date, timedelta
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -50,7 +49,6 @@ class ResUsers(models.Model):
 
         if database_name:
             admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
-            partner = admin_user.partner_id
 
             build = self.env["saas.db"].create({
                 "name": database_name,
@@ -58,47 +56,10 @@ class ResUsers(models.Model):
                 "admin_user": admin_user.id,
             })
 
-            installing_products = []
-            if installing_modules and max_users_limit:
-                # TODO: эту часть надо будет переписывать, когда модули уже будут иметь свои продукты
-                installing_products += self.env['saas.line']\
-                                           .search([("name", "in", installing_modules), ('application', '=', True)])\
-                                           .mapped('product_id.product_variant_id')\
-                                           .mapped(lambda p: {
-                                               "id": p.id,
-                                               "name": p.name,
-                                               "price": p.lst_price,
-                                               "quantity": 1,
-                                           })
-
-                if subscription_period:
-                    installing_products += self.env.ref("saas_product.product_users_{}".format(subscription_period)).mapped(lambda p: {
-                        "id": p.id,
-                        "name": p.name,
-                        "price": p.lst_price,
-                        "quantity": max_users_limit,
-                    })
-
-            self.env["contract.contract"].with_context(create_build=True).create({
-                "name": "{}'s SaaS Contract".format(partner.name),
-                "partner_id": partner.id,
-                "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,  # TODO: Если Try: trial В этом случае по умолчанию используем шаблон с Repeat Every: Monthly
-
-                "contract_line_ids": list(map(lambda p: (0, 0, {
-                    "name": p["name"],
-                    "product_id": p["id"],
-                    "uom_id": self.env.ref("uom.product_uom_unit").id,
-                    "quantity": p["quantity"],
-                    "price_unit": p["price"],
-                    "recurring_interval": 1,
-                    "recurring_rule_type": "yearly" if subscription_period == "annually" else subscription_period,
-                    "recurring_invoicing_type": "pre-paid",
-                    "recurring_next_date": build._fields["expiration_date"].default(self),
-                    "date_start": build._fields["expiration_date"].default(self),
-                    "date_end": date.today() + timedelta(days=365)
-                }), installing_products))
-            })
-
+            self.env["contract.contract"]._create_saas_contract_for_trial(
+                build, installing_modules, max_users_limit,
+                subscription_period
+            )
         return res
 
     def signup_to_buy(self, values, *args, **kwargs):
