@@ -17,8 +17,8 @@ odoo.define('saas_apps_signup.saas_apps', function (require) {
             alert("Could not parse number of users");
             return;
         }
-        window.location = "/web/signup?installing_modules=" + modules_to_install.join(",") + "&max_users_limit=" + maxUsersCount + "&period=" + get_subscription_period();
-    }
+        window.location = "/saas_apps_signup/make_database_for_trial?installing_modules=" + modules_to_install.join(",") + "&max_users_limit=" + maxUsersCount + "&period=" + get_subscription_period();
+    };
 
     // один из самых костыльных способов отвязать событие с кнопки
     $(document).ready(function() {

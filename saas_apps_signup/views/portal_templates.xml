@@ -6,7 +6,7 @@
     <template id="portal_create_build" name="Create build">
         <t t-call="portal.portal_layout">
 
-            <form t-attf-action="/my/builds/create?redirect={{ redirect }}" method="POST">
+            <form t-attf-action="/my/builds/create?{{ query }}" method="POST">
                 <div class="form-group">
                     <label for="database_name" class="col-form-label">Database name</label>
                     <input type="text" class="form-control" name="database_name" id="database_name" t-att-value="database_name" onfocus="$('#database_create_error').hide()"/>

@@ -5,6 +5,8 @@ from odoo.http import request, route, Controller
 import logging
 from slugify import slugify
 import werkzeug
+from werkzeug.urls import Href, url_encode
+
 
 _logger = logging.getLogger(__name__)
 
@@ -39,7 +41,7 @@ class Main(Controller):
                         "operator_id": request.env.ref("saas.local_operator").id,
                         "admin_user": request.env.user.id,
                     })
-                    return werkzeug.utils.redirect(redirect)
+                    return request.redirect(redirect)
                 except Exception as e:
                     _logger.exception("Something went wrong, when creating draft build")
                     qcontext.update({
@@ -51,7 +53,33 @@ class Main(Controller):
                 })
 
         qcontext.update(
-            redirect=redirect,
+            query=url_encode({
+                "redirect": redirect,
+            }),
             database_name=database_name or "",
         )
         return request.render("saas_apps_signup.portal_create_build", qcontext)
+
+    @route("/saas_apps_signup/make_database_for_trial", auth="public", type="http", website=True)
+    def make_database_for_trial(self, period, max_users_limit, database_name=None, **kw):
+        params = {
+            "max_users_limit": max_users_limit,
+            "period": period,
+            "installing_modules": kw.get("installing_modules", ""),
+#            "saas_template_id": kw.get("saas_template_id", ""),
+        }
+        if request.env.user == request.env.ref("base.public_user"):
+            return werkzeug.utils.redirect(Href("/web/signup")(params))
+
+        build = request.env["saas.db"].search([
+            ("type", "=", "build"),
+            ("state", "=", "draft"),
+            ("admin_user", "=", request.env.user.id),
+        ], order='id DESC', limit=1)
+        if not build:
+            return request.redirect(Href("/my/builds/create")({
+                "redirect": request.httprequest.full_path
+            }))
+
+        raise NotImplementedError("Надо базу то создать")
+        return request.redirect("/my/build/{}".format(build.id))
