@@ -45,6 +45,17 @@ odoo.define('saas_apps.model', function (require) {
         }
     }
 
+    function get_chosen_package_id() {
+        var result;
+        $(".package").each(function(_, el) {
+            if (choosen.has(el.dataset.packageName)) {
+                result = el.dataset.packageId;
+                return false;  // exits .each loop
+            }
+        });
+        return result;
+    }
+
     function redirect_to_build(modules_to_install) {
         // Checking for choosen packages
         var package = get_choosen_package();
@@ -475,7 +486,8 @@ odoo.define('saas_apps.model', function (require) {
     }
 
     return {
+        "get_chosen_package_id": get_chosen_package_id,
         "get_modules_to_install": get_modules_to_install,
         "get_subscription_period": function() {return per_month ? "monthly" : "annually";},
-    }
+    };
 });
