@@ -23,7 +23,8 @@ class SaaSAppsController(Controller):
             'packages': packages.search([('set_as_package', '=', True)]),
             'show_apps': bool(res['show_apps']),
             'show_packages': bool(res['show_packages']),
-            'show_buy_now_button':bool(res['show_buy_now_button'])
+            'show_buy_now_button':bool(res['show_buy_now_button']),
+            'show_try_trial_button':bool(res['show_try_trial_button'])
         })
 
     @route(['/refresh'], type='json', auth='public')

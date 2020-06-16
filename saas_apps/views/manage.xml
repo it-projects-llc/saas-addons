@@ -130,6 +130,14 @@
                             <label for="show_buy_now_button" string="Show 'Buy now' button"/>
                         </div>
                     </div>
+                    <div class="col-12 col-md-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="show_try_trial_button"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="show_try_trial_button" string="Show 'Try trial' button"/>
+                        </div>
+                    </div>
                 </div>
             </xpath>
         </field>
