@@ -60,7 +60,7 @@
                             <div class="mb24">
                                 <div class="form-row">
                                     <t t-foreach="packages" t-as="package">
-                                        <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app package">
+                                        <div class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition app package" t-att-data-package-id="package.id" t-att-data-package-name="package.name">
                                             <div class="app-icon">
                                                 <img t-att-src="'data:image/png;base64,%s' % to_text(package.package_image)"
                                                         style="max-width: 40px;max-height: 40px;"/>

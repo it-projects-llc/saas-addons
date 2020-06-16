@@ -23,7 +23,7 @@ odoo.define('saas_apps.model', function (require) {
     }
 
     function user_price() {
-        return per_month ? 12.5 : 10.0;
+        return per_month ? 12.5 : 120.0;
     }
 
     function Calc_Price() {
@@ -43,6 +43,17 @@ odoo.define('saas_apps.model', function (require) {
                 return key;
             }
         }
+    }
+
+    function get_chosen_package_id() {
+        var result;
+        $(".package").each(function(_, el) {
+            if (choosen.has(el.dataset.packageName)) {
+                result = el.dataset.packageId;
+                return false;  // exits .each loop
+            }
+        });
+        return result;
     }
 
     function redirect_to_build(modules_to_install) {
@@ -414,7 +425,7 @@ odoo.define('saas_apps.model', function (require) {
         $('#price').text(String(price));
         $('#box-period').text(String(period));
         $('#users-qty').text($('#users').val())
-        users_price_period = per_month ? 12.5 : 10.0;
+        users_price_period = user_price();
         $('#price-users').text(String(users_price_period));
         $('#apps-qty').text(String(apps_in_basket));
         $('#users-cnt-cost').text(String(users_price_period * $('#users').val()));
@@ -475,7 +486,8 @@ odoo.define('saas_apps.model', function (require) {
     }
 
     return {
+        "get_chosen_package_id": get_chosen_package_id,
         "get_modules_to_install": get_modules_to_install,
         "get_subscription_period": function() {return per_month ? "monthly" : "annually";},
-    }
+    };
 });

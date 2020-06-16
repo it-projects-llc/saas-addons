@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": """SaaS: Portal""",
-    "summary": """Allows to customers see their Builds at Portal.""",
+    "name": """SaaS: build admin""",
+    "summary": """This module helps you to set admin on build""",
     "category": "Hidden",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=13.0",
     "images": [],
@@ -11,18 +11,13 @@
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "apps@it-projects.info",
-    "website": "https://apps.odoo.com/apps/modules/13.0/saas_portal/",
+    "website": "https://apps.odoo.com/apps/modules/13.0/saas_build_admin/",
     "license": "AGPL-3",
     # "price": 9.00,
     # "currency": "EUR",
-    "depends": ["saas", "portal", "saas_expiration", "saas_limit_max_users", "saas_build_admin"],
+    "depends": ["saas"],
     "external_dependencies": {"python": [], "bin": []},
-    "data": [
-        "security/ir.model.access.csv",
-        "security/saas_db_security.xml",
-        "views/portal_templates.xml",
-        "views/saas_db.xml",
-    ],
+    "data": ["data/mail_template.xml"],
     "demo": [],
     "qweb": [],
     "post_load": None,
@@ -31,13 +26,13 @@
     "uninstall_hook": None,
     "auto_install": False,
     "installable": True,
-    # "demo_title": "SaaS: Portal",
+    # "demo_title": "SaaS: build admin",
     # "demo_addons": [
     # ],
     # "demo_addons_hidden": [
     # ],
     # "demo_url": "DEMO-URL",
-    # "demo_summary": "SHORT DESC",
+    # "demo_summary": "This module helps you to set admin on build",
     # "demo_images": [
     #    "images/MAIN_IMAGE",
     # ]

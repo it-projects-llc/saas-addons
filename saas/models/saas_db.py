@@ -62,6 +62,7 @@ class SAASDB(models.Model):
         return res
 
     def refresh_data(self, should_read_from_build=True, should_write_to_build=True):
+        self.flush()
         for record in self.filtered(lambda record: (record.type, record.state) == ("build", "done")).with_context(writing_from_refresh_data=True):
             if should_read_from_build:
                 vals = record.read_values_from_build()
