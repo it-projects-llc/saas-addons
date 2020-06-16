@@ -5,9 +5,11 @@ odoo.define('saas_apps_signup.saas_apps', function (require) {
 
     var get_modules_to_install = require("saas_apps.model").get_modules_to_install;
     var get_subscription_period = require("saas_apps.model").get_subscription_period;
+    var get_chosen_package_id = require("saas_apps.model").get_chosen_package_id;
 
     var onGetStartedClick = function() {
         var modules_to_install = get_modules_to_install();
+        var saas_template_id = get_chosen_package_id();
         if (!modules_to_install) {
             alert("Please choose modules to install");
             return;
@@ -17,7 +19,7 @@ odoo.define('saas_apps_signup.saas_apps', function (require) {
             alert("Could not parse number of users");
             return;
         }
-        window.location = "/saas_apps_signup/make_database_for_trial?installing_modules=" + modules_to_install.join(",") + "&max_users_limit=" + maxUsersCount + "&period=" + get_subscription_period();
+        window.location = "/saas_apps_signup/make_database_for_trial?max_users_limit=" + maxUsersCount + "&period=" + get_subscription_period() + "&" + (saas_template_id ? "saas_template_id=" + saas_template_id : "installing_modules=" + modules_to_install.join(","));
     };
 
     // один из самых костыльных способов отвязать событие с кнопки

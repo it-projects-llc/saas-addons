@@ -42,6 +42,7 @@ class ResUsers(models.Model):
         # popping out values before creating user
         database_name = values.pop("database_name", None)
         installing_modules = values.pop("installing_modules", "").split(",")
+        saas_template_id = values.pop("saas_template_id", "")
         max_users_limit = int(values.pop("max_users_limit", 1))
         subscription_period = values.pop("period", "")
 
@@ -57,8 +58,9 @@ class ResUsers(models.Model):
             })
 
             self.env["contract.contract"]._create_saas_contract_for_trial(
-                build, installing_modules, max_users_limit,
-                subscription_period
+                build, max_users_limit, subscription_period,
+                installing_modules=installing_modules,
+                saas_template_id=saas_template_id,
             )
         return res
 

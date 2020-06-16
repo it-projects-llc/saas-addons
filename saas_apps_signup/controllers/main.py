@@ -62,13 +62,16 @@ class Main(Controller):
         return request.render("saas_apps_signup.portal_create_build", qcontext)
 
     @route("/saas_apps_signup/make_database_for_trial", auth="public", type="http", website=True)
-    def make_database_for_trial(self, period, max_users_limit, database_name=None, installing_modules=None, **kw):
+    def make_database_for_trial(self, period, max_users_limit, database_name=None, installing_modules=None, saas_template_id=None, **kw):
         params = {
             "max_users_limit": max_users_limit,
             "period": period,
             "installing_modules": installing_modules or "",
-#            "saas_template_id": kw.get("saas_template_id", ""),
+            "saas_template_id": saas_template_id or "",
         }
+
+        assert not(saas_template_id and installing_modules), "Both saas_template_id and installing_modules given"
+
         if request.env.user == request.env.ref("base.public_user"):
             return werkzeug.utils.redirect(Href("/web/signup")(params))
 
@@ -83,10 +86,9 @@ class Main(Controller):
             }))
 
         request.env["contract.contract"].with_user(SUPERUSER_ID)._create_saas_contract_for_trial(
-            build,
+            build, max_users_limit, period,
             installing_modules=(installing_modules or "").split(","),
-            max_users_limit=max_users_limit,
-            subscription_period=period,
+            saas_template_id=saas_template_id
         )
 
         return request.redirect("/my/build/{}".format(build.id))

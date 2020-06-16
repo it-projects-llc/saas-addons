@@ -38,10 +38,18 @@ class Contract(models.Model):
         return res
 
     @api.model
-    def _create_saas_contract_for_trial(self, build, installing_modules, max_users_limit, subscription_period):
+    def _create_saas_contract_for_trial(self, build, max_users_limit, subscription_period, installing_modules=None, saas_template_id=None):
         partner = build.admin_user.partner_id
         installing_products = []
-        if installing_modules and max_users_limit:
+
+        installing_products += self.env.ref("saas_product.product_users_{}".format(subscription_period)).mapped(lambda p: {
+            "id": p.id,
+            "name": p.name,
+            "price": p.lst_price,
+            "quantity": max_users_limit,
+        })
+
+        if installing_modules:
             # TODO: эту часть надо будет переписывать, когда модули уже будут иметь свои продукты
             installing_products += self.env['saas.line']\
                                        .search([("name", "in", installing_modules), ('application', '=', True)])\
@@ -53,13 +61,17 @@ class Contract(models.Model):
                                            "quantity": 1,
                                        })
 
-            if subscription_period:
-                installing_products += self.env.ref("saas_product.product_users_{}".format(subscription_period)).mapped(lambda p: {
-                    "id": p.id,
-                    "name": p.name,
-                    "price": p.lst_price,
-                    "quantity": max_users_limit,
-                })
+        if saas_template_id:
+            saas_template_id = int(saas_template_id)
+            installing_products += self.env["saas.template"]\
+                                       .browse(saas_template_id)\
+                                       .product_id\
+                                       .mapped(lambda p: {
+                                           "id": p.id,
+                                           "name": p.name,
+                                           "price": p.lst_price,
+                                           "quantity": 1,
+                                       })
 
         return self.env["contract.contract"].with_context(create_build=True).create({
             "name": "{}'s SaaS Contract".format(partner.name),
@@ -105,9 +117,10 @@ class Contract(models.Model):
                 _logger.error("Not creating build. Reason: too many 'Users' products in contract ({})".format(len(contract_line_users)))
                 return
 
-            contract_products = contract.contract_line_ids.mapped('product_id.product_tmpl_id')
+            contract_products = contract.contract_line_ids.mapped('product_id')
+            contract_product_templates = contract_products.mapped('product_tmpl_id')
 
-            build_installing_modules = self.env['saas.line'].sudo().search([('product_id', 'in', contract_products.ids)]).mapped('name')
+            build_installing_modules = self.env['saas.line'].sudo().search([('product_id', 'in', contract_product_templates.ids)]).mapped('name')
             build_max_users_limit = int(contract_line_users.quantity)
 
             template = self.env["saas.template"].search([

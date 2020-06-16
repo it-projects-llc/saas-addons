@@ -21,7 +21,8 @@ class Main(SignupVerifyEmail):
             try:
                 assert d["period"] in ("annually", "monthly")
                 assert int(d["max_users_limit"]) > 0
-                assert d["installing_modules"]
+                assert d.get("installing_modules") or d.get("saas_template_id")
+                assert not (d.get("installing_modules") and d.get("saas_template_id"))
                 assert not d.get("sale_order_id")  # making sure, that sale order is not used
             except KeyError as e:
                 raise AssertionError("{} is not given".format(e))
