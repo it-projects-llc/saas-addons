@@ -284,6 +284,8 @@ class ResConfigSettings(models.TransientModel):
     config_parameter='saas_apps.show_apps')
     show_buy_now_button = fields.Boolean("Show 'Buy now' button",
     config_parameter='saas_apps.show_buy_now_button')
+    show_try_trial_button = fields.Boolean("Show 'Try trial' button",
+    config_parameter='saas_apps.show_try_trial_button')
 
     @api.model
     def get_values(self):
@@ -292,9 +294,11 @@ class ResConfigSettings(models.TransientModel):
         packages = select_type.get_param('saas_apps.show_packages')
         apps = select_type.get_param('saas_apps.show_apps')
         buy_now_button = select_type.get_param('saas_apps.show_buy_now_button')
+        try_trial_button = select_type.get_param('saas_apps.show_try_trial_button')
         res.update({
             'show_packages' : packages,
             'show_apps' : apps,
-            'show_buy_now_button' : buy_now_button
+            'show_buy_now_button' : buy_now_button,
+            'show_try_trial_button' : try_trial_button
         })
         return res
