@@ -6,6 +6,7 @@ import logging
 from slugify import slugify
 import werkzeug
 from werkzeug.urls import Href, url_encode
+from odoo import SUPERUSER_ID
 
 
 _logger = logging.getLogger(__name__)
@@ -61,11 +62,11 @@ class Main(Controller):
         return request.render("saas_apps_signup.portal_create_build", qcontext)
 
     @route("/saas_apps_signup/make_database_for_trial", auth="public", type="http", website=True)
-    def make_database_for_trial(self, period, max_users_limit, database_name=None, **kw):
+    def make_database_for_trial(self, period, max_users_limit, database_name=None, installing_modules=None, **kw):
         params = {
             "max_users_limit": max_users_limit,
             "period": period,
-            "installing_modules": kw.get("installing_modules", ""),
+            "installing_modules": installing_modules or "",
 #            "saas_template_id": kw.get("saas_template_id", ""),
         }
         if request.env.user == request.env.ref("base.public_user"):
@@ -81,5 +82,11 @@ class Main(Controller):
                 "redirect": request.httprequest.full_path
             }))
 
-        raise NotImplementedError("Надо базу то создать")
+        request.env["contract.contract"].with_user(SUPERUSER_ID)._create_saas_contract_for_trial(
+            build,
+            installing_modules=(installing_modules or "").split(","),
+            max_users_limit=max_users_limit,
+            subscription_period=period,
+        )
+
         return request.redirect("/my/build/{}".format(build.id))
