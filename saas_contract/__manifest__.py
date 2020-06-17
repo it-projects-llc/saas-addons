@@ -23,6 +23,9 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         'data/contract_template.xml',
+        "data/ir_cron.xml",
+        "views/contract.xml",
+        "views/saas_db.xml",
     ],
     "demo": [
     ],
