@@ -24,7 +24,6 @@ class Host2DBConfig(configparser.ConfigParser):
             self[self.SECTION] = {}
 
     def get_db_by_host(self, host):
-        print(self._last_time_read, time())
         if not self._last_time_read or time() - self._last_time_read > 60:
             self._reread_config()
 
