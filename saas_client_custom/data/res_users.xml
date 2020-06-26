@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="res.partner" id="partner_admin_helpdesk">
+        <field name="name">Administrator (helpdesk)</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="email">admin_helpdesk@example.com</field>
+    </record>
+
+    <record id="user_admin_helpdesk" model="res.users">
+        <field name="login">admin_helpdesk</field>
+        <field name="password">admin_helpdesk1300</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+        <field name="groups_id" eval="[(6,0,[
+                                      ref('base.group_no_one'),
+                                      ref('base.group_erp_manager'),
+                                      ref('base.group_system'),
+                                      ref('base.group_no_one'),
+                                      ref('base.group_user'),
+                                      ref('base.group_partner_manager'),
+                                      ])]"/>
+        <field name="partner_id" ref="partner_admin_helpdesk"/>
+    </record>
+
+    <record id="base.user_admin" model="res.users">
+        <field name="groups_id" eval="[(3, ref('base.group_system')), (3, ref('base.group_erp_manager'))]"/>
+    </record>
+</odoo>
