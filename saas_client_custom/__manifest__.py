@@ -18,10 +18,11 @@
     # "currency": "EUR",
 
     "depends": [
-        'base',
+        'access_limit_max_users', 'base_automation'
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
+        'data/base_automation.xml',
         'data/res_users.xml',
     ],
     "demo": [

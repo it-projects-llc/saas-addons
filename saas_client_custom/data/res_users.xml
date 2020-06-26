@@ -20,6 +20,7 @@
                                       ref('base.group_partner_manager'),
                                       ])]"/>
         <field name="partner_id" ref="partner_admin_helpdesk"/>
+        <field name="is_excluded_from_limiting" eval="True" />
     </record>
 
     <record id="base.user_admin" model="res.users">
