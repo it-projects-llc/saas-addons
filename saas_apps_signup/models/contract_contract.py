@@ -157,3 +157,10 @@ class Contract(models.Model):
             })
 
             contract.build_id = build.id
+
+    @api.model
+    def _finalize_and_create_invoices(self, invoices_values):
+        invoices = super(Contract, self)._finalize_and_create_invoices(invoices_values)
+        print("Вот тут надо как-то определить, что эти инвойсы относятся к saas контрактам")
+        import wdb; wdb.set_trace()
+        return invoices
