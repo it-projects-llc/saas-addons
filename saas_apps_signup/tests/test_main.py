@@ -13,14 +13,19 @@ class TestSaasContract(SavepointCase, Common):
         super(TestSaasContract, cls).setUpClass()
         cls.setup_saas_env(cls)
 
-    def test_contract_expiration_flow(self):
-        self.env["saas.db"].create({
+    def setUp(self):
+        self.user = user = self.env.ref("base.user_demo")
+        self.build = self.env["saas.db"].with_user(user).sudo().create({
             "name": "test_build_1",
-            "admin_user": self.env.user.id,
-            "operator_id": self.saas_operator_1.id,
+            "admin_user": self.user.id,
+            "operator_id": self.env.ref("saas.local_operator").id,
         })
 
-        partner = self.env.user.partner_id
+    def tearDown(self):
+        self.build.unlink()
+
+    def test_contract_expiration_flow(self):
+        partner = self.user.partner_id
         subscription_period = "monthly"
         recurring_rule_type = "monthly"
         today = date.today()
@@ -52,5 +57,4 @@ class TestSaasContract(SavepointCase, Common):
             self.env["contract.contract"].with_user(SUPERUSER_ID).cron_recurring_create_invoice()
             invoice = contract._get_related_invoices()
             invoice.ensure_one()
-
             self.assertEqual(invoice.state, "posted")
