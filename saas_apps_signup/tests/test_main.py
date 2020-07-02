@@ -32,6 +32,7 @@ class TestSaasContract(SavepointCase, Common):
             "name": "{}'s SaaS Contract".format(partner.name),
             "partner_id": partner.id,
             "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,
+            "build_id": self.build.id,
             "contract_line_ids": [(0, 0, {
                 "name": product_user.name,
                 "product_id": product_user.id,

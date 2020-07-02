@@ -73,6 +73,7 @@ class Contract(models.Model):
 
         return self.env["contract.contract"].with_context(create_build=True).create({
             "name": "{}'s SaaS Contract".format(partner.name),
+            "build_id": build.id,
             "partner_id": partner.id,
             "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,  # TODO: Если Try: trial В этом случае по умолчанию используем шаблон с Repeat Every: Monthly
 
@@ -95,11 +96,16 @@ class Contract(models.Model):
     def _create_build(self):
         for contract in self:
             partner = self.partner_id
-            build = self.env["saas.db"].search([
-                ("type", "=", "build"),
-                ("state", "=", "draft"),
-                ("admin_user", "in", partner.user_ids.ids),
-            ], order='id DESC', limit=1)
+            build = self.build_id
+            if build:
+                assert build.state == "draft"
+                assert build.admin_user & partner.user_ids
+            else:
+                build = self.env["saas.db"].search([
+                    ("type", "=", "build"),
+                    ("state", "=", "draft"),
+                    ("admin_user", "in", partner.user_ids.ids),
+                ], order='id DESC', limit=1)
 
             if not build:
                 _logger.warning("No draft build found for making contract")
@@ -156,7 +162,8 @@ class Contract(models.Model):
                 "max_users_limit": build_max_users_limit,
             })
 
-            contract.build_id = build.id
+            if not contract.build_id:
+                contract.build_id = build.id
 
     @api.model
     def _finalize_and_create_invoices(self, invoices_values):
