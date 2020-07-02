@@ -199,6 +199,7 @@ class SAASTemplateLine(models.Model):
         if not key_values:
             key_values = {}
 
+        self.flush()
         assert not (draft_build_id and db_name), "Both db_name and draft_build_id are given"
 
         if draft_build_id:
