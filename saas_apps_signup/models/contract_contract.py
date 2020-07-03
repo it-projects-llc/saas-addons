@@ -169,7 +169,11 @@ class Contract(models.Model):
     def _finalize_and_create_invoices(self, invoices_values):
         invoices = super(Contract, self)._finalize_and_create_invoices(invoices_values)
         for invoice in invoices:
-            invoice.contract_id.invalidate_cache()
-            if invoice.contract_id.build_id and invoice.contract_id.build_id.state == "done":
+            contract = invoice.contract_id
+            build = contract.build_id
+
+            contract.invalidate_cache()
+            if build and build.state == "done":
                 invoice.action_post()
+
         return invoices
