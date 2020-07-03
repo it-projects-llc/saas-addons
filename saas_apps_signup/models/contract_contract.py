@@ -18,6 +18,8 @@ class Contract(models.Model):
     def create(self, vals):
 
         record = super(Contract, self).create(vals)
+        if record.build_id:
+            record.build_id.contract_id = record
 
         if self.env.context.get("create_build"):
             record.with_user(SUPERUSER_ID).with_delay()._create_build()
@@ -163,7 +165,7 @@ class Contract(models.Model):
             })
 
             if not contract.build_id:
-                contract.build_id = build.id
+                contract.build_id = build
 
     @api.model
     def _finalize_and_create_invoices(self, invoices_values):
