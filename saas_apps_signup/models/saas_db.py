@@ -18,3 +18,17 @@ class SaasDb(models.Model):
                 raise Exception("You cannot create more than one draft database")
 
         return super(SaasDb, self).create(vals)
+
+    def write_values_to_build(self):
+        super(SaasDb, self).write_values_to_build()
+
+        web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        if not web_base_url:
+            return
+
+        self.execute_kw(
+            "ir.config_parameter",
+            "set_param",
+            "database_expiration_details_link",
+            web_base_url + self.access_url,
+        )
