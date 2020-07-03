@@ -30,5 +30,12 @@ class SaasDb(models.Model):
             "ir.config_parameter",
             "set_param",
             "database_expiration_details_link",
-            web_base_url + self.access_url,
+            web_base_url + self.access_url + "/renew_subscription",
+        )
+
+        self.execute_kw(
+            "ir.config_parameter",
+            "set_param",
+            "database_expiration_details_link_label",
+            "Renew subscribtion",
         )
