@@ -32,12 +32,12 @@ class AccountMove(models.Model):
             if user_product_attribute_value == self.env.ref("saas_product.product_attribute_value_subscription_annually"):
                 subscribtion_period = "annually"
                 recurring_rule_type = "yearly"
-                recurring_next_date = today + timedelta(days=365)
+                recurring_next_date_delta = timedelta(days=365)
 
             elif user_product_attribute_value == self.env.ref("saas_product.product_attribute_value_subscription_monthly"):
                 subscribtion_period = "monthly"
                 recurring_rule_type = "monthly"
-                recurring_next_date = today + timedelta(days=30)
+                recurring_next_date_delta = timedelta(days=30)
 
             else:
                 continue
@@ -53,7 +53,7 @@ class AccountMove(models.Model):
                 "recurring_interval": 1,
                 "recurring_rule_type": recurring_rule_type,
                 "recurring_invoicing_type": "post-paid",
-                "recurring_next_date": recurring_next_date,
+                "recurring_next_date": today + recurring_next_date_delta,
                 "is_cancel_allowed": False,
                 "date_start": today,
                 "date_end": today + timedelta(days=365),
@@ -76,6 +76,7 @@ class AccountMove(models.Model):
 
                         contract_line[2]["date_start"] = existing_contract_line.recurring_next_date + timedelta(days=1)
                         contract_line[2]["date_end"] = existing_contract_line.recurring_next_date + timedelta(days=365)
+                        contract_line[2]["recurring_next_date"] = existing_contract_line.recurring_next_date + recurring_next_date_delta
 
                         if existing_contract_line.date_start > today and existing_contract_line.predecessor_contract_line_id:
                             predecessor_contract_lines.append((1, existing_contract_line.id, {"is_canceled": True}))
