@@ -22,6 +22,7 @@ class Contract(models.Model):
             record.build_id.contract_id = record
 
         if self.env.context.get("create_build"):
+
             record.with_user(SUPERUSER_ID).with_delay()._create_build()
 
         return record
@@ -41,6 +42,7 @@ class Contract(models.Model):
     def _create_saas_contract_for_trial(self, build, max_users_limit, subscription_period, installing_modules=None, saas_template_id=None):
         partner = build.admin_user.partner_id
         installing_products = []
+        today = date.today()
 
         installing_products += self.env.ref("saas_product.product_users_{}".format(subscription_period)).mapped(lambda p: {
             "id": p.id,
@@ -89,8 +91,9 @@ class Contract(models.Model):
                 "recurring_rule_type": "yearly" if subscription_period == "annually" else subscription_period,
                 "recurring_invoicing_type": "pre-paid",
                 "recurring_next_date": build._fields["expiration_date"].default(self),
-                "date_start": build._fields["expiration_date"].default(self),
-                "date_end": date.today() + timedelta(days=365)
+                "date_start": today,
+                "date_end": today + timedelta(days=365),
+                "is_cancel_allowed": False,
             }), installing_products))
         })
 

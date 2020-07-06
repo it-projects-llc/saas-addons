@@ -104,7 +104,7 @@ class CustomerPortal(BaseCustomerPortal):
 
         contract = build_sudo.contract_id
 
-        invoices = contract._get_related_invoices().filtered(lambda invoice: invoice.state == "posted")
+        invoices = contract._get_related_invoices().filtered(lambda invoice: (invoice.state, invoice.invoice_payment_state) == ("posted", "not_paid"))
         if not invoices:
             invoice = contract.recurring_create_invoice()
             invoice.action_post()
