@@ -36,6 +36,9 @@ class Contract(models.Model):
                 "expiration_date": self.recurring_next_date,
                 "contract_id": self.id,
             })
+
+        self.mapped("build_id").refresh_data()
+
         return res
 
     @api.model
@@ -91,9 +94,9 @@ class Contract(models.Model):
                 "recurring_rule_type": "yearly" if subscription_period == "annually" else subscription_period,
                 "recurring_invoicing_type": "pre-paid",
                 "recurring_next_date": build._fields["expiration_date"].default(self),
+                "is_cancel_allowed": False,
                 "date_start": today,
                 "date_end": today + timedelta(days=365),
-                "is_cancel_allowed": False,
             }), installing_products))
         })
 
