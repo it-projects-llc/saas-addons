@@ -70,7 +70,7 @@ class Contract(models.Model):
             saas_template_id = int(saas_template_id)
             installing_products += self.env["saas.template"]\
                                        .browse(saas_template_id)\
-                                       .product_id\
+                                       .mapped('product_id.product_variant_id')\
                                        .mapped(lambda p: {
                                            "id": p.id,
                                            "name": p.name,
