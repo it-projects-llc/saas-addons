@@ -140,7 +140,7 @@ class SaasAppsCart(WebsiteSale):
         for id in product_ids:
             product = pr_tmp.browse(id)
             app = request.env['saas.line'].sudo().search([('module_name', '=', product.name)])
-            packages = request.env['saas.template'].sudo().search([('name', '=', product.name)])
+            packages = request.env['saas.template'].sudo().search([('product_id', '=', product.product_tmpl_id.id)])
             if period == 'm':
                 app.change_product_price(app, app.month_price)
                 packages.change_product_price(packages, packages.month_price)
