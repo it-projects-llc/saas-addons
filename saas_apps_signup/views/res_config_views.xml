@@ -18,14 +18,14 @@
     </record>
 
     <record id="action_config_settings" model="ir.actions.act_window">
-        <field name="name">SaaS Config</field>
+        <field name="name">SaaS Settings</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">saas.config.settings</field>
         <field name="view_mode">form</field>
         <field name="target">inline</field>
     </record>
 
-    <menuitem name="Config"
+    <menuitem name="Settings"
               parent="saas.saas_main_menu"
               id="saas_main_menu_config"
               sequence="4"
