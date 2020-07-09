@@ -41,3 +41,14 @@ class SaasDb(models.Model):
             "database_expiration_details_link_label",
             "Renew subscribtion",
         )
+
+        Config = self.env["ir.config_parameter"].sudo()
+
+        database_expiration_warning_delay = Config.get_param("saas_apps_signup.database_expiration_warning_delay")
+        if database_expiration_warning_delay:
+            self.execute_kw(
+                "ir.config_parameter",
+                "set_param",
+                "database_expiration_warning_delay",
+                database_expiration_warning_delay
+            )

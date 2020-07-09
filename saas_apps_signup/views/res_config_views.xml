@@ -11,6 +11,7 @@
                 </header>
                 <group>
                     <field name="database_limit_size_default"/>
+                    <field name="database_expiration_warning_delay" />
                 </group>
             </form>
         </field>
