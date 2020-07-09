@@ -1,12 +1,14 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import models, fields
 
 
 class SaasDb(models.Model):
 
     _inherit = 'saas.db'
+
+    database_limit_size = fields.Float(default=lambda self: self.env["ir.config_parameter"].get_param("saas_apps_signup.database_limit_size_default", 0.0))
 
     def create(self, vals):
 
