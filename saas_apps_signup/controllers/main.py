@@ -6,7 +6,9 @@ import logging
 from slugify import slugify
 import werkzeug
 from werkzeug.urls import Href, url_encode
-
+from odoo import SUPERUSER_ID
+from odoo.exceptions import AccessError, MissingError
+from odoo.addons.saas_portal.controllers.main import Main as BaseCustomerPortal
 
 _logger = logging.getLogger(__name__)
 
@@ -61,13 +63,16 @@ class Main(Controller):
         return request.render("saas_apps_signup.portal_create_build", qcontext)
 
     @route("/saas_apps_signup/make_database_for_trial", auth="public", type="http", website=True)
-    def make_database_for_trial(self, period, max_users_limit, database_name=None, **kw):
+    def make_database_for_trial(self, period, max_users_limit, database_name=None, installing_modules=None, saas_template_id=None, **kw):
         params = {
             "max_users_limit": max_users_limit,
             "period": period,
-            "installing_modules": kw.get("installing_modules", ""),
-#            "saas_template_id": kw.get("saas_template_id", ""),
+            "installing_modules": installing_modules or "",
+            "saas_template_id": saas_template_id or "",
         }
+
+        assert not(saas_template_id and installing_modules), "Both saas_template_id and installing_modules given"
+
         if request.env.user == request.env.ref("base.public_user"):
             return werkzeug.utils.redirect(Href("/web/signup")(params))
 
@@ -81,5 +86,28 @@ class Main(Controller):
                 "redirect": request.httprequest.full_path
             }))
 
-        raise NotImplementedError("Надо базу то создать")
+        request.env["contract.contract"].with_user(SUPERUSER_ID)._create_saas_contract_for_trial(
+            build, max_users_limit, period,
+            installing_modules=(installing_modules or "").split(","),
+            saas_template_id=saas_template_id
+        )
+
         return request.redirect("/my/build/{}".format(build.id))
+
+
+class CustomerPortal(BaseCustomerPortal):
+    @route(["/my/build/<int:build_id>/renew_subscription"], type="http", auth="user", website=True)
+    def portal_my_build_renew_subscription(self, build_id=None, access_token=None, **kw):
+        build_sudo = self._document_check_access("saas.db", build_id, access_token)
+
+        assert build_sudo.contract_id, "Following build does not have contract"
+
+        contract = build_sudo.contract_id
+
+        invoices = contract._get_related_invoices().filtered(lambda invoice: (invoice.state, invoice.invoice_payment_state) == ("posted", "not_paid"))
+        if not invoices:
+            invoice = contract.recurring_create_invoice()
+            invoice.action_post()
+        else:
+            invoice = invoices[0]
+        return request.redirect(invoice.access_url)

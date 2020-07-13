@@ -36,7 +36,13 @@ class SaasDb(models.Model):
     def read_values_from_build(self):
         vals = super(SaasDb, self).read_values_from_build()
 
-        vals.update(users_count=self.execute_kw("res.users", "search_count", []))
+        vals.update(
+            users_count=self.execute_kw(
+                "res.users",
+                "search_count",
+                [(("is_excluded_from_limiting", "=", False))],
+            )
+        )
 
         if not self.max_users_limit:
             _id, model, res_id = self.xmlid_lookup(

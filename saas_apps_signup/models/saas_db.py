@@ -1,24 +1,14 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import models, fields
 
 
 class SaasDb(models.Model):
 
     _inherit = 'saas.db'
 
-    # TODO: перенести это в saas_contact
-    contract_id = fields.Many2one("contract.contract")
-    expiration_date = fields.Datetime(compute="_compute_expiration_date")
-
-    @api.depends("contract_id.recurring_next_date")
-    def _compute_expiration_date(self):
-        for record in self:
-            if record.contract_id:
-                record.expiration_date = record.contract_id.recurring_next_date
-            else:
-                record.expiration_date = False
+    database_limit_size = fields.Float(default=lambda self: self.env["ir.config_parameter"].get_param("saas_apps_signup.database_limit_size_default", 0.0))
 
     def create(self, vals):
 
@@ -30,3 +20,35 @@ class SaasDb(models.Model):
                 raise Exception("You cannot create more than one draft database")
 
         return super(SaasDb, self).create(vals)
+
+    def write_values_to_build(self):
+        super(SaasDb, self).write_values_to_build()
+
+        web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        if not web_base_url:
+            return
+
+        self.execute_kw(
+            "ir.config_parameter",
+            "set_param",
+            "database_expiration_details_link",
+            web_base_url + self.access_url + "/renew_subscription",
+        )
+
+        self.execute_kw(
+            "ir.config_parameter",
+            "set_param",
+            "database_expiration_details_link_label",
+            "Renew subscribtion",
+        )
+
+        Config = self.env["ir.config_parameter"].sudo()
+
+        database_expiration_warning_delay = Config.get_param("saas_apps_signup.database_expiration_warning_delay")
+        if database_expiration_warning_delay:
+            self.execute_kw(
+                "ir.config_parameter",
+                "set_param",
+                "database_expiration_warning_delay",
+                database_expiration_warning_delay
+            )

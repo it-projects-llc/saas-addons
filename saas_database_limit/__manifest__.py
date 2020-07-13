@@ -2,9 +2,9 @@
 # License MIT (https://opensource.org/licenses/MIT).
 
 {
-    "name": """SaaS: Contracts""",
-    "summary": """This module manages contracts with SaaS clients""",
-    "category": "Sales",
+    "name": """SaaS: Database limit""",
+    "summary": """SHORT INTRO""",
+    "category": "Hidden",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=13.0",
     "images": [],
     "version": "13.0.1.0.0",
@@ -12,20 +12,17 @@
 
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "apps@it-projects.info",
-    "website": "https://apps.odoo.com/apps/modules/13.0/saas_contract/",
+    "website": "https://apps.odoo.com/apps/modules/13.0/saas_database_limit/",
     "license": "Other OSI approved licence",  # MIT
     # "price": 9.00,
     # "currency": "EUR",
 
     "depends": [
-        'saas', "contract", "saas_product",
+        'saas',
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
-        'data/contract_template.xml',
-        "data/ir_cron.xml",
-        "views/contract.xml",
-        "views/saas_db.xml",
+        'views/saas_db.xml',
     ],
     "demo": [
     ],
@@ -40,13 +37,13 @@
     "auto_install": False,
     "installable": True,
 
-    # "demo_title": "SaaS: Contracts",
+    # "demo_title": "SaaS: Database limit",
     # "demo_addons": [
     # ],
     # "demo_addons_hidden": [
     # ],
     # "demo_url": "DEMO-URL",
-    # "demo_summary": "This module manages contracts with SaaS clients",
+    # "demo_summary": "SHORT INTRO",
     # "demo_images": [
     #    "images/MAIN_IMAGE",
     # ]

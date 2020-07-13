@@ -18,7 +18,7 @@
     # "currency": "EUR",
 
     "depends": [
-        "auth_signup_verify_email", "saas_apps", "saas_portal", "saas_contract", "base_automation",
+        "auth_signup_verify_email", "saas_apps", "saas_portal", "saas_contract", "base_automation", "saas_database_limit",
     ],
     "external_dependencies": {"python": ["python-slugify"], "bin": []},
     "data": [
@@ -27,9 +27,8 @@
         'data/website.xml',
         'views/auth_signup.xml',
         'views/assets.xml',
-        'views/saas_db.xml',
-        'views/contract.xml',
         'views/portal_templates.xml',
+        'views/res_config_views.xml',
     ],
     "demo": [
     ],
