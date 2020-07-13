@@ -138,4 +138,13 @@
             </div>
         </t>
     </template>
+
+    <data>
+        <record id="main_pricing_menu" model="website.menu">
+            <field name="name">Pricing</field>
+            <field name="url">/price</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">10</field>
+        </record>
+    </data>
 </odoo>
