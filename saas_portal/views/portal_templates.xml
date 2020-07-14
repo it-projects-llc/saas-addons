@@ -82,7 +82,14 @@
                             <span t-field="build.users_count" /> / <span t-field="build.max_users_limit" />
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col">
+                            <b>Pending processes</b>
+                        </div>
+                        <div class="col">
+                            <span t-field="build.number_of_queue_jobs_to_be_done" />
+                        </div>
+                    </div>
                 </t>
             </t>
         </t>
