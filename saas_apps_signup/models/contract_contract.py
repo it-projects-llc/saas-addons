@@ -137,7 +137,7 @@ class Contract(models.Model):
 
             template = self.env["saas.template"].search([
                 ("set_as_package", "=", True),
-                ("product_id", "in", contract_products.ids),
+                ("product_id", "in", contract_product_templates.ids),
             ])
             if not template:
                 template = self.env.ref("saas_apps.base_template")
