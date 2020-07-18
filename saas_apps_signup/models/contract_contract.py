@@ -78,11 +78,26 @@ class Contract(models.Model):
                                            "quantity": 1,
                                        })
 
-        return self.env["contract.contract"].with_context(create_build=True).create({
+        recurring_rule_type = {"annually": "yearly"}.get(subscription_period) or subscription_period
+
+        default_expiration_date = build._fields["expiration_date"].default(self)
+
+        contract = self.env["contract.contract"].with_context(create_build=True).create({
             "name": "{}'s SaaS Contract".format(partner.name),
             "build_id": build.id,
             "partner_id": partner.id,
-            "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,  # TODO: Если Try: trial В этом случае по умолчанию используем шаблон с Repeat Every: Monthly
+            "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,
+            "line_recurrency": False,
+
+            "is_trial": True,
+
+            "date_start": default_expiration_date,
+            "date_end": default_expiration_date + timedelta(days=365),
+
+            "recurring_next_date": default_expiration_date,
+            "recurring_interval": 1,
+            "recurring_rule_type": recurring_rule_type,
+            "recurring_invoicing_type": "post-paid",
 
             "contract_line_ids": list(map(lambda p: (0, 0, {
                 "name": p["name"],
@@ -90,15 +105,13 @@ class Contract(models.Model):
                 "uom_id": self.env.ref("uom.product_uom_unit").id,
                 "quantity": p["quantity"],
                 "price_unit": p["price"],
-                "recurring_interval": 1,
-                "recurring_rule_type": "yearly" if subscription_period == "annually" else subscription_period,
-                "recurring_invoicing_type": "pre-paid",
-                "recurring_next_date": build._fields["expiration_date"].default(self),
-                "is_cancel_allowed": False,
-                "date_start": today,
-                "date_end": today + timedelta(days=365),
             }), installing_products))
         })
+
+        invoice = contract._recurring_create_invoice()
+        invoice.action_post()
+
+        return contract
 
     @job
     def _create_build(self):
