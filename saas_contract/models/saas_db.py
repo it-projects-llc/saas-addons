@@ -10,15 +10,6 @@ class SaasDb(models.Model):
     _inherit = "saas.db"
 
     contract_id = fields.Many2one("contract.contract")
-    expiration_date = fields.Datetime(compute="_compute_expiration_date", store=True)
-
-    @api.depends("contract_id.recurring_next_date")
-    def _compute_expiration_date(self):
-        for record in self:
-            if record.contract_id:
-                record.expiration_date = record.contract_id.recurring_next_date
-            else:
-                record.expiration_date = False
 
     @api.model
     def remove_long_expired_unpaid_builds(self):
