@@ -33,7 +33,7 @@ class Contract(models.Model):
             max_users_limit = contract.contract_line_ids.filtered(
                 lambda line: line.product_id.product_tmpl_id == self.env.ref("saas_product.product_users")
                 and line.is_paid
-                and line.date_start <= fields.Date.context_today() <= line.date_end
+                and line.date_start <= fields.Date.context_today(line) <= line.date_end
             ).mapped("quantity")
 
             build.write({
