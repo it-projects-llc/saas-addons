@@ -13,6 +13,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     def _create_or_update_contract(self):
+        return
         for record in self:
             today = date.today()
 
