@@ -21,4 +21,58 @@
             </xpath>
         </field>
     </record>
+
+    <record id="action_saas_contract" model="ir.actions.act_window">
+        <field name="name">SaaS Contracts</field>
+        <field name="res_model">contract.contract</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('contract_type', '=', 'sale'), ('build_id', '!=', False)]</field>
+        <field name="context">
+            {'is_contract':1,
+            'search_default_not_finished':1,
+            'default_contract_type': 'sale'}
+        </field>
+        <field name="search_view_id" ref="contract.contract_contract_search_view" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new contract.
+            </p>
+        </field>
+    </record>
+
+    <record id="saas_contract_tree_view" model="ir.ui.view">
+        <field name="name">contract.contract tree view (in saas contract)</field>
+        <field name="model">contract.contract</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Name" />
+                <field name="build_id" />
+                <field name="journal_id" groups="account.group_account_user" />
+                <field name="partner_id" />
+                <field name="active" invisible="1" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_saas_contract_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="saas_contract_tree_view" />
+        <field name="act_window_id" ref="action_saas_contract" />
+    </record>
+
+    <record id="action_saas_contract_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="contract.contract_contract_customer_form_view" />
+        <field name="act_window_id" ref="action_saas_contract" />
+    </record>
+
+    <menuitem name="Contracts"
+              parent="saas.saas_main_menu"
+              id="saas_contract_menu"
+              sequence="4"
+              action="action_saas_contract"/>
+
 </odoo>
