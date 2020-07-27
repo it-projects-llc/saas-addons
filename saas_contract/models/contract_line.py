@@ -10,7 +10,7 @@ class ContractLine(models.Model):
 
     def _compute_is_paid(self):
         for line in self:
-            if line.price == 0:
+            if line.price_unit == 0:
                 line.is_paid = True
             else:
                 line.is_paid = self.env["account.move.line"].sudo().search([

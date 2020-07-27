@@ -3,7 +3,7 @@
 <odoo noupdate="1">
     <record id="saas_update_builds" model="ir.cron">
         <field name="name">SaaS: update builds by contract</field>
-        <field name="model_id" ref="saas.model_contract_contract"/>
+        <field name="model_id" ref="contract.model_contract_contract"/>
         <field name="active" eval="True" />
         <field name="user_id" ref="base.user_root" />
         <field name="interval_number">1</field>
