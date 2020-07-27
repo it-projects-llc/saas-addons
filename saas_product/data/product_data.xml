@@ -38,7 +38,11 @@
     <record id="product_users_attribute_subscription_line" model="product.template.attribute.line">
         <field name="product_tmpl_id" ref="product_users" />
         <field name="attribute_id" ref="product_attribute_subscription" />
-        <field name="value_ids" eval="[(6, 0, [ref('saas_product.product_attribute_value_subscription_annually'), ref('product_attribute_value_subscription_monthly')])]" />
+        <field name="value_ids" eval="[(6, 0, [
+                                      ref('saas_product.product_attribute_value_subscription_annually'),
+                                      ref('product_attribute_value_subscription_monthly'),
+                                      ref('product_attribute_value_subscription_trial'),
+                                      ])]" />
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
