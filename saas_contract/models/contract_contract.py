@@ -30,7 +30,6 @@ class Contract(models.Model):
 
         return res
 
-    # TODO: добавить задачу в крон
     def action_update_build(self):
         for contract in self.filtered("build_id"):
             build = contract.build_id
@@ -45,3 +44,6 @@ class Contract(models.Model):
                 "expiration_date": contract.build_expiration_date,
                 "max_users_limit": sum(max_users_limit) or 1,
             })
+
+    def _action_update_all_builds(self):
+        self.env["contract.contract"].search([("build_id", "!=", False)]).action_update_build():
