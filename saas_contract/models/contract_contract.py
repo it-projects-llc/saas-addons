@@ -46,4 +46,4 @@ class Contract(models.Model):
             })
 
     def _action_update_all_builds(self):
-        self.env["contract.contract"].search([("build_id", "!=", False)]).action_update_build():
+        self.env["contract.contract"].search([("build_id", "!=", False)]).action_update_build()
