@@ -10,6 +10,15 @@
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="build_id" attrs="{'invisible': [('build_id', '=', False)]}"/>
             </xpath>
+            <xpath expr="//button[@name='recurring_create_invoice']" position="after">
+                <button
+                    name="action_update_build"
+                    type="object"
+                    attrs="{'invisible': [('build_id', '=', False)]}"
+                    string="Update build"
+                    groups="base.group_user"
+                    />
+            </xpath>
         </field>
     </record>
 </odoo>

@@ -30,7 +30,6 @@ class Contract(models.Model):
 
         return res
 
-    # TODO: добавить кнопку во вьюху
     # TODO: добавить задачу в крон
     def action_update_build(self):
         for contract in self.filtered("build_id"):
