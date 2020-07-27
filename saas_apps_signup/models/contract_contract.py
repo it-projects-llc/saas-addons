@@ -33,7 +33,6 @@ class Contract(models.Model):
         if "build_id" in vals:
             build = self.env["saas.db"].sudo().browse(vals["build_id"])
             build.write({
-                "expiration_date": self.recurring_next_date,
                 "contract_id": self.id,
             })
 
@@ -44,68 +43,75 @@ class Contract(models.Model):
     @api.model
     def _create_saas_contract_for_trial(self, build, max_users_limit, subscription_period, installing_modules=None, saas_template_id=None):
         partner = build.admin_user.partner_id
-        installing_products = []
+        contract_lines = []
         today = date.today()
 
-        installing_products += self.env.ref("saas_product.product_users_{}".format(subscription_period)).mapped(lambda p: {
-            "id": p.id,
+        expiration_date = self.env["saas.db"]._fields["expiration_date"].default()
+        product_users_tmpl = self.env.ref("saas_product.product_users_{}".format(subscription_period))
+
+        contract_lines += self.env.ref("saas_product.product_users_trial").mapped(lambda p: {
             "name": p.name,
-            "price": p.lst_price,
+            "product_id": p.id,
+            "price_unit": p.lst_price,
             "quantity": max_users_limit,
+            "date_start": today,
+            "date_end": expiration_date,
+        })
+
+        contract_lines += product_users_tmpl.mapped(lambda p: {
+            "name": p.name,
+            "product_id": p.id,
+            "price_unit": p.lst_price,
+            "quantity": max_users_limit,
+            "date_start": expiration_date + timedelta(days=1),
+            "date_end": today + product_users_tmpl._get_expiration_timedelta()
         })
 
         if installing_modules:
             # TODO: эту часть надо будет переписывать, когда модули уже будут иметь свои продукты
-            installing_products += self.env['saas.line']\
-                                       .search([("name", "in", installing_modules), ('application', '=', True)])\
-                                       .mapped('product_id.product_variant_id')\
-                                       .mapped(lambda p: {
-                                           "id": p.id,
-                                           "name": p.name,
-                                           "price": p.lst_price,
-                                           "quantity": 1,
-                                       })
+            contract_lines += self.env['saas.line']\
+                                  .search([("name", "in", installing_modules), ('application', '=', True)])\
+                                  .mapped('product_id.product_variant_id')\
+                                  .mapped(lambda p: {
+                                      "name": p.name,
+                                      "product_id": p.id,
+                                      "price_unit": p.lst_price,
+                                      "quantity": 1,
+                                      "date_start": today,
+                                      # TODO: вообще говоря, могут быть приложения, которые надо все время оплачивать
+                                  })
 
         if saas_template_id:
             saas_template_id = int(saas_template_id)
-            installing_products += self.env["saas.template"]\
-                                       .browse(saas_template_id)\
-                                       .mapped('product_id.product_variant_id')\
-                                       .mapped(lambda p: {
-                                           "id": p.id,
-                                           "name": p.name,
-                                           "price": p.lst_price,
-                                           "quantity": 1,
-                                       })
+            contract_lines += self.env["saas.template"]\
+                                  .browse(saas_template_id)\
+                                  .mapped('product_id.product_variant_id')\
+                                  .mapped(lambda p: {
+                                      "name": p.name,
+                                      "product_id": p.id,
+                                      "price_unit": p.lst_price,
+                                      "quantity": 1,
+                                      "date_start": expiration_date + timedelta(days=1),
+                                      "date_end": today + product_users_tmpl._get_expiration_timedelta()
+                                  })
 
-        recurring_rule_type = {"annually": "yearly"}.get(subscription_period) or subscription_period
+        for x in contract_lines:
+            x.update({
+                "uom_id": self.env.ref("uom.product_uom_unit").id,
+                "recurring_next_date": x["date_start"],
+            })
+            if x.get("date_end"):
+                x.update({
+                    "recurring_rule_type": "yearly",
+                    "recurring_interval": 999,
+                })
 
-        default_expiration_date = build._fields["expiration_date"].default(self)
 
         contract = self.env["contract.contract"].with_context(create_build=True).create({
             "name": "{}'s SaaS Contract".format(partner.name),
             "build_id": build.id,
             "partner_id": partner.id,
-            "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,
-            "line_recurrency": False,
-
-            "is_trial": True,
-
-            "date_start": default_expiration_date,
-            "date_end": default_expiration_date + timedelta(days=365),
-
-            "recurring_next_date": default_expiration_date,
-            "recurring_interval": 1,
-            "recurring_rule_type": recurring_rule_type,
-            "recurring_invoicing_type": "post-paid",
-
-            "contract_line_ids": list(map(lambda p: (0, 0, {
-                "name": p["name"],
-                "product_id": p["id"],
-                "uom_id": self.env.ref("uom.product_uom_unit").id,
-                "quantity": p["quantity"],
-                "price_unit": p["price"],
-            }), installing_products))
+            "contract_line_ids": list(map(lambda line: (0, 0, line), contract_lines))
         })
 
         invoice = contract._recurring_create_invoice()
@@ -122,6 +128,7 @@ class Contract(models.Model):
                 assert build.state == "draft"
                 assert build.admin_user & partner.user_ids
             else:
+                # TODO: избавиться от этой фигни
                 build = self.env["saas.db"].search([
                     ("type", "=", "build"),
                     ("state", "=", "draft"),
@@ -132,21 +139,10 @@ class Contract(models.Model):
                 _logger.warning("No draft build found for making contract")
                 return
 
-            contract_line_users = contract.contract_line_ids.filtered(lambda line: line.product_id.product_tmpl_id == self.env.ref("saas_product.product_users"))
-
-            if not contract_line_users:
-                _logger.error("Not creating build. Reason: no 'Users' products in contract")
-                return contract
-
-            if len(contract_line_users) > 1:
-                _logger.error("Not creating build. Reason: too many 'Users' products in contract ({})".format(len(contract_line_users)))
-                return
-
             contract_products = contract.contract_line_ids.mapped('product_id')
             contract_product_templates = contract_products.mapped('product_tmpl_id')
 
             build_installing_modules = self.env['saas.line'].sudo().search([('product_id', 'in', contract_product_templates.ids)]).mapped('name')
-            build_max_users_limit = int(contract_line_users.quantity)
 
             template = self.env["saas.template"].search([
                 ("set_as_package", "=", True),
@@ -179,12 +175,11 @@ class Contract(models.Model):
                 draft_build_id=build.id
             )
 
-            build.write({
-                "max_users_limit": build_max_users_limit,
-            })
-
+            # TODO: это тоже не забудь убрать
             if not contract.build_id:
                 contract.build_id = build
+
+            contract.action_update_build()
 
     @api.model
     def _finalize_and_create_invoices(self, invoices_values):
