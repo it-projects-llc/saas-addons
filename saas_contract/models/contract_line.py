@@ -21,11 +21,12 @@ class ContractLine(models.Model):
 
     def write(self, vals):
         res = super(ContractLine, self).write(vals)
+        self._recompute_is_paid()
+        return res
 
+    def _recompute_is_paid(self):
         self.env.add_to_compute(self._fields['is_paid'], self)
         self.recompute()
-
-        return res
 
     @api.model
     def get_paid_user_product_lines(self):

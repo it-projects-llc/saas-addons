@@ -23,11 +23,7 @@ class Contract(models.Model):
 
     def write(self, vals):
         res = super(Contract, self).write(vals)
-        lines = self.mapped("contract_line_ids")
-
-        self.env.add_to_compute(lines._fields['is_paid'], lines)
-        self.recompute()
-
+        self.mapped("contract_line_ids")._recompute_is_paid()
         return res
 
     def action_update_build(self):
