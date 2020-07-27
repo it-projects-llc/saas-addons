@@ -28,7 +28,7 @@
     <menuitem name="Settings"
               parent="saas.saas_main_menu"
               id="saas_main_menu_config"
-              sequence="4"
+              sequence="999"
               action="action_config_settings"/>
 
 </odoo>
