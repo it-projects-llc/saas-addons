@@ -20,6 +20,12 @@
         <field name="sequence">20</field>
     </record>
 
+    <record id="product_attribute_value_subscription_trial" model="product.attribute.value">
+        <field name="name">Trial</field>
+        <field name="attribute_id" ref="product_attribute_subscription"/>
+        <field name="sequence">30</field>
+    </record>
+
     <record id="product_users" model="product.template">
         <field name="name">Users</field>
         <field name="sale_ok" eval="True" />
@@ -44,6 +50,10 @@
             'xml_id': 'saas_product.product_users_attribute_subscription_value_monthly',
             'record': obj().env.ref('saas_product.product_users_attribute_subscription_line').product_template_value_ids[1],
             'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_attribute_subscription_value_trial',
+            'record': obj().env.ref('saas_product.product_users_attribute_subscription_line').product_template_value_ids[2],
+            'noupdate': True,
             }]"/>
     </function>
 
@@ -55,6 +65,10 @@
         <field name="price_extra">12.5</field>
     </record>
 
+    <record id="product_users_attribute_subscription_value_trial" model="product.template.attribute.value">
+        <field name="price_extra">0</field>
+    </record>
+
     <function model="ir.model.data" name="_update_xmlids">
         <value model="base" eval="[{
             'xml_id': 'saas_product.product_users_monthly',
@@ -63,6 +77,10 @@
         }, {
             'xml_id': 'saas_product.product_users_annually',
             'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_annually')),
+            'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_trial',
+            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_trial')),
             'noupdate': True,
         },]"/>
     </function>
