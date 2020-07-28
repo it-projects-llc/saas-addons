@@ -19,7 +19,8 @@ class Contract(models.Model):
             )
 
     build_id = fields.Many2one("saas.db", readonly=True)
-    build_expiration_date = fields.Datetime("Computed expiration date of the build", compute=_compute_build_expiration_date)
+    build_expiration_date = fields.Datetime("Build expiration date (computed)", compute=_compute_build_expiration_date)
+    build_expiration_date_defacto = fields.Datetime("Build expiration date (defacto)", related="build_id.expiration_date")
 
     def write(self, vals):
         res = super(Contract, self).write(vals)

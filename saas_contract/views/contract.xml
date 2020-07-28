@@ -10,6 +10,11 @@
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="build_id" attrs="{'invisible': [('build_id', '=', False)]}"/>
             </xpath>
+            <xpath expr="//field[@name='date_end']" position="after">
+                <field name="build_expiration_date" attrs="{'invisible': [('build_id', '=', False)]}"/>
+                <field name="build_expiration_date_defacto" attrs="{'invisible': [('build_id', '=', False)]}"/>
+            </xpath>
+
             <xpath expr="//button[@name='recurring_create_invoice']" position="after">
                 <button
                     name="action_update_build"
