@@ -67,19 +67,6 @@ class ResUsers(models.Model):
     def signup_to_buy(self, values, *args, **kwargs):
         sale_order = self.env["sale.order"].browse(int(values.pop("sale_order_id")))
 
-        '''
-        # detecting period by "Users" product
-        products = sale_order.order_line.mapped("product_id")
-        user_product = products.filtered(lambda p: p.product_tmpl_id == env.ref("saas_product.product_users"))
-        user_product_attribute_value = user_product.product_template_attribute_value_ids.product_attribute_value_id
-        if user_product_attribute_value == self.env.ref("saas_product.product_users_attribute_subscription_value_annually"):
-            subscription_period = "annually"
-        elif user_product_attribute_value == self.env.ref("saas_product.product_users_attribute_subscription_value_monthly"):
-            subscription_period = "monthly"
-        else:
-            raise NotImplementedError("Could not detect period")
-        '''
-
         database_name = values.pop("database_name", None)
 
         res = super(ResUsers, self).signup(values, *args, **kwargs)
