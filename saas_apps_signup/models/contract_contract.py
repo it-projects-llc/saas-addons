@@ -192,3 +192,19 @@ class Contract(models.Model):
                 invoice.action_post()
 
         return invoices
+
+
+class ContractLine(models.Model):
+
+    _inherit = 'contract.line'
+
+    @api.model
+    def create(self, vals):
+        move_line_id = vals.pop("move_line_id", None)
+        res = super(ContractLine, self).create(vals)
+        if move_line_id:
+            self.env["account.move.line"].sudo().browse(move_line_id).write({
+                "contract_line_id": res.id,
+            })
+            res._recompute_is_paid()
+        return res
