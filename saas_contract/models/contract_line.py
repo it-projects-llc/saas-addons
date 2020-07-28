@@ -9,13 +9,22 @@ class ContractLine(models.Model):
     _inherit = 'contract.line'
 
     def _compute_is_paid(self):
+        updated_contracts = self.env["contract.contract"]
         for line in self:
+            is_paid_before = line.is_paid
+
             if line.price_unit == 0:
                 line.is_paid = True
             else:
                 line.is_paid = self.env["account.move.line"].sudo().search([
                     ("contract_line_id", "=", line.id),
                 ], limit=1).mapped("move_id").invoice_payment_state == "paid"
+            is_paid_after = line.is_paid
+
+            if is_paid_before != is_paid_after:
+                updated_contracts |= line.contract_id
+
+        updated_contracts.action_update_build()
 
     is_paid = fields.Boolean("Is line payed?", compute=_compute_is_paid, store=True)
 
@@ -25,6 +34,8 @@ class ContractLine(models.Model):
         return res
 
     def _recompute_is_paid(self):
+        if not self:
+            return  # nothing to recompute
         self.env.add_to_compute(self._fields['is_paid'], self)
         self.recompute()
 
