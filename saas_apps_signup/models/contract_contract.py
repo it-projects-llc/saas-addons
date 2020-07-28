@@ -47,7 +47,7 @@ class Contract(models.Model):
         today = date.today()
 
         expiration_date = self.env["saas.db"]._fields["expiration_date"].default()
-        product_users_tmpl = self.env.ref("saas_product.product_users_{}".format(subscription_period))
+        product_users = self.env.ref("saas_product.product_users_{}".format(subscription_period))
 
         contract_lines += self.env.ref("saas_product.product_users_trial").mapped(lambda p: {
             "name": p.name,
@@ -58,13 +58,13 @@ class Contract(models.Model):
             "date_end": expiration_date,
         })
 
-        contract_lines += product_users_tmpl.mapped(lambda p: {
+        contract_lines += product_users.mapped(lambda p: {
             "name": p.name,
             "product_id": p.id,
             "price_unit": p.lst_price,
             "quantity": max_users_limit,
             "date_start": expiration_date + timedelta(days=1),
-            "date_end": today + product_users_tmpl._get_expiration_timedelta()
+            "date_end": today + product_users._get_expiration_timedelta()
         })
 
         if installing_modules:
@@ -92,7 +92,7 @@ class Contract(models.Model):
                                       "price_unit": p.lst_price,
                                       "quantity": 1,
                                       "date_start": expiration_date + timedelta(days=1),
-                                      "date_end": today + product_users_tmpl._get_expiration_timedelta()
+                                      "date_end": today + product_users._get_expiration_timedelta()
                                   })
 
         for x in contract_lines:
@@ -105,7 +105,6 @@ class Contract(models.Model):
                     "recurring_rule_type": "yearly",
                     "recurring_interval": 999,
                 })
-
 
         contract = self.env["contract.contract"].with_context(create_build=True).create({
             "name": "{}'s SaaS Contract".format(partner.name),
