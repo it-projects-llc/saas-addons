@@ -14,10 +14,13 @@ class WebsiteSale(BaseWebsiteSale):
         if order:
             if request.env.user == request.env.ref("base.public_user"):
                 return request.redirect("/web/signup?sale_order_id={}".format(order.id))
-            else:
-                if request.env["saas.db"].search_count([
+            elif not order.build_id:
+                build = request.env["saas.db"].search([
                     ("type", "=", "build"),
                     ("state", "=", "draft"),
                     ("admin_user", "=", request.env.user.id),
-                ]) == 0:
+                ], order='id DESC', limit=1)
+                if not build:
                     return request.redirect("/my/builds/create?redirect=/shop/checkout")
+
+                order.build_id = build

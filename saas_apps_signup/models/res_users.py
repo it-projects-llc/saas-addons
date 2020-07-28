@@ -73,10 +73,15 @@ class ResUsers(models.Model):
         admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
         sale_order.partner_id = admin_user.partner_id
 
-        self.env["saas.db"].create({
+        build = self.env["saas.db"].create({
             "name": database_name,
             "operator_id": self.env.ref("saas.local_operator").id,
             "admin_user": admin_user.id,
+        })
+
+        sale_order.write({
+            "partner_id": admin_user.partner_id.id,
+            "build_id": build.id
         })
 
         return res
