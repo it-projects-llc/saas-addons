@@ -9,17 +9,7 @@ class Contract(models.Model):
     _inherit = 'contract.contract'
 
     # TODO: запретить ситуацию, где набор линии в контракте, в котором есть пустое пространство из будущего времени (хотя-бы в плане юзеров)
-    @api.depends("contract_line_ids", "build_id")
-    def _compute_build_expiration_date(self):
-        for contract in self.filtered("build_id"):
-            contract.build_expiration_date = max(
-                contract.contract_line_ids
-                .filtered(lambda line: line.product_id.product_tmpl_id == self.env.ref("saas_product.product_users") and line.is_paid)
-                .mapped("date_end")
-            )
-
     build_id = fields.Many2one("saas.db", readonly=True)
-    build_expiration_date = fields.Datetime("Build expiration date (computed)", compute=_compute_build_expiration_date)
     build_expiration_date_defacto = fields.Datetime("Build expiration date (defacto)", related="build_id.expiration_date")
 
     def write(self, vals):
@@ -27,6 +17,7 @@ class Contract(models.Model):
         self.mapped("contract_line_ids")._recompute_is_paid()
         return res
 
+    @api.depends("contract_line_ids.is_paid")
     def action_update_build(self):
         for contract in self.filtered("build_id"):
             build = contract.build_id
@@ -37,8 +28,14 @@ class Contract(models.Model):
                 and line.date_start <= fields.Date.context_today(line) <= line.date_end
             ).mapped("quantity")
 
+            build_expiration_date = max(
+                contract.contract_line_ids
+                .filtered(lambda line: line.product_id.product_tmpl_id == self.env.ref("saas_product.product_users") and line.is_paid)
+                .mapped("date_end")
+            )
+
             build.write({
-                "expiration_date": contract.build_expiration_date,
+                "expiration_date": build_expiration_date,
                 "max_users_limit": sum(max_users_limit) or 1,
             })
 
