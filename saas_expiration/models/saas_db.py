@@ -11,7 +11,7 @@ class SaasDb(models.Model):
     _inherit = "saas.db"
 
     expiration_date = fields.Datetime(
-        "Expiration date", default=lambda self: datetime.now() + timedelta(days=7)
+        "Expiration date", default=lambda *args: datetime.now() + timedelta(days=7)
     )
 
     def write_values_to_build(self):
