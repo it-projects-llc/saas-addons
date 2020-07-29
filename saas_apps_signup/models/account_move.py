@@ -45,6 +45,9 @@ class AccountMove(models.Model):
                 "contract_line_ids": list(map(lambda line: (0, 0, line), new_contract_lines))
             })
 
+            contract.contract_line_ids._recompute_is_paid()
+            contract.action_update_build()
+
         for order in sale_lines.mapped("order_id"):
             sale_lines_in_order = sale_lines.filtered(lambda x: x.order_id == order)
             new_contract_lines = []
