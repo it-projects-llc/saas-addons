@@ -48,7 +48,7 @@
         <field name="name">contract.contract tree view (in saas contract)</field>
         <field name="model">contract.contract</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree create="false">
                 <field name="name" string="Name" />
                 <field name="build_id" />
                 <field name="journal_id" groups="account.group_account_user" />
