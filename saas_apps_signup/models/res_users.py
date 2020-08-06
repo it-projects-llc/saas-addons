@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models, SUPERUSER_ID
+from odoo import api, fields, models, SUPERUSER_ID
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -11,6 +11,8 @@ class ResUsers(models.Model):
 
     _inherit = 'res.users'
 
+    database_lang = fields.Char("Preferred language for database")
+
     @api.model
     def signup(self, values, *args, **kwargs):
         self = self.with_user(SUPERUSER_ID)
@@ -19,14 +21,7 @@ class ResUsers(models.Model):
             values["country_id"] = self.env["res.country"].search([("code", "=", values["country_code"])]).id
             del values["country_code"]
 
-        if values.get('lang') and values["lang"] not in self.env['res.lang'].sudo().search([]).mapped('code'):
-            self.env['base.language.install'].sudo().create({
-                'lang': values["lang"],
-                "overwrite": False,
-            }).lang_install()
-            self = self.with_context(lang=values.pop("lang"))
-
-        elif not self.env.context.get("create_user"):
+        if not self.env.context.get("create_user"):
             return super(ResUsers, self).signup(values, *args, **kwargs)
 
         elif "sale_order_id" in values:
