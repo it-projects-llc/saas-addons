@@ -26,6 +26,7 @@
         'data/res_users.xml',
     ],
     "demo": [
+        'demo/res_users.xml',
     ],
     "qweb": [
     ],
