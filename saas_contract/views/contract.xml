@@ -9,6 +9,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="build_id" attrs="{'invisible': [('build_id', '=', False)]}"/>
+                <field name="build_status" attrs="{'invisible': [('build_id', '=', False)]}"/>
             </xpath>
             <xpath expr="//field[@name='date_end']" position="after">
                 <field name="build_expiration_date_defacto" attrs="{'invisible': [('build_id', '=', False)]}"/>
@@ -51,6 +52,7 @@
             <tree create="false">
                 <field name="name" string="Name" />
                 <field name="build_id" />
+                <field name="build_status" />
                 <field name="journal_id" groups="account.group_account_user" />
                 <field name="partner_id" />
                 <field name="active" invisible="1" />
