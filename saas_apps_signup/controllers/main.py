@@ -96,9 +96,10 @@ class Main(Controller):
 
 
 class CustomerPortal(BaseCustomerPortal):
-    @route(["/my/build/<int:build_id>/renew_subscription"], type="http", auth="user", website=True)
+    @route(["/my/build/<int:build_id>/renew_subscription"], type="http", auth="public", website=True)
     def portal_my_build_renew_subscription(self, build_id=None, access_token=None, **kw):
-        build_sudo = self._document_check_access("saas.db", build_id, access_token)
+        # build_sudo = self._document_check_access("saas.db", build_id, access_token)  # does not work, 'cos of ir.model.access error
+        build_sudo = request.env["saas.db"].sudo().browse(build_id)
 
         assert build_sudo.contract_id, "Following build does not have contract"
 
@@ -110,4 +111,4 @@ class CustomerPortal(BaseCustomerPortal):
             invoice.action_post()
         else:
             invoice = invoices[0]
-        return request.redirect(invoice.access_url)
+        return request.redirect(invoice.get_portal_url())
