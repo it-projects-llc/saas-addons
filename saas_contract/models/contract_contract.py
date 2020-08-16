@@ -17,6 +17,15 @@ class Contract(models.Model):
         ("suspended", "Suspended"),
     ], "Build status", readonly=True)
 
+    @api.model
+    def create(self, vals):
+        record = super(Contract, self).create(vals)
+        # тупой костыль из-за того, что в оду не выставляется зависимые значения от default
+        # упомянул об этом тут
+        # https://github.com/OCA/contract/pull/533/files#r471076615
+        record.journal_id = record._fields['journal_id'].default(record)
+        return record
+
     def write(self, vals):
         res = super(Contract, self).write(vals)
         self.mapped("contract_line_ids")._recompute_is_paid()
