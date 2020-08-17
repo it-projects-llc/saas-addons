@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="odoo_backup_sh_backup_form" model="ir.ui.view">
+        <field name="name">odoo_backup_sh.backup_info.form</field>
+        <field name="model">odoo_backup_sh.backup_info</field>
+        <field name="inherit_id" ref="odoo_backup_sh.odoo_backup_sh_backup_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="local_copy_filename" />
+            </xpath>
+            <xpath expr="//button[@type='action']" position="after">
+                <button
+                    class="btn btn-primary"
+                    style="margin-left: 10px"
+                    type="object"
+                    name="restore_backup_action"
+                    groups="odoo_backup_sh.group_manager"
+                    attrs="{'invisible': ['|', '|', ('backup_simulation', '=', True), ('active', '=', False), ('local_copy_filename', '=', False)]}"
+                    >
+                    Restore backup
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="remove_old_db_dialog" model="ir.ui.view">
+        <field name="name">remove_old_db_dialog</field>
+        <field name="model">odoo_backup_sh.backup_info</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>Database already exists. Destroy database and restore backup?</p>
+                <footer>
+                    <button string="Yes" class="btn-primary" name="restore_backup_action" type="object" />
+                    <button string="No" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
