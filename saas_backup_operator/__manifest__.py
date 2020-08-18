@@ -23,6 +23,7 @@
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
+        'data/ir_cron.xml',
         'views/odoo_backup_sh_views.xml',
     ],
     "demo": [
