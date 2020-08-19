@@ -17,16 +17,13 @@ _logger = logging.getLogger(__name__)
 class BackupConfig(models.Model):
     _inherit = "odoo_backup_sh.config"
 
-    @api.depends("saas_db_id")
-    def _compute_database_name(self):
-        for record in self.filtered("saas_db_id"):
-            record.database = record.saas_db_id
-
-    def _inverse_database_name(self):
-        pass
-
     saas_db_id = fields.Char("saas.db", readonly=True)
-    database = fields.Char(compute=_compute_database_name, inverse=_inverse_database_name)
+
+    def create(self, vals):
+        if vals.get("saas_db_id"):
+            assert not vals.get("database"), "You cannot set database name, if saas database record id given"
+            vals["database"] = self.env["saas.db"].sudo().browse(vals.get("saas_db_id")).name
+        return super(BackupConfig, self).create(vals)
 
     def write(self, vals):
         if "database" in vals and self.filtered("saas_db_id"):

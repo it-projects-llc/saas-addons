@@ -25,6 +25,21 @@
         </field>
     </record>
 
+    <record id='odoo_backup_sh_config_form' model='ir.ui.view'>
+        <field name="name">odoo_backup_sh.config.form</field>
+        <field name="model">odoo_backup_sh.config</field>
+        <field name="inherit_id" ref="odoo_backup_sh.odoo_backup_sh_config_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='database']" position="after">
+                <field name="saas_db_id" attrs="{'invisible': 1}"/>
+            </xpath>
+            <xpath expr="//field[@name='database']" position="attributes">
+                <attribute name="attrs">{'readonly': [('saas_db_id', '!=', False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
     <record id="remove_old_db_dialog" model="ir.ui.view">
         <field name="name">remove_old_db_dialog</field>
         <field name="model">odoo_backup_sh.backup_info</field>

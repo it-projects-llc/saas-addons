@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="saas_db_form_view" model="ir.ui.view">
+        <field name="name">saas.db.backup</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button
+                    type="object"
+                    name="create_backup_config_action"
+                    string="Create backup config"
+                    attrs="{'invisible': [('backup_config', '!=', False)]}"
+                    />
+            </xpath>
+            <xpath expr="//form/sheet/group" position="inside">
+                <field name="backup_config" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

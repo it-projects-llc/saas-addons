@@ -23,6 +23,7 @@
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
+        'views/saas_db.xml',
         'data/ir_cron.xml',
         'views/odoo_backup_sh_views.xml',
     ],
