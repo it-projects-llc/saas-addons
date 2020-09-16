@@ -63,50 +63,60 @@ class SAASOperator(models.Model):
 
             db.exp_drop(db_name)
 
+    def _install_modules(self, db_name, modules):
+        if self.type != 'local':
+            raise NotImplementedError()
+
+        db = sql_db.db_connect(db_name)
+        with api.Environment.manage(), db.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, {})
+
+            # Set odoo.http.request to None.
+            #
+            # Odoo tries to use its values in translation system, which may eventually
+            # change currentThread().dbname to saas master value.
+            _request_stack.push(None)
+
+            module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
+            module_ids.button_immediate_install()
+
+            # Some magic to force reloading registry in other workers
+            env.registry.registry_invalidated = True
+            env.registry.signal_changes()
+
+            # return request back
+            _request_stack.pop()
+
     @job
     def install_modules(self, template_id, template_operator_id):
         self.ensure_one()
         modules = [module.name for module in template_id.template_module_ids]
         modules = [('name', 'in', self.get_mandatory_modules() + modules)]
-        if self.type == 'local':
-            db = sql_db.db_connect(template_operator_id.operator_db_name)
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
+        self._install_modules(template_operator_id.operator_db_name, modules)
+        template_operator_id.state = 'post_init'
+        self.with_delay().post_init(template_id, template_operator_id)
 
-                # Set odoo.http.request to None.
-                #
-                # Odoo tries to use its values in translation system, which may eventually
-                # change currentThread().dbname to saas master value.
-                _request_stack.push(None)
+    def _post_init(self, db_name, template_post_init):
+        if self.type != 'local':
+            raise NotImplementedError()
 
-                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
-                module_ids.button_immediate_install()
-
-                # Some magic to force reloading registry in other workers
-                env.registry.registry_invalidated = True
-                env.registry.signal_changes()
-
-                # return request back
-                _request_stack.pop()
-
-            template_operator_id.state = 'post_init'
-            self.with_delay().post_init(template_id, template_operator_id)
+        db = sql_db.db_connect(db_name)
+        registry(db_name).check_signaling()
+        with api.Environment.manage(), db.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, {})
+            action = env['ir.actions.server'].create({
+                'name': 'Local Code Eval',
+                'state': 'code',
+                'model_id': 1,
+                'code': template_post_init
+            })
+            action.run()
 
     @job
     def post_init(self, template_id, template_operator_id):
-        if self.type == 'local':
-            db = sql_db.db_connect(template_operator_id.operator_db_name)
-            registry(template_operator_id.operator_db_name).check_signaling()
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
-                action = env['ir.actions.server'].create({
-                    'name': 'Local Code Eval',
-                    'state': 'code',
-                    'model_id': 1,
-                    'code': template_id.template_post_init
-                })
-                action.run()
-            template_operator_id.state = 'done'
+        self.ensure_one()
+        self._post_init(template_operator_id.operator_db_name, template_id.template_post_init)
+        template_operator_id.state = 'done'
 
     def get_db_url(self, db):
         # TODO: use mako for url templating
