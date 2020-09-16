@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License MIT (https://opensource.org/licenses/MIT). -->
+<odoo>
+    <record id="saas_operator_form_view" model="ir.ui.view">
+        <field name="name">saas.operator.form</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='global_url']" position="after">
+                <field name="master_pwd" attrs="{'required': [('type', '=', 'remote')], 'invisible': [('type', '!=', 'remote')]}" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
