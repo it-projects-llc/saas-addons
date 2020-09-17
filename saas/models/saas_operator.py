@@ -32,36 +32,36 @@ class SAASOperator(models.Model):
 
     def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
-        if self.type == 'local':
-            # to avoid installing extra modules we need this condition
-            if tools.config['init']:
-                tools.config['init'] = {}
+        if not self:
+            return
+        elif self.type != 'local':
+            raise NotImplementedError()
 
-            # we don't need tests in templates and builds
-            test_enable = tools.config['test_enable']
-            if test_enable:
-                tools.config['test_enable'] = {}
+        # to avoid installing extra modules we need this condition
+        if tools.config['init']:
+            tools.config['init'] = {}
 
-        for r in self:
-            if r.type != 'local':
-                continue
+        # we don't need tests in templates and builds
+        test_enable = tools.config['test_enable']
+        if test_enable:
+            tools.config['test_enable'] = {}
 
-            if template_db:
-                db._drop_conn(self.env.cr, template_db)
-                db.exp_duplicate_database(template_db, db_name)
-            else:
-                db.exp_create_database(
-                    db_name, demo, lang)
+        if template_db:
+            db._drop_conn(self.env.cr, template_db)
+            db.exp_duplicate_database(template_db, db_name)
+        else:
+            db.exp_create_database(db_name, demo, lang)
 
         if test_enable:
             tools.config['test_enable'] = test_enable
 
     def _drop_db(self, db_name):
-        for r in self:
-            if r.type != 'local':
-                continue
+        if not self:
+            return
+        elif self.type != 'local':
+            raise NotImplementedError()
 
-            db.exp_drop(db_name)
+        db.exp_drop(db_name)
 
     def _install_modules(self, db_name, modules):
         if self.type != 'local':
