@@ -82,6 +82,7 @@ class OperatorController(http.Controller):
     @route("/saas_operator/post_init", type="json", auth="none")
     @check_master_pwd
     def post_init(self, db_name, template_post_init):
+        db = sql_db.db_connect(db_name)
         registry(db_name).check_signaling()
         with api.Environment.manage(), db.cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
