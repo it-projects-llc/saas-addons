@@ -143,6 +143,7 @@ class Contract(models.Model):
 
             build_installing_modules = self.env['saas.line'].sudo().search([('product_id', 'in', contract_product_templates.ids)]).mapped('name')
 
+            # TODO: оператор должен определяет по билду!
             template = self.env["saas.template"].search([
                 ("set_as_package", "=", True),
                 ("product_id", "in", contract_product_templates.ids),

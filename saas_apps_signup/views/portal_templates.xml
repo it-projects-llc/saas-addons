@@ -16,6 +16,7 @@
                     </div>
 
                 </div>
+                <input type="hidden" name="operator_id" t-att-value="operator_id"/>
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <button type="submit" id="send_form" class="btn btn-primary">Create database</button>
             </form>
