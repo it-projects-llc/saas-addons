@@ -9,6 +9,7 @@
             <form>
                 <sheet>
                     <group>
+                        <field name="name"/>
                         <field name="type"/>
                         <field name="db_url_template"/>
                         <field name="db_name_template"/>

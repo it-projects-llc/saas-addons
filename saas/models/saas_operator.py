@@ -1,5 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from collections import defaultdict
 import string
@@ -15,7 +16,7 @@ class SAASOperator(models.Model):
     _name = 'saas.operator'
     _description = 'Database Operator'
 
-    name = fields.Char()
+    name = fields.Char(required=True)
     # list of types can be extended via selection_add
     type = fields.Selection([
         ('local', 'Same Instance'),
@@ -141,11 +142,17 @@ class SAASOperator(models.Model):
         build = "env['ir.config_parameter'].create([{{'key': 'auth_quick.build', 'value': '{build_id}'}}])\n"
         return master + build
 
+    def _build_execute_kw(self, db_name, model, method, args, kwargs):
+        if self.type != 'local':
+            raise NotImplementedError()
+
+        return execute(db_name, SUPERUSER_ID, model, method, *args, **kwargs)
+
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
+        self.ensure_one()
         args = args or []
         kwargs = kwargs or {}
-        if self.type == 'local':
-            return execute(build.name, SUPERUSER_ID, model, method, *args, **kwargs)
+        return self._build_execute_kw(build.name, model, method, args, kwargs)
 
     @job
     def build_post_init(self, build, post_init_action, key_value_dict):

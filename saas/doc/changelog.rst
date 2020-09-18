@@ -10,6 +10,7 @@
 - **Fix:** attempt to update global_url on draft builds
 - **Improvement:** Added option to deploy database on draft builds
 - **Fix:** "Connect to the Build" button now works even if admin user on build was renamed
+- TODO: список операторов вывести в менюшку
 
 `2.4.3`
 -------
