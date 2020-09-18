@@ -4,6 +4,7 @@
 from odoo import api, http, tools, sql_db, SUPERUSER_ID, registry
 from odoo.http import request, route
 from odoo.service import db
+from odoo.service.model import execute
 from odoo.http import _request_stack
 from odoo.exceptions import AccessError
 import functools
@@ -93,3 +94,8 @@ class OperatorController(http.Controller):
                 'code': template_post_init
             })
             action.run()
+
+    @route("/saas_operator/execute_kw", type="json", auth="none")
+    @check_master_pwd
+    def execute_kw(self, db_name, model, method, args, kwargs):
+        return execute(db_name, SUPERUSER_ID, model, method, *args, **kwargs)

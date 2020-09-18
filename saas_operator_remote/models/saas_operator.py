@@ -4,6 +4,7 @@
 from odoo import api, fields, models
 from odoo.addons.queue_job.exception import FailedJobError
 import requests
+import json
 
 
 def jsonrpc(url, params, timeout=1200):
@@ -20,7 +21,17 @@ def jsonrpc(url, params, timeout=1200):
 
     error = response.get("error")
     if error:
-        raise FailedJobError(error.get("data", {}).get("debug"))
+        traceback = error.get("data", {}).get("debug")
+        if type(traceback) is str:
+            message = "\n".join((
+                "=" * 10,
+                "REMOTE INSTANCE TRACEBACK",
+                "=" * 10,
+                traceback
+            ))
+        else:
+            message = json.dumps(error, indent=4, sort_keys=True)
+        raise FailedJobError(message)
 
     return response
 
@@ -30,7 +41,7 @@ class SaasOperator(models.Model):
     _inherit = "saas.operator"
 
     type = fields.Selection(
-        selection_add=[("remote", "Remote")]
+        selection_add=[("remote", "Remote Instance")]
     )
     master_pwd = fields.Char("Master Password")
 
@@ -76,3 +87,17 @@ class SaasOperator(models.Model):
             "db_name": db_name,
             "template_post_init": template_post_init,
         })
+
+    def _build_execute_kw(self, db_name, model, method, args, kwargs):
+        if self.type != "remote":
+            return super(SaasOperator, self)._build_execute_kw(db_name, model, method, args, kwargs)
+
+        response = jsonrpc(self.global_url + "/saas_operator/execute_kw", {
+            "master_pwd": self.master_pwd,
+            "db_name": db_name,
+            "model": model,
+            "method": method,
+            "args": args,
+            "kwargs": kwargs,
+        })
+        return response.get("result")
