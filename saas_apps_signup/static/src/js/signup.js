@@ -29,7 +29,8 @@ odoo.define('saas_apps_signup.signup', function (require) {
                 helper.find(".build-domain-helper_status-loading").show();
 
                 session.rpc("/saas_apps_signup/is_database_slot_available", {
-                    database_name: event.target.value
+                    database_name: event.target.value,
+                    operator_id: $("[name=operator_id]").val(),
                 }).then(function(response) {
                     helper.find(".build-domain-helper_status").hide();
                     if (response.domain) {

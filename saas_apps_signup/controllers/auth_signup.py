@@ -32,6 +32,13 @@ class Main(SignupVerifyEmail):
             d["sale_order_id"] = int(d["sale_order_id"])
             assert all(map(lambda k: not d.get(k), try_now_args))  # making sure, that "Try now" args are not used
 
+        if not d.get("operator_id"):
+            if d.get("saas_template_id"):
+                template = request.env["saas.template"].browse(int(d.get("saas_template_id")))
+            else:
+                template = request.env.ref("saas_apps.base_template")
+            d["operator_id"] = template._random_ready_operator_id()
+
         d['langs'] = odoo.service.db.exp_list_lang()
         d['countries'] = odoo.service.db.exp_list_countries()
         return d

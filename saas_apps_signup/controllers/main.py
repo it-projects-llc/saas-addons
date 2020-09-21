@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 
 class Main(Controller):
     @route("/saas_apps_signup/is_database_slot_available", auth="public", type="json")
-    def is_available(self, database_name, **kw):
+    def is_available(self, database_name, operator_id, **kw):
         # TODO: добавить operator для входных данных
         database_name = database_name.lower().strip()
         if not database_name:
@@ -26,7 +26,7 @@ class Main(Controller):
 
         is_free_slot = not request.env["saas.db"].sudo().search([("name", "=", database_name)])
         if is_free_slot:
-            return {"domain": request.env.ref("saas.local_operator").sudo().db_url_template.format(db_name=database_name)}
+            return {"domain": request.env["saas.operator"].sudo().browse(int(operator_id)).db_url_template.format(db_name=database_name)}
         else:
             return {"answer": "Database already exists"}
 
@@ -59,21 +59,14 @@ class Main(Controller):
                     "error": res["answer"],
                 })
         else:
-            template_operators = request.env.ref("saas_apps.base_template").sudo().operator_ids
-            if not template_operators:
+            try:
                 qcontext.update({
-                    "error": "No template operators in base template. Contact administrator",
+                    "operator_id": request.env.ref("saas_apps.base_template")._random_ready_operator_id()
                 })
-            else:
-                template_operator = template_operators.random_ready_operator()
-                if not template_operator:
-                    qcontext.update({
-                        "error": "No operators are ready. Please try again later",
-                    })
-                else:
-                    qcontext.update({
-                        "operator_id": template_operator.operator_id.id,
-                    })
+            except AssertionError as e:
+                qcontext.update({
+                    "error": str(e),
+                })
 
         qcontext.update(
             query=url_encode({

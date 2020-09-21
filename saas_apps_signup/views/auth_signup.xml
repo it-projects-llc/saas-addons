@@ -6,6 +6,7 @@
 
         <xpath expr="//div[hasclass('form-group', 'field-name')]" position="after">
             <t t-if="not only_passwords">
+                <input type="hidden" name="operator_id" t-att-value="operator_id" />
 
                 <div class="loader hid transition">
                     <img src="/saas_apps/static/src/img/loader.gif" draggable="false">
