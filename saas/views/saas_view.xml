@@ -16,9 +16,21 @@
         <field name="view_mode">tree,form</field>
         <field name="domain">[('type', '=', 'build')]</field>
     </record>
+    <record model='ir.actions.act_window' id="saas_operator_action" >
+        <field name="name">Operators</field>
+        <field name="res_model">saas.operator</field>
+        <field name="views">[(False, 'form')]</field>
+        <field name="view_mode">tree,form</field>
+    </record>
     <!-- Menu items-->
     <menuitem name="SaaS"
               id="saas_main_menu"/>
+
+    <menuitem name="Operators"
+              parent="saas_main_menu"
+              id="saas_operator_menu_item"
+              sequence="2"
+              action="saas_operator_action"/>
 
     <menuitem name="Templates"
               parent="saas_main_menu"
