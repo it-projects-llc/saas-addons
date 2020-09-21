@@ -40,6 +40,7 @@ class ResUsers(models.Model):
         saas_template_id = values.pop("saas_template_id", "")
         max_users_limit = int(values.pop("max_users_limit", 1))
         subscription_period = values.pop("period", "")
+        operator_id = int(values.pop("operator_id"))
 
         res = super(ResUsers, self).signup(values, *args, **kwargs)
 
@@ -48,7 +49,7 @@ class ResUsers(models.Model):
 
             build = self.env["saas.db"].create({
                 "name": database_name,
-                "operator_id": self.env.ref("saas.local_operator").id,
+                "operator_id": operator_id,
                 "admin_user": admin_user.id,
             })
 
@@ -63,6 +64,7 @@ class ResUsers(models.Model):
         sale_order = self.env["sale.order"].browse(int(values.pop("sale_order_id")))
 
         database_name = values.pop("database_name", None)
+        operator_id = int(values.pop("operator_id"))
 
         res = super(ResUsers, self).signup(values, *args, **kwargs)
         admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
@@ -70,7 +72,7 @@ class ResUsers(models.Model):
 
         build = self.env["saas.db"].create({
             "name": database_name,
-            "operator_id": self.env.ref("saas.local_operator").id,
+            "operator_id": operator_id,
             "admin_user": admin_user.id,
         })
 
