@@ -16,7 +16,6 @@ _logger = logging.getLogger(__name__)
 class Main(Controller):
     @route("/saas_apps_signup/is_database_slot_available", auth="public", type="json")
     def is_available(self, database_name, operator_id, **kw):
-        # TODO: добавить operator для входных данных
         database_name = database_name.lower().strip()
         if not database_name:
             return {"answer": "Empty database name"}
