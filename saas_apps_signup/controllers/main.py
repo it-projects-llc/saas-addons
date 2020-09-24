@@ -39,7 +39,7 @@ class Main(Controller):
             qcontext.update({
                 "operator_id": operator_id,
             })
-            res = self.is_available(database_name)
+            res = self.is_available(database_name, operator_id)
             if "domain" in res:
                 try:
                     request.env["saas.db"].sudo().create({
