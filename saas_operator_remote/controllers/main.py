@@ -64,21 +64,12 @@ class OperatorController(http.Controller):
         with api.Environment.manage(), db.cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
 
-            # Set odoo.http.request to None.
-            #
-            # Odoo tries to use its values in translation system, which may eventually
-            # change currentThread().dbname to saas master value.
-            _request_stack.push(None)
-
             module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
             module_ids.button_immediate_install()
 
             # Some magic to force reloading registry in other workers
             env.registry.registry_invalidated = True
             env.registry.signal_changes()
-
-            # return request back
-            _request_stack.pop()
 
     @route("/saas_operator/post_init", type="json", auth="none")
     @check_master_pwd

@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
-from odoo.addons.queue_job.exception import FailedJobError
 import requests
 import json
 
@@ -17,7 +16,7 @@ def jsonrpc(url, params, timeout=1200):
     try:
         response = req.json()
     except ValueError:
-        raise FailedJobError(req.text)
+        raise Exception(req.text)
 
     error = response.get("error")
     if error:
@@ -31,7 +30,7 @@ def jsonrpc(url, params, timeout=1200):
             ))
         else:
             message = json.dumps(error, indent=4, sort_keys=True)
-        raise FailedJobError(message)
+        raise Exception(message)
 
     return response
 
