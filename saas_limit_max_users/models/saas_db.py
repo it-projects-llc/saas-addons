@@ -20,6 +20,25 @@ class SaasDb(models.Model):
                     _("Number of allowed max users must be at least 1")
                 )
 
+    def write(self, vals):
+        templates = self.filtered(lambda x: x.type == "template")
+        if vals.get("state") != "done" or not templates:
+            return super(SaasDb, self).write(vals)
+
+        # deactivate demo user and portal user
+        for template in templates:
+            for row in template.execute_kw(
+                "ir.model.data",
+                "search_read",
+                [("module", "=", "base"), ("name", "in", ["user_demo", "demo_user0"])],
+                ["model", "res_id"],
+            ):
+                template.execute_kw(
+                    row["model"], "write", row["res_id"], {"active": False}
+                )
+
+        return super(SaasDb, self).write(vals)
+
     def write_values_to_build(self):
         super(SaasDb, self).write_values_to_build()
 
