@@ -1,6 +1,7 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2018-2019 Denis Mudarisov <https://it-projects.info/team/mudarisov>
 # Copyright 2019 Anvar Kildebekov <https://it-projects.info/team/kildebekov>
+# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": """SaaS Base""",
@@ -8,7 +9,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=13.0",
     "images": [],
-    "version": "13.0.2.4.3",
+    "version": "13.0.3.0.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",

@@ -21,6 +21,7 @@
             <form>
                 <header>
                     <button name="action_get_build_access" type="object" string="Connect to the Build" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
+                    <button name="refresh_data" type="object" string="Refresh" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
                     <field name="state" widget="statusbar" nolabel="1"/>
                 </header>
                 <sheet>
