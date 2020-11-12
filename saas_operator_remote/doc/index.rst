@@ -37,6 +37,7 @@ For example, ``remote.server.net:8069`` is address of remote Odoo instance.
 * Open menu ``[[ SaaS ]] >> Operators``
 * Click ``[Create]``
 * Fill the form with following values:
+
   - Name: anything
   - Type: ``Remote instance``
   - DB URLs: ``http://{db_name}.remote.server.net:8069``
