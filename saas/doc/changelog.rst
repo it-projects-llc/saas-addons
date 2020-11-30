@@ -11,6 +11,7 @@
 - **Improvement:** Added option to deploy database on draft builds
 - **Fix:** "Connect to the Build" button now works even if admin user on build was renamed
 - **Improvement:** Added "Operators" menu to show list of operators
+- **Improvement:** saas.operator.name field is now mandatory
 
 `2.4.3`
 -------
