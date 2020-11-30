@@ -1,5 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from collections import defaultdict
 import string
@@ -32,81 +33,91 @@ class SAASOperator(models.Model):
 
     def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
-        if self.type == 'local':
-            # to avoid installing extra modules we need this condition
-            if tools.config['init']:
-                tools.config['init'] = {}
+        if not self:
+            return
+        elif self.type != 'local':
+            raise NotImplementedError()
 
-            # we don't need tests in templates and builds
-            test_enable = tools.config['test_enable']
-            if test_enable:
-                tools.config['test_enable'] = {}
+        # to avoid installing extra modules we need this condition
+        if tools.config['init']:
+            tools.config['init'] = {}
 
-        for r in self:
-            if r.type != 'local':
-                continue
+        # we don't need tests in templates and builds
+        test_enable = tools.config['test_enable']
+        if test_enable:
+            tools.config['test_enable'] = {}
 
-            if template_db:
-                db._drop_conn(self.env.cr, template_db)
-                db.exp_duplicate_database(template_db, db_name)
-            else:
-                db.exp_create_database(
-                    db_name, demo, lang)
+        if template_db:
+            db._drop_conn(self.env.cr, template_db)
+            db.exp_duplicate_database(template_db, db_name)
+        else:
+            db.exp_create_database(db_name, demo, lang)
 
         if test_enable:
             tools.config['test_enable'] = test_enable
 
     def _drop_db(self, db_name):
-        for r in self:
-            if r.type != 'local':
-                continue
+        if not self:
+            return
+        elif self.type != 'local':
+            raise NotImplementedError()
 
-            db.exp_drop(db_name)
+        db.exp_drop(db_name)
+
+    def _install_modules(self, db_name, modules):
+        if self.type != 'local':
+            raise NotImplementedError()
+
+        db = sql_db.db_connect(db_name)
+        with api.Environment.manage(), db.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, {})
+
+            # Set odoo.http.request to None.
+            #
+            # Odoo tries to use its values in translation system, which may eventually
+            # change currentThread().dbname to saas master value.
+            _request_stack.push(None)
+
+            module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
+            module_ids.button_immediate_install()
+
+            # Some magic to force reloading registry in other workers
+            env.registry.registry_invalidated = True
+            env.registry.signal_changes()
+
+            # return request back
+            _request_stack.pop()
 
     @job
     def install_modules(self, template_id, template_operator_id):
         self.ensure_one()
         modules = [module.name for module in template_id.template_module_ids]
         modules = [('name', 'in', self.get_mandatory_modules() + modules)]
-        if self.type == 'local':
-            db = sql_db.db_connect(template_operator_id.operator_db_name)
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
+        self._install_modules(template_operator_id.operator_db_name, modules)
+        template_operator_id.state = 'post_init'
+        self.with_delay().post_init(template_id, template_operator_id)
 
-                # Set odoo.http.request to None.
-                #
-                # Odoo tries to use its values in translation system, which may eventually
-                # change currentThread().dbname to saas master value.
-                _request_stack.push(None)
+    def _post_init(self, db_name, template_post_init):
+        if self.type != 'local':
+            raise NotImplementedError()
 
-                module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
-                module_ids.button_immediate_install()
-
-                # Some magic to force reloading registry in other workers
-                env.registry.registry_invalidated = True
-                env.registry.signal_changes()
-
-                # return request back
-                _request_stack.pop()
-
-            template_operator_id.state = 'post_init'
-            self.with_delay().post_init(template_id, template_operator_id)
+        db = sql_db.db_connect(db_name)
+        registry(db_name).check_signaling()
+        with api.Environment.manage(), db.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, {})
+            action = env['ir.actions.server'].create({
+                'name': 'Local Code Eval',
+                'state': 'code',
+                'model_id': 1,
+                'code': template_post_init
+            })
+            action.run()
 
     @job
     def post_init(self, template_id, template_operator_id):
-        if self.type == 'local':
-            db = sql_db.db_connect(template_operator_id.operator_db_name)
-            registry(template_operator_id.operator_db_name).check_signaling()
-            with api.Environment.manage(), db.cursor() as cr:
-                env = api.Environment(cr, SUPERUSER_ID, {})
-                action = env['ir.actions.server'].create({
-                    'name': 'Local Code Eval',
-                    'state': 'code',
-                    'model_id': 1,
-                    'code': template_id.template_post_init
-                })
-                action.run()
-            template_operator_id.state = 'done'
+        self.ensure_one()
+        self._post_init(template_operator_id.operator_db_name, template_id.template_post_init)
+        template_operator_id.state = 'done'
 
     def get_db_url(self, db):
         # TODO: use mako for url templating
@@ -131,11 +142,17 @@ class SAASOperator(models.Model):
         build = "env['ir.config_parameter'].create([{{'key': 'auth_quick.build', 'value': '{build_id}'}}])\n"
         return master + build
 
+    def _build_execute_kw(self, db_name, model, method, args, kwargs):
+        if self.type != 'local':
+            raise NotImplementedError()
+
+        return execute(db_name, SUPERUSER_ID, model, method, *args, **kwargs)
+
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
+        self.ensure_one()
         args = args or []
         kwargs = kwargs or {}
-        if self.type == 'local':
-            return execute(build.name, SUPERUSER_ID, model, method, *args, **kwargs)
+        return self._build_execute_kw(build.name, model, method, args, kwargs)
 
     @job
     def build_post_init(self, build, post_init_action, key_value_dict):
