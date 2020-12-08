@@ -5,7 +5,6 @@
     <record id="product_attribute_subscription" model="product.attribute">
         <field name="name">Subscription (SaaS)</field>
         <field name="sequence">30</field>
-        <field name="display_type">select</field>
     </record>
 
     <record id="product_attribute_value_subscription_annually" model="product.attribute.value">
@@ -26,7 +25,8 @@
         <field name="sequence">30</field>
     </record>
 
-    <record id="product_users" model="product.template">
+    <!-- context create_product_product is used to disallow to make product.product -->
+    <record id="product_users" model="product.template" context="{'create_product_product': True}">
         <field name="name">Users</field>
         <field name="sale_ok" eval="True" />
         <field name="purchase_ok" eval="False" />
@@ -73,20 +73,20 @@
         <field name="price_extra">0</field>
     </record>
 
-    <function model="ir.model.data" name="_update_xmlids">
-        <value model="base" eval="[{
-            'xml_id': 'saas_product.product_users_monthly',
-            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_monthly')),
-            'noupdate': True,
-        }, {
-            'xml_id': 'saas_product.product_users_annually',
-            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_annually')),
-            'noupdate': True,
-        }, {
-            'xml_id': 'saas_product.product_users_trial',
-            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_trial')),
-            'noupdate': True,
-        },]"/>
-    </function>
+    <data noupdate="1">
+        <record id="product_users_monthly" model="product.product">
+            <field name="product_tmpl_id" ref="product_users" />
+            <field name="attribute_value_ids" eval="[(6,0,[ref('product_attribute_value_subscription_monthly')])]" />
+        </record>
 
+        <record id="product_users_annually" model="product.product">
+            <field name="product_tmpl_id" ref="product_users" />
+            <field name="attribute_value_ids" eval="[(6,0,[ref('product_attribute_value_subscription_annually')])]" />
+        </record>
+
+        <record id="product_users_trial" model="product.product">
+            <field name="product_tmpl_id" ref="product_users" />
+            <field name="attribute_value_ids" eval="[(6,0,[ref('product_attribute_value_subscription_trial')])]" />
+        </record>
+    </data>
 </odoo>
