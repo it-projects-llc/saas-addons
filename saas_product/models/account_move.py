@@ -4,17 +4,17 @@
 from odoo import models
 
 
-class AccountMoveLine(models.Model):
+class AccountInvoiceLine(models.Model):
 
-    _inherit = "account.move.line"
+    _inherit = "account.invoice.line"
 
-    def _get_computed_taxes(self):
+    def _set_taxes(self):
         """
         Zero taxes for saas products
         """
-        self.ensure_one()
+        res = super(AccountInvoiceLine, self)._set_taxes()
 
         if self.product_id and self.product_id.product_tmpl_id.is_saas_product:
-            return self.env["account.tax"]
+            self.invoice_line_tax_ids = self.env["account.tax"]
 
-        return super(AccountMoveLine, self)._get_computed_taxes()
+        return res
