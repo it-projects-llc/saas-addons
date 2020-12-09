@@ -21,7 +21,7 @@ server_wide_modules = web,saas_operator_remote
 (...)
 ```
 
-* set ``admin_passwd``. More info in `Deploying Odoo <https://www.odoo.com/documentation/13.0/setup/deploy.html#setup-deploy-odoo>`__
+* set ``admin_passwd``. More info in `Deploying Odoo <https://www.odoo.com/documentation/12.0/setup/deploy.html#setup-deploy-odoo>`__
 
 * set ``dbfilter=^%d$``
 
