@@ -3,6 +3,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from collections import defaultdict
+from contextlib import contextmanager
 import string
 
 from odoo import models, fields, api, tools, SUPERUSER_ID, sql_db, registry
@@ -10,6 +11,18 @@ from odoo.service import db
 from odoo.service.model import execute
 from odoo.addons.queue_job.job import job
 from odoo.http import _request_stack
+
+
+@contextmanager
+def turn_off_tests():
+    test_enable = tools.config['test_enable']
+    if test_enable:
+        tools.config['test_enable'] = {}
+
+    yield
+
+    if test_enable:
+        tools.config['test_enable'] = test_enable
 
 
 class SAASOperator(models.Model):
@@ -43,19 +56,17 @@ class SAASOperator(models.Model):
         if tools.config['init']:
             tools.config['init'] = {}
 
-        # we don't need tests in templates and builds
         test_enable = tools.config['test_enable']
         if test_enable:
             tools.config['test_enable'] = {}
 
-        if template_db:
-            db._drop_conn(self.env.cr, template_db)
-            db.exp_duplicate_database(template_db, db_name)
-        else:
-            db.exp_create_database(db_name, demo, lang)
-
-        if test_enable:
-            tools.config['test_enable'] = test_enable
+        # we don't need tests in templates and builds
+        with turn_off_tests():
+            if template_db:
+                db._drop_conn(self.env.cr, template_db)
+                db.exp_duplicate_database(template_db, db_name)
+            else:
+                db.exp_create_database(db_name, demo, lang)
 
     @api.multi
     def _drop_db(self, db_name):
@@ -81,7 +92,8 @@ class SAASOperator(models.Model):
             _request_stack.push(None)
 
             module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
-            module_ids.button_immediate_install()
+            with turn_off_tests():
+                module_ids.button_immediate_install()
 
             # Some magic to force reloading registry in other workers
             env.registry.registry_invalidated = True
