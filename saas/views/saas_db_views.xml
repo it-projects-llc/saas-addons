@@ -25,6 +25,8 @@
                     <field name="state" widget="statusbar" nolabel="1"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
                     <group>
                         <field name="name"/>
                         <field name="operator_id"/>
