@@ -86,3 +86,8 @@ class SAASDB(models.Model):
 
     def xmlid_lookup(self, xmlid):
         return self.execute_kw("ir.model.data", "xmlid_lookup", xmlid)
+
+    def action_install_missing_mandatory_modules(self):
+        for build in self:
+            operator = build.operator_id
+            operator._install_modules(build.name, [('name', 'in', operator.get_mandatory_modules())])

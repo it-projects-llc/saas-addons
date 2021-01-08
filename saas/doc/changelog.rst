@@ -13,6 +13,7 @@
 - **Improvement:** Added "Operators" menu to show list of operators
 - **Improvement:** saas.operator.name field is now mandatory
 - **Fix:** Do not run tests when installing modules in builds
+- **Improvement:** Added "Install missing mandatory modules" button in build and template operator views on developer mode
 
 `2.4.3`
 -------
