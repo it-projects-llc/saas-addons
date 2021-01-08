@@ -244,3 +244,7 @@ class SAASTemplateLine(models.Model):
         if not ready_operators:
             return ready_operators
         return random.choice(ready_operators)
+
+    def action_install_missing_mandatory_modules(self):
+        for record in self:
+            record.operator_db_id.action_install_missing_mandatory_modules()
