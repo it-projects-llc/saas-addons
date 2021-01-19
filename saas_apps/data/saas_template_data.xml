@@ -1,0 +1,32 @@
+<!-- Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
+<odoo>
+    <data noupdate="1">
+        <record id="base_template" model="saas.template">
+            <field name="name">Base</field>
+            <field name="template_demo">False</field>
+            <field name="public_access">True</field>
+            <field name="build_post_init">env['ir.module.module'].search([('name', 'in', {installing_modules})]).button_immediate_install()</field>
+        </record>
+
+        <record id="saas_base_template_operator" model="saas.template.operator">
+            <field name="operator_db_name">saas_apps_base_template_database</field>
+            <field name="template_id" eval="ref('base_template')"/>
+            <field name="operator_id" ref="saas.local_operator"/>
+        </record>
+    </data>
+
+    <data>
+        <record id="saas_apps_base_image" model="ir.attachment">
+            <field name="public" eval="True" />
+            <field name="name">Application base icon</field>
+            <field name="store_fname">base.png</field>
+            <field name="type">binary</field>
+            <field
+                name="datas"
+                type="base64"
+                file="saas_apps/static/src/img/base.png"
+                />
+        </record>
+    </data>
+</odoo>

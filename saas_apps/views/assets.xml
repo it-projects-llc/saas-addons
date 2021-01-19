@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+    License AGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
+<odoo>
+    <template id="assets_frontend" inherit_id="website.assets_frontend">
+       <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/saas_apps/static/src/css/calculator.css"/>
+            <script type="text/javascript" src="/saas_apps/static/src/js/saas_apps.js"></script>
+       </xpath>
+    </template>
+    <template id="assets_backend" name="saas_line assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/saas_apps/static/src/js/refresh_button.js"></script>
+        </xpath>
+    </template>
+</odoo>
