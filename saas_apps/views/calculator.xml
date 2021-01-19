@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+    License AGPL-3.0 (https://www.gnu.org/licenses/lgpl.html).-->
+<odoo>
+    <template id="price">
+        <t t-call="website.layout">
+            <title>Apps</title>
+            <div class="row container main-column js_saas_apps">
+                <div class="mx-auto page-alignment">
+                    <!-- Users qty -->
+                    <t t-if="show_apps or show_packages">
+                        <div
+                            id="users_block"
+                            t-att-data-price-month="user_month_product.lst_price"
+                            t-att-data-price-year="user_year_product.lst_price"
+                            t-att-data-product-id-month="user_month_product.id"
+                            t-att-data-product-id-year="user_year_product.id"
+                        >
+                            <div>
+                                <h3 class="mt16 mb8">Choose the number of <b>Users</b></h3>
+                            </div>
+                            <img id="minus-user" src="/saas_apps/static/src/img/substr-users.png" alt="Decrease users qty" class="users-qty-change-buttons"/>
+                            <input class="form-control border text-right pr-2"
+                            id="users" name="num_users" type="text" value="1" style="max-width: 100px;display: inline;text-align: center !important;"/>
+                            <img id="plus-user" src="/saas_apps/static/src/img/add-users.png" alt="Increase users qty" class="users-qty-change-buttons"/>
+                        </div>
+                    </t>
+                    <!-- App list -->
+                    <t t-if="show_apps">
+                        <div>
+                            <h3 class="mt16 mb16">Choose your Apps</h3>
+                            <div class="mb24">
+                                <div class="form-row">
+                                    <t t-foreach="apps" t-as="app">
+                                        <t t-if="True">
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded text-truncate transition app"
+                                                t-att-data-name="app.name"
+                                                t-att-data-price-month="app.month_price"
+                                                t-att-data-price-year="app.year_price"
+                                                t-att-data-product-id-month="app.month_product_id.id"
+                                                t-att-data-product-id-year="app.year_product_id.id"
+                                                t-att-data-depends="app.dependencies_str()"
+                                            >
+                                                <div class="app-icon">
+                                                    <img t-att-src="'data:image/png;base64,%s' % to_text(app.icon_image)"
+                                                        style="max-width: 40px;max-height: 40px;"/>
+                                                </div>
+                                                <div class="app-data">
+                                                    <div><t t-esc="app.shortdesc"/></div>
+                                                    <div id="app-price">
+                                                        <div class="yearly-price">
+                                                            <div class="price-value"><t t-esc="app.year_price"/></div>
+                                                            <div class="period"> <t t-esc="currency.symbol"/> / year</div>
+                                                        </div>
+                                                        <div class="monthly-price hid">
+                                                            <div class="price-value"><t t-esc="app.month_price"/></div>
+                                                            <div class="period">  <t t-esc="currency.symbol"/>  / month</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <!-- Packages -->
+                    <div>
+                        <t t-if="show_packages and packages">
+                            <h3 class="mt16 mb16">Choose your Packages</h3>
+                            <div class="mb24">
+                                <div class="form-row">
+                                    <t t-foreach="packages" t-as="package">
+                                        <div
+                                            class="col-12 col-sm-6 col-lg-4 shadow p-3 bg-white rounded price-window text-truncate transition package"
+                                            t-att-data-package-id="package.id"
+                                            t-att-data-package-name="package.name"
+                                            t-att-data-price-month="package.month_price"
+                                            t-att-data-price-year="package.year_price"
+                                            t-att-data-product-id-month="package.month_product_id.id"
+                                            t-att-data-product-id-year="package.year_product_id.id"
+                                        >
+                                            <div class="app-icon">
+                                                <img t-if="package.package_image"
+                                                     t-att-src="'data:image/png;base64,%s' % to_text(package.package_image)"
+                                                     style="max-width: 40px;max-height: 40px;"
+                                                />
+                                            </div>
+                                            <div class="app-data">
+                                                <div><t t-esc="package.name"/></div>
+                                                <div id="app-price">
+                                                    <div class="yearly-price">
+                                                        <div class="price-value"><t t-esc="package.year_price"/></div>
+                                                        <div class="period"> <t t-esc="currency.symbol"/> / year</div>
+                                                    </div>
+                                                    <div class="monthly-price hid">
+                                                        <div class="price-value"><t t-esc="package.month_price"/></div>
+                                                        <div class="period">  <t t-esc="currency.symbol"/>  / month</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="app_tech_name" style="display: none"><t t-esc="package.name"/></div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <!-- Price window -->
+                    <t t-if="show_apps or show_packages">
+                        <div>
+                            <span id="price-window" class="shadow mb-5 bg-white rounded">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs">
+                                        <li class="nav-item" data-type="yearly">
+                                            <a data-toggle="tab" data-period="year" href="javascript:void(0)" class="nav-link px-3 border-top-0 rounded-0 fw_bold switch-period active">Annually</a>
+                                        </li>
+                                        <li data-type="monthly" class="nav-item">
+                                            <a data-toggle="tab" data-period="month" href="javascript:void(0)" class="nav-link px-2 border-top-0 rounded-0 fw_bold switch-period">Monthly</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body" style="margin-top: -30px;font-size: 18px;">
+                                    <ul class="list-unstyled mt-3 mb-4 transition">
+                                        <li>
+                                            <div class="leftstr"><b id="users-qty" class="left-align-price">1</b> Users</div>
+                                            <div class="rightstr">
+                                                <div id="users-cnt-cost" class="d-inline">0 </div>
+                                                <div id="users-cnt-currency" class="d-inline"><t t-esc="currency.symbol"/></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="leftstr"><b id="apps-qty" class="left-align-price">0</b> Apps</div>
+                                            <div class="rightstr">
+                                                <div id="apps-cost" class="d-inline">0 </div>
+                                                <div id="apps-cost-currency" class="d-inline"><t t-esc="currency.symbol"/></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <h4 id="price" class="card-title pricing-card-title">10</h4>
+                                    <h4 class="card-title pricing-card-title" style="display: inline;"> <t t-esc="currency.symbol"/> / </h4>
+                                    <small id="box-period" class="text-muted period fnt-24">year</small>
+                                    <div id="btn-block" style="display: none">
+                                        <t t-if="show_try_trial_button">
+                                            <button id="try-trial" class="btn btn-lg btn-block btn-primary fnt-larger">Try trial</button>
+                                        </t>
+                                        <t t-if="show_buy_now_button">
+                                            <button id="buy-now" class="btn btn-lg btn-block btn-primary fnt-larger">Buy now</button>
+                                        </t>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                    </t>
+                </div>
+            </div>
+            <div class="loader transition" style="display: none">
+                <img src="/saas_apps/static/src/img/loader.gif" draggable="false">
+                    <p class="status">Please wait...</p>
+                </img>
+            </div>
+        </t>
+    </template>
+
+    <data>
+        <record id="main_pricing_menu" model="website.menu">
+            <field name="name">Pricing</field>
+            <field name="url">/price</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">10</field>
+        </record>
+    </data>
+</odoo>
