@@ -34,6 +34,11 @@ Maintainers
 Further information
 ===================
 
+Known bugs
+----------
+
+* ``number_of_queue_jobs_to_be_done`` field always shows zero
+
 Demo: http://runbot.it-projects.info/demo/saas-addons/13.0
 
 HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_portal/
