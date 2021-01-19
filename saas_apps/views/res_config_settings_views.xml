@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+    License AGPL-3.0 (https://www.gnu.org/licenses/agpl-3.0.html).-->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.website.apps</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='website_settings']" position="after">
+                <h2>SaaS pricing page</h2>
+                <div class="row mt16 o_settings_container" id="apps_general_settings">
+                    <div class="col-12 col-md-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="show_packages"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="show_packages" string="Show packages"/>
+                            <div class="text-muted">
+                                Show packages at "price" page
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="show_apps"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="show_apps" string="Show apps"/>
+                            <div class="text-muted">
+                                Show applications at "price" page
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="show_buy_now_button"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="show_buy_now_button" string="Show 'Buy now' button"/>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="show_try_trial_button"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="show_try_trial_button" string="Show 'Try trial' button"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
