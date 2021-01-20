@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="price" inherit_id="saas_apps.price">
+        <xpath expr="//button[@id='try-trial']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+
+        <xpath expr="//button[@id='try-trial']" position="after">
+            <button id="try-trial2" class="btn btn-lg btn-block btn-primary fnt-larger">Try trial</button>
+        </xpath>
+    </template>
+</odoo>

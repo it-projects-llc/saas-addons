@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_config_settings" model="ir.ui.view">
+        <field name="name">saas settings</field>
+        <field name="model">saas.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="SaaS config">
+                <header>
+                    <button string="Apply" type="object" name="execute"/>
+                    <button string="Cancel" type="object" name="cancel"/>
+                </header>
+                <group>
+                    <field name="database_limit_size_default"/>
+                    <field name="database_expiration_warning_delay" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_config_settings" model="ir.actions.act_window">
+        <field name="name">SaaS Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+
+    <menuitem name="Settings"
+              parent="saas.saas_main_menu"
+              id="saas_main_menu_config"
+              sequence="999"
+              action="action_config_settings"/>
+
+</odoo>
