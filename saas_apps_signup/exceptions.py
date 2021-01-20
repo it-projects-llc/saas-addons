@@ -1,0 +1,2 @@
+class OperatorNotAvailable(BaseException):
+    pass
