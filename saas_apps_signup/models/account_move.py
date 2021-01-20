@@ -8,13 +8,13 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class AccountMove(models.Model):
+class AccountInvoice(models.Model):
 
-    _inherit = 'account.move'
+    _inherit = 'account.invoice'
 
     def _create_or_update_contract(self):
-        contract_lines = self.mapped("line_ids.contract_line_id").filtered(lambda x: x.product_id.product_tmpl_id.is_saas_product and x.date_end)
-        sale_lines = self.mapped("line_ids.sale_line_ids")
+        contract_lines = self.mapped("invoice_line_ids.contract_line_id").filtered(lambda x: x.product_id.product_tmpl_id.is_saas_product and x.date_end)
+        sale_lines = self.mapped("invoice_line_ids.sale_line_ids")
         today = date.today()
 
         for l in contract_lines:
@@ -99,6 +99,5 @@ class AccountMove(models.Model):
                 "name": "{}'s SaaS Contract".format(partner.name),
                 "partner_id": partner.id,
                 "contract_line_ids": list(map(lambda line: (0, 0, line), new_contract_lines)),
-                "line_recurrence": True,
                 "build_id": order.build_id.id,
             })

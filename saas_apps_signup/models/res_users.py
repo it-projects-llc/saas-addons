@@ -15,7 +15,7 @@ class ResUsers(models.Model):
 
     @api.model
     def signup(self, values, *args, **kwargs):
-        self = self.with_user(SUPERUSER_ID)
+        self = self.sudo()
 
         if values.get("country_code"):
             values["country_id"] = self.env["res.country"].search([("code", "=", values["country_code"])]).id
