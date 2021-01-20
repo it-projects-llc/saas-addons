@@ -23,9 +23,9 @@ class SaasApp(models.Model):
     def create(self, vals):
         res = super(SaasApp, self).create(vals)
         if not res.product_tmpl_id:
-            res.product_tmpl_id = self.env["product.template"].create({
+            res.product_tmpl_id = self.env["product.template"].with_context(create_product_product=True).create({
                 "name": res.shortdesc,
-                "image_1920": res.icon_image,
+                "image": res.icon_image,
                 "saas_app_id": res.id,
                 "is_saas_product": True,
                 "website_published": True,

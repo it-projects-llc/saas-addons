@@ -6,21 +6,22 @@ class SaasTemplate(models.Model):
     _inherit = ["saas.template", "saas.period.product.mixin"]
 
     is_package = fields.Boolean("Is package?")
-    package_image = fields.Image(
+    package_image = fields.Binary(
         string='Package image'
     )
 
+    @api.multi
     def write(self, vals):
         res = super(SaasTemplate, self).write(vals)
 
-        ProductTemplate = self.env["product.template"].sudo().with_context(active_test=False)
+        ProductTemplate = self.env["product.template"].sudo().with_context(create_product_product=True, active_test=False)
         for record in self:
             if record.is_package and not record.product_tmpl_id:
                 product_tmpl_id = ProductTemplate.search([("saas_package_id", "=", record.id)])
                 if not product_tmpl_id:
                     product_tmpl_id = ProductTemplate.create({
                         "name": record.name,
-                        "image_1920": record.package_image,
+                        "image": record.package_image,
                         "saas_package_id": record.id,
                         "is_saas_product": True,
                         "website_published": True,

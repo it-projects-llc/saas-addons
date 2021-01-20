@@ -6,7 +6,7 @@ odoo.define("saas_apps.saas_apps", function (require) {
     var session = require('web.session');
 
     if (!$(".js_saas_apps").length) {
-        return Promise.reject("DOM doesn't contain '.js_saas_apps'");
+        return $.Deferred().reject("DOM doesn't contain '.js_saas_apps'");
     }
 
     var MONTHLY = "month";
