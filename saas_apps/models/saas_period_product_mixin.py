@@ -45,10 +45,30 @@ class SaasPeriodProductMixin(models.AbstractModel):
             month_ptv.write({
                 "price_extra": app.month_price
             })
-            app.month_product_id = month_ptv.ptav_product_variant_ids[:1]
+
+            month_product = self.env["product.product"].search([
+                ("product_tmpl_id", "=", app.product_tmpl_id.id),
+                ("attribute_value_ids", "=", patvs_month.id),
+            ])
+            if not month_product:
+                month_product = self.env["product.product"].create({
+                    "product_tmpl_id": app.product_tmpl_id.id,
+                    "attribute_value_ids": [(6, 0, [patvs_month.id])],
+                })
+            app.month_product_id = month_product
 
             year_ptv = ptv_ids.filtered(lambda x: x.product_attribute_value_id == patvs_year)
             year_ptv.write({
                 "price_extra": app.year_price
             })
-            app.year_product_id = year_ptv.ptav_product_variant_ids[:1]
+
+            year_product = self.env["product.product"].search([
+                ("product_tmpl_id", "=", app.product_tmpl_id.id),
+                ("attribute_value_ids", "=", patvs_year.id),
+            ])
+            if not year_product:
+                year_product = self.env["product.product"].create({
+                    "product_tmpl_id": app.product_tmpl_id.id,
+                    "attribute_value_ids": [(6, 0, [patvs_year.id])],
+                })
+            app.year_product_id = year_product
