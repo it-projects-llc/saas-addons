@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models, SUPERUSER_ID
+from odoo import api, models
 import logging
 from ..exceptions import OperatorNotAvailable
 from odoo.addons.queue_job.job import job
@@ -19,7 +19,7 @@ class Contract(models.Model):
         record = super(Contract, self).create(vals)
 
         if self.env.context.get("create_build"):
-            record.with_user(SUPERUSER_ID).with_delay()._create_build()
+            record.sudo().with_delay()._create_build()
 
         return record
 
@@ -98,12 +98,11 @@ class Contract(models.Model):
             "name": "{}'s SaaS Contract".format(partner.name),
             "build_id": build.id,
             "partner_id": partner.id,
-            "line_recurrence": True,
             "contract_line_ids": list(map(lambda line: (0, 0, line), contract_lines))
         })
 
         invoice = contract._recurring_create_invoice()
-        invoice.action_post()
+        invoice.action_invoice_open()
 
         return contract
 
@@ -178,12 +177,13 @@ class Contract(models.Model):
     def _finalize_and_create_invoices(self, invoices_values):
         invoices = super(Contract, self)._finalize_and_create_invoices(invoices_values)
         for invoice in invoices:
-            contract = invoice.contract_id
-            build = contract.build_id
-
-            contract.invalidate_cache()
-            if build and build.state == "done":
-                invoice.action_post()
+            builds = invoice.invoice_line_ids \
+                            .mapped("contract_line_id") \
+                            .mapped("contract_id") \
+                            .mapped("build_id") \
+                            .filtered(lambda x: x.state == "done")
+            if builds:
+                invoice.action_invoice_open()
 
         return invoices
 
@@ -197,7 +197,7 @@ class ContractLine(models.Model):
         move_line_id = vals.pop("move_line_id", None)
         res = super(ContractLine, self).create(vals)
         if move_line_id:
-            self.env["account.move.line"].sudo().browse(move_line_id).write({
+            self.env["account.invoice.line"].sudo().browse(move_line_id).write({
                 "contract_line_id": res.id,
             })
             res._recompute_is_paid()

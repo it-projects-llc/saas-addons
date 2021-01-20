@@ -1,6 +1,5 @@
 from odoo.addons.saas.tests.common_saas_test import Common
 
-from odoo import SUPERUSER_ID
 from odoo.tests.common import tagged, SavepointCase
 from datetime import date, timedelta
 from unittest.mock import patch
@@ -16,7 +15,7 @@ class TestSaasContract(SavepointCase, Common):
     def setUp(self):
         super(TestSaasContract, self).setUp()
         self.user = user = self.env.ref("base.user_demo")
-        self.build = self.env["saas.db"].with_user(user).sudo().create({
+        self.build = self.env["saas.db"].sudo(user).create({
             "name": "test_build_1",
             "admin_user": self.user.id,
             "operator_id": self.env.ref("saas.local_operator").id,
@@ -56,7 +55,7 @@ class TestSaasContract(SavepointCase, Common):
 
         with patch("odoo.fields.Date.context_today", lambda *args, **kw: recurring_next_date + timedelta(days=1)):
             self.assertFalse(contract._get_related_invoices())
-            self.env["contract.contract"].with_user(SUPERUSER_ID).cron_recurring_create_invoice()
+            self.env["contract.contract"].sudo().cron_recurring_create_invoice()
             invoice = contract._get_related_invoices()
             invoice.ensure_one()
             self.assertEqual(invoice.state, "posted")

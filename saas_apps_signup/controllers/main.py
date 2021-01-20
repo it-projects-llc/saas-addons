@@ -6,7 +6,6 @@ import logging
 from slugify import slugify
 import werkzeug
 from werkzeug.urls import Href, url_encode
-from odoo import SUPERUSER_ID
 from odoo.addons.saas_portal.controllers.main import Main as BaseCustomerPortal
 
 _logger = logging.getLogger(__name__)
@@ -98,7 +97,7 @@ class Main(Controller):
                 "redirect": request.httprequest.full_path
             }))
 
-        request.env["contract.contract"].with_user(SUPERUSER_ID)._create_saas_contract_for_trial(
+        request.env["contract.contract"].sudo()._create_saas_contract_for_trial(
             build, max_users_limit, period,
             installing_modules=(installing_modules or "").split(","),
             saas_template_id=saas_template_id
@@ -117,10 +116,10 @@ class CustomerPortal(BaseCustomerPortal):
 
         contract = build_sudo.contract_id
 
-        invoices = contract._get_related_invoices().filtered(lambda invoice: (invoice.state, invoice.invoice_payment_state) == ("posted", "not_paid"))
+        invoices = contract._get_related_invoices().filtered(lambda invoice: (invoice.move_id.state, invoice.state) == ("posted", "not_paid"))
         if not invoices:
             invoice = contract.recurring_create_invoice()
-            invoice.action_post()
+            invoice.action_invoice_open()
         else:
             invoice = invoices[0]
         return request.redirect(invoice.get_portal_url())
