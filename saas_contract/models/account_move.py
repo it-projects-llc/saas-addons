@@ -4,10 +4,10 @@
 from odoo import models
 
 
-class AccountMove(models.Model):
-    _inherit = "account.move"
+class AccountInvoice(models.Model):
+    _inherit = "account.invoice"
 
     def _compute_amount(self):
-        res = super(AccountMove, self)._compute_amount()
-        self.line_ids.mapped("contract_line_id")._recompute_is_paid()
+        res = super(AccountInvoice, self)._compute_amount()
+        self.invoice_line_ids.mapped("contract_line_id")._recompute_is_paid()
         return res

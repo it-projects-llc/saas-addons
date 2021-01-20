@@ -5,14 +5,14 @@
     "name": """SaaS: Contracts""",
     "summary": """This module manages contracts with SaaS clients""",
     "category": "Sales",
-    # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=13.0",
+    # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": [],
-    "version": "13.0.1.0.0",
+    "version": "12.0.1.0.0",
     "application": False,
 
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "apps@it-projects.info",
-    "website": "https://apps.odoo.com/apps/modules/13.0/saas_contract/",
+    "website": "https://apps.odoo.com/apps/modules/12.0/saas_contract/",
     "license": "Other OSI approved licence",  # MIT
     # "price": 9.00,
     # "currency": "EUR",

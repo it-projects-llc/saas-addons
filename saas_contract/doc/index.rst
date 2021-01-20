@@ -33,7 +33,7 @@ Assuming, that you already have SaaS template ready to use.
 * Click ``[Creat invoices]``
 * Smart button will show ``1 invoices``. Click on it
 * Click on created invoice
-* Click ``[Post]`` if it is not posted
+* Click ``[Validate]`` if it is not validated
 * This invoice will be marked as paid, due to zero price
 * Return back to contract
 * Click ``[Update build]``

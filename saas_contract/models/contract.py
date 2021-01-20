@@ -24,8 +24,6 @@ class Contract(models.Model):
         build = None
 
         if build_id:
-            if not vals.get("line_recurrence"):
-                raise ValidationError("Cannot create SaaS contract with disabled line-level recurrence")
             build = self.env["saas.db"].sudo().browse(build_id)
             if build.contract_id:
                 raise ValidationError("Chosen build already has SaaS contract")
@@ -39,8 +37,6 @@ class Contract(models.Model):
 
     def write(self, vals):
         res = super(Contract, self).write(vals)
-        if not vals.get("line_recurrence", True) and self.mapped("build_id"):
-            raise ValidationError("Cannot unset line_recurrenct from SaaS contract")
         self.mapped("contract_line_ids")._recompute_is_paid()
         return res
 
@@ -86,9 +82,9 @@ class ContractLine(models.Model):
             if line.price_unit == 0:
                 line.is_paid = True
             else:
-                line.is_paid = self.env["account.move.line"].sudo().search([
+                line.is_paid = self.env["account.invoice.line"].sudo().search([
                     ("contract_line_id", "=", line.id),
-                ], limit=1).mapped("move_id").invoice_payment_state == "paid"
+                ], limit=1).mapped("invoice_id").state == "paid"
 
     is_paid = fields.Boolean("Is line payed?", compute=_compute_is_paid, store=True)
     build_id = fields.Many2one("saas.db", related="contract_id.build_id")
@@ -101,7 +97,7 @@ class ContractLine(models.Model):
     def _recompute_is_paid(self):
         if not self:
             return  # nothing to recompute
-        self.env.add_to_compute(self._fields['is_paid'], self)
+        self.env.add_todo(self._fields['is_paid'], self)
         self.recompute()
 
     @api.model
