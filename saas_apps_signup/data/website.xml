@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website.default_website" model="website">
+        <field name="auth_signup_uninvited">b2c</field>
+    </record>
+</odoo>

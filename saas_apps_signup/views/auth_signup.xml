@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <template inherit_id="auth_signup.fields" id="additional_fields" name="Auth Signup additional form fields">
+
+        <xpath expr="//div[hasclass('form-group', 'field-name')]" position="after">
+            <t t-if="not only_passwords">
+                <input type="hidden" name="operator_id" t-att-value="operator_id" />
+
+                <div class="loader hid transition">
+                    <img src="/saas_apps/static/src/img/loader.gif" draggable="false">
+                        <p class="status">Creating database...</p>
+                    </img>
+                </div>
+
+                <div class="form-group field-company_name">
+                    <label for="company_name">Company name</label>
+                    <input type="text" name="company_name" id="company_name" class="form-control form-control-sm"
+                           t-att-value="company_name"
+                           required="required"/>
+                </div>
+
+                <div class="form-group field-database_name">
+                    <label for="database_name">Database name</label>
+                    <input type="text" name="database_name" id="database_name" class="form-control form-control-sm"
+                           t-att-value="database_name"
+                           required="required"/>
+                    <small id="build-domain-helper">
+                        <span class="text-danger build-domain-helper_status build-domain-helper_status-false" style="display: none">Domain is not available</span>
+                        <span class="text-success build-domain-helper_status build-domain-helper_status-true" style="display: none">
+                            Your domain
+                            <span class="domain"></span>
+                        </span>
+                        <span class="build-domain-helper_status build-domain-helper_status-loading" style="display: none">Detecting is domain available</span>
+                    </small>
+                </div>
+
+                <div class="form-group field-phone">
+                    <label for="phone">Phone</label>
+                    <input type="text" name="phone" id="phone" class="form-control form-control-sm"
+                           t-att-value="phone"
+                           required="required"/>
+                </div>
+
+                <div class="form-group field-database_lang">
+                    <label for="database_lang">Language</label>
+                    <select id="database_lang" name="database_lang" class="form-control" autocomplete="off">
+                        <option value=""></option>
+                        <t t-foreach="langs" t-as="item">
+                            <option t-att-value="item[0]" t-esc="item[1]" t-att-selected="'selected' if database_lang == item[0] else None"/>
+                        </t>
+                    </select>
+                </div>
+
+                <div class="form-group field-country_code">
+                    <label for="country_code">Country</label>
+                    <select id="country_code" name="country_code" class="form-control" autocomplete="off">
+                        <option value=""></option>
+                        <t t-foreach="countries" t-as="item">
+                            <option t-att-value="item[0]" t-esc="item[1]" t-att-selected="'selected' if country_code == item[0] else None"/>
+                        </t>
+                    </select>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>
