@@ -86,7 +86,7 @@ class ContractLine(models.Model):
                     ("contract_line_id", "=", line.id),
                 ], limit=1).mapped("invoice_id").state == "paid"
 
-    is_paid = fields.Boolean("Is line payed?", compute=_compute_is_paid, store=True)
+    is_paid = fields.Boolean("Is line payed?", compute=_compute_is_paid, store=False)
     build_id = fields.Many2one("saas.db", related="contract_id.build_id")
 
     def write(self, vals):
@@ -95,6 +95,8 @@ class ContractLine(models.Model):
         return res
 
     def _recompute_is_paid(self):
+        # pylint: disable=unreachable
+        return
         if not self:
             return  # nothing to recompute
         self.env.add_todo(self._fields['is_paid'], self)
