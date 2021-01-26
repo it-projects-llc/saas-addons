@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import api, models
 from datetime import date, timedelta
 import logging
 
@@ -101,3 +101,11 @@ class AccountInvoice(models.Model):
                 "contract_line_ids": list(map(lambda line: (0, 0, line), new_contract_lines)),
                 "build_id": order.build_id.id,
             })
+
+    @api.multi
+    def write(self, vals):
+        unpaid_invoices = self.filtered(lambda x: x.state != "paid")
+        res = super(AccountInvoice, self).write(vals)
+        just_paid_invoices = unpaid_invoices.filtered(lambda x: x.state == "paid")
+        just_paid_invoices._create_or_update_contract()
+        return res

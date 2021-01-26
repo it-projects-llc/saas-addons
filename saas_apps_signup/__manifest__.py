@@ -16,7 +16,6 @@
     "depends": [
         "account_payment",
         "auth_signup_verify_email",
-        "base_automation",
         "saas_apps",
         "saas_contract",
         "saas_database_limit",
@@ -25,7 +24,6 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "data/auth_signup_data.xml",
-        "data/base_automation.xml",
         "data/website.xml",
         "views/assets.xml",
         "views/auth_signup.xml",
