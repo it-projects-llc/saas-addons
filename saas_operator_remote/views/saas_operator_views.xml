@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="saas_operator_form_view" model="ir.ui.view">
+        <field name="name">saas.operator.form</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='global_url']/.." position="after">
+                <group
+                    string="Remote instance settings"
+                    attrs="{'invisible': [('type', '!=', 'remote')]}"
+                >
+                    <field
+                        name="remote_instance_url"
+                        attrs="{'required': [('type', '=', 'remote')]}"
+                    />
+                    <field
+                        name="remote_master_pwd"
+                        attrs="{'required': [('type', '=', 'remote')]}"
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

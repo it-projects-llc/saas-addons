@@ -1,0 +1,47 @@
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
+
+=======================
+ SaaS Operator: Remote
+=======================
+
+This module allows to deploy builds on remote Odoo instance
+
+Credits
+=======
+
+Contributors
+------------
+* `Eugene Molotov <https://it-projects.info/team/em230418>`__:
+
+Sponsors
+--------
+* `IT-Projects LLC <https://it-projects.info>`__
+
+Maintainers
+-----------
+* `IT-Projects LLC <https://it-projects.info>`__
+
+      To get a guaranteed support
+      you are kindly requested to purchase the module
+      at `odoo apps store <https://apps.odoo.com/apps/modules/12.0/saas_operator_remote/>`__.
+
+      Thank you for understanding!
+
+      `IT-Projects Team <https://www.it-projects.info/team>`__
+
+Further information
+===================
+
+Demo: http://runbot.it-projects.info/demo/saas-addons/12.0
+
+HTML Description: https://apps.odoo.com/apps/modules/12.0/saas_operator_remote/
+
+Usage instructions: `<doc/index.rst>`_
+
+Changelog: `<doc/changelog.rst>`_
+
+Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/12.0/saas_operator_remote.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/12.0/saas_operator_remote.atom>`_
+
+Tested on Odoo 12.0 d201fdd75946fa75bcce3dc0be7203649e7972db

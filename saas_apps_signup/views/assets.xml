@@ -1,0 +1,12 @@
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+
+    <template id="saas_apps" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/saas_apps_signup/static/src/js/saas_apps.js"></script>
+            <script type="text/javascript" src="/saas_apps_signup/static/src/js/signup.js"></script>
+        </xpath>
+    </template>
+
+</odoo>
