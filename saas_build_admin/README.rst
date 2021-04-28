@@ -25,7 +25,7 @@ Maintainers
 
       To get a guaranteed support
       you are kindly requested to purchase the module
-      at `odoo apps store <https://apps.odoo.com/apps/modules/13.0/saas_build_admin/>`__.
+      at `odoo apps store <https://apps.odoo.com/apps/modules/14.0/saas_build_admin/>`__.
 
       Thank you for understanding!
 
@@ -34,14 +34,14 @@ Maintainers
 Further information
 ===================
 
-Demo: http://runbot.it-projects.info/demo/saas-addons/13.0
+Demo: http://runbot.it-projects.info/demo/saas-addons/14.0
 
-HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_build_admin/
+HTML Description: https://apps.odoo.com/apps/modules/14.0/saas_build_admin/
 
 Usage instructions: `<doc/index.rst>`_
 
 Changelog: `<doc/changelog.rst>`_
 
-Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_build_admin.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_build_admin.atom>`_
+Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_build_admin.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_build_admin.atom>`_
 
-Tested on Odoo 13.0 54340487adaed962750c9719fb50fc7e000da476
+Tested on Odoo 14.0 54340487adaed962750c9719fb50fc7e000da476
