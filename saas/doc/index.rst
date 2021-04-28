@@ -10,7 +10,7 @@ Installation
   3600), because with default values (60 and 120 seconds) it may be not enough
   to install modules in template database
 * Set ``--workers`` more than 1 (you cannot use *threaded* mode, i.e. ``--workers`` equal to zero)
-* Follow instruction of `Job Queue <https://github.com/OCA/queue/tree/13.0/queue_job>`__ module.
+* Follow instruction of `Job Queue <https://github.com/OCA/queue/tree/14.0/queue_job>`__ module.
 * `Install <https://odoo-development.readthedocs.io/en/latest/odoo/usage/install-module.html>`__ this module in a usual way
 * Restart the odoo as required by the Job Queue module
 

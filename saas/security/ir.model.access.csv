@@ -11,3 +11,5 @@ manager_access_saas_log,manager_access_saas_log,model_saas_log,saas.group_manage
 manager_access_saas_operator,manager_access_saas_operator,model_saas_operator,saas.group_manager,1,1,1,0
 manager_access_saas_template,manager_access_saas_template,model_saas_template,saas.group_manager,1,1,1,1
 manager_access_saas_module,manager_access_saas_module,model_saas_module,saas.group_manager,1,1,1,1
+access_saas_template_create_build,access_saas_template_create_build,model_saas_template_create_build,saas.group_user,1,1,1,1
+access_build_post_init_line,access_build_post_init_line,model_build_post_init_line,saas.group_user,1,1,1,1

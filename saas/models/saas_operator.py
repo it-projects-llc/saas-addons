@@ -9,7 +9,6 @@ import string
 from odoo import models, fields, api, tools, SUPERUSER_ID, sql_db, registry
 from odoo.service import db
 from odoo.service.model import execute
-from odoo.addons.queue_job.job import job
 from odoo.http import _request_stack
 
 
@@ -100,7 +99,6 @@ class SAASOperator(models.Model):
             # return request back
             _request_stack.pop()
 
-    @job
     def install_modules(self, template_id, template_operator_id):
         self.ensure_one()
         modules = [module.name for module in template_id.template_module_ids]
@@ -125,7 +123,6 @@ class SAASOperator(models.Model):
             })
             action.run()
 
-    @job
     def post_init(self, template_id, template_operator_id):
         self.ensure_one()
         self._post_init(template_operator_id.operator_db_name, template_id.template_post_init)
@@ -166,7 +163,6 @@ class SAASOperator(models.Model):
         kwargs = kwargs or {}
         return self._build_execute_kw(build.name, model, method, args, kwargs)
 
-    @job
     def build_post_init(self, build, post_init_action, key_value_dict):
         key_value_dict.update(self._get_mandatory_args(build))
         code = self._get_mandatory_code() + post_init_action

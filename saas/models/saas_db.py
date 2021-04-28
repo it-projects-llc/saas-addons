@@ -3,7 +3,6 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import models, fields
-from odoo.addons.queue_job.job import job
 
 
 class SAASDB(models.Model):
@@ -25,7 +24,6 @@ class SAASDB(models.Model):
         self.drop_db()
         return super(SAASDB, self).unlink()
 
-    @job
     def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()
         db_name = self.name
@@ -35,7 +33,6 @@ class SAASDB(models.Model):
         if callback_obj and callback_method:
             getattr(callback_obj, callback_method)()
 
-    @job
     def drop_db(self):
         for r in self:
             r.operator_id._drop_db(r.name)
