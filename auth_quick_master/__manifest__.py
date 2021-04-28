@@ -7,7 +7,7 @@
     "category": "Extra Tools",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": ['images/quick_auth_master.jpg'],
-    "version": "13.0.1.1.0",
+    "version": "14.0.1.1.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",

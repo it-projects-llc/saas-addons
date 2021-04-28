@@ -47,14 +47,14 @@ Maintainers
 Further information
 ===================
 
-Demo: http://runbot.it-projects.info/demo/saas-addons/13.0
+Demo: http://runbot.it-projects.info/demo/saas-addons/14.0
 
-HTML Description: https://apps.odoo.com/apps/modules/13.0/auth_quick_master/
+HTML Description: https://apps.odoo.com/apps/modules/14.0/auth_quick_master/
 
 Usage instructions: `<doc/index.rst>`_
 
 Changelog: `<doc/changelog.rst>`_
 
-Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/auth_quick_master.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/auth_quick_master.atom>`_
+Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/auth_quick_master.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/auth_quick_master.atom>`_
 
-Tested on Odoo 13.0 09eb205ed1e4348dd4762263cafa9819e17dba7e
+Tested on Odoo 14.0 8ca3ea063050f2ab2d19cce8a68116489872a734
