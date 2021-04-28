@@ -5,7 +5,7 @@
 Installation
 ============
 
-* Follow the insallation instruction of `SaaS Base <https://github.com/it-projects-llc/saas-addons/blob/13.0/saas/doc/index.rst>`__ module
+* Follow the insallation instruction of `SaaS Base <https://github.com/it-projects-llc/saas-addons/blob/14.0/saas/doc/index.rst>`__ module
 * `Install <https://odoo-development.readthedocs.io/en/latest/odoo/usage/install-module.html>`__ this module in a usual way
 
 Configuration

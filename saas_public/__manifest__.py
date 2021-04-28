@@ -5,7 +5,7 @@
     "summary": """Module for creating public builds""",
     "category": "SaaS",
     "images": [],
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "application": False,
 
     "author": "IT-Projects LLC, Denis Mudarisov",
