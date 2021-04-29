@@ -30,7 +30,7 @@ def check_master_pwd(f):
 class OperatorController(http.Controller):
     @route("/saas_operator/create_db", type="json", auth="none")
     @check_master_pwd
-    def create_db(self, template_db, db_name, demo, lang="en_US"):
+    def create_db(self, template_db, db_name, demo, lang="en_US", **kw):
         # to avoid installing extra modules we need this condition
         if tools.config["init"]:
             tools.config["init"] = {}
@@ -55,12 +55,12 @@ class OperatorController(http.Controller):
 
     @route("/saas_operator/drop_db", type="json", auth="none")
     @check_master_pwd
-    def drop_db(self, db_name):
+    def drop_db(self, db_name, **kw):
         db.exp_drop(db_name)
 
     @route("/saas_operator/install_modules", type="json", auth="none")
     @check_master_pwd
-    def install_modules(self, db_name, modules):
+    def install_modules(self, db_name, modules, **kw):
         db = sql_db.db_connect(db_name)
         with api.Environment.manage(), db.cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
@@ -76,7 +76,7 @@ class OperatorController(http.Controller):
 
     @route("/saas_operator/post_init", type="json", auth="none")
     @check_master_pwd
-    def post_init(self, db_name, template_post_init):
+    def post_init(self, db_name, template_post_init, **kw):
         db = sql_db.db_connect(db_name)
         registry(db_name).check_signaling()
         with api.Environment.manage(), db.cursor() as cr:
@@ -93,5 +93,5 @@ class OperatorController(http.Controller):
 
     @route("/saas_operator/execute_kw", type="json", auth="none")
     @check_master_pwd
-    def execute_kw(self, db_name, model, method, args, kwargs):
+    def execute_kw(self, db_name, model, method, args, kwargs, **kw):
         return execute(db_name, SUPERUSER_ID, model, method, *args, **kwargs)
