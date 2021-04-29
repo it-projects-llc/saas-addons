@@ -88,7 +88,7 @@ class ContractLine(models.Model):
             else:
                 line.is_paid = self.env["account.move.line"].sudo().search([
                     ("contract_line_id", "=", line.id),
-                ], limit=1).mapped("move_id").invoice_payment_state == "paid"
+                ], limit=1).mapped("move_id").payment_state == "paid"
 
     is_paid = fields.Boolean("Is line payed?", compute=_compute_is_paid, store=True)
     build_id = fields.Many2one("saas.db", related="contract_id.build_id")
