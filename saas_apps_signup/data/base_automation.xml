@@ -8,7 +8,7 @@
         <field name="code" eval="'record._create_or_update_contract()'"/>
         <field name="trigger">on_write</field>
         <field name="active" eval="True"/>
-        <field name="filter_domain">[('invoice_payment_state', '=', 'paid')]</field>
-        <field name="filter_pre_domain">[('invoice_payment_state', '!=', 'paid')]</field>
+        <field name="filter_domain">[('payment_state', '=', 'paid')]</field>
+        <field name="filter_pre_domain">[('payment_state', '!=', 'paid')]</field>
         </record>
 </odoo>

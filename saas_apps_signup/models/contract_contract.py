@@ -4,7 +4,6 @@
 from odoo import api, models, SUPERUSER_ID
 import logging
 from ..exceptions import OperatorNotAvailable
-from odoo.addons.queue_job.job import job
 from datetime import date, timedelta
 
 _logger = logging.getLogger(__name__)
@@ -107,7 +106,6 @@ class Contract(models.Model):
 
         return contract
 
-    @job
     def _create_build(self):
         for contract in self:
             partner = self.partner_id
