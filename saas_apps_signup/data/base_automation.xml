@@ -1,0 +1,14 @@
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="invoice_automate_rule_on_write" model="base.automation">
+        <field name="name">Invoice Paid Automation</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code" eval="'record._create_or_update_contract()'"/>
+        <field name="trigger">on_write</field>
+        <field name="active" eval="True"/>
+        <field name="filter_domain">[('invoice_payment_state', '=', 'paid')]</field>
+        <field name="filter_pre_domain">[('invoice_payment_state', '!=', 'paid')]</field>
+        </record>
+</odoo>

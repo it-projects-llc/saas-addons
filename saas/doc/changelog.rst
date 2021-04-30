@@ -1,3 +1,20 @@
+`3.0.0`
+-------
+
+- **Improvement:** mandatory modules can be redefined in dependent modules
+- **New:** added "Refresh" in build view to get data from build database
+- **Fix:** random_ready_operator does not throw exceptions if no operators are ready
+- **Fix:** no extra rigths required to read build's URL
+- **Improvement:** Removed {db_id} variable for generating database name
+- **Improvement:** Added helper methods `execute_kw` and `xmlid_lookup` on `saas.db` model
+- **Fix:** attempt to update global_url on draft builds
+- **Improvement:** Added option to deploy database on draft builds
+- **Fix:** "Connect to the Build" button now works even if admin user on build was renamed
+- **Improvement:** Added "Operators" menu to show list of operators
+- **Improvement:** saas.operator.name field is now mandatory
+- **Fix:** Do not run tests when installing modules in builds
+- **Improvement:** Added "Install missing mandatory modules" button in build and template operator views on developer mode
+
 `2.4.3`
 -------
 

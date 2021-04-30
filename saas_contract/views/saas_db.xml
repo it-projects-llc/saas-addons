@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="saas_db_form_view" model="ir.ui.view">
+        <field name="name">saas.db.contract</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='operator_id']" position="after">
+                <field name="contract_id" invisible="1" />
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_create_contract"
+                        type="object"
+                        string="Create SaaS contract"
+                        attrs="{'invisible': [('contract_id','!=',False)]}"
+                        />
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_show_contract"
+                        type="object" icon="fa-file"
+                        string="Show contract"
+                        attrs="{'invisible': [('contract_id','=',False)]}"
+                        class="oe_stat_button"
+                        />
+            </xpath>
+        </field>
+    </record>
+</odoo>

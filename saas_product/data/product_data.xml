@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License MIT (https://opensource.org/licenses/MIT). -->
+<odoo>
+    <record id="product_attribute_subscription" model="product.attribute">
+        <field name="name">Subscription (SaaS)</field>
+        <field name="sequence">30</field>
+        <field name="display_type">select</field>
+    </record>
+
+    <record id="product_attribute_value_subscription_annually" model="product.attribute.value">
+        <field name="name">Annually</field>
+        <field name="attribute_id" ref="product_attribute_subscription"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="product_attribute_value_subscription_monthly" model="product.attribute.value">
+        <field name="name">Monthly</field>
+        <field name="attribute_id" ref="product_attribute_subscription"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="product_attribute_value_subscription_trial" model="product.attribute.value">
+        <field name="name">Trial</field>
+        <field name="attribute_id" ref="product_attribute_subscription"/>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="product_users" model="product.template">
+        <field name="name">Users</field>
+        <field name="sale_ok" eval="True" />
+        <field name="purchase_ok" eval="False" />
+        <field name="is_saas_product" eval="True" />
+        <field name="type">service</field>
+        <field name="list_price">0</field>
+    </record>
+
+    <record id="product_users_attribute_subscription_line" model="product.template.attribute.line">
+        <field name="product_tmpl_id" ref="product_users" />
+        <field name="attribute_id" ref="product_attribute_subscription" />
+        <field name="value_ids" eval="[(6, 0, [
+                                      ref('saas_product.product_attribute_value_subscription_annually'),
+                                      ref('product_attribute_value_subscription_monthly'),
+                                      ref('product_attribute_value_subscription_trial'),
+                                      ])]" />
+    </record>
+
+    <function model="ir.model.data" name="_update_xmlids">
+        <value model="base" eval="[{
+            'xml_id': 'saas_product.product_users_attribute_subscription_value_annually',
+            'record': obj().env.ref('saas_product.product_users_attribute_subscription_line').product_template_value_ids[0],
+            'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_attribute_subscription_value_monthly',
+            'record': obj().env.ref('saas_product.product_users_attribute_subscription_line').product_template_value_ids[1],
+            'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_attribute_subscription_value_trial',
+            'record': obj().env.ref('saas_product.product_users_attribute_subscription_line').product_template_value_ids[2],
+            'noupdate': True,
+            }]"/>
+    </function>
+
+    <record id="product_users_attribute_subscription_value_annually" model="product.template.attribute.value">
+        <field name="price_extra">120</field>
+    </record>
+
+    <record id="product_users_attribute_subscription_value_monthly" model="product.template.attribute.value">
+        <field name="price_extra">12.5</field>
+    </record>
+
+    <record id="product_users_attribute_subscription_value_trial" model="product.template.attribute.value">
+        <field name="price_extra">0</field>
+    </record>
+
+    <function model="ir.model.data" name="_update_xmlids">
+        <value model="base" eval="[{
+            'xml_id': 'saas_product.product_users_monthly',
+            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_monthly')),
+            'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_annually',
+            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_annually')),
+            'noupdate': True,
+        }, {
+            'xml_id': 'saas_product.product_users_trial',
+            'record': obj().env.ref('saas_product.product_users')._get_variant_for_combination(obj().env.ref('saas_product.product_users_attribute_subscription_value_trial')),
+            'noupdate': True,
+        },]"/>
+    </function>
+
+</odoo>

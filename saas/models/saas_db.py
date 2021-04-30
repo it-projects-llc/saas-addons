@@ -1,5 +1,6 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
+# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import models, fields
 from odoo.addons.queue_job.job import job
@@ -44,7 +45,7 @@ class SAASDB(models.Model):
     def get_url(self):
         # TODO: need possibility to use custom domain
         self.ensure_one()
-        return self.operator_id.get_db_url(self)
+        return self.sudo().operator_id.get_db_url(self)
 
     def action_get_build_access(self):
         auth_url = '/saas/auth-to-build/' + str(self.id)
@@ -53,3 +54,36 @@ class SAASDB(models.Model):
             'target': 'new',
             'url': auth_url,
         }
+
+    def write(self, vals):
+        res = super(SAASDB, self).write(vals)
+        if not self.env.context.get("writing_from_refresh_data"):  # Do not run "refresh_data", if already running it
+            self.refresh_data()
+        return res
+
+    def refresh_data(self, should_read_from_build=True, should_write_to_build=True):
+        for record in self.filtered(lambda record: (record.type, record.state) == ("build", "done")).with_context(writing_from_refresh_data=True):
+            if should_read_from_build:
+                vals = record.read_values_from_build()
+                if vals:
+                    record.write(vals)
+
+            if should_write_to_build:
+                record.write_values_to_build()
+
+    def write_values_to_build(self):
+        pass
+
+    def read_values_from_build(self):
+        return {}
+
+    def execute_kw(self, model, method, *args, **kwargs):
+        return self.operator_id.build_execute_kw(self, model, method, args, kwargs)
+
+    def xmlid_lookup(self, xmlid):
+        return self.execute_kw("ir.model.data", "xmlid_lookup", xmlid)
+
+    def action_install_missing_mandatory_modules(self):
+        for build in self:
+            operator = build.operator_id
+            operator._install_modules(build.name, [('name', 'in', operator.get_mandatory_modules())])

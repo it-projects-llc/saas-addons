@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License MIT (https://opensource.org/licenses/MIT). -->
+<odoo>
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.common.form.is_saas_product</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="inside">
+                <div>
+                    <field name="is_saas_product"/>
+                    <label for="is_saas_product"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

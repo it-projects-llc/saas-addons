@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="saas_db_form_view" model="ir.ui.view">
+        <field name="name">saas.db.build_admin</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='operator_id']" position="after">
+                <field name="admin_user"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

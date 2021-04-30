@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+    License AGPL-3.0 (https://www.gnu.org/licenses/agpl-3.0.html).-->
+<odoo>
+    <record id="saas_template_form_view" model="ir.ui.view">
+        <field name="name">saas.template.form.view</field>
+        <field name="model">saas.template</field>
+        <field name="inherit_id" ref="saas.saas_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="inside">
+                <field name="is_package"/>
+                <field attrs="{'invisible':[('is_package','=',False)]}" name="package_image" widget="image" class="oe_left oe_avatar"/>
+                <field attrs="{'invisible':[('is_package','=',False)]}" name="month_price"/>
+                <field attrs="{'invisible':[('is_package','=',False)]}" name="year_price"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

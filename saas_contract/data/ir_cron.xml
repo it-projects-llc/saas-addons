@@ -1,0 +1,16 @@
+<!-- Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo noupdate="1">
+    <record id="saas_update_builds" model="ir.cron">
+        <field name="name">SaaS: update builds by contract</field>
+        <field name="model_id" ref="contract.model_contract_contract"/>
+        <field name="active" eval="True" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+        <field name="state">code</field>
+        <field name="code">model._action_update_all_builds</field>
+    </record>
+</odoo>
