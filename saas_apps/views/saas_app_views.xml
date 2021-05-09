@@ -27,7 +27,6 @@
     <record id="action_saas_app_list" model="ir.actions.act_window">
         <field name="name">Website Apps</field>
         <field name="res_model">saas.app</field>
-        <field name="view_mode">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="saas_app_view_tree"/>
         <field name="target">current</field>
