@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
@@ -26,7 +26,7 @@ class Contract(models.Model):
         if build_id:
             build = self.env["saas.db"].sudo().browse(build_id)
             if build.contract_id:
-                raise ValidationError("Chosen build already has SaaS contract")
+                raise ValidationError(_("Chosen build already has SaaS contract"))
 
         res = super(Contract, self).create(vals)
 
