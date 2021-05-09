@@ -3,7 +3,7 @@
 
 from odoo.http import request, route, Controller
 import logging
-from slugify import slugify
+from slugify import slugify   # pylint: disable=missing-manifest-dependency
 import werkzeug
 from werkzeug.urls import Href, url_encode
 from odoo import SUPERUSER_ID
