@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
@@ -25,10 +25,10 @@ class Contract(models.Model):
 
         if build_id:
             if not vals.get("line_recurrence"):
-                raise ValidationError("Cannot create SaaS contract with disabled line-level recurrence")
+                raise ValidationError(_("Cannot create SaaS contract with disabled line-level recurrence"))
             build = self.env["saas.db"].sudo().browse(build_id)
             if build.contract_id:
-                raise ValidationError("Chosen build already has SaaS contract")
+                raise ValidationError(_("Chosen build already has SaaS contract"))
 
         res = super(Contract, self).create(vals)
 
@@ -40,7 +40,7 @@ class Contract(models.Model):
     def write(self, vals):
         res = super(Contract, self).write(vals)
         if not vals.get("line_recurrence", True) and self.mapped("build_id"):
-            raise ValidationError("Cannot unset line_recurrenct from SaaS contract")
+            raise ValidationError(_("Cannot unset line_recurrenct from SaaS contract"))
         self.mapped("contract_line_ids")._recompute_is_paid()
         return res
 
