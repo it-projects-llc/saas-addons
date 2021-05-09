@@ -5,7 +5,7 @@
 import random
 import string
 import logging
-from slugify import slugify
+from slugify import slugify  # pylint: disable=missing-manifest-dependency
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import test_python_expr
