@@ -21,7 +21,7 @@
         "saas_database_limit",
         "saas_portal",
     ],
-    "external_dependencies": {"python": [], "bin": []},
+    "external_dependencies": {"python": ["slugify"], "bin": []},
     "data": [
         "data/auth_signup_data.xml",
         "data/website.xml",
