@@ -144,7 +144,7 @@ class Demo(models.Model):
         # So, assume that we are on tests if modules is installed
         if not is_test(self):
             # close transaction to make update_repos_state update visible
-            self.env.cr.commit()
+            self.env.cr.commit()  # pylint: disable=invalid-commit
         operators.update_repos()
 
         # repos_updating_next() will be called via cron
