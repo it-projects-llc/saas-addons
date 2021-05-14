@@ -16,6 +16,7 @@ Credits
 Contributors
 ------------
 * `Denis Mudarisov <https://it-projects.info/team/trojikman>`__
+* `Eugene Molotov <https://it-projects.info/team/molotov>`__
 
 Sponsors
 --------
