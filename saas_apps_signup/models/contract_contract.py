@@ -136,7 +136,6 @@ class Contract(models.Model):
             ]).mapped("name")
             # fmt: on
 
-            # TODO: оператор должен определяет по билду!
             template = self.env["saas.template"].search([
                 ("is_package", "=", True),
                 ("product_tmpl_id", "in", contract_product_templates.ids),
@@ -152,6 +151,10 @@ class Contract(models.Model):
             template_operators = template.operator_ids
             if not template_operators:
                 raise OperatorNotAvailable("No template operators in base template. Contact administrator")
+
+            template_operators = template_operators.filtered(lambda x: x.operator_id == build.operator_id)
+            if not template_operators:
+                raise OperatorNotAvailable("In template %s no template operators for build %s are available" % (template, build))
 
             template_operator = template_operators.random_ready_operator()
             if not template_operator:
