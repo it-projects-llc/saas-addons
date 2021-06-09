@@ -150,7 +150,7 @@ class Contract(models.Model):
                 template = template[0]
             template_operators = template.operator_ids
             if not template_operators:
-                raise OperatorNotAvailable("No template operators in base template. Contact administrator")
+                raise OperatorNotAvailable("No template operators in template %s" % (template))
 
             template_operators = template_operators.filtered(lambda x: x.operator_id == build.operator_id)
             if not template_operators:
