@@ -12,12 +12,12 @@ Remote instance configuration
 
 On instance, where builds will be created, you need to edit odoo.conf:
 
-* set ``server_wide_modules`` with value ``web,saas_operator_remote``. For example:
+* set ``server_wide_modules`` with value ``web,saas_cluster_simple``. For example:
 
 ```
 [options]
 (...)
-server_wide_modules = web,saas_operator_remote
+server_wide_modules = web,saas_cluster_simple
 (...)
 ```
 
