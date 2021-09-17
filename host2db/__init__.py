@@ -1,1 +1,1 @@
-from . import override
+from .override import host2db_config
