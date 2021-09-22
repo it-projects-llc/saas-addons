@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="saas_domain_name_view_tree" model="ir.ui.view">
+        <field name="name">saas.domain.name.tree</field>
+        <field name="model">saas.domain.name</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="operator_id" options="{'no_create': 1}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_domain_name_form_view" model="ir.ui.view">
+        <field name="name">saas.domain.name.form</field>
+        <field name="model">saas.domain.name</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="operator_id" options="{'no_create': 1}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

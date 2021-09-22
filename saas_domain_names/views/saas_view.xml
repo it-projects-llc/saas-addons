@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_saas_domain_names" model="ir.actions.act_window">
+        <field name="name">Domains</field>
+        <field name="res_model">saas.domain.name</field>
+        <field name="views">[(False, 'form')]</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Domains"
+              parent="saas.saas_main_menu"
+              id="saas_menu_domains"
+              sequence="50"
+              action="action_saas_domain_names"/>
+</odoo>
