@@ -2,6 +2,7 @@
 -------
 
 - **New:** implemented method to lookup xmlid without raising exceptions
+- **Improvement:** removed redundant "DB Names" field from operator
 
 `3.0.1`
 -------
