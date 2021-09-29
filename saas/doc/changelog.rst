@@ -2,6 +2,7 @@
 -------
 
 - **Improvement:** build name is now readonly
+- **Improvement:** reorganized menu items
 
 `3.0.0`
 -------

@@ -29,19 +29,19 @@
     <menuitem name="Operators"
               parent="saas_main_menu"
               id="saas_operator_menu_item"
-              sequence="2"
+              sequence="50"
               action="saas_operator_action"/>
 
     <menuitem name="Templates"
               parent="saas_main_menu"
               id="saas_main_menu_item"
-              sequence="3"
+              sequence="20"
               action="saas_template_action"/>
 
     <menuitem name="Builds"
               parent="saas_main_menu"
               id="saas_main_menu_item_2"
-              sequence="4"
+              sequence="10"
               action="saas_db_action"/>
 
 </odoo>
