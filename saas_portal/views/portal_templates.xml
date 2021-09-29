@@ -37,7 +37,7 @@
                             </span>
                             <span class="float-right">
                                 <t t-if="build.state == 'done'">
-                                    <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                    <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary" target="_blank">
                                         Link
                                     </a>
                                 </t>
@@ -58,7 +58,7 @@
                         <span t-if="build.state == 'draft'">(Draft)</span>
                         <span class="float-right">
                             <t t-if="build.state == 'done'">
-                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary">
+                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary" target="_blank">
                                     Link
                                 </a>
                             </t>
