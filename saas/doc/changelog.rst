@@ -3,6 +3,7 @@
 
 - **Improvement:** build name is now readonly
 - **Improvement:** reorganized menu items
+- **Improvement:** operators menu is shown only on debug mode
 
 `3.0.0`
 -------
