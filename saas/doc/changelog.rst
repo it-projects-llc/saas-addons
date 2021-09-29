@@ -1,3 +1,8 @@
+`3.0.1`
+-------
+
+- **Improvement:** build name is now readonly
+
 `3.0.0`
 -------
 
