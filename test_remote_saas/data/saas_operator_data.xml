@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="remote_operator" model="saas.operator">
+        <field name="name">Remote</field>
+        <field name="type">remote</field>
+        <field name="remote_instance_url" eval="obj().get_test_remote_instance_url()" model="saas.operator"/>
+        <field name="remote_master_pwd" eval="obj().get_test_remote_master_pwd()" model="saas.operator"/>
+        <!-- TODO: not sure if it is correct -->
+        <field name="global_url" eval="'http://' + obj().env.cr.dbname + '.127.0.0.1.nip.io:8069'" model="saas.operator"/>
+    </record>
+</odoo>
