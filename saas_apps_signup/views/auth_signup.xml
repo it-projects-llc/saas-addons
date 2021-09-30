@@ -6,9 +6,9 @@
 
         <xpath expr="//div[hasclass('form-group', 'field-name')]" position="after">
             <t t-if="not only_passwords">
-                <input type="hidden" name="operator_id" t-att-value="operator_id" />
+                <input type="hidden" name="operator_id" t-att-value="operator_id" t-if="operator_id"/>
 
-                <div class="loader hid transition">
+                <div class="loader hid transition" t-if="operator_id">
                     <img src="/saas_apps/static/src/img/loader.gif" draggable="false">
                         <p class="status">Creating database...</p>
                     </img>
@@ -21,7 +21,7 @@
                            required="required"/>
                 </div>
 
-                <div class="form-group field-database_name">
+                <div class="form-group field-database_name" t-if="operator_id">
                     <label for="database_name">Database name</label>
                     <input type="text" name="database_name" id="database_name" class="form-control form-control-sm"
                            t-att-value="database_name"

@@ -35,9 +35,12 @@ class Main(SignupVerifyEmail):
         if not d.get("operator_id"):
             if d.get("saas_template_id"):
                 template = request.env["saas.template"].browse(int(d.get("saas_template_id")))
-            else:
+            elif d.get("installing_modules"):
                 template = request.env.ref("saas_apps.base_template")
-            d["operator_id"] = template._random_ready_operator_id()
+            else:
+                template = None
+            if template:
+                d["operator_id"] = template._random_ready_operator_id()
 
         d['langs'] = odoo.service.db.exp_list_lang()
         d['countries'] = odoo.service.db.exp_list_countries()
