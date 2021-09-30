@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record id="view_config_settings" model="ir.ui.view">
-        <field name="name">saas settings</field>
-        <field name="model">saas.config.settings</field>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.point_of_sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="95"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
         <field name="arch" type="xml">
-            <form string="SaaS config">
-                <header>
-                    <button string="Apply" type="object" name="execute"/>
-                    <button string="Cancel" type="object" name="cancel"/>
-                </header>
-                <group>
-                    <field name="database_limit_size_default"/>
-                    <field name="database_expiration_warning_delay" />
-                </group>
-            </form>
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="SaaS" string="SaaS" data-key="saas" groups="saas.group_manager">
+                    <h2>Defaults</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="database_limit_size_default_settings">
+                            <div class="o_setting_right_pane">
+                                <label for="database_limit_size_default"/>
+                                <field name="database_limit_size_default"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="database_expiration_warning_delay_settings">
+                            <div class="o_setting_right_pane">
+                                <label for="database_expiration_warning_delay"/>
+                                <field name="database_expiration_warning_delay"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
         </field>
     </record>
 
     <record id="action_config_settings" model="ir.actions.act_window">
-        <field name="name">SaaS Settings</field>
+        <field name="name">Settings</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">saas.config.settings</field>
+        <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
         <field name="target">inline</field>
+        <field name="context">{'module' : 'saas', 'bin_size': False}</field>
     </record>
 
     <menuitem name="Settings"
