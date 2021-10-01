@@ -12,15 +12,16 @@ from odoo.addons.host2db import host2db_config
 _logger = logging.getLogger(__name__)
 
 
-# TODO: add decorator for ensuring master password and returning exception
 def check_master_pwd(f):
     @functools.wraps(f)
     def wrap(*args, **kw):
         master_pwd = kw.pop("master_pwd", None)
         if not master_pwd:
-            raise AccessError(_("master password (master_pwd) not given"))
+            raise AccessError("Master password (master_pwd) not given")
+        if not tools.config["admin_passwd"]:
+            raise AccessError("Master password not set")
         if not tools.config.verify_admin_password(master_pwd):
-            raise AccessError(_("Incorrect master password or master password not set"))
+            raise AccessError("Incorrect master password")
         return f(*args, **kw)
 
     return wrap
