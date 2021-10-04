@@ -22,6 +22,12 @@
                                 <field name="database_expiration_warning_delay"/>
                             </div>
                         </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="number_of_days_for_trial_setings">
+                            <div class="o_setting_right_pane">
+                                <label for="number_of_days_for_trial"/>
+                                <field name="number_of_days_for_trial"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </xpath>
