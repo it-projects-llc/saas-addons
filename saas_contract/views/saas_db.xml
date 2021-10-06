@@ -19,7 +19,7 @@
             </xpath>
             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                 <button name="action_show_contract"
-                        type="object" icon="fa-file"
+                        type="object" icon="fa-dollar"
                         string="Show contract"
                         attrs="{'invisible': [('contract_id','=',False)]}"
                         class="oe_stat_button"
