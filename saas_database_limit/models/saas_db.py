@@ -8,7 +8,7 @@ class SaasDb(models.Model):
 
     _inherit = "saas.db"
 
-    database_limit_size = fields.Float("Limit database size (in megabytes)")
+    database_limit_size = fields.Float("DB size limit (Mb)")
 
     def write_values_to_build(self):
         super(SaasDb, self).write_values_to_build()
