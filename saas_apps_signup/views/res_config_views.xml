@@ -13,18 +13,21 @@
                         <div class="col-12 col-lg-6 o_setting_box" id="database_limit_size_default_settings">
                             <div class="o_setting_right_pane">
                                 <label for="database_limit_size_default"/>
+                                <br/>
                                 <field name="database_limit_size_default"/>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 o_setting_box" id="database_expiration_warning_delay_settings">
                             <div class="o_setting_right_pane">
                                 <label for="database_expiration_warning_delay"/>
+                                <br/>
                                 <field name="database_expiration_warning_delay"/>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 o_setting_box" id="number_of_days_for_trial_setings">
                             <div class="o_setting_right_pane">
                                 <label for="number_of_days_for_trial"/>
+                                <br/>
                                 <field name="number_of_days_for_trial"/>
                             </div>
                         </div>
