@@ -12,4 +12,15 @@
             </xpath>
         </field>
     </record>
+
+    <record id="saas_db_view_tree" model="ir.ui.view">
+        <field name="name">saas.db.tree.expiration</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="expiration_date" />
+            </xpath>
+        </field>
+    </record>
 </odoo>
