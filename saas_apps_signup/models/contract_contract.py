@@ -35,7 +35,7 @@ class Contract(models.Model):
         else:
             raise AssertionError("Incorrect value of subscription_period: {}".format(subscription_period))
 
-        expiration_date = self.env["saas.db"]._fields["expiration_date"].default(self)
+        expiration_date = self.env["saas.db"]._fields["expiration_date"].default(build)
         product_users = self.env.ref("saas_product.product_users_{}".format(subscription_period_suffix))
 
         contract_lines += self.env.ref("saas_product.product_users_trial").mapped(lambda p: {
