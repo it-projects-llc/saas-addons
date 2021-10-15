@@ -37,6 +37,21 @@ class Main(SignupVerifyEmail):
                 template = request.env["saas.template"].browse(int(d.get("saas_template_id")))
             elif d.get("installing_modules"):
                 template = request.env.ref("saas_apps.base_template")
+
+            elif d.get("sale_order_id"):
+                # Buy now is pressed
+                # Detect template from the cart
+
+                order = request.env["sale.order"].sudo().browse(d["sale_order_id"])
+                template = request.env["saas.template"].sudo().search([
+                    ("id", "in", order.mapped("order_line.product_id.product_tmpl_id").ids),
+                ])
+                if not template:
+                    template = request.env.ref("saas_apps.base_template")
+                elif len(template) > 1:
+                    _logger.warning("More that one saas package in order. Using first one")
+                    template = template[0]
+
             else:
                 template = None
             if template:
