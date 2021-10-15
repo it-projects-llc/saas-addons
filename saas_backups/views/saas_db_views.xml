@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="saas_db_form_view" model="ir.ui.view">
+        <field name="name">saas.db.form.backup</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <!-- TODO: перенести в actions -->
+                <button name="action_create_backup"
+                        type="object"
+                        string="Create backup"
+                        attrs="{'invisible': [('state', '!=', 'done')]}"
+                        />
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_backups"
+                    type="object"
+                    icon="fa-list"
+                    class="oe_stat_button"
+                >
+                    <field string="Backups" name="backup_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//sheet/div[@name='button_box']" position="after">
+                <field name="active" invisible="1" />
+                <widget name="web_ribbon" title="Archive" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group name="backup" attrs="{'invisible': [('origin_backup_id', '=', False)]}">
+                    <field name="origin_build_id" />
+                    <field name="origin_backup_id" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
