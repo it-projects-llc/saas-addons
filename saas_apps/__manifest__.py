@@ -7,7 +7,7 @@
     "category": "Marketing",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": ["/images/attention.jpg"],
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "application": False,
     "author": "IT-Projects LLC, Vildan Safin",
     "support": "apps@it-projects.info",

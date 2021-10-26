@@ -11,9 +11,11 @@ class SaasPeriodProductMixin(models.AbstractModel):
     year_product_id = fields.Many2one("product.product", string="Product for annually subscription", compute="_compute_product_ids", store=True)
     currency_id = fields.Many2one("res.currency", related="product_tmpl_id.currency_id")
 
-    # TODO: when following fields are written, you need to update prices on product.product
-    month_price = fields.Float("Month price", default=0.0)
-    year_price = fields.Float("Year price", default=0.0)
+    month_ptv = fields.Many2one("product.template.attribute.value", compute="_compute_product_ids", store=True)
+    year_ptv = fields.Many2one("product.template.attribute.value", compute="_compute_product_ids", store=True)
+
+    month_price = fields.Float("Month price", compute="_compute_prices", inverse="_inverse_prices")
+    year_price = fields.Float("Year price", compute="_compute_prices", inverse="_inverse_prices")
 
     @api.depends("product_tmpl_id")
     def _compute_product_ids(self):
@@ -42,13 +44,20 @@ class SaasPeriodProductMixin(models.AbstractModel):
             ptv_ids = line.product_template_value_ids
 
             month_ptv = ptv_ids.filtered(lambda x: x.product_attribute_value_id == patvs_month)
-            month_ptv.write({
-                "price_extra": app.month_price
-            })
+            app.month_ptv = month_ptv
             app.month_product_id = month_ptv.ptav_product_variant_ids[:1]
 
             year_ptv = ptv_ids.filtered(lambda x: x.product_attribute_value_id == patvs_year)
-            year_ptv.write({
-                "price_extra": app.year_price
-            })
+            app.year_ptv = year_ptv
             app.year_product_id = year_ptv.ptav_product_variant_ids[:1]
+
+    @api.depends("product_tmpl_id.list_price", "month_ptv", "year_ptv")
+    def _compute_prices(self):
+        for app in self:
+            app.month_price = app.product_tmpl_id.list_price + app.month_ptv.price_extra
+            app.year_price = app.product_tmpl_id.list_price + app.year_ptv.price_extra
+
+    def _inverse_prices(self):
+        for app in self:
+            app.month_ptv.price_extra = app.month_price - app.product_tmpl_id.list_price
+            app.year_ptv.price_extra = app.year_price - app.product_tmpl_id.list_price
