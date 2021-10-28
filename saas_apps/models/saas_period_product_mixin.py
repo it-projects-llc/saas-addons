@@ -14,8 +14,8 @@ class SaasPeriodProductMixin(models.AbstractModel):
     month_ptv = fields.Many2one("product.template.attribute.value", compute="_compute_product_ids", store=True)
     year_ptv = fields.Many2one("product.template.attribute.value", compute="_compute_product_ids", store=True)
 
-    month_price = fields.Float("Month price", compute="_compute_prices", inverse="_inverse_prices")
-    year_price = fields.Float("Year price", compute="_compute_prices", inverse="_inverse_prices")
+    month_price = fields.Float("Month price", compute="_compute_prices", inverse="_inverse_month_price")
+    year_price = fields.Float("Year price", compute="_compute_prices", inverse="_inverse_year_price")
 
     @api.depends("product_tmpl_id")
     def _compute_product_ids(self):
@@ -57,7 +57,10 @@ class SaasPeriodProductMixin(models.AbstractModel):
             app.month_price = app.product_tmpl_id.list_price + app.month_ptv.price_extra
             app.year_price = app.product_tmpl_id.list_price + app.year_ptv.price_extra
 
-    def _inverse_prices(self):
+    def _inverse_month_price(self):
         for app in self:
             app.month_ptv.price_extra = app.month_price - app.product_tmpl_id.list_price
+
+    def _inverse_year_price(self):
+        for app in self:
             app.year_ptv.price_extra = app.year_price - app.product_tmpl_id.list_price
