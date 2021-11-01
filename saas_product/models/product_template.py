@@ -16,6 +16,7 @@ class ProductTemplate(models.Model):
         if vals.get("is_saas_product"):
             vals["taxes_id"] = [(5,)]
             vals["supplier_taxes_id"] = [(5,)]
+            vals["invoice_policy"] = "order"
         return super(ProductTemplate, self).create(vals)
 
 
