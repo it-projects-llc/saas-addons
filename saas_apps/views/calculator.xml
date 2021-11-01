@@ -164,6 +164,7 @@
         </t>
     </template>
 
+    <!-- TODO: maybe take out this menu, since /shop redirects to /price -->
     <data>
         <record id="main_pricing_menu" model="website.menu">
             <field name="name">Pricing</field>

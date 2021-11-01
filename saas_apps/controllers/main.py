@@ -97,3 +97,7 @@ class SaasAppsCart(WebsiteSale):
         for product_id in kw.get("product_ids", []):
             sale_order._cart_update(product_id=int(product_id), add_qty=1)
         return {"link": "/shop/cart"}
+
+    @route()
+    def shop(self, **post):
+        return request.redirect("/price")
