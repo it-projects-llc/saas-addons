@@ -50,6 +50,9 @@
                             <li>Click on "Preferences"</li>
                             <li>Click on "Change password"</li>
                         </ul>
+                        <br/>
+                        <a href="/my/home">Manage your acccount</a>
+                        <br/>
                         --<br/>The ${object.company_id.name} Team
                     </div>
                 </td></tr>
