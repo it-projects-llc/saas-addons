@@ -24,6 +24,7 @@
         "queue_job",
         "web_editor",
         "web_notify",
+        "mail",
     ],
     "external_dependencies": {"python": ['python-slugify'], "bin": []},
     "data": [

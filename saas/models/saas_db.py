@@ -7,6 +7,7 @@ from odoo import models, fields
 
 class SAASDB(models.Model):
     _name = 'saas.db'
+    _inherit = 'mail.thread'
     _description = 'Build'
 
     name = fields.Char('Name', help='Technical Database name', readonly=True)
