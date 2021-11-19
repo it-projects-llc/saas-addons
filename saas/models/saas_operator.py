@@ -181,7 +181,13 @@ class SAASOperator(models.Model):
         kwargs = kwargs or {}
         return self._build_execute_kw(build.name, model, method, args, kwargs)
 
-    def build_post_init(self, build, post_init_action, key_value_dict):
+    def build_post_init(self, build, post_init_action=None, key_value_dict=None):
+        if post_init_action is None:
+            post_init_action = ""
+
+        if key_value_dict is None:
+            key_value_dict = {}
+
         key_value_dict.update(self._get_mandatory_args(build))
         code = self._get_mandatory_code() + post_init_action
         action = {
