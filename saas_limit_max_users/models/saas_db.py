@@ -64,13 +64,17 @@ class SaasDb(models.Model):
         )
 
         if not self.max_users_limit:
-            _id, model, res_id = self.xmlid_lookup(
+            model, res_id = self.xmlid_to_res_model_res_id(
                 "access_limit_max_users.max_users_limit"
             )
-            vals.update(
-                max_users_limit=self.execute_kw(
-                    model, "search_read", [("id", "=", res_id)], ["max_records"]
-                )[0]["max_records"]
-            )
+            if model and res_id:
+                vals.update(
+                    max_users_limit=self.execute_kw(
+                        model, "search_read", [("id", "=", res_id)], ["max_records"]
+                    )[0]["max_records"]
+                )
+            else:
+                # TODO: maybe warning or something?
+                pass
 
         return vals
