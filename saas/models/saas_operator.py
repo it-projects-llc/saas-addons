@@ -163,6 +163,26 @@ class SAASOperator(models.Model):
         action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
         self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
+    def _create_backup_internal(self, db_name):
+        if self.type != "local":
+            raise NotImplementedError()
+
+        return cluster.create_backup(db_name)
+
+    def _create_backup(self, db_name):
+        self.ensure_one()
+        return self._create_backup_internal(db_name)
+
+    def _deploy_backup_internal(self, backup_name):
+        if self.type != "local":
+            raise NotImplementedError()
+
+        return cluster.deploy_backup(backup_name)
+
+    def _deploy_backup(self, backup_name):
+        self.ensure_one()
+        return self._deploy_backup_internal(backup_name)
+
     def write(self, vals):
         if 'global_url' in vals:
             self._update_global_url(vals['global_url'])

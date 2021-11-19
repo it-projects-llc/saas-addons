@@ -135,3 +135,23 @@ class SaasOperator(models.Model):
             {"master_pwd": self.remote_master_pwd, "domain": domain},
         )
         return response.get("result")
+
+    def _create_backup_internal(self, db_name):
+        if self.type != "remote":
+            return super(SaasOperator, self)._create_backup_internal(db_name)
+
+        response = jsonrpc(
+            self.remote_instance_url + "/saas_operator/create_backup",
+            {"master_pwd": self.remote_master_pwd, "db_name": db_name},
+        )
+        return response.get("result")
+
+    def _deploy_backup_internal(self, backup_name):
+        if self.type != "remote":
+            return super(SaasOperator, self)._deploy_backup_internal(backup_name)
+
+        response = jsonrpc(
+            self.remote_instance_url + "/saas_operator/deploy_backup",
+            {"master_pwd": self.remote_master_pwd, "backup_name": backup_name},
+        )
+        return response.get("result")
