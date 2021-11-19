@@ -1,3 +1,8 @@
+`3.1.0`
+-------
+
+- **New:** implemented method to lookup xmlid without raising exceptions
+
 `3.0.1`
 -------
 
