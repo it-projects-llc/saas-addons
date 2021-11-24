@@ -1,15 +1,15 @@
-# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+# Copyright 2021 Bykov Victor
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": """SaaS: Control access to Apps""",
+    "name": """SaaS: saas_installed_apps""",
     "summary": """This module disallows anyone to install apps on build and shows installed apps.""",
     "category": "Hidden",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
     "version": "14.0.1.0.0",
     "application": False,
-    "author": "IT-Projects LLC, Eugene Molotov",
+    "author": "IT-Projects LLC, Bykov Victor",
     "support": "apps@it-projects.info",
     "website": "https://apps.odoo.com/apps/modules/14.0/saas_access_apps/",
     "license": "AGPL-3",
@@ -17,7 +17,7 @@
     # "currency": "EUR",
     "depends": ["saas"],
     "external_dependencies": {"python": [], "bin": []},
-    "data": [],
+    "data": ["views/saas_db.xml"],
     "demo": [],
     "qweb": [],
     "post_load": None,
