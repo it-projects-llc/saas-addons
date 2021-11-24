@@ -40,6 +40,24 @@ class SAASOperator(models.Model):
     db_name_template = fields.Char('DB Names', required=True, help='Avaialble variables: {unique_id}')
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
+    build_count = fields.Integer(compute="_compute_build_count")
+
+    def _compute_build_count(self):
+        for record in self:
+            record.build_count = self.env['saas.db'].search_count([("operator_id", "=", self.id)])
+
+    def action_show_builds(self):
+        self.ensure_one()
+        action = {
+            "type": "ir.actions.act_window",
+            "name": "Builds and templates",
+            "res_model": "saas.db",
+            "view_mode": "tree,form",
+            "domain": [["operator_id", "=", self.id]],
+            "views": [[False, "tree"], [False, "form"]],
+        }
+        return action
+
     def get_mandatory_modules(self):
         return ["auth_quick"]
 

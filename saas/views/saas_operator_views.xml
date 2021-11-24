@@ -8,6 +8,19 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_show_builds"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list">
+                            <field
+                                string="Builds"
+                                name="build_count"
+                                widget="statinfo"
+                            />
+                        </button>
+                    </div>
                     <group>
                         <field name="name"/>
                         <field name="type"/>
