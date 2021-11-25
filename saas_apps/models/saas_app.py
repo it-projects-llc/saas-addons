@@ -13,7 +13,7 @@ class SaasApp(models.Model):
     name = fields.Char("Technical Name", required=True, index=True)
     shortdesc = fields.Char("Module Name", required=True)
     dependency_ids = fields.Many2many("saas.app", "saas_apps_dependency_rel", "dep_id", "app_id", string="Dependencies")
-    icon_image = fields.Binary("Icon")
+    icon_image = fields.Binary("Icon", related="product_tmpl_id.image_1920", readonly=False)
 
     allow_to_sell = fields.Boolean(default=True, string="Sellable")
 
