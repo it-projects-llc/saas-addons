@@ -13,13 +13,18 @@
         </field>
     </record>
 
-    <record id="saas_db_view_tree" model="ir.ui.view">
-        <field name="name">saas.db.tree.expiration</field>
+    <record id="saas_db_tree_view" model="ir.ui.view">
+        <field name="name">saas.db.expiration.tree</field>
         <field name="model">saas.db</field>
         <field name="inherit_id" ref="saas.saas_db_view_tree" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='state']" position="after">
                 <field name="expiration_date" />
+                <field name="expiration_state" invisible="1"/>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-warning">expiration_state == "expiring_soon"</attribute>
+                <attribute name="decoration-danger">expiration_state == "expired"</attribute>
             </xpath>
         </field>
     </record>

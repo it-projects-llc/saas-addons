@@ -24,6 +24,31 @@ class SaasDb(models.Model):
         default=lambda self: datetime.now() + timedelta(days=self._get_number_of_days_for_trial()),
     )
     # fmt: on
+    expiration_state = fields.Selection(
+        selection=[
+            ("expired", "Finished"),
+            ("expiring_soon", "Expiring soon"),
+            ("active", "Active"),
+        ],
+        compute="_compute_expiration_state",
+    )
+
+    def _compute_expiration_state(self):
+
+        time_now = fields.datetime.now()
+
+        for build in self:
+
+            if time_now > build.expiration_date:
+                build.expiration_state = "expired"
+
+            elif time_now < build.expiration_date and time_now >= (
+                build.expiration_date - timedelta(days=2)
+            ):
+                build.expiration_state = "expiring_soon"
+
+            else:
+                build.expiration_state = "active"
 
     def write_values_to_build(self):
         super(SaasDb, self).write_values_to_build()
