@@ -12,6 +12,7 @@
         "saas_expiration",
         "saas_limit_max_users",
         "saas_build_admin",
+        "saas_backups",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [

@@ -31,27 +31,17 @@ class CustomerPortal(CustomerPortal):
             sortby = "name"
         order = searchbar_sortings[sortby]["order"]
 
-        build_count = Build.search_count(domain)
-
-        pager = portal_pager(
-            url="/my/builds",
-            url_args={"sortby": sortby},
-            total=build_count,
-            page=page,
-            step=self._items_per_page,
-        )
-
         # content according to pager and archive selected
         builds = Build.search(
-            domain, order=order, limit=self._items_per_page, offset=pager["offset"]
+            domain + [("is_temporary", "=", False)], order=order
         )
 
         values.update(
             {
                 "builds": builds,
+                "temporary_builds": Build.search(domain + [("is_temporary", "=", True)]),
                 "page_name": "build",
                 "default_url": "/my/builds",
-                "pager": pager,
                 "searchbar_sortings": searchbar_sortings,
                 "sortby": sortby,
             }
