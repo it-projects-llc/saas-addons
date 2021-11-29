@@ -5,11 +5,12 @@ from odoo.exceptions import AccessError, MissingError
 
 
 class CustomerPortal(CustomerPortal):
-    def _prepare_portal_layout_values(self):
-        values = super(CustomerPortal, self)._prepare_portal_layout_values()
-        values["build_count"] = request.env["saas.db"].search_count([
-            ("type", "=", "build"),
-        ])
+    def _prepare_home_portal_values(self, counters):
+        values = super()._prepare_home_portal_values(counters)
+        if "build_count" in counters:
+            values["build_count"] = request.env["saas.db"].search_count([
+                ("type", "=", "build"),
+            ])
         return values
 
     @http.route(
@@ -30,14 +31,12 @@ class CustomerPortal(CustomerPortal):
             sortby = "name"
         order = searchbar_sortings[sortby]["order"]
 
-        # archive groups - Default Group By 'create_date'
-        # archive_groups = self._get_archive_groups('project.project', domain)
-        # pager
+        build_count = Build.search_count(domain)
 
         pager = portal_pager(
             url="/my/builds",
             url_args={"sortby": sortby},
-            total=values["build_count"],
+            total=build_count,
             page=page,
             step=self._items_per_page,
         )

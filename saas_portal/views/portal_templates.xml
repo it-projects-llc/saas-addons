@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <template id="portal_my_home" name="Portal My Home: saas.db entries" inherit_id="portal.portal_my_home" priority="40">
+    <template id="portal_my_home" name="Show Builds" customize_show="True" inherit_id="portal.portal_my_home" priority="40">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="build_count" t-call="portal.portal_docs_entry">
+            <t t-call="portal.portal_docs_entry">
                 <t t-set="title">Builds</t>
                 <t t-set="url" t-value="'/my/builds'"/>
-                <t t-set="count" t-value="build_count"/>
+                <t t-set="placeholder_count" t-value="'build_count'"/>
             </t>
         </xpath>
     </template>
