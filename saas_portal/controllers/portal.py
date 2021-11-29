@@ -4,9 +4,9 @@ from odoo.addons.portal.controllers.portal import CustomerPortal, pager as porta
 from odoo.exceptions import AccessError, MissingError
 
 
-class Main(CustomerPortal):
+class CustomerPortal(CustomerPortal):
     def _prepare_portal_layout_values(self):
-        values = super(Main, self)._prepare_portal_layout_values()
+        values = super(CustomerPortal, self)._prepare_portal_layout_values()
         values["build_count"] = request.env["saas.db"].search_count([
             ("type", "=", "build"),
         ])

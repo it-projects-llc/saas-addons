@@ -7,7 +7,7 @@ from slugify import slugify
 import werkzeug
 from werkzeug.urls import Href, url_encode
 from odoo import SUPERUSER_ID
-from odoo.addons.saas_portal.controllers.main import Main as BaseCustomerPortal
+from odoo.addons.saas_portal.controllers.portal import CustomerPortal
 
 _logger = logging.getLogger(__name__)
 
@@ -107,7 +107,7 @@ class Main(Controller):
         return request.redirect("/my/build/{}".format(build.id))
 
 
-class CustomerPortal(BaseCustomerPortal):
+class CustomerPortal(CustomerPortal):
     @route(["/my/build/<int:build_id>/renew_subscription"], type="http", auth="public", website=True)
     def portal_my_build_renew_subscription(self, build_id=None, access_token=None, **kw):
         # build_sudo = self._document_check_access("saas.db", build_id, access_token)  # does not work, 'cos of ir.model.access error
