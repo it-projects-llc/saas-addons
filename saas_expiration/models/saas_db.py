@@ -13,9 +13,9 @@ class SaasDb(models.Model):
     @api.model
     def _get_number_of_days_for_trial(self):
         return int(
-            self.env["ir.config_parameter"].get_param(
-                "saas_expiration.number_of_days_for_trial", 7
-            )
+            self.sudo()
+            .env["ir.config_parameter"]
+            .get_param("saas_expiration.number_of_days_for_trial", 7)
         )
 
     # fmt: off
