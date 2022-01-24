@@ -224,12 +224,16 @@ class SAASTemplateLine(models.Model):
                 self.operator_db_name,
                 self.template_id.template_demo,
             )
+            build.with_delay().action_install_missing_mandatory_modules()
+
             self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values)
         else:
             build.create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
             )
+            build.action_install_missing_mandatory_modules()
+
             self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values)
 
         return build
