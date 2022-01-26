@@ -61,9 +61,6 @@ class SaasApp(models.Model):
 
     @api.model
     def action_make_applist_from_local_instance(self):
-        for x in map(self.browse, self._search([])):
-            x.unlink()
-
         def walk(parent_ir_module_name, parent_app_name=None):
             modules = self.env["ir.module.module.dependency"].sudo().search([("name", "=", parent_ir_module_name)]).mapped("module_id")
             for m in modules:
