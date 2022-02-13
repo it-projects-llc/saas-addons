@@ -4,6 +4,7 @@
 - **New:** implemented method to lookup xmlid without raising exceptions
 - **Improvement:** removed redundant "DB Names" field from operator
 - **Fix:** inability to set auth_quick.build on build's System Parameters
+- **Fix:** action_install_missing_mandatory_modules now can only be applied to ready builds
 
 `3.0.1`
 -------
