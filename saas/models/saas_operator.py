@@ -11,6 +11,8 @@ from odoo.service import db
 from odoo.service.model import execute
 from odoo.http import _request_stack
 
+from odoo.addons.host2db import host2db_config
+
 
 @contextmanager
 def turn_off_tests():
@@ -144,6 +146,29 @@ class SAASOperator(models.Model):
         self.ensure_one()
         self._post_init(template_operator_id.operator_db_name, template_id.template_post_init)
         template_operator_id.state = 'done'
+
+    def _map_domain(self, domain, db_name):
+        if self.type != "local":
+            raise NotImplementedError()
+
+        host2db_config.assign_host_to_db(domain, db_name)
+
+    def map_domain(self, domain, db_name):
+        self.ensure_one()
+        # TODO: add check if domain is valid
+        self._map_domain(domain, db_name)
+
+    def _unmap_domain(self, domain):
+        if self.type != "local":
+            raise NotImplementedError()
+
+        host2db_config.unassign_host(domain)
+
+    def unmap_domain(self, domain):
+        self.ensure_one()
+        if not domain:
+            return
+        self._unmap_domain(domain)
 
     def get_db_url(self, db):
         # TODO: use mako for url templating

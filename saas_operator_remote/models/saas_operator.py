@@ -111,3 +111,27 @@ class SaasOperator(models.Model):
             },
         )
         return response.get("result")
+
+    def _map_domain(self, domain, db_name):
+        if self.type != "remote":
+            return super(SaasOperator, self)._map_domain(domain, db_name)
+
+        response = jsonrpc(
+            self.remote_instance_url + "/saas_operator/map_domain",
+            {
+                "master_pwd": self.remote_master_pwd,
+                "domain": domain,
+                "db_name": db_name,
+            },
+        )
+        return response.get("result")
+
+    def _unmap_domain(self, domain):
+        if self.type != "remote":
+            return super(SaasOperator, self)._unmap_domain(domain)
+
+        response = jsonrpc(
+            self.remote_instance_url + "/saas_operator/unmap_domain",
+            {"master_pwd": self.remote_master_pwd, "domain": domain},
+        )
+        return response.get("result")
