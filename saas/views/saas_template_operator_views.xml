@@ -14,7 +14,7 @@
                 <sheet>
                     <group>
                         <field name="operator_db_name"/>
-                        <field name="operator_id"/>
+                        <field name="operator_id" options="{'no_create': 1}"/>
                     </group>
                 </sheet>
             </form>

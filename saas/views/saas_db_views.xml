@@ -30,7 +30,7 @@
                     </div>
                     <group>
                         <field name="name"/>
-                        <field name="operator_id"/>
+                        <field name="operator_id" options="{'no_create': 1}"/>
                     </group>
                 </sheet>
                 <div class="oe_chatter">

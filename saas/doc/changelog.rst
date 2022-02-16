@@ -5,6 +5,7 @@
 - **Improvement:** removed redundant "DB Names" field from operator
 - **Fix:** inability to set auth_quick.build on build's System Parameters
 - **Fix:** action_install_missing_mandatory_modules now can only be applied to ready builds
+- **Fix:** disallow creating operator via build or template operator forms
 
 `3.0.1`
 -------
