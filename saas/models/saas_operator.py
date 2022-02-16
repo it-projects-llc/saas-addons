@@ -1,29 +1,12 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
-# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+# Copyright 2020-2021 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from collections import defaultdict
-from contextlib import contextmanager
 import string
 
-from odoo import models, fields, api, tools, SUPERUSER_ID, sql_db, registry
-from odoo.service import db
-from odoo.service.model import execute
-from odoo.http import _request_stack
-
-from odoo.addons.host2db import host2db_config
-
-
-@contextmanager
-def turn_off_tests():
-    test_enable = tools.config['test_enable']
-    if test_enable:
-        tools.config['test_enable'] = {}
-
-    yield
-
-    if test_enable:
-        tools.config['test_enable'] = test_enable
+from odoo import models, fields
+import odoo.addons.saas_cluster_simple.main as cluster
 
 
 class SAASOperator(models.Model):
@@ -69,21 +52,7 @@ class SAASOperator(models.Model):
         elif self.type != 'local':
             raise NotImplementedError()
 
-        # to avoid installing extra modules we need this condition
-        if tools.config['init']:
-            tools.config['init'] = {}
-
-        test_enable = tools.config['test_enable']
-        if test_enable:
-            tools.config['test_enable'] = {}
-
-        # we don't need tests in templates and builds
-        with turn_off_tests():
-            if template_db:
-                db._drop_conn(self.env.cr, template_db)
-                db.exp_duplicate_database(template_db, db_name)
-            else:
-                db.exp_create_database(db_name, demo, lang)
+        return cluster.create_db(template_db, db_name, demo, lang)
 
     def _drop_db(self, db_name):
         if not self:
@@ -91,32 +60,13 @@ class SAASOperator(models.Model):
         elif self.type != 'local':
             raise NotImplementedError()
 
-        db.exp_drop(db_name)
+        return cluster.drop_db(db_name)
 
     def _install_modules(self, db_name, modules):
         if self.type != 'local':
             raise NotImplementedError()
 
-        db = sql_db.db_connect(db_name)
-        with api.Environment.manage(), db.cursor() as cr:
-            env = api.Environment(cr, SUPERUSER_ID, {})
-
-            # Set odoo.http.request to None.
-            #
-            # Odoo tries to use its values in translation system, which may eventually
-            # change currentThread().dbname to saas master value.
-            _request_stack.push(None)
-
-            module_ids = env['ir.module.module'].search([('state', '=', 'uninstalled')] + modules)
-            with turn_off_tests():
-                module_ids.button_immediate_install()
-
-            # Some magic to force reloading registry in other workers
-            env.registry.registry_invalidated = True
-            env.registry.signal_changes()
-
-            # return request back
-            _request_stack.pop()
+        return cluster.install_modules(db_name, modules)
 
     def install_modules(self, template_id, template_operator_id):
         self.ensure_one()
@@ -130,17 +80,7 @@ class SAASOperator(models.Model):
         if self.type != 'local':
             raise NotImplementedError()
 
-        db = sql_db.db_connect(db_name)
-        registry(db_name).check_signaling()
-        with api.Environment.manage(), db.cursor() as cr:
-            env = api.Environment(cr, SUPERUSER_ID, {})
-            action = env['ir.actions.server'].create({
-                'name': 'Local Code Eval',
-                'state': 'code',
-                'model_id': 1,
-                'code': template_post_init
-            })
-            action.run()
+        return cluster.post_init(db_name, template_post_init)
 
     def post_init(self, template_id, template_operator_id):
         self.ensure_one()
@@ -151,7 +91,7 @@ class SAASOperator(models.Model):
         if self.type != "local":
             raise NotImplementedError()
 
-        host2db_config.assign_host_to_db(domain, db_name)
+        return cluster.map_domain(domain, db_name)
 
     def map_domain(self, domain, db_name):
         self.ensure_one()
@@ -162,7 +102,7 @@ class SAASOperator(models.Model):
         if self.type != "local":
             raise NotImplementedError()
 
-        host2db_config.unassign_host(domain)
+        return cluster.unmap_domain(domain)
 
     def unmap_domain(self, domain):
         self.ensure_one()
@@ -197,7 +137,7 @@ class SAASOperator(models.Model):
         if self.type != 'local':
             raise NotImplementedError()
 
-        return execute(db_name, SUPERUSER_ID, model, method, *args, **kwargs)
+        return cluster.execute_kw(db_name, model, method, args, kwargs)
 
     def build_execute_kw(self, build, model, method, args=None, kwargs=None):
         self.ensure_one()

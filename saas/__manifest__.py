@@ -21,6 +21,7 @@
 
     "depends": [
         "auth_quick_master",
+        "saas_cluster_simple",
         "queue_job",
         "web_editor",
         "web_notify",
