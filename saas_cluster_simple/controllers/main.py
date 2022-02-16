@@ -7,6 +7,8 @@ from odoo.http import route
 from odoo.service import db
 from odoo.service.model import execute
 
+from odoo.addons.host2db import host2db_config
+
 _logger = logging.getLogger(__name__)
 
 
@@ -92,3 +94,13 @@ class OperatorController(http.Controller):
     @check_master_pwd
     def execute_kw(self, db_name, model, method, args, kwargs, **kw):
         return execute(db_name, SUPERUSER_ID, model, method, *args, **kwargs)
+
+    @route("/saas_operator/map_domain", type="json", auth="none")
+    @check_master_pwd
+    def map_domain(self, domain, db_name):
+        host2db_config.assign_host_to_db(domain, db_name)
+
+    @route("/saas_operator/unmap_domain", type="json", auth="none")
+    @check_master_pwd
+    def unmap_domain(self, domain):
+        host2db_config.unassign_host(domain)
