@@ -18,6 +18,7 @@
     "data": [
         "security/ir.model.access.csv",
         "security/saas_db_security.xml",
+        "views/saas_db_views.xml",
         "views/portal_templates.xml",
     ],
     "demo": [],

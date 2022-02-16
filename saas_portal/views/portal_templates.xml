@@ -66,6 +66,15 @@
                         <small class="text-muted">Build - </small><span t-field="build.name"/>
                         <span t-if="build.state == 'draft'">(Draft)</span>
                         <span class="float-right">
+                            <t t-if="build.is_temporary">
+                                <a class="btn btn-sm" disabled="disabled" t-if="build.is_approved">
+                                    Approved
+                                </a>
+                                <form t-else="" style="display: inline-block" t-att-action="build.get_portal_url(suffix='/approve')" method="POST">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input class="btn btn-sm btn-secondary" type="submit" value="Approve" />
+                                </form>
+                            </t>
                             <t t-if="build.state == 'done'">
                                 <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary" target="_blank">
                                     Link
@@ -104,4 +113,22 @@
         </t>
     </template>
 
+    <template id="approve_build_result" name="Approve build result">
+        <t t-call="portal.portal_layout">
+            <t t-if="error">
+                <div class="alert alert-danger">
+                    <t t-esc="error" />
+                </div>
+                <t t-if="details">
+                    <pre><t t-esc="details" /></pre>
+                </t>
+            </t>
+            <t t-else="">
+                <div class="alert alert-success">
+                    This build is marked as approved successfully. Please wait for some time, until admin sets this build as main.
+                </div>
+                <a class="btn btn-primary" t-att-href="build.get_portal_url()">Go back to build</a>
+            </t>
+        </t>
+    </template>
 </odoo>
