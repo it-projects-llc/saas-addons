@@ -9,8 +9,34 @@ class Contract(models.Model):
 
     _inherit = 'contract.contract'
 
+    @api.depends("build_id.contract_id")
+    def _compute_build(self):
+        builds_with_contract_list = self.sudo().env["saas.db"].search_read([
+            ("contract_id", "in", self.ids)
+        ], ["contract_id", "id"])
+
+        contract2build = {}
+        for t in builds_with_contract_list:
+            contract2build[t["contract_id"][0]] = t["id"]
+
+        for contract in self:
+            contract = contract
+            contract.write({
+                "build_id": contract2build.get(contract.id) or False,
+            })
+
+    def _inverse_build(self):
+        Build = self.sudo().env["saas.db"]
+        for contract in self:
+            builds = Build.search([("contract_id", "=", contract.id)])
+            (builds - contract.build_id).write({"contract_id": False})
+            if contract.build_id:
+                if contract.build_id.contract_id != contract:  # add extra check to prevent excessive write
+                    contract.build_id.write({"contract_id": contract.id})
+
     # TODO: запретить ситуацию, где набор линии в контракте, в котором есть пустое пространство из будущего времени (хотя-бы в плане юзеров)
-    build_id = fields.Many2one("saas.db", readonly=True)
+    # TODO: inverse is temporary hack. build_id must be only as computed field
+    build_id = fields.Many2one("saas.db", readonly=True, compute="_compute_build", inverse="_inverse_build", store=True)
     build_expiration_date_defacto = fields.Datetime("Build expiration date (defacto)", related="build_id.expiration_date")
     build_status = fields.Selection([
         ("trial", "Trial"),
@@ -20,21 +46,9 @@ class Contract(models.Model):
 
     @api.model
     def create(self, vals):
-        build_id = vals.get("build_id") or self.env.context.get("default_build_id")
-        build = None
-
-        if build_id:
-            if not vals.get("line_recurrence"):
-                raise ValidationError("Cannot create SaaS contract with disabled line-level recurrence")
-            build = self.env["saas.db"].sudo().browse(build_id)
-            if build.contract_id:
-                raise ValidationError("Chosen build already has SaaS contract")
-
         res = super(Contract, self).create(vals)
-
-        if build:
-            build.write({"contract_id": res.id})
-
+        if res.build_id and not vals.get("line_recurrence"):
+            raise ValidationError("Cannot create SaaS contract with disabled line-level recurrence")
         return res
 
     def write(self, vals):

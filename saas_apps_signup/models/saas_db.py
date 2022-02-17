@@ -92,3 +92,17 @@ class SaasDb(models.Model):
                 "database_expiration_warning_delay",
                 database_expiration_warning_delay
             )
+
+    def _prepare_predecessor_build_vals(self, successor_build):
+        res = super(SaasDb, self)._prepare_predecessor_build_vals(successor_build)
+        res.update(
+            contract_id=False,
+        )
+        return res
+
+    def _prepare_successor_build_vals(self, predecessor_build):
+        res = super(SaasDb, self)._prepare_successor_build_vals(predecessor_build)
+        res.update(
+            contract_id=predecessor_build.contract_id,
+        )
+        return res
