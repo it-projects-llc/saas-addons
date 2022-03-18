@@ -8,7 +8,17 @@
         <field name="res_model">saas.template</field>
         <field name="views">[(False, 'form')]</field>
         <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_technical_template', '=', False)]</field>
     </record>
+
+    <record id="saas_technical_template_action" model="ir.actions.act_window">
+        <field name="name">Technical templates</field>
+        <field name="res_model">saas.template</field>
+        <field name="views">[(False, 'form')]</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_technical_template', '=', True)]</field>
+    </record>
+
     <record model='ir.actions.act_window' id="saas_db_action" >
         <field name="name">Builds</field>
         <field name="res_model">saas.db</field>
@@ -45,4 +55,21 @@
               sequence="10"
               action="saas_db_action"/>
 
+    <menuitem name="Configuration"
+              parent="saas_main_menu"
+              id="saas_main_menu_config"
+              sequence="999"/>
+
+    <menuitem name="Settings"
+              parent="saas_main_menu_config"
+              id="saas_main_menu_config_settings"
+              sequence="10"
+              action="action_config_settings"/>
+
+    <menuitem name="Technical templates"
+              parent="saas_main_menu_config"
+              id="saas_main_menu_config_tt"
+              sequence="20"
+              groups="base.group_no_one"
+              action="saas_technical_template_action"/>
 </odoo>

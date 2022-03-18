@@ -53,6 +53,7 @@ class SAASTemplate(models.Model):
         default=DEFAULT_BUILD_PYTHON_CODE,
         help='Python code to be executed once build db is created from template')
     operator_ids = fields.One2many('saas.template.operator', 'template_id', string="Template's deployments")
+    is_technical_template = fields.Boolean("Is technical template?")
 
     @api.constrains('template_post_init')
     def _check_python_code(self):

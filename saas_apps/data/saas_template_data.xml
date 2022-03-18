@@ -7,6 +7,7 @@
             <field name="template_demo">False</field>
             <field name="public_access">True</field>
             <field name="build_post_init">env['ir.module.module'].update_list(); env['ir.module.module'].search([('name', 'in', {installing_modules})]).button_immediate_install()</field>
+            <field name="is_technical_template" eval="True" />
         </record>
 
         <record id="saas_base_template_operator" model="saas.template.operator">
