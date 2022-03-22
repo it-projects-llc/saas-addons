@@ -1,6 +1,6 @@
 from odoo.tests import HttpCase
+from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.addons.saas.tests.common_saas_test import Common
-from slugify import slugify
 
 DB_PREFIX = "saas_domain_names_test_"
 DB_TEMPLATE_NAME = DB_PREFIX + "template"

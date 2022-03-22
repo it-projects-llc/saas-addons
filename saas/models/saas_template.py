@@ -5,10 +5,10 @@
 import random
 import string
 import logging
-from slugify import slugify
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import test_python_expr
+from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.exceptions import ValidationError, UserError
 
 _logger = logging.getLogger(__name__)

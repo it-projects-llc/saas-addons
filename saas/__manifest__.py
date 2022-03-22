@@ -26,8 +26,9 @@
         "web_editor",
         "web_notify",
         "mail",
+        "http_routing",
     ],
-    "external_dependencies": {"python": ['python-slugify'], "bin": []},
+    "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/saas_security.xml",
         "security/ir.model.access.csv",

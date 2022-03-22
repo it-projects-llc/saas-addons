@@ -3,10 +3,11 @@
 
 from odoo.http import request, route, Controller
 import logging
-from slugify import slugify
+
 import werkzeug
 from werkzeug.urls import Href, url_encode
 from odoo import SUPERUSER_ID
+from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.addons.saas_portal.controllers.portal import CustomerPortal
 
 _logger = logging.getLogger(__name__)
