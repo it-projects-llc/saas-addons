@@ -3,3 +3,4 @@ web https://github.com/OCA/web.git
 access-addons https://github.com/itpp-labs/access-addons.git
 server-auth https://github.com/OCA/server-auth.git
 contract https://github.com/OCA/contract.git
+server-env https://github.com/OCA/server-env.git
