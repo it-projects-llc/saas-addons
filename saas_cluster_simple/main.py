@@ -85,7 +85,7 @@ def install_modules(db_name, modules):
         _request_stack.push(None)
 
         # We need to have fresh module list before installing new ones
-        env["ir.module.module"].update_list() #
+        env["ir.module.module"].update_list()
 
         module_ids = env["ir.module.module"].search(
             [("state", "=", "uninstalled")] + modules

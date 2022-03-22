@@ -17,7 +17,7 @@
         <field name="name">saas.app.list</field>
         <field name="model">saas.app</field>
         <field name="arch" type="xml">
-            <tree string="Manage Apps">
+            <tree>
                 <field name="shortdesc"/>
                 <field name="allow_to_sell"/>
             </tree>

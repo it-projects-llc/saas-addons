@@ -1,3 +1,4 @@
+# pylint: disable=translation-required
 import functools
 import logging
 

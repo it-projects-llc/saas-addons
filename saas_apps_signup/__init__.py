@@ -1,3 +1,4 @@
+# pylint: disable=absent-doc,js-empty-coverage
 from . import controllers
 from . import models
 from . import tests

@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -10,7 +10,7 @@ class QueueJob(models.Model):
     def action_open_restored_build(self):
         self.ensure_one()
         if not self.restored_build_id:
-            raise UserError("No restored build defined")
+            raise UserError(_("No restored build defined"))
 
         action = self.related_action_open_record()
         action.update(

@@ -55,12 +55,11 @@ class SaasDb(models.Model):
         self.ensure_one()
 
         if not self.origin_build_id:
-            raise UserError("Predecessor build is not set")
+            raise UserError(_("Predecessor build is not set"))
 
         predecessor_vals = self.origin_build_id._prepare_predecessor_build_vals(self)
         successor_build_vals = self._prepare_successor_build_vals(self.origin_build_id)
 
-        import wdb; wdb.set_trace()
         self.origin_build_id.write(predecessor_vals)
         self.write(successor_build_vals)
         return True

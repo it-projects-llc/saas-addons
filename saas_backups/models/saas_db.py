@@ -37,5 +37,5 @@ class SaasDb(models.Model):
             "name": "Backups of %s" % (self.name,),
             "res_model": "saas.db.backup",
             "views": [[False, "tree"], [False, "form"]],
-            "domain": [["origin_build_id", "=", self.id],],
+            "domain": [["origin_build_id", "=", self.id]],
         }

@@ -2,7 +2,6 @@ from odoo import http, _
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.exceptions import AccessError, MissingError
-import traceback
 import logging
 
 _logger = logging.getLogger(__name__)
