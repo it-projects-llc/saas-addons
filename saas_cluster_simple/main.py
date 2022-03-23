@@ -55,11 +55,6 @@ def create_db(template_db, db_name, demo, lang="en_US", **kw):
     if tools.config["init"]:
         tools.config["init"] = {}
 
-    # we don't need tests in templates and builds
-    test_enable = tools.config["test_enable"]
-    if test_enable:
-        tools.config["test_enable"] = {}
-
     with turn_off_tests():
         if template_db:
             with closing(sql_db.db_connect(template_db).cursor()) as cr:
