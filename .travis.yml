@@ -25,6 +25,7 @@ env:
     - OPTIONS="--log-db=openerp_test --load=web,queue_job"
     - PYLINT_ODOO_JSLINTRC="/home/travis/maintainer-quality-tools/travis/cfg/.jslintrc"
     - DISABLE_PYLINT='absent-index-html,manifest-image,manifest-name'
+    - EXCLUDE='test_remote_saas,test_remote_saas_domain_names'
 
   matrix:
     - LINT_CHECK="1"
