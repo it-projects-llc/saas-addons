@@ -44,6 +44,7 @@
         "data/saas_operator_data.xml",
         "data/default_modules.xml",
         "data/db_sequence.xml",
+        "data/queue_job_data.xml",
     ],
     "demo": [
         "demo/saas_template_demo.xml",

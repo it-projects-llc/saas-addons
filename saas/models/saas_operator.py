@@ -5,8 +5,10 @@
 from collections import defaultdict
 import string
 
+import psycopg2
 from odoo import models, fields
 import odoo.addons.saas_cluster_simple.main as cluster
+from odoo.addons.queue_job.exception import RetryableJobError
 
 
 class SAASOperator(models.Model):
@@ -160,8 +162,12 @@ class SAASOperator(models.Model):
             'model_id': 1,
             'code': string.Formatter().vformat(code, (), SafeDict(**key_value_dict))
         }
-        action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
-        self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
+        try:
+            action_ids = self.build_execute_kw(build, 'ir.actions.server', 'create', [action])
+            self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
+        except psycopg2.OperationalError as e:
+            # TODO: this is very stupid hack that can be handled only in local instance operators
+            raise RetryableJobError(str(e))
 
     def _create_backup_internal(self, db_name):
         if self.type != "local":

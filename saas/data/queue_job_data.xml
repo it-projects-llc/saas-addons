@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="job_function_sale_order_action_done" model="queue.job.function">
+        <field name="model_id" ref="saas.model_saas_operator" />
+        <field name="method">build_post_init</field>
+        <field name="retry_pattern" eval="{1: 30, 3: 60, 5: 120}" />
+    </record>
+</odoo>
