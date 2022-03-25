@@ -212,10 +212,8 @@ class SAASOperator(models.Model):
         manager_users = self.env.ref('saas.group_manager').users
         if message_type == 'success':
             manager_users.notify_success(message=message, title=title, sticky=True)
-        elif message_type == 'info':
-            manager_users.notify_info(message=message, title=title, sticky=True)
         else:
-            manager_users.notify_default(message=message, title=title, sticky=True)
+            manager_users.notify_info(message=message, title=title, sticky=True)
 
 
 class SafeDict(defaultdict):

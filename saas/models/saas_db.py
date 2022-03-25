@@ -80,10 +80,10 @@ class SAASDB(models.Model):
         return self.operator_id.build_execute_kw(self, model, method, args, kwargs)
 
     def xmlid_lookup(self, xmlid):
-        return self.execute_kw("ir.model.data", "xmlid_lookup", xmlid)
+        return self.execute_kw("ir.model.data", "_xmlid_lookup", xmlid)
 
     def xmlid_to_res_model_res_id(self, xmlid, raise_if_not_found=False):
-        return self.execute_kw("ir.model.data", "xmlid_to_res_model_res_id", xmlid, raise_if_not_found=raise_if_not_found)
+        return self.execute_kw("ir.model.data", "_xmlid_to_res_model_res_id", xmlid, raise_if_not_found=raise_if_not_found)
 
     def action_install_missing_mandatory_modules(self):
         for build in self.filtered(lambda x: x.state == "done"):

@@ -5,7 +5,7 @@ from .common_saas_test import Common, DB_TEMPLATE_1, DB_TEMPLATE_2, MODULE_TO_IN
 
 import odoo
 from odoo import SUPERUSER_ID
-from odoo.tests.common import tagged, SavepointCase
+from odoo.tests.common import tagged, TransactionCase
 from odoo.service import db
 
 DB_INSTANCE_1 = 'db-instance-1'
@@ -14,7 +14,7 @@ KEY_VALUES = {'mail_message': 'mail.message'}
 
 
 @tagged('post_install', 'at_install')
-class TestSaas(SavepointCase, Common):
+class TestSaas(TransactionCase, Common):
 
     def assert_modules_is_installed(self, db_name, module):
         db = odoo.sql_db.db_connect(db_name)
