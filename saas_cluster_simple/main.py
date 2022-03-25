@@ -8,10 +8,11 @@ from itertools import combinations
 import os
 import re
 import string
+import threading
 
 from odoo import SUPERUSER_ID, api, registry, sql_db, tools
 from odoo.service import db
-from odoo.service.model import execute
+from odoo.service.model import check, execute_cr
 from odoo.http import _request_stack
 
 from odoo.addons.host2db import host2db_config
@@ -70,7 +71,7 @@ def drop_db(db_name):
 
 def install_modules(db_name, modules):
     conn = sql_db.db_connect(db_name)
-    with api.Environment.manage(), conn.cursor() as cr:
+    with conn.cursor() as cr:
         env = api.Environment(cr, SUPERUSER_ID, {})
 
         # Set odoo.http.request to None.
@@ -99,7 +100,7 @@ def install_modules(db_name, modules):
 def post_init(db_name, template_post_init):
     conn = sql_db.db_connect(db_name)
     registry(db_name).check_signaling()
-    with api.Environment.manage(), conn.cursor() as cr:
+    with conn.cursor() as cr:
         env = api.Environment(cr, SUPERUSER_ID, {})
         action = env["ir.actions.server"].create(
             {
@@ -155,3 +156,18 @@ def deploy_backup(backup_name):
     return {
         "db_name": db_name,
     }
+
+
+# Modified version of odoo.service.model.execute
+# Removes checking private methods since
+# cluster requires all methods to be executed
+# It is expected, that master password check will protect
+# from unauthorized usage
+@check
+def execute(db, uid, obj, method, *args, **kw):
+    threading.currentThread().dbname = db
+    with registry(db).cursor() as cr:
+        res = execute_cr(cr, uid, obj, method, *args, **kw)
+        if res is None:
+            _logger.info('The method %s of the object %s can not return `None` !', method, obj)
+        return res
