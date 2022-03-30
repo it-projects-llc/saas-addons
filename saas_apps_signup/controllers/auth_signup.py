@@ -8,13 +8,27 @@ import logging
 
 from ..exceptions import OperatorNotAvailable
 
+
+try_now_args = ("installing_modules", "max_users_limit", "period")
+EXTRA_SIGN_UP_REQUEST_PARAMS = try_now_args + (
+    # signup form values
+    "company_name",
+    "database_name",
+    "phone",
+    "database_lang",
+    "country_code",
+
+    "saas_template_id",
+    "sale_order_id",
+    "operator_id",
+)
 _logger = logging.getLogger(__name__)
 
 
 class Main(SignupVerifyEmail):
     def get_auth_signup_qcontext(self):
-        d = super(Main, self).get_auth_signup_qcontext()
-        try_now_args = ("installing_modules", "max_users_limit", "period")
+        d = {k: v for (k, v) in request.params.items() if k in EXTRA_SIGN_UP_REQUEST_PARAMS}
+        d.update(super(Main, self).get_auth_signup_qcontext())
 
         if any([k in d for k in try_now_args]):
             # "Try now" is pressed

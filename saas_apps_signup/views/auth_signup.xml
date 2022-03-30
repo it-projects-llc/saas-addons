@@ -48,7 +48,7 @@
                     <select id="database_lang" name="database_lang" class="form-control" autocomplete="off" required="required">
                         <option value=""></option>
                         <t t-foreach="langs" t-as="item">
-                            <option t-att-value="item[0]" t-esc="item[1]" t-att-selected="'selected' if database_lang == item[0] or (database_lang is None and item[0] == 'en_US') else None"/>
+                            <option t-att-value="item[0]" t-out="item[1]" t-att-selected="'selected' if database_lang == item[0] or (database_lang is None and item[0] == 'en_US') else None"/>
                         </t>
                     </select>
                 </div>
@@ -58,7 +58,7 @@
                     <select id="country_code" name="country_code" class="form-control" autocomplete="off" required="required">
                         <option value=""></option>
                         <t t-foreach="countries" t-as="item">
-                            <option t-att-value="item[0]" t-esc="item[1]" t-att-selected="'selected' if country_code == item[0] else None"/>
+                            <option t-att-value="item[0]" t-out="item[1]" t-att-selected="'selected' if country_code == item[0] else None"/>
                         </t>
                     </select>
                 </div>

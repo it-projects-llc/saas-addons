@@ -1,13 +1,13 @@
 from odoo.addons.saas.tests.common_saas_test import Common
 
 from odoo import SUPERUSER_ID
-from odoo.tests.common import tagged, SavepointCase
+from odoo.tests.common import tagged, TransactionCase
 from datetime import date, timedelta
 from unittest.mock import patch
 
 
 @tagged('post_install', 'at_install')
-class TestSaasContract(SavepointCase, Common):
+class TestSaasContract(TransactionCase, Common):
     @classmethod
     def setUpClass(cls):
         super(TestSaasContract, cls).setUpClass()

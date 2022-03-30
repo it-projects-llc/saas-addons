@@ -12,7 +12,7 @@
                     <input type="text" class="form-control" name="database_name" id="database_name" t-att-value="database_name" onfocus="$('#database_create_error').hide()"/>
 
                     <div t-if="error" id="database_create_error" class="alert alert-danger text-center" role="alert">
-                        <t t-esc="error"/>
+                        <t t-out="error"/>
                     </div>
 
                 </div>
