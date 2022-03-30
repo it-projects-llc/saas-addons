@@ -120,7 +120,7 @@ class SAASOperator(models.Model):
     def generate_db_name(self):
         self.ensure_one()
         sequence = self.env['ir.sequence'].next_by_code('saas.db')
-        return "fast-build-{unique_id}".db_name_template.format(unique_id=sequence)
+        return "fast-build-{unique_id}".format(unique_id=sequence)
 
     def _get_mandatory_args(self, db):
         self.ensure_one()
