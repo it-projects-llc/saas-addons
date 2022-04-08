@@ -121,3 +121,14 @@ class ContractLine(models.Model):
     @api.model
     def get_paid_user_product_lines(self):
         return self.filtered(lambda line: line.product_id.product_tmpl_id == self.env.ref("saas_product.product_users") and line.is_paid)
+
+    def _compute_allowed(self):
+        super(ContractLine, self)._compute_allowed()
+        for x in self.filtered("build_id"):
+            x.update({
+                "is_plan_successor_allowed": False,
+                "is_stop_plan_successor_allowed": False,
+                "is_stop_allowed": False,
+                "is_cancel_allowed": False,
+                "is_un_cancel_allowed": False,
+            })

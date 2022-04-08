@@ -7,9 +7,14 @@
         <field name="model">contract.contract</field>
         <field name="inherit_id" ref="contract.contract_contract_form_view" />
         <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="build_status" attrs="{'invisible': [('build_id', '=', False)]}" widget="statusbar"/>
+            </xpath>
+            <xpath expr="//field[@name='line_recurrence']" position="attributes">
+                <attribute name="attrs">{"readonly": [('build_id', '!=', False)]}</attribute>
+            </xpath>
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="build_id" attrs="{'invisible': [('build_id', '=', False)]}"/>
-                <field name="build_status" attrs="{'invisible': [('build_id', '=', False)]}"/>
             </xpath>
             <xpath expr="//field[@name='date_end']" position="after">
                 <field name="build_expiration_date_defacto" attrs="{'invisible': [('build_id', '=', False)]}"/>
