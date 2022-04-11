@@ -9,6 +9,7 @@
     "depends": [
         "saas",
         "portal",
+        "saas_domain_names",
         "saas_expiration",
         "saas_limit_max_users",
         "saas_build_admin",
