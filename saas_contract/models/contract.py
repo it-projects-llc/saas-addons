@@ -65,14 +65,18 @@ class Contract(models.Model):
 
             paid_user_product_lines = contract.contract_line_ids.get_paid_user_product_lines()
             paid_user_product_lines_for_this_day = paid_user_product_lines.filtered(
-                lambda line: line.date_start <= fields.Date.context_today(line) <= line.date_end
+                lambda line: fields.Date.context_today(line) <= line.date_end
             )
 
             max_users_limit = paid_user_product_lines_for_this_day.mapped("quantity")
 
-            is_trial = bool(paid_user_product_lines_for_this_day.filtered(
-                lambda line: line.product_id == self.env.ref("saas_product.product_users_trial")
-            ))
+            is_trial = False
+            for line in paid_user_product_lines_for_this_day:
+                if line.product_id == self.env.ref("saas_product.product_users_trial"):
+                    is_trial = True
+                else:
+                    is_trial = False
+                    break
 
             build_expiration_date = max(paid_user_product_lines.mapped("date_end"))
 
