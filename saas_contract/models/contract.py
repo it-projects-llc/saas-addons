@@ -34,7 +34,6 @@ class Contract(models.Model):
                 if contract.build_id.contract_id != contract:  # add extra check to prevent excessive write
                     contract.build_id.write({"contract_id": contract.id})
 
-    # TODO: запретить ситуацию, где набор линии в контракте, в котором есть пустое пространство из будущего времени (хотя-бы в плане юзеров)
     # TODO: inverse is temporary hack. build_id must be only as computed field
     build_id = fields.Many2one("saas.db", readonly=True, compute="_compute_build", inverse="_inverse_build", store=True)
     build_expiration_date_defacto = fields.Datetime("Build expiration date (defacto)", related="build_id.expiration_date")
@@ -42,89 +41,46 @@ class Contract(models.Model):
         ("trial", "Trial"),
         ("active", "Active"),
         ("suspended", "Suspended"),
-    ], "Build status", readonly=True)
+    ], "Build status", compute="_compute_build_status", store=False)
+    trial_expiration_date = fields.Datetime("Trial expiration date", readonly=True)
+
+    @api.depends("build_id")
+    def _compute_build_status(self):
+        now = fields.Datetime.now()
+        for record in self:
+            if not record.build_id:
+                record.build_status = False
+                continue
+
+            if record.trial_expiration_date:
+                if record.build_expiration_date_defacto and record.trial_expiration_date <= record.build_expiration_date_defacto:
+                    record.build_status = "active"
+                else:
+                    record.build_status = "trial"
+            elif now <= record.build_expiration_date_defacto:
+                record.build_status = "active"
+            else:
+                record.build_status = "suspended"
 
     @api.model
     def create(self, vals):
         res = super(Contract, self).create(vals)
-        if res.build_id and not vals.get("line_recurrence"):
-            raise ValidationError("Cannot create SaaS contract with disabled line-level recurrence")
+        if res.build_id and res.line_recurrence:
+            raise ValidationError("Cannot create SaaS contract with enabled line-level recurrence")
         return res
 
     def write(self, vals):
         res = super(Contract, self).write(vals)
-        if not vals.get("line_recurrence", True) and self.mapped("build_id"):
-            raise ValidationError("Cannot unset line_recurrenct from SaaS contract")
-        self.mapped("contract_line_ids")._recompute_is_paid()
+        if vals.get("line_recurrence") is False and self.mapped("build_id"):
+            raise ValidationError("Cannot set line recurrence from SaaS contract")
         return res
-
-    @api.depends("contract_line_ids", "contract_line_ids.is_paid", "build_id")
-    def action_update_build(self):
-        for contract in self.filtered("build_id"):
-            build = contract.build_id
-
-            paid_user_product_lines = contract.contract_line_ids.get_paid_user_product_lines()
-            paid_user_product_lines_for_this_day = paid_user_product_lines.filtered(
-                lambda line: fields.Date.context_today(line) <= line.date_end
-            )
-
-            max_users_limit = paid_user_product_lines_for_this_day.mapped("quantity")
-
-            is_trial = False
-            for line in paid_user_product_lines_for_this_day:
-                if line.product_id == self.env.ref("saas_product.product_users_trial"):
-                    is_trial = True
-                else:
-                    is_trial = False
-                    break
-
-            build_expiration_date = max(paid_user_product_lines.mapped("date_end"))
-
-            build.write({
-                "expiration_date": build_expiration_date,
-                "max_users_limit": sum(max_users_limit) or 1,
-                "contract_id": contract.id,
-            })
-
-            # TODO: тут не будет повторный раз у билда считаться?
-            contract.write({
-                "build_status": is_trial and "trial" or (fields.Date.context_today(contract) <= build_expiration_date and "active" or "suspended")
-            })
-
-    def _action_update_all_builds(self):
-        self.env["contract.contract"].search([("build_id", "!=", False)]).action_update_build()
 
 
 class ContractLine(models.Model):
 
     _inherit = 'contract.line'
 
-    def _compute_is_paid(self):
-        for line in self:
-            if line.price_unit == 0:
-                line.is_paid = True
-            else:
-                line.is_paid = self.env["account.move.line"].sudo().search([
-                    ("contract_line_id", "=", line.id),
-                ], limit=1).mapped("move_id").payment_state == "paid"
-
-    is_paid = fields.Boolean("Is line payed?", compute=_compute_is_paid, store=True)
     build_id = fields.Many2one("saas.db", related="contract_id.build_id")
-
-    def write(self, vals):
-        res = super(ContractLine, self).write(vals)
-        self._recompute_is_paid()
-        return res
-
-    def _recompute_is_paid(self):
-        if not self:
-            return  # nothing to recompute
-        self.env.add_to_compute(self._fields['is_paid'], self)
-        self.recompute()
-
-    @api.model
-    def get_paid_user_product_lines(self):
-        return self.filtered(lambda line: line.product_id.product_tmpl_id == self.env.ref("saas_product.product_users") and line.is_paid)
 
     def _compute_allowed(self):
         super(ContractLine, self)._compute_allowed()

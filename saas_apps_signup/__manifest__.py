@@ -25,7 +25,6 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "data/auth_signup_data.xml",
-        "data/base_automation.xml",
         "data/website.xml",
         "security/ir.model.access.csv",
         "views/auth_signup.xml",

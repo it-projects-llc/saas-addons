@@ -20,19 +20,8 @@
                 <field name="build_expiration_date_defacto" attrs="{'invisible': [('build_id', '=', False)]}"/>
             </xpath>
 
-            <xpath expr="//button[@name='recurring_create_invoice']" position="after">
-                <button
-                    name="action_update_build"
-                    type="object"
-                    attrs="{'invisible': [('build_id', '=', False)]}"
-                    string="Update build"
-                    groups="base.group_user"
-                    />
-            </xpath>
-
             <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='last_date_invoiced']" position="after">
                 <field name="build_id" invisible="1" />
-                <field name="is_paid" attrs="{'invisible': [('build_id', '=', False)]}" />
             </xpath>
         </field>
     </record>
