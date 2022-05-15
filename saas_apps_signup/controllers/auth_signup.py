@@ -53,7 +53,7 @@ class Main(SignupVerifyEmail):
                     template = template[0]
 
             else:
-                template = None
+                template = request.env.ref("saas_apps.base_template")
             if template:
                 d["operator_id"] = template._random_ready_operator_id()
 
