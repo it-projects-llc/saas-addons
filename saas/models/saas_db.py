@@ -69,6 +69,7 @@ class SAASDB(models.Model):
 
             if should_write_to_build:
                 record.write_values_to_build()
+                record.operator_id._signal_changes(record.name)
 
     def write_values_to_build(self):
         pass

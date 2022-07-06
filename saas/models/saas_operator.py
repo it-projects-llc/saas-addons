@@ -112,6 +112,9 @@ class SAASOperator(models.Model):
             return
         self._unmap_domain(domain)
 
+    def _signal_changes(self, db_name):
+        cluster.signal_changes(db_name)
+
     def get_db_url(self, db):
         # TODO: use mako for url templating
         self.ensure_one()

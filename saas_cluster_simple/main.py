@@ -35,7 +35,8 @@ __all__ = [
     "map_domain",
     "unmap_domain",
     "execute_kw",
-    "create_backup"
+    "create_backup",
+    "signal_changes",
 ]
 
 
@@ -156,6 +157,10 @@ def deploy_backup(backup_name):
     return {
         "db_name": db_name,
     }
+
+
+def signal_changes(db):
+    registry(db).signal_changes()
 
 
 # Modified version of odoo.service.model.execute
