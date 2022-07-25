@@ -10,6 +10,7 @@ from odoo import models, fields, api, _
 from odoo.tools.safe_eval import test_python_expr
 from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.exceptions import ValidationError, UserError
+from odoo.addons.queue_job.delay import group
 
 _logger = logging.getLogger(__name__)
 
@@ -221,21 +222,22 @@ class SAASTemplateLine(models.Model):
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
         if with_delay:
-            build.with_delay().create_db(
+            job_create=(build.with_delay().create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
-            )
-            build.with_delay().action_install_missing_mandatory_modules()
+            ))
+            job_missing_mandatory=(group(job_create).on_done(
+            build.with_delay().action_install_missing_mandatory_modules()))
 
-            self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values)
+            group(job_missing_mandatory).on_done(self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values))
         else:
-            build.create_db(
+            job_create=(build.create_db(
                 self.operator_db_name,
                 self.template_id.template_demo,
-            )
-            build.action_install_missing_mandatory_modules()
+            ))
+            job_missing_mandatory=(group(job_create).on_done(build.action_install_missing_mandatory_modules()))
 
-            self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values)
+            group(job_missing_mandatory).on_done(self.operator_id.build_post_init(build, self.template_id.build_post_init, key_values))
 
         return build
 
