@@ -14,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class Main(SignupVerifyEmail):
     def get_auth_signup_qcontext(self):
         d = super(Main, self).get_auth_signup_qcontext()
+        d.update(request.params)
         try_now_args = ("installing_modules", "max_users_limit", "period")
 
         if any([k in d for k in try_now_args]):
