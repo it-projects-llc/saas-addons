@@ -226,10 +226,10 @@ class SAASTemplateLine(models.Model):
                 self.operator_db_name,
                 self.template_id.template_demo,
             ))
-            job_missing_mandatory=(group(job_create).on_done(
+            job_install_modules=(group(job_create).on_done(
             build.with_delay().action_install_missing_mandatory_modules()))
 
-            group(job_missing_mandatory).on_done(self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values))
+            group(job_install_modules).on_done(self.operator_id.with_delay().build_post_init(build, self.template_id.build_post_init, key_values))
         else:
             job_create=(build.create_db(
                 self.operator_db_name,
