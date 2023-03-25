@@ -6,8 +6,8 @@ from odoo import models, api
 class Token(models.Model):
     _inherit = 'auth_quick_master.token'
 
-    @api.model
-    def create(self, vals):
-        res = super(Token, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(Token, self).create(vals_list)
         self.env['saas.log'].log_db_authed(res)
         return res

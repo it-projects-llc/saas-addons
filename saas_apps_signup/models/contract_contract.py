@@ -12,9 +12,9 @@ class Contract(models.Model):
 
     _inherit = 'contract.contract'
 
-    @api.model
-    def create(self, vals):
-        record = super(Contract, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        record = super(Contract, self).create(vals_list)
 
         if self.env.context.get("create_build_vals"):
             record.with_user(SUPERUSER_ID).with_delay()._create_build(self.env.context.get("create_build_vals"))
@@ -161,7 +161,7 @@ class Contract(models.Model):
             contract = invoice.contract_id
             build = contract.build_id
 
-            contract.invalidate_cache()
+            contract.invalidate_recordset()
             if build and build.state == "done":
                 invoice.action_post()
 
@@ -172,10 +172,10 @@ class ContractLine(models.Model):
 
     _inherit = 'contract.line'
 
-    @api.model
-    def create(self, vals):
-        move_line_id = vals.pop("move_line_id", None)
-        res = super(ContractLine, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        move_line_id = vals_list.pop("move_line_id", None)
+        res = super(ContractLine, self).create(vals_list)
         if move_line_id:
             self.env["account.move.line"].sudo().browse(move_line_id).write({
                 "contract_line_id": res.id,

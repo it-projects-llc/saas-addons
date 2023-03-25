@@ -17,9 +17,9 @@ class SaasDb(models.Model):
         ),
     ]
 
-    @api.model
-    def create(self, vals):
-        record = super(SaasDb, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        record = super(SaasDb, self).create(vals_list)
         if record.domain_name_id:
             DomainName = self.env["saas.domain.name"]
 

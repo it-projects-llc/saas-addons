@@ -128,6 +128,7 @@ class SAASTemplateLine(models.Model):
         ('done', 'Ready'),
 
     ], default='draft')
+    template_language = fields.Char('Language', default='en_US')
 
     @api.model
     def unlink(self):
@@ -179,10 +180,11 @@ class SAASTemplateLine(models.Model):
             r.write({
                 'state': 'creating',
             })
-            r.flush()
+            r.flush_recordset()
             r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,
+                lang=r.template_language,
                 callback_obj=r,
                 callback_method='_on_template_created')
 
@@ -222,18 +224,15 @@ class SAASTemplateLine(models.Model):
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
         if with_delay:
-            job_create = build.with_delay().create_db(
+            job_create = build.delayable().create_db(
                 self.operator_db_name, self.template_id.template_demo,
             )
-            job_install_modules = group(job_create).on_done(
-                build.with_delay().action_install_missing_mandatory_modules()
-            )
+            job_install_modules = build.delayable().action_install_missing_mandatory_modules()
 
-            group(job_install_modules).on_done(
-                self.operator_id.with_delay().build_post_init(
+            job_build_post_init= self.operator_id.delayable().build_post_init(
                     build, self.template_id.build_post_init, key_values
                 )
-            )
+            job_create.on_done(job_install_modules.on_done(job_build_post_init)).delay()
         else:
             build.create_db(
                 self.operator_db_name,

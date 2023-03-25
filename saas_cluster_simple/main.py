@@ -12,7 +12,7 @@ import threading
 
 from odoo import SUPERUSER_ID, api, registry, sql_db, tools
 from odoo.service import db
-from odoo.service.model import check, execute_cr
+from odoo.service.model import execute_cr
 from odoo.http import _request_stack
 
 from odoo.addons.host2db import host2db_config
@@ -159,8 +159,8 @@ def deploy_backup(backup_name):
     }
 
 
-def signal_changes(db):
-    registry(db).signal_changes()
+def signal_changes(db_name):
+    registry(database_name=db_name).signal_changes()
 
 
 # Modified version of odoo.service.model.execute
@@ -168,9 +168,9 @@ def signal_changes(db):
 # cluster requires all methods to be executed
 # It is expected, that master password check will protect
 # from unauthorized usage
-@check
+# @check
 def execute(db, uid, obj, method, *args, **kw):
-    threading.currentThread().dbname = db
+    threading.current_thread().dbname = db
     with registry(db).cursor() as cr:
         res = execute_cr(cr, uid, obj, method, *args, **kw)
         if res is None:

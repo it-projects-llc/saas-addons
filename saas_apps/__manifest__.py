@@ -30,13 +30,15 @@
             "saas_apps/static/src/css/calculator.css",
             "saas_apps/static/src/js/saas_apps.js",
         ],
-        "web.assets_backend": ["saas_apps/static/src/js/refresh_button.js"],
-        "web.assets_qweb": ["saas_apps/static/src/xml/base.xml"],
+        "web.assets_backend": [
+            "saas_apps/static/src/js/refresh_button.js",
+            "saas_apps/static/src/xml/base.xml"
+            ],
     },
     "post_load": None,
     "pre_init_hook": None,
     "post_init_hook": None,
     "uninstall_hook": None,
     "auto_install": False,
-    "installable": True,
+    "installable": False,
 }

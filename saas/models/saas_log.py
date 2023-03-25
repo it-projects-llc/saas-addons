@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import logging
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
 
@@ -55,6 +55,7 @@ class SAASLog(models.Model):
             'db_id': db.id,
         })
 
-    def create(self, vals):
-        _logger.debug('saas.log: %s', vals)
-        return super(SAASLog, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        _logger.debug('saas.log: %s', vals_list)
+        return super(SAASLog, self).create(vals_list)

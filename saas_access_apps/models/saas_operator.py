@@ -5,7 +5,6 @@ from odoo import models
 
 
 class SaasOperator(models.Model):
-
     _inherit = "saas.operator"
 
     def get_mandatory_modules(self):
