@@ -4,11 +4,13 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from collections import defaultdict
 import string
+import logging
 
 import psycopg2
 from odoo import models, fields
 import odoo.addons.saas_cluster_simple.main as cluster
 from odoo.addons.queue_job.exception import RetryableJobError
+_logger = logging.getLogger(__name__)
 
 
 class SAASOperator(models.Model):
