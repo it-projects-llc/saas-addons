@@ -56,6 +56,8 @@ class Main(SignupVerifyEmail):
                 template = None
             if template:
                 d["operator_id"] = template._random_ready_operator_id()
+            else:
+                d["operator_id"] = request.env.ref("saas_apps.base_template")._random_ready_operator_id()
 
         d['langs'] = odoo.service.db.exp_list_lang()
         d['countries'] = odoo.service.db.exp_list_countries()
