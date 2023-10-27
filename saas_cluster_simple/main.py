@@ -159,8 +159,8 @@ def deploy_backup(backup_name):
     }
 
 
-def signal_changes(db):
-    registry(db).signal_changes()
+def signal_changes(db_name):
+    registry(db_name).signal_changes()
 
 
 # Modified version of odoo.service.model.execute
