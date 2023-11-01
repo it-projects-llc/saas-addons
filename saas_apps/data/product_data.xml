@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="saas_product.product_users" model="product.template">
+        <field name="website_published">True</field>
+        <field file="saas_apps/static/src/img/user.png" name="image_1920" type="base64" />
+    </record>
+</odoo>

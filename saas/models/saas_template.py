@@ -5,7 +5,7 @@
 import random
 import string
 import logging
-from slugify import slugify
+from slugify import slugify  # pylint: disable=missing-manifest-dependency
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import test_python_expr
@@ -194,19 +194,29 @@ class SAASTemplateLine(models.Model):
         self.ensure_one()
         return slugify(db_name)
 
-    def create_db(self, key_values=None, db_name=None, with_delay=True):
+    def create_db(self, key_values=None, db_name=None, with_delay=True, draft_build_id=None):
         self.ensure_one()
         if not key_values:
             key_values = {}
-        if not db_name:
-            db_name = self.operator_id.generate_db_name()
+
+        assert not (draft_build_id and db_name), "Both db_name and draft_build_id are given"
+
+        if draft_build_id:
+            build = self.env["saas.db"].browse(draft_build_id)
+            assert build.state == "draft", "Given build is not draft"
+            assert build.operator_id == self.operator_id, "Given build uses other operator"
+
         else:
-            db_name = self.prepare_name(db_name)
-        build = self.env['saas.db'].create({
-            'name': db_name,
-            'operator_id': self.operator_id.id,
-            'type': 'build',
-        })
+            if not db_name:
+                db_name = self.operator_id.generate_db_name()
+            else:
+                db_name = self.prepare_name(db_name)
+
+            build = self.env['saas.db'].create({
+                'name': db_name,
+                'operator_id': self.operator_id.id,
+                'type': 'build',
+            })
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
         if with_delay:
@@ -226,4 +236,10 @@ class SAASTemplateLine(models.Model):
 
     def random_ready_operator(self):
         ready_operators = self.filtered(lambda r: r.state == 'done')
+        if not ready_operators:
+            return ready_operators
         return random.choice(ready_operators)
+
+    def action_install_missing_mandatory_modules(self):
+        for record in self:
+            record.operator_db_id.action_install_missing_mandatory_modules()

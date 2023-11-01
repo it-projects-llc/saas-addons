@@ -41,15 +41,17 @@ class Common(object):
         })
 
         self.saas_operator_1 = self.env['saas.operator'].create({
+            'name': 'Test local operator 1',
             'type': 'local',
-            'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
+            'db_url_template': 'http://{db_name}.127.0.0.1.nip.io:8069',
             'db_name_template': 'test_db_{unique_id}',
             'global_url': 'http://saas.127.0.0.1.nip.io:8069',
         })
 
         self.saas_operator_2 = self.env['saas.operator'].create({
+            'name': 'Test local operator 2',
             'type': 'local',
-            'db_url_template': 'http://{db_name}.{db_id}.127.0.0.1.nip.io:8069',
+            'db_url_template': 'http://{db_name}.127.0.0.1.nip.io:8069',
             'db_name_template': 'test_db_{unique_id}',
             'global_url': 'http://saas.127.0.0.1.nip.io:8069',
         })

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+    License AGPL-3.0 (https://www.gnu.org/licenses/agpl-3.0.html).-->
+<odoo>
+    <record id="saas_app_search" model="ir.ui.view">
+        <field name="name">saas.app.search</field>
+        <field name="model">saas.app</field>
+        <field name="arch" type="xml">
+            <search string="Search Redirect">
+                <field name="shortdesc"/>
+                <field name="allow_to_sell"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="saas_app_view_tree" model="ir.ui.view">
+        <field name="name">saas.app.list</field>
+        <field name="model">saas.app</field>
+        <field name="arch" type="xml">
+            <tree string="Manage Apps">
+                <field name="shortdesc"/>
+                <field name="allow_to_sell"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_saas_app_list" model="ir.actions.act_window">
+        <field name="name">Website Apps</field>
+        <field name="res_model">saas.app</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="saas_app_view_tree"/>
+        <field name="target">current</field>
+        <field name="search_view_id" ref="saas_app_search"/>
+    </record>
+
+    <menuitem name="Manage Apps"
+            id="menu_website_manage_apps_list"
+            action="action_saas_app_list"
+            parent="website.menu_website_global_configuration"
+            sequence="40"
+            />
+
+    <record id="saas_app_view_form" model="ir.ui.view">
+        <field name="name">saas.app.form</field>
+        <field name="model">saas.app</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="icon_image" widget="image" class="oe_avatar o_field_image"/>
+                    <group>
+                        <field name="shortdesc"/>
+                        <field name="allow_to_sell"/>
+                        <field name="month_price" class="oe_inline" widget='monetary'/>
+                        <field name="year_price" class="oe_inline" widget='monetary'/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="dependency_ids"/>
+                        <field name="product_tmpl_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

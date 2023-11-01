@@ -1,2 +1,5 @@
 queue https://github.com/OCA/queue.git
-OCA_web https://github.com/OCA/web.git
+web https://github.com/OCA/web.git
+access-addons https://github.com/itpp-labs/access-addons.git
+server-auth https://github.com/OCA/server-auth.git
+contract https://github.com/OCA/contract.git

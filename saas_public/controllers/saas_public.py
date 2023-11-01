@@ -1,6 +1,7 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from odoo import SUPERUSER_ID
 from odoo.http import route, request, Controller
 
 
@@ -17,7 +18,10 @@ class SaaSPublicController(Controller):
             template_operator_id = template.operator_ids.random_ready_operator()
             build = template_operator_id.create_db(kwargs, with_delay=False)
             build_url = build.get_url()
-            return request.env['auth_quick_master.token'].sudo().redirect_with_token(build_url, build.id,
-                                                                                     build_login='admin')
+            return (
+                request.env["auth_quick_master.token"]
+                .with_user(SUPERUSER_ID)
+                .redirect_with_token(build_url, build.id, build_login="admin")
+            )
         else:
             return request.not_found()

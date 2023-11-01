@@ -21,9 +21,13 @@
             <form>
                 <header>
                     <button name="action_get_build_access" type="object" string="Connect to the Build" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
+                    <button name="refresh_data" type="object" string="Refresh" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
+                    <button name="action_install_missing_mandatory_modules" type="object" string="Install missing mandatory modules" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" groups="base.group_no_one" />
                     <field name="state" widget="statusbar" nolabel="1"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
                     <group>
                         <field name="name"/>
                         <field name="operator_id"/>
