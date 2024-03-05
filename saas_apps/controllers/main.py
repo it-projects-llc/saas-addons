@@ -63,6 +63,8 @@ class SaaSAppsController(Controller):
 
 # TODO: он нужен?
 class SaasAppsCart(WebsiteSale):
+
+    @route(['/shop/cart/clear'], type='json', auth="public", website=True)
     def clear_cart(self):
         order = request.website.sale_get_order()
         if order:

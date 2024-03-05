@@ -11,13 +11,14 @@ class ProductTemplate(models.Model):
 
     is_saas_product = fields.Boolean("Is SaaS product?", default=False)
 
-    @api.model
-    def create(self, vals):
-        if vals.get("is_saas_product"):
-            vals["taxes_id"] = [(5,)]
-            vals["supplier_taxes_id"] = [(5,)]
-            vals["invoice_policy"] = "order"
-        return super(ProductTemplate, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("is_saas_product"):
+                vals["taxes_id"] = [(5,)]
+                vals["supplier_taxes_id"] = [(5,)]
+                vals["invoice_policy"] = "order"
+        return super(ProductTemplate, self).create(vals_list)
 
 
 class Product(models.Model):

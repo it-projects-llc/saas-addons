@@ -14,7 +14,7 @@ class AccountMoveLine(models.Model):
         """
         self.ensure_one()
 
-        if self.product_id and self.product_id.product_tmpl_id.is_saas_product:
-            return self.env["account.tax"]
+        # if self.product_id and self.product_id.product_tmpl_id.is_saas_product:
+        #     return self.env["account.tax"]
 
         return super(AccountMoveLine, self)._get_computed_taxes()

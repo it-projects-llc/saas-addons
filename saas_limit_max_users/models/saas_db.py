@@ -9,7 +9,7 @@ class SaasDb(models.Model):
 
     _inherit = "saas.db"
 
-    max_users_limit = fields.Integer("Max Users Allowed")
+    max_users_limit = fields.Integer("Max Users Allowed", default=1)
     users_count = fields.Integer("Current No. Of Users", readonly=1)
 
     @api.constrains("max_users_limit")

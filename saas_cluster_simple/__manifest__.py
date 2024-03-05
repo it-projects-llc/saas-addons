@@ -1,6 +1,6 @@
 {
     "name": "SaaS: Simple cluster",
-    "version": "15.0.0.1.1",
+    "version": "16.0.0.1.0",
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
     "license": "LGPL-3",

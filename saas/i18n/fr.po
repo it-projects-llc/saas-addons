@@ -6,96 +6,100 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 08:18+0000\n"
-"PO-Revision-Date: 2023-03-29 08:18+0000\n"
+"POT-Creation-Date: 2023-03-28 21:50+0000\n"
+"PO-Revision-Date: 2023-03-28 23:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Action à prendre"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 msgid "Are you sure you want to suspend this access to database?"
-msgstr ""
+msgstr "Voulez-vous vraiment suspendre cet accès à la base de données ?"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 msgid "Are you sure you want to unsuspend this access to database?"
 msgstr ""
+"Voulez-vous vraiment annuler la suspension de cet accès à la base de "
+"données ?"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Nombre de pièces jointes"
 
 #. module: saas
 #: model:ir.model,name:saas.model_auth_quick_master_token
 msgid "Authentication Token"
-msgstr ""
+msgstr "Jeton d’authentification"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_operator__db_url_template
 msgid "Avaialble variables: {db_name}"
-msgstr ""
+msgstr "Variables disponibles: {db_name}"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_db
 msgid "Build"
-msgstr ""
+msgstr "Instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_operator__build_count
 msgid "Build Count"
-msgstr ""
+msgstr "Nombre d'instances"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__build_creation_id
 msgid "Build Creation"
-msgstr ""
+msgstr "Création d'une instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__build_post_init
 msgid "Build Initialization"
-msgstr ""
+msgstr "Initialisation de la génération d'une instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__build_post_init_ids
 msgid "Build Initialization Values"
-msgstr ""
+msgstr "Valeurs d’initialisation d'une instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__build_name
 msgid "Build name"
-msgstr ""
+msgstr "Nom de l'instance"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
 msgid "Build post init form"
-msgstr ""
+msgstr "Créer un formulaire post init"
 
 #. module: saas
 #: model:ir.model,name:saas.model_build_post_init_line
 msgid "Build post init line"
-msgstr ""
+msgstr "Construire une ligne d’initialisation de poste"
 
 #. module: saas
 #: model:ir.actions.act_window,name:saas.saas_db_action
 #: model:ir.ui.menu,name:saas.saas_main_menu_item_2
 #: model_terms:ir.ui.view,arch_db:saas.saas_operator_form_view
 msgid "Builds"
-msgstr ""
+msgstr "Instances"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #. module: saas
 #: model:ir.ui.menu,name:saas.saas_main_menu_config
@@ -105,13 +109,13 @@ msgstr ""
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 msgid "Connect to the Build"
-msgstr ""
+msgstr "Connexion à l'instance"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
 msgid "Create Build"
-msgstr ""
+msgstr "Créer une instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__create_uid
@@ -123,7 +127,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_uid
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Créé par"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__create_date
@@ -135,62 +139,62 @@ msgstr ""
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_date
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Créé le"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__type
 msgid "DB Type"
-msgstr ""
+msgstr "BD type"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_operator__db_url_template
 msgid "DB URLs"
-msgstr ""
+msgstr "BD URLs"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__type__creation
 msgid "DB is being created"
-msgstr ""
+msgstr "BD est en cours de création"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__type__created
 msgid "DB is created"
-msgstr ""
+msgstr "BD est crée"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__type__dropped
 msgid "DB is dropped"
-msgstr ""
+msgstr "BD est supprimé"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__creating
 msgid "Database Creating"
-msgstr ""
+msgstr "Création d’une base de données"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_log
 msgid "Database Event Log"
-msgstr ""
+msgstr "Journal des événements de base de données"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_operator
 msgid "Database Operator"
-msgstr ""
+msgstr "Instances de base de données"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_template
 msgid "Database Template"
-msgstr ""
+msgstr "Modèle de base de données"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_state
 msgid "Database operator state"
-msgstr ""
+msgstr "Statut de l'Instances de base de données"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_log__db_id
 msgid "Db"
-msgstr ""
+msgstr "Bd"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.res_config_settings_view_form
@@ -212,23 +216,23 @@ msgstr ""
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__display_name
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom d’affichage"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_db__state__draft
 #: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__draft
 msgid "Draft"
-msgstr ""
+msgstr "En préparation"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_log__description
 msgid "Extra data"
-msgstr ""
+msgstr "Données supplémentaires"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__post_init
 msgid "Extra initialization"
-msgstr ""
+msgstr "Initialisation supplémentaire"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_follower_ids
@@ -243,7 +247,7 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "A un message"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__id
@@ -261,22 +265,26 @@ msgstr ""
 #: model:ir.model.fields,help:saas.field_saas_db__message_needaction
 msgid "If checked, new messages require your attention."
 msgstr ""
+"Si cette option est cochée, les nouveaux messages requièrent votre "
+"attention."
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_db__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
+"Si cette option est cochée, certains messages présentent une erreur de "
+"remise."
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__template_demo
 msgid "Install demo data"
-msgstr ""
+msgstr "Installer les donnés de démonstartion"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_operator_form_view
 msgid "Install missing mandatory modules"
-msgstr ""
+msgstr "Installer APPS obligatoires manquants"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_is_follower
@@ -286,17 +294,17 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__is_technical_template
 msgid "Is technical template?"
-msgstr ""
+msgstr "Le modèle est-il technique?"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__key
 msgid "Key"
-msgstr ""
+msgstr "Clé"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__template_language
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line____last_update
@@ -337,27 +345,27 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_log__type
 msgid "Log type"
-msgstr ""
+msgstr "Type de log"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Pièce jointe principale"
 
 #. module: saas
 #: model:res.groups,name:saas.group_manager
 msgid "Manager"
-msgstr ""
+msgstr "Gestionnaire"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_operator__global_url
 msgid "Master URL (Server-to-Server)"
-msgstr ""
+msgstr "Serveur Maitre (Maitre à Maitre)"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Erreur de remise des messages"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_ids
@@ -367,84 +375,81 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__installing_modules
 msgid "Modules installation"
-msgstr ""
+msgstr "Installation des modules"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__template_module_ids
 msgid "Modules to install"
-msgstr ""
-
-#. module: saas
-#: model:ir.model.constraint,message:saas.constraint_saas_db_name_unique
-msgid "Must be unique database name!"
-msgstr ""
+msgstr "Modules à installer"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__name
 #: model:ir.model.fields,field_description:saas.field_saas_operator__name
 #: model:ir.model.fields,field_description:saas.field_saas_template__name
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_db__type__build
 msgid "Normal Build"
-msgstr ""
+msgstr "Instance Normal"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Nombre d’actions"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Nombre d’erreurs"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_db__message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Nombre de messages nécessitant une action"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_db__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Nombre de messages avec erreur de remise"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__operator_id
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_id
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__saas_operator
 msgid "Operator"
-msgstr ""
+msgstr "Instance de BD"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_id
 msgid "Operator Db"
-msgstr ""
+msgstr "Instance de BD"
 
 #. module: saas
 #: model:ir.actions.act_window,name:saas.saas_operator_action
 #: model:ir.ui.menu,name:saas.saas_operator_menu_item
 msgid "Operators"
-msgstr ""
+msgstr "Instances de BD"
 
 #. module: saas
 #: model:ir.actions.server,name:saas.preparing_template_next_cron_ir_actions_server
 #: model:ir.cron,cron_name:saas.preparing_template_next_cron
 msgid "Preparing Template Next Cron"
-msgstr ""
+msgstr "Préparation du modèle Cron suivant"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_template__build_post_init
 msgid "Python code to be executed once build db is created from template"
 msgstr ""
+"Code Python à exécuter une fois que l'instance client est créé à partir du "
+"modèle"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_template__template_post_init
 msgid ""
 "Python code to be executed once db is created and modules are installed"
-msgstr ""
+msgstr "Code Python à exécuter une fois la bd créée et les modules installés"
 
 #. module: saas
 #: model:ir.model,name:saas.model_queue_job
@@ -454,13 +459,13 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__type__authed
 msgid "Quick Authentication"
-msgstr ""
+msgstr "Authentification rapide"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_db__state__done
 #: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__done
 msgid "Ready"
-msgstr ""
+msgstr "En service"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_log__data_id
@@ -471,7 +476,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
 msgid "Refresh"
-msgstr ""
+msgstr "Mettre à jour"
 
 #. module: saas
 #: model:ir.module.category,name:saas.module_management
@@ -484,39 +489,39 @@ msgstr ""
 #: model:ir.actions.server,name:saas.refresh_saas_db_data_ir_actions_server
 #: model:ir.cron,cron_name:saas.refresh_saas_db_data
 msgid "SaaS: refresh data from build database"
-msgstr ""
+msgstr "SaaS : MAJ depuis BD Instance"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_operator__type__local
 msgid "Same Instance"
-msgstr ""
+msgstr "Même Instance Master"
 
 #. module: saas
 #: model:ir.actions.act_window,name:saas.action_config_settings
 #: model:ir.ui.menu,name:saas.saas_main_menu_config_settings
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__state
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__state
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 msgid "Suspend Database"
-msgstr ""
+msgstr "Suspendre la BD"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_db__name
 msgid "Technical Database name"
-msgstr ""
+msgstr "Nom de la base de données technique"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_module__name
 msgid "Technical name"
-msgstr ""
+msgstr "Nom technique"
 
 #. module: saas
 #: model:ir.actions.act_window,name:saas.saas_technical_template_action
@@ -530,79 +535,83 @@ msgstr ""
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__template_id
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_view_tree
 msgid "Template"
-msgstr ""
+msgstr "Modèle"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_db__type__template
 msgid "Template DB"
-msgstr ""
+msgstr "Modèles BD"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__template_post_init
 msgid "Template Initialization"
-msgstr ""
+msgstr "Initialisation du modèle"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_operator__template_operator_ids
 msgid "Template Operator"
-msgstr ""
+msgstr "Modèle d'instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_operator_count
 msgid "Template Operator Count"
-msgstr ""
+msgstr "Nombre Modèle d'instance"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_name
 msgid "Template database name"
-msgstr ""
+msgstr "Nom de la base de données modèle"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_template_operator
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_operator_id
 msgid "Template's Deployment"
-msgstr ""
+msgstr "Déploiement du modèle"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__operator_ids
 msgid "Template's deployments"
-msgstr ""
+msgstr "Déploiement du modèle"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_module
 msgid "Template's modules to install"
-msgstr ""
+msgstr "Modules du modèle à installer"
 
 #. module: saas
 #: model:ir.actions.act_window,name:saas.saas_template_action
 #: model:ir.ui.menu,name:saas.saas_main_menu_item
 msgid "Templates"
-msgstr ""
+msgstr "Modèles"
 
 #. module: saas
 #. odoo-python
 #: code:addons/saas/models/saas_template.py:0
 #, python-format
 msgid ""
-"There are no ready template's deployments. Create new one or wait until it's"
-" done."
+"There are no ready template's deployments. Create new one or wait until "
+"it's done."
 msgstr ""
+"Il n’y a pas de déploiements de modèles prêts. Créez en un nouveau ou "
+"attendez que ce soit fait."
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_template_create_build__build_post_init_ids
 msgid ""
 "These values will be used on execution template's Build Initialization code"
 msgstr ""
+"Ces valeurs seront utilisées sur le code d’initialisation de l'instance du "
+"modèle initial d’exécution"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__to_rebuild
 msgid "To Rebuild"
-msgstr ""
+msgstr "A refaire"
 
 #. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__auth_quick_master_token
 msgid "Token"
-msgstr ""
+msgstr "Jeton d'authentification"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_operator__type
@@ -612,45 +621,45 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_operator__global_url
 msgid "URL for server-to-server communication "
-msgstr ""
+msgstr "URL pour la communication de serveur à serveur "
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 msgid "Unsuspend Database"
-msgstr ""
+msgstr "Annuler la suspension BD"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__random
 msgid "Use random operator"
-msgstr ""
+msgstr "Utiliser une instance de BD aléatoire"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_log__user_id
 #: model:res.groups,name:saas.group_user
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #. module: saas
 #: model:ir.module.category,description:saas.module_management
 msgid "User access level for SaaS"
-msgstr ""
+msgstr "Aaccès utilisateur pour SaaS"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__value
 msgid "Value"
-msgstr ""
+msgstr "Valeur"
 
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Messages du site Web"
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_db__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Historique des communications du site Web"
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_template_create_build
 msgid "Wizard to create build by template"
-msgstr ""
+msgstr "Assistante de création d'instance client par modèle"
