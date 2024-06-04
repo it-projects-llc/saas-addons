@@ -24,7 +24,7 @@ class SaasDb(models.Model):
             DomainName = self.env["saas.domain.name"]
 
             DomainName.with_delay()._run_domain_operations(
-                record.operator_id.id, ["map", record.domain_name_id.name, record.name]
+                record.operator_id.id, [["map", record.domain_name_id.name, record.name]]
             )
 
         return record
