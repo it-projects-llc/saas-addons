@@ -7,8 +7,8 @@
         <field name="model">saas.app</field>
         <field name="arch" type="xml">
             <search string="Search Redirect">
-                <field name="shortdesc"/>
-                <field name="allow_to_sell"/>
+                <field name="shortdesc" />
+                <field name="allow_to_sell" />
             </search>
         </field>
     </record>
@@ -18,8 +18,8 @@
         <field name="model">saas.app</field>
         <field name="arch" type="xml">
             <tree js_class="saas_apps_tree">
-                <field name="shortdesc"/>
-                <field name="allow_to_sell"/>
+                <field name="shortdesc" />
+                <field name="allow_to_sell" />
             </tree>
         </field>
     </record>
@@ -29,34 +29,44 @@
         <field name="res_model">saas.app</field>
         <field name="view_mode">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="saas_app_view_tree"/>
+        <field name="view_id" ref="saas_app_view_tree" />
         <field name="target">current</field>
-        <field name="search_view_id" ref="saas_app_search"/>
+        <field name="search_view_id" ref="saas_app_search" />
     </record>
 
-    <menuitem name="Manage Apps"
-            id="menu_website_manage_apps_list"
-            action="action_saas_app_list"
-            parent="website.menu_website_global_configuration"
-            sequence="40"
-            />
+    <menuitem name="Manage Apps" id="menu_website_manage_apps_list" action="action_saas_app_list" parent="website.menu_website_global_configuration" sequence="40" />
 
     <record id="saas_app_view_form" model="ir.ui.view">
         <field name="name">saas.app.form</field>
         <field name="model">saas.app</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="SaaS Apps">
+                <header />
                 <sheet>
-                    <field name="icon_image" widget="image" class="oe_avatar o_field_image"/>
+                    <field name="icon_image" widget="image" class="oe_avatar" />
+                    <div class="oe_title">
+                        <h1>
+                            <field name="shortdesc" />
+                        </h1>
+                    </div>
                     <group>
-                        <field name="shortdesc"/>
-                        <field name="allow_to_sell"/>
-                        <field name="month_price" class="oe_inline" widget='monetary'/>
-                        <field name="year_price" class="oe_inline" widget='monetary'/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="dependency_ids"/>
-                        <field name="product_tmpl_id"/>
+                        <group>
+                            <field name="product_tmpl_id" />
+                            <field name="currency_id" invisible="1" />
+                            <field name="allow_to_sell" />
+                        </group>
+                        <group>
+                            <label for="month_price" string="Month Price" />
+                            <div name="month_price_container">
+                                <field name="month_price" class="oe_inline" widget='monetary' />
+                            </div>
+                            <label for="year_price" string="Year Price" />
+                            <div name="year_price_container">
+                                <field name="year_price" class="oe_inline" widget='monetary' />
+                            </div>
+                        </group>
                     </group>
+                    <field name="dependency_ids" />
                 </sheet>
             </form>
         </field>

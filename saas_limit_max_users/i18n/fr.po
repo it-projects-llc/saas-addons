@@ -1,0 +1,45 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_limit_max_users
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-29 07:49+0000\n"
+"PO-Revision-Date: 2023-03-29 09:51+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: saas_limit_max_users
+#: model:ir.model,name:saas_limit_max_users.model_saas_db
+msgid "Build"
+msgstr "Instance"
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__users_count
+msgid "Current No. Of Users"
+msgstr "Nombre d'utilisateurs actuel"
+
+#. module: saas_limit_max_users
+#: model:ir.model,name:saas_limit_max_users.model_saas_operator
+msgid "Database Operator"
+msgstr "Instances de base de données"
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__max_users_limit
+msgid "Max Users Allowed"
+msgstr "Nombre Utilisateurs Autorisés"
+
+#. module: saas_limit_max_users
+#. odoo-python
+#: code:addons/saas_limit_max_users/models/saas_db.py:0
+#, python-format
+msgid "Number of allowed max users must be at least 1"
+msgstr "Le nombre d'utilisateurs max doit être supérieur à 1"

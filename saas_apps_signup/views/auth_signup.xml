@@ -4,7 +4,7 @@
 <odoo>
     <template inherit_id="auth_signup.fields" id="additional_fields" name="Auth Signup additional form fields">
 
-        <xpath expr="//div[hasclass('form-group', 'field-name')]" position="after">
+        <xpath expr="//div[hasclass('field-confirm_password')]" position="after">
             <t t-if="not only_passwords">
                 <input type="hidden" name="operator_id" t-att-value="operator_id" t-if="operator_id"/>
 

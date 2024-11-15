@@ -20,9 +20,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_get_build_access" type="object" string="Connect to the Build" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
-                    <button name="refresh_data" type="object" string="Refresh" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" />
-                    <button name="action_install_missing_mandatory_modules" type="object" string="Install missing mandatory modules" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" groups="base.group_no_one" />
+                    <button name="action_get_build_access" type="object" string="Connect to the Build" attrs="{'invisible':[('state', '!=', 'done')]}" />
+                    <button name="refresh_data" type="object" string="Refresh" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_highlight" />
+                    <button name="action_install_missing_mandatory_modules" type="object" string="Install missing mandatory modules" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_highlight" groups="base.group_no_one" />
                     <field name="state" widget="statusbar" nolabel="1"/>
                 </header>
                 <sheet>
@@ -35,6 +35,7 @@
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
                     <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
                 </div>
             </form>

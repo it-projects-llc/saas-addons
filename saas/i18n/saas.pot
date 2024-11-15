@@ -4,8 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-29 08:18+0000\n"
+"PO-Revision-Date: 2023-03-29 08:18+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,23 +16,43 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+msgid "Are you sure you want to suspend this access to database?"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+msgid "Are you sure you want to unsuspend this access to database?"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: saas
 #: model:ir.model,name:saas.model_auth_quick_master_token
 msgid "Authentication Token"
 msgstr ""
 
 #. module: saas
 #: model:ir.model.fields,help:saas.field_saas_operator__db_url_template
-msgid "Avaialble variables: {db_id}, {db_name}"
-msgstr ""
-
-#. module: saas
-#: model:ir.model.fields,help:saas.field_saas_operator__db_name_template
-msgid "Avaialble variables: {unique_id}"
+msgid "Avaialble variables: {db_name}"
 msgstr ""
 
 #. module: saas
 #: model:ir.model,name:saas.model_saas_db
 msgid "Build"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__build_count
+msgid "Build Count"
 msgstr ""
 
 #. module: saas
@@ -66,12 +88,18 @@ msgstr ""
 #. module: saas
 #: model:ir.actions.act_window,name:saas.saas_db_action
 #: model:ir.ui.menu,name:saas.saas_main_menu_item_2
+#: model_terms:ir.ui.view,arch_db:saas.saas_operator_form_view
 msgid "Builds"
 msgstr ""
 
 #. module: saas
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
 msgid "Cancel"
+msgstr ""
+
+#. module: saas
+#: model:ir.ui.menu,name:saas.saas_main_menu_config
+msgid "Configuration"
 msgstr ""
 
 #. module: saas
@@ -107,11 +135,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_date
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_date
 msgid "Created on"
-msgstr ""
-
-#. module: saas
-#: model:ir.model.fields,field_description:saas.field_saas_operator__db_name_template
-msgid "DB Names"
 msgstr ""
 
 #. module: saas
@@ -170,6 +193,11 @@ msgid "Db"
 msgstr ""
 
 #. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.res_config_settings_view_form
+msgid "Defaults"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_module__description
 msgid "Description"
 msgstr ""
@@ -203,6 +231,21 @@ msgid "Extra initialization"
 msgstr ""
 
 #. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__id
 #: model:ir.model.fields,field_description:saas.field_saas_db__id
 #: model:ir.model.fields,field_description:saas.field_saas_log__id
@@ -215,13 +258,44 @@ msgid "ID"
 msgstr ""
 
 #. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__template_demo
 msgid "Install demo data"
 msgstr ""
 
 #. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_operator_form_view
+msgid "Install missing mandatory modules"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__is_technical_template
+msgid "Is technical template?"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__key
 msgid "Key"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__template_language
+msgid "Language"
 msgstr ""
 
 #. module: saas
@@ -266,6 +340,11 @@ msgid "Log type"
 msgstr ""
 
 #. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: saas
 #: model:res.groups,name:saas.group_manager
 msgid "Manager"
 msgstr ""
@@ -276,6 +355,16 @@ msgid "Master URL (Server-to-Server)"
 msgstr ""
 
 #. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__installing_modules
 msgid "Modules installation"
 msgstr ""
@@ -283,6 +372,11 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template__template_module_ids
 msgid "Modules to install"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.constraint,message:saas.constraint_saas_db_name_unique
+msgid "Must be unique database name!"
 msgstr ""
 
 #. module: saas
@@ -298,6 +392,26 @@ msgid "Normal Build"
 msgstr ""
 
 #. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__operator_id
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_id
 #: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__saas_operator
@@ -310,9 +424,14 @@ msgid "Operator Db"
 msgstr ""
 
 #. module: saas
+#: model:ir.actions.act_window,name:saas.saas_operator_action
+#: model:ir.ui.menu,name:saas.saas_operator_menu_item
+msgid "Operators"
+msgstr ""
+
+#. module: saas
 #: model:ir.actions.server,name:saas.preparing_template_next_cron_ir_actions_server
 #: model:ir.cron,cron_name:saas.preparing_template_next_cron
-#: model:ir.cron,name:saas.preparing_template_next_cron
 msgid "Preparing Template Next Cron"
 msgstr ""
 
@@ -325,6 +444,11 @@ msgstr ""
 #: model:ir.model.fields,help:saas.field_saas_template__template_post_init
 msgid ""
 "Python code to be executed once db is created and modules are installed"
+msgstr ""
+
+#. module: saas
+#: model:ir.model,name:saas.model_queue_job
+msgid "Queue Job"
 msgstr ""
 
 #. module: saas
@@ -344,6 +468,7 @@ msgid "Reference"
 msgstr ""
 
 #. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
 #: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
 msgid "Refresh"
 msgstr ""
@@ -351,7 +476,14 @@ msgstr ""
 #. module: saas
 #: model:ir.module.category,name:saas.module_management
 #: model:ir.ui.menu,name:saas.saas_main_menu
+#: model_terms:ir.ui.view,arch_db:saas.res_config_settings_view_form
 msgid "SaaS"
+msgstr ""
+
+#. module: saas
+#: model:ir.actions.server,name:saas.refresh_saas_db_data_ir_actions_server
+#: model:ir.cron,cron_name:saas.refresh_saas_db_data
+msgid "SaaS: refresh data from build database"
 msgstr ""
 
 #. module: saas
@@ -360,9 +492,20 @@ msgid "Same Instance"
 msgstr ""
 
 #. module: saas
+#: model:ir.actions.act_window,name:saas.action_config_settings
+#: model:ir.ui.menu,name:saas.saas_main_menu_config_settings
+msgid "Settings"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_db__state
 #: model:ir.model.fields,field_description:saas.field_saas_template_operator__state
 msgid "State"
+msgstr ""
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+msgid "Suspend Database"
 msgstr ""
 
 #. module: saas
@@ -373,6 +516,12 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_module__name
 msgid "Technical name"
+msgstr ""
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_technical_template_action
+#: model:ir.ui.menu,name:saas.saas_main_menu_config_tt
+msgid "Technical templates"
 msgstr ""
 
 #. module: saas
@@ -431,6 +580,7 @@ msgid "Templates"
 msgstr ""
 
 #. module: saas
+#. odoo-python
 #: code:addons/saas/models/saas_template.py:0
 #, python-format
 msgid ""
@@ -465,6 +615,11 @@ msgid "URL for server-to-server communication "
 msgstr ""
 
 #. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+msgid "Unsuspend Database"
+msgstr ""
+
+#. module: saas
 #: model:ir.model.fields,field_description:saas.field_saas_template_create_build__random
 msgid "Use random operator"
 msgstr ""
@@ -483,6 +638,16 @@ msgstr ""
 #. module: saas
 #: model:ir.model.fields,field_description:saas.field_build_post_init_line__value
 msgid "Value"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__website_message_ids
+msgid "Website communication history"
 msgstr ""
 
 #. module: saas

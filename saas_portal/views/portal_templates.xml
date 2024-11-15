@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <template id="portal_layout" name="Portal layout: build menu entry" inherit_id="portal.portal_breadcrumbs" priority="40">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'build' or build" t-attf-class="breadcrumb-item #{'active ' if not build else ''}">
+                <a t-if="build" t-attf-href="/my/builds?{{ keep_query() }}">Build</a>
+                <t t-else="">Builds</t>
+            </li>
+            <li t-if="build" class="breadcrumb-item active text-truncate">
+                <span t-field="build.name" />
+            </li>
+        </xpath>
+    </template>
 
     <template id="portal_my_home" name="Show Builds" customize_show="True" inherit_id="portal.portal_my_home" priority="40">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">

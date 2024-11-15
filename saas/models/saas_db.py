@@ -7,7 +7,7 @@ from odoo import models, fields
 
 class SAASDB(models.Model):
     _name = 'saas.db'
-    _inherit = 'mail.thread'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Build'
 
     name = fields.Char('Name', help='Technical Database name', readonly=True)
@@ -20,6 +20,10 @@ class SAASDB(models.Model):
         ('draft', 'Draft'),
         ('done', 'Ready'),
     ], default='draft')
+
+    _sql_constraints = [
+        ('name_unique', 'unique(name)', "Must be unique database name!"),
+    ]
 
     def unlink(self):
         self.drop_db()
@@ -55,12 +59,13 @@ class SAASDB(models.Model):
 
     def write(self, vals):
         res = super(SAASDB, self).write(vals)
-        if not self.env.context.get("writing_from_refresh_data"):  # Do not run "refresh_data", if already running it
+        # Do not run "refresh_data", if already running it
+        if not self.env.context.get("writing_from_refresh_data"):
             self.refresh_data()
         return res
 
     def refresh_data(self, should_read_from_build=True, should_write_to_build=True):
-        self.flush()
+        self.flush_recordset()
         for record in self.filtered(lambda record: (record.type, record.state) == ("build", "done")).with_context(writing_from_refresh_data=True):
             if should_read_from_build:
                 vals = record.read_values_from_build()
@@ -89,4 +94,5 @@ class SAASDB(models.Model):
     def action_install_missing_mandatory_modules(self):
         for build in self.filtered(lambda x: x.state == "done"):
             operator = build.operator_id
-            operator._install_modules(build.name, [('name', 'in', operator.get_mandatory_modules())])
+            operator._install_modules(
+                build.name, [('name', 'in', operator.get_mandatory_modules())])

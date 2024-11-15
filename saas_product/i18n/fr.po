@@ -1,0 +1,64 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-29 07:52+0000\n"
+"PO-Revision-Date: 2023-03-29 09:54+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: saas_product
+#: model:product.attribute.value,name:saas_product.product_attribute_value_subscription_annually
+msgid "Annually"
+msgstr "Annuellement"
+
+#. module: saas_product
+#: model:ir.model.fields,field_description:saas_product.field_product_product__is_saas_product
+#: model:ir.model.fields,field_description:saas_product.field_product_template__is_saas_product
+msgid "Is SaaS product?"
+msgstr "Est un produit SaaS"
+
+#. module: saas_product
+#: model:ir.model,name:saas_product.model_account_move_line
+msgid "Journal Item"
+msgstr "Écriture comptable"
+
+#. module: saas_product
+#: model:product.attribute.value,name:saas_product.product_attribute_value_subscription_monthly
+msgid "Monthly"
+msgstr "Mensuelle"
+
+#. module: saas_product
+#: model:ir.model,name:saas_product.model_product_template
+msgid "Product"
+msgstr "Produit"
+
+#. module: saas_product
+#: model:ir.model,name:saas_product.model_product_product
+msgid "Product Variant"
+msgstr "Variante de produit"
+
+#. module: saas_product
+#: model:product.attribute,name:saas_product.product_attribute_subscription
+msgid "Subscription (SaaS)"
+msgstr "Abonnement (SaaS)"
+
+#. module: saas_product
+#: model:product.attribute.value,name:saas_product.product_attribute_value_subscription_trial
+msgid "Trial"
+msgstr "Essaie"
+
+#. module: saas_product
+#: model:product.template,name:saas_product.product_users
+msgid "Users"
+msgstr "Utilisateurs"

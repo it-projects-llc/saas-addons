@@ -69,6 +69,7 @@ class CreateBuildByTemplate(models.TransientModel):
 class BuildPostInit(models.TransientModel):
     _name = 'build.post_init.line'
     _description = 'Build post init line'
+
     build_creation_id = fields.Many2one('saas.template.create_build', readonly=True)
     key = fields.Char()
     value = fields.Char()

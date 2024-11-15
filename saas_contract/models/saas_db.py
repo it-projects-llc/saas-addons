@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from odoo import fields, models, _
 
 
 class SaasDb(models.Model):
@@ -24,13 +24,14 @@ class SaasDb(models.Model):
     def action_create_contract(self):
         self.ensure_one()
         assert not self.contract_id, "This build is already associated with contract"
+        name = _('%s Saas contract') % self.name
         return {
             "type": "ir.actions.act_window",
             "name": "Contract",
             "res_model": "contract.contract",
             "view_mode": "form",
             "context": {
-                "default_name": self.name + "'s SaaS contract",
+                "default_name": name,
                 "default_contract_type": "sale",
                 "default_build_id": self.id,
                 "default_line_recurrence": False,

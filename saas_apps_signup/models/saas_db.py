@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields
+from odoo import models, fields, api
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -21,7 +21,8 @@ class SaasDb(models.Model):
             ("record_ids", "like", [self.contract_id.id]),
         ] + super(SaasDb, self)._get_domain_of_queue_job_records()
 
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
 
         if not self.env.user.has_group("saas.group_manager"):
             if self.env['saas.db']._search([
@@ -30,7 +31,7 @@ class SaasDb(models.Model):
             ], limit=1):
                 raise Exception("You cannot create more than one draft database")
 
-        return super(SaasDb, self).create(vals)
+        return super(SaasDb, self).create(vals_list)
 
     def read_values_from_build(self):
         vals = super(SaasDb, self).read_values_from_build()

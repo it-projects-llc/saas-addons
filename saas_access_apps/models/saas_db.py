@@ -5,13 +5,13 @@ from odoo import models
 
 
 class SaasDb(models.Model):
-
     _inherit = "saas.db"
 
     def write_values_to_build(self):
         super(SaasDb, self).write_values_to_build()
 
-        model, res_id = self.xmlid_to_res_model_res_id("access_apps.group_allow_apps")
+        model, res_id = self.xmlid_to_res_model_res_id(
+            "access_apps.group_allow_apps")
 
         # disallowing all users to install apps
         if model and res_id:

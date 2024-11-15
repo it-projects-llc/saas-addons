@@ -7,5 +7,5 @@
     "license": "LGPL-3",
     "depends": [],
     "external_dependencies": {"python": [], "bin": []},
-    "installable": False,
+    "installable": True,
 }

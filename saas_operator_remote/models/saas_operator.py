@@ -36,8 +36,8 @@ class SaasOperator(models.Model):
     _inherit = "saas.operator"
 
     type = fields.Selection(selection_add=[("remote", "Remote Instance")])
-    remote_instance_url = fields.Char("Instance URL")
-    remote_master_pwd = fields.Char("Master Password")
+    remote_instance_url = fields.Char(string="Instance URL")
+    remote_master_pwd = fields.Char(string="Master Password")
 
     def _create_db(self, template_db, db_name, demo, lang="en_US"):
         remote_ops = self.filtered(lambda op: op.type == "remote")

@@ -1,0 +1,327 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_apps
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-29 07:35+0000\n"
+"PO-Revision-Date: 2023-03-29 09:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "/ month"
+msgstr "/ mois"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "/ year"
+msgstr "/ an"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "10"
+msgstr ""
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "<b id=\"apps-qty\" class=\"left-align-price\">0</b> Apps"
+msgstr "<b id=\"apps-qty\" class=\"left-align-price\">0</b> Apps"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "<b id=\"users-qty\" class=\"left-align-price\">1</b> Users"
+msgstr "<b id=\"users-qty\" class=\"left-align-price\">1</b> Utilisateurs"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "<small id=\"box-period\" class=\"text-muted period fnt-24\">year</small>"
+msgstr "<small id=\"box-period\" class=\"text-muted period fnt-24\">an(s)</small>"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Annually"
+msgstr "Annuel"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Buy now"
+msgstr "Acheter Maintenant"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Choose the number of <b>Users</b>"
+msgstr "Choisir le nombre  <b>d'Utilisateurss</b>"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Choose your Apps"
+msgstr "Choisir l'application"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Choose your Packages"
+msgstr "Choisir votre Pack"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_res_config_settings
+msgid "Config Settings"
+msgstr "Paramètres de configuration"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__currency_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__currency_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__currency_id
+msgid "Currency"
+msgstr "Monnaie"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_saas_template
+msgid "Database Template"
+msgstr "Modèle de base de données"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Decrease users qty"
+msgstr "Diminuer le nombre d'utilisateurs"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__dependency_ids
+msgid "Dependencies"
+msgstr "Dépendances"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__icon_image
+msgid "Icon"
+msgstr "Icone"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Increase users qty"
+msgstr "Augmenter le nombre d’utilisateurs"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__is_package
+msgid "Is package?"
+msgstr "Est un package?"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.ui.menu,name:saas_apps.menu_website_manage_apps_list
+msgid "Manage Apps"
+msgstr "Gérer les Apps"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__shortdesc
+msgid "Module Name"
+msgstr "Nom de module"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__month_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__month_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__month_ptv
+msgid "Month Ptv"
+msgstr "Ptv Mensuel"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__month_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__month_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__month_price
+msgid "Month price"
+msgstr "Prix mensuelle"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Monthly"
+msgstr "Mensuelle"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__package_image
+msgid "Package image"
+msgstr "Image du package"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_saas_period_product_mixin
+msgid "Period Product Mixin"
+msgstr ""
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Please wait..."
+msgstr "Merci de patienter..."
+
+#. module: saas_apps
+#: model:website.menu,name:saas_apps.main_pricing_menu
+msgid "Pricing"
+msgstr "Tarification"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_product_template
+msgid "Product"
+msgstr "Produit"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__product_tmpl_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__product_tmpl_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__product_tmpl_id
+msgid "Product Tmpl"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__year_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__year_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__year_product_id
+msgid "Product for annually subscription"
+msgstr "Produit pour abonnement annuel"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__month_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__month_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__month_product_id
+msgid "Product for monthly subscription"
+msgstr "Produit pour abonnement mensuelle"
+
+#. module: saas_apps
+#. odoo-javascript
+#: code:addons/saas_apps/static/src/xml/base.xml:0
+#, python-format
+msgid "Refresh"
+msgstr "MAJ"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_saas_app
+msgid "SaaS App"
+msgstr ""
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "SaaS pricing page"
+msgstr "SaaS page des tarifs"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_product_product__saas_app_id
+#: model:ir.model.fields,field_description:saas_apps.field_product_template__saas_app_id
+msgid "Saas App"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_product_product__saas_package_id
+#: model:ir.model.fields,field_description:saas_apps.field_product_template__saas_package_id
+msgid "Saas Package"
+msgstr "SaaS Pack"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.saas_app_search
+msgid "Search Redirect"
+msgstr "Redirection de recherche"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__allow_to_sell
+msgid "Sellable"
+msgstr "Vendable"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_buy_now_button
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show 'Buy now' button"
+msgstr "Afficher le bouton 'Acheter maintenant'"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_try_trial_button
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show 'Try trial' button"
+msgstr "Afficher le bouton « Essayer gratuitement »"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show applications at \"price\" page"
+msgstr "Afficher les applications sur la page « tarifs»"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show apps"
+msgstr "Afficher les apps"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_packages
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show packages"
+msgstr "Afficher les pack"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show packages at \"price\" page"
+msgstr "Afficher les packs sur la page « tarifs»"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__name
+msgid "Technical Name"
+msgstr "Nom technique"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Try trial"
+msgstr "Essayer gratuitement"
+
+#. module: saas_apps
+#: model:ir.actions.act_window,name:saas_apps.action_saas_app_list
+msgid "Website Apps"
+msgstr ""
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__year_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__year_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__year_ptv
+msgid "Year Ptv"
+msgstr "Ptv Annuel"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__year_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__year_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__year_price
+msgid "Year price"
+msgstr "Tarif annuel"

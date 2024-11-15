@@ -8,6 +8,7 @@ from odoo.addons.auth_quick_master.tools.build_redirection import build_redirect
 
 
 class SaasController(odoo.http.Controller):
+
     @route('/saas/auth-to-build/<int:build_id>', type='http', auth='user')
     def auth_to_build(self, build_id=None, **kwargs):
         if not build_id:

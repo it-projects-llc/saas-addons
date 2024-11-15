@@ -21,12 +21,13 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_create_build" type="object" string="Create Build" class="oe_read_only"/>
+                    <button name="action_create_build" type="object" string="Create Build" class="oe_highlight"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="name"/>
                         <field name="template_demo"/>
+                        <field name="is_technical_template"/>
                         <field name="template_module_ids" widget="many2many_tags"/>
                         <field name="template_post_init" widget="ace" options="{'mode': 'python'}"/>
                         <field name="build_post_init" widget="ace" options="{'mode': 'python'}"/>

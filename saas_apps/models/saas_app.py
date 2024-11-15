@@ -19,9 +19,9 @@ class SaasApp(models.Model):
 
     # TODO: add non-storable compute field like "Are cyclic dependency detected?"
 
-    @api.model
-    def create(self, vals):
-        res = super(SaasApp, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(SaasApp, self).create(vals_list)
         if not res.product_tmpl_id:
             res.product_tmpl_id = self.env["product.template"].create({
                 "name": res.shortdesc,

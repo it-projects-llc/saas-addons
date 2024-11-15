@@ -9,12 +9,13 @@
             <form>
                 <header>
                     <button name="action_install_missing_mandatory_modules" type="object" string="Install missing mandatory modules" attrs="{'invisible':[('state', '!=', 'done')]}" class="oe_read_only" groups="base.group_no_one" />
-                    <field name="state" widget="statusbar" nolabel="1" class="oe_read_only"/>
+                    <field name="state" widget="statusbar" nolabel="1" class="oe_read_only" />
                 </header>
                 <sheet>
                     <group>
-                        <field name="operator_db_name"/>
-                        <field name="operator_id" options="{'no_create': 1}"/>
+                        <field name="operator_db_name" />
+                        <field name="template_language" />
+                        <field name="operator_id" options="{'no_create': 1}" />
                     </group>
                 </sheet>
             </form>
@@ -26,9 +27,10 @@
         <field name="model">saas.template.operator</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="operator_db_name"/>
-                <field name="state"/>
-                <field name="operator_id"/>
+                <field name="operator_db_name" />
+                <field name="template_language" />
+                <field name="state" />
+                <field name="operator_id" />
             </tree>
         </field>
     </record>
