@@ -4,7 +4,6 @@
 from odoo import api, models, SUPERUSER_ID
 import logging
 from ..exceptions import OperatorNotAvailable
-from datetime import date, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -17,8 +16,8 @@ class Contract(models.Model):
     def create(self, vals):
         record = super(Contract, self).create(vals)
 
-        if self.env.context.get("create_build"):
-            record.with_user(SUPERUSER_ID).with_delay()._create_build()
+        if self.env.context.get("create_build_vals"):
+            record.with_user(SUPERUSER_ID).with_delay()._create_build(self.env.context.get("create_build_vals"))
 
         return record
 
@@ -26,7 +25,7 @@ class Contract(models.Model):
     def _create_saas_contract_for_trial(self, build, max_users_limit, subscription_period, installing_modules=None, saas_template_id=None):
         partner = build.admin_user.partner_id
         contract_lines = []
-        today = date.today()
+        contract_vals = {}
         subscription_period_suffix = ""
         if subscription_period == "month":
             subscription_period_suffix = "monthly"
@@ -38,22 +37,21 @@ class Contract(models.Model):
         expiration_date = self.env["saas.db"]._fields["expiration_date"].default(build)
         product_users = self.env.ref("saas_product.product_users_{}".format(subscription_period_suffix))
 
-        contract_lines += self.env.ref("saas_product.product_users_trial").mapped(lambda p: {
-            "name": p.name,
-            "product_id": p.id,
-            "price_unit": p.lst_price,
-            "quantity": max_users_limit,
-            "date_start": today,
-            "date_end": expiration_date,
-        })
+        contract_vals = {
+            "name": "{}'s SaaS Contract".format(partner.name),
+            "build_id": build.id,
+            "partner_id": partner.id,
+            "line_recurrence": False,
+            "trial_expiration_date": expiration_date,
+            "recurring_rule_type": subscription_period + "ly",
+            "recurring_interval": 1,
+        }
 
         contract_lines += product_users.mapped(lambda p: {
             "name": p.name,
             "product_id": p.id,
             "price_unit": p.lst_price,
             "quantity": max_users_limit,
-            "date_start": expiration_date + timedelta(days=1),
-            "date_end": today + product_users._get_expiration_timedelta()
         })
 
         if installing_modules:
@@ -65,7 +63,6 @@ class Contract(models.Model):
                                       "product_id": p.id,
                                       "price_unit": p.lst_price,
                                       "quantity": 1,
-                                      "date_start": today,
                                   })
 
         if saas_template_id:
@@ -78,35 +75,20 @@ class Contract(models.Model):
                                       "product_id": p.id,
                                       "price_unit": p.lst_price,
                                       "quantity": 1,
-                                      "date_start": expiration_date + timedelta(days=1),
-                                      "date_end": today + product_users._get_expiration_timedelta()
                                   })
 
         for x in contract_lines:
             x.update({
                 "uom_id": self.env.ref("uom.product_uom_unit").id,
-                "recurring_next_date": x["date_start"],
             })
-            if x.get("date_end"):
-                x.update({
-                    "recurring_rule_type": "yearly",
-                    "recurring_interval": 999,
-                })
 
-        contract = self.env["contract.contract"].with_context(create_build=True).create({
-            "name": "{}'s SaaS Contract".format(partner.name),
-            "build_id": build.id,
-            "partner_id": partner.id,
-            "line_recurrence": True,
-            "contract_line_ids": list(map(lambda line: (0, 0, line), contract_lines))
-        })
+        contract_vals["contract_line_fixed_ids"] = list(map(lambda line: (0, 0, line), contract_lines))
+        return self.env["contract.contract"].with_context(create_build_vals={
+            "max_users_limit": max_users_limit,
+            "expiration_date": expiration_date,
+        }).create(contract_vals)
 
-        invoice = contract._recurring_create_invoice()
-        invoice.action_post()
-
-        return contract
-
-    def _create_build(self):
+    def _create_build(self, build_vals):
         for contract in self:
             partner = self.partner_id
             build = self.build_id
@@ -160,7 +142,9 @@ class Contract(models.Model):
                 build_installing_modules
             )) + "]"
 
-            build = template_operator.create_db(
+            build.write(build_vals)
+
+            template_operator.create_db(
                 key_values={"installing_modules": installing_modules_var},
                 with_delay=False,
                 draft_build_id=build.id
@@ -169,8 +153,6 @@ class Contract(models.Model):
             # TODO: это тоже не забудь убрать
             if not contract.build_id:
                 contract.build_id = build
-
-            contract.action_update_build()
 
     @api.model
     def _finalize_and_create_invoices(self, invoices_values):
@@ -198,5 +180,4 @@ class ContractLine(models.Model):
             self.env["account.move.line"].sudo().browse(move_line_id).write({
                 "contract_line_id": res.id,
             })
-            res._recompute_is_paid()
         return res

@@ -112,6 +112,9 @@ class SAASOperator(models.Model):
             return
         self._unmap_domain(domain)
 
+    def _signal_changes(self, db_name):
+        cluster.signal_changes(db_name)
+
     def get_db_url(self, db):
         # TODO: use mako for url templating
         self.ensure_one()
@@ -120,7 +123,7 @@ class SAASOperator(models.Model):
     def generate_db_name(self):
         self.ensure_one()
         sequence = self.env['ir.sequence'].next_by_code('saas.db')
-        return "fast-build-{unique_id}".db_name_template.format(unique_id=sequence)
+        return "fast-build-{unique_id}".format(unique_id=sequence)
 
     def _get_mandatory_args(self, db):
         self.ensure_one()
@@ -212,10 +215,8 @@ class SAASOperator(models.Model):
         manager_users = self.env.ref('saas.group_manager').users
         if message_type == 'success':
             manager_users.notify_success(message=message, title=title, sticky=True)
-        elif message_type == 'info':
-            manager_users.notify_info(message=message, title=title, sticky=True)
         else:
-            manager_users.notify_default(message=message, title=title, sticky=True)
+            manager_users.notify_info(message=message, title=title, sticky=True)
 
 
 class SafeDict(defaultdict):

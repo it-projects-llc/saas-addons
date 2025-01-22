@@ -6,17 +6,15 @@
     var core = require('web.core');
     var session = require('web.session');
     var ListController = require('web.ListController');
+    var ListView = require('web.ListView');
+    var viewRegistry = require('web.view_registry');
 
-    ListController.include({
-        renderButtons: function($node) {
-        this._super.apply(this, arguments);
-            if (this.$buttons) {
-                var refresh_apps_button = this.$buttons.find('.refresh_apps_button');
-                if (refresh_apps_button.length) {
-                    refresh_apps_button.on("click", this.proxy('refresh_apps_button'));
-                }
-            }
-        },
+    var ManageAppsController = ListController.extend({
+        buttons_template: 'ManageApps.buttons',
+        events: _.extend({}, ListController.prototype.events, {
+            'click .refresh_apps_button': 'refresh_apps_button',
+        }),
+
         refresh_apps_button: function () {
             // Loading all modules in saas.line from ir.module.module
             this._rpc({
@@ -28,4 +26,13 @@
             });
         }
     });
+
+    var ManageAppsView = ListView.extend({
+        config: _.extend({}, ListView.prototype.config, {
+            Controller: ManageAppsController,
+        }),
+    });
+
+    viewRegistry.add('saas_apps_tree', ManageAppsView);
+
 });

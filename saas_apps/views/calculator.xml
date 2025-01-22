@@ -47,15 +47,15 @@
                                                         style="max-width: 40px;max-height: 40px;"/>
                                                 </div>
                                                 <div class="app-data">
-                                                    <div><t t-esc="app.shortdesc"/></div>
+                                                    <div><t t-out="app.shortdesc"/></div>
                                                     <div id="app-price">
                                                         <div class="yearly-price">
-                                                            <div class="price-value"><t t-esc="app.year_price"/></div>
-                                                            <div class="period"> <t t-esc="currency.symbol"/> / year</div>
+                                                            <div class="price-value"><t t-out="app.year_price"/></div>
+                                                            <div class="period"> <t t-out="currency.symbol"/> / year</div>
                                                         </div>
                                                         <div class="monthly-price hid">
-                                                            <div class="price-value"><t t-esc="app.month_price"/></div>
-                                                            <div class="period">  <t t-esc="currency.symbol"/>  / month</div>
+                                                            <div class="price-value"><t t-out="app.month_price"/></div>
+                                                            <div class="period">  <t t-out="currency.symbol"/>  / month</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -89,19 +89,19 @@
                                                 />
                                             </div>
                                             <div class="app-data">
-                                                <div><t t-esc="package.name"/></div>
+                                                <div><t t-out="package.name"/></div>
                                                 <div id="app-price">
                                                     <div class="yearly-price">
-                                                        <div class="price-value"><t t-esc="package.year_price"/></div>
-                                                        <div class="period"> <t t-esc="currency.symbol"/> / year</div>
+                                                        <div class="price-value"><t t-out="package.year_price"/></div>
+                                                        <div class="period"> <t t-out="currency.symbol"/> / year</div>
                                                     </div>
                                                     <div class="monthly-price hid">
-                                                        <div class="price-value"><t t-esc="package.month_price"/></div>
-                                                        <div class="period">  <t t-esc="currency.symbol"/>  / month</div>
+                                                        <div class="price-value"><t t-out="package.month_price"/></div>
+                                                        <div class="period">  <t t-out="currency.symbol"/>  / month</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="app_tech_name" style="display: none"><t t-esc="package.name"/></div>
+                                            <div class="app_tech_name" style="display: none"><t t-out="package.name"/></div>
                                         </div>
                                     </t>
                                 </div>
@@ -128,19 +128,19 @@
                                             <div class="leftstr"><b id="users-qty" class="left-align-price">1</b> Users</div>
                                             <div class="rightstr">
                                                 <div id="users-cnt-cost" class="d-inline">0 </div>
-                                                <div id="users-cnt-currency" class="d-inline"><t t-esc="currency.symbol"/></div>
+                                                <div id="users-cnt-currency" class="d-inline"><t t-out="currency.symbol"/></div>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="leftstr"><b id="apps-qty" class="left-align-price">0</b> Apps</div>
                                             <div class="rightstr">
                                                 <div id="apps-cost" class="d-inline">0 </div>
-                                                <div id="apps-cost-currency" class="d-inline"><t t-esc="currency.symbol"/></div>
+                                                <div id="apps-cost-currency" class="d-inline"><t t-out="currency.symbol"/></div>
                                             </div>
                                         </li>
                                     </ul>
                                     <h4 id="price" class="card-title pricing-card-title">10</h4>
-                                    <h4 class="card-title pricing-card-title" style="display: inline;"> <t t-esc="currency.symbol"/> / </h4>
+                                    <h4 class="card-title pricing-card-title" style="display: inline;"> <t t-out="currency.symbol"/> / </h4>
                                     <small id="box-period" class="text-muted period fnt-24">year</small>
                                     <div id="btn-block" style="display: none">
                                         <t t-if="show_try_trial_button">

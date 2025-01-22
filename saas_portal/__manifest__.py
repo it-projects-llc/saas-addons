@@ -1,7 +1,7 @@
 {
     "name": "SaaS: Portal",
     "summary": "Allows to customers see their Builds at Portal",
-    "version": "14.0.1.0.2",
+    "version": "15.0.1.0.2",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
@@ -9,6 +9,7 @@
     "depends": [
         "saas",
         "portal",
+        "saas_domain_names",
         "saas_expiration",
         "saas_limit_max_users",
         "saas_build_admin",

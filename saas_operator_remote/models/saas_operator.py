@@ -155,3 +155,13 @@ class SaasOperator(models.Model):
             {"master_pwd": self.remote_master_pwd, "backup_name": backup_name},
         )
         return response.get("result")
+
+    def _signal_changes(self, db_name):
+        if self.type != "remote":
+            return super(SaasOperator, self)._signal_changes(db_name)
+
+        response = jsonrpc(
+            self.remote_instance_url + "/saas_operator/signal_changes",
+            {"master_pwd": self.remote_master_pwd, "db_name": db_name},
+        )
+        return response.get("result")

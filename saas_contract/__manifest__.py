@@ -7,7 +7,7 @@
     "category": "Sales",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.1",
     "application": False,
 
     "author": "IT-Projects LLC, Eugene Molotov",
@@ -22,8 +22,8 @@
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
-        "data/ir_cron.xml",
         "views/contract.xml",
+        "views/contract_line.xml",
         "views/saas_db.xml",
     ],
     "demo": [
