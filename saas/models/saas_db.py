@@ -29,7 +29,6 @@ class SAASDB(models.Model):
         self.ensure_one()
         db_name = self.name
         self.operator_id._create_db(template_db, db_name, demo, lang)
-        self.name = db_name + '.' + self.operator_id.domain_build
         self.state = 'done'
         self.env['saas.log'].log_db_created(self)
         if callback_obj and callback_method:

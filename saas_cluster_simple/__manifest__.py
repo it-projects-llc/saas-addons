@@ -9,5 +9,5 @@
     "data": [],
     "demo": [],
     "qweb": [],
-    "installable": False,
+    "installable": True,
 }

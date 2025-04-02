@@ -38,7 +38,7 @@
         "views/saas_operator_views.xml",
         "views/saas_module_views.xml",
         "views/saas_db_views.xml",
-        "views/res_config_settings_views.xml",
+        #"views/res_config_settings_views.xml",
         "wizard/saas_template_create_build_view.xml",
         "data/ir_cron_data.xml",
         "data/saas_operator_data.xml",
@@ -59,5 +59,5 @@
     "uninstall_hook": None,
 
     "auto_install": False,
-    "installable": False,
+    "installable": True,
 }
