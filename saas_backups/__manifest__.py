@@ -2,7 +2,7 @@
     "name": "SaaS: Backups",
     "summary": "Makes backups of builds",
     "images": [],
-    "version": "16.0.0.1.0",
+    "version": "17.0.0.1.0",
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
     "license": "AGPL-3",
