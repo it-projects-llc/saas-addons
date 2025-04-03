@@ -2,8 +2,11 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class SAASDB(models.Model):
     _name = 'saas.db'
@@ -25,15 +28,30 @@ class SAASDB(models.Model):
         self.drop_db()
         return super(SAASDB, self).unlink()
 
+    @api.model
     def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()
         db_name = self.name
-        self.operator_id._create_db(template_db, db_name, demo, lang)
+        _logger.info(f"Creating savepoint for DB: {db_name}")
+        try:
+            _logger.info(f"Creating DB: {db_name} using template: {template_db}")
+            self.operator_id._create_db(template_db, db_name, demo, lang)
+        except Exception as e:
+            _logger.error(f"Error during DB creation: {str(e)}")
+            raise ValidationError(f"Erreur lors de la création de la base de données: {str(e)}")
+        self.name = db_name + '.' + self.operator_id.domain_build
         self.state = 'done'
         self.env['saas.log'].log_db_created(self)
         if callback_obj and callback_method:
+            _logger.info(f"Calling callback method: {callback_method}")
             getattr(callback_obj, callback_method)()
+        _logger.info(f"DB {db_name} created successfully")
 
+    def _on_template_created(self):
+        self.ensure_one()
+        self.to_rebuild = False
+        self.state = 'installing_modules'
+        self.operator_id.with_delay().install_modules(self.template_id, self)
 
     def drop_db(self):
         for r in self:

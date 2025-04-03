@@ -14,8 +14,9 @@ from odoo.addons.queue_job.exception import RetryableJobError
 class SAASOperator(models.Model):
     _name = 'saas.operator'
     _description = 'Database Operator'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(required=True)
+    name = fields.Char(string='Name', required=True)
     # list of types can be extended via selection_add
     type = fields.Selection([
         ('local', 'Same Instance'),
@@ -28,6 +29,24 @@ class SAASOperator(models.Model):
 
     build_count = fields.Integer(compute="_compute_build_count")
     domain_build = fields.Char('Build Domain', required=True)
+
+    # Server capacity
+    max_databases = fields.Integer(string='Max Databases', default=50)
+    cpu_cores = fields.Integer(string='CPU Cores', default=4)
+    ram_size = fields.Integer(string='RAM (GB)', default=16)
+    storage_size = fields.Integer(string='Storage (GB)', default=500)
+
+    # Server status
+    active = fields.Boolean(default=True)
+    state = fields.Selection([
+        ('online', 'Online'),
+        ('offline', 'Offline'),
+        ('maintenance', 'Maintenance'),
+    ], string='Status', default='offline', tracking=True)
+
+    # Usage
+    used_databases = fields.Integer(string='Used Databases')
+    load_percentage = fields.Float(string='Load (%)', default=0)
 
     def _compute_build_count(self):
         for record in self:
@@ -55,7 +74,6 @@ class SAASOperator(models.Model):
             return
         elif self.type != 'local':
             raise NotImplementedError()
-
         return cluster.create_db(template_db, db_name, demo, lang)
 
     def _drop_db(self, db_name):

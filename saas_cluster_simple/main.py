@@ -9,11 +9,13 @@ import os
 import re
 import string
 import threading
+import time
 
 from odoo import SUPERUSER_ID, api, registry, sql_db, tools
 from odoo.service import db
 from odoo.service.model import execute_cr
 from odoo.http import _request_stack
+from psycopg2 import OperationalError
 
 from odoo.addons.host2db import host2db_config
 
@@ -53,7 +55,6 @@ def turn_off_tests():
 
 
 def create_db(template_db, db_name, demo, lang="en_US", **kw):
-    # to avoid installing extra modules we need this condition
     if tools.config["init"]:
         tools.config["init"] = {}
 
@@ -65,38 +66,50 @@ def create_db(template_db, db_name, demo, lang="en_US", **kw):
         else:
             db.exp_create_database(db_name, demo, lang)
 
-
 def drop_db(db_name):
     db.exp_drop(db_name)
 
-
-def install_modules(db_name, modules):
+def install_modules(db_name, modules, max_retries=5):
     conn = sql_db.db_connect(db_name)
-    with conn.cursor() as cr:
-        env = api.Environment(cr, SUPERUSER_ID, {})
+    retries = 0
+    while retries < max_retries:
+        try:
+            with conn.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
 
-        # Set odoo.http.request to None.
-        #
-        # Odoo tries to use its values in translation system, which may eventually
-        # change currentThread().dbname to saas master value.
-        _request_stack.push(None)
+                # Set odoo.http.request to None.
+                #
+                # Odoo tries to use its values in translation system, which may eventually
+                # change currentThread().dbname to saas master value.
+                _request_stack.push(None)
 
-        # We need to have fresh module list before installing new ones
-        env["ir.module.module"].update_list()
+                # We need to have fresh module list before installing new ones
+                env["ir.module.module"].update_list()
 
-        module_ids = env["ir.module.module"].search(
-            [("state", "=", "uninstalled")] + modules
-        )
-        with turn_off_tests():
-            module_ids.button_immediate_install()
+                module_ids = env["ir.module.module"].search(
+                    [("state", "=", "uninstalled")] + modules
+                )
+                with turn_off_tests():
+                    module_ids.button_immediate_install()
 
-        # Some magic to force reloading registry in other workers
-        env.registry.registry_invalidated = True
-        env.registry.signal_changes()
+                # Some magic to force reloading registry in other workers
+                env.registry.registry_invalidated = True
+                env.registry.signal_changes()
 
-        # return request back
-        _request_stack.pop()
-
+                # return request back
+                _request_stack.pop()
+            break
+        except OperationalError as e:
+            if 'could not serialize access due to concurrent update' in str(e):
+                retries += 1
+                _logger.warning(f"Concurrent update detected. Retrying {retries}/{max_retries}...")
+                time.sleep(2 ** retries)
+            else:
+                _logger.error(f"Error during module installation: {str(e)}")
+                raise
+        except Exception as e:
+            _logger.error(f"Error during module installation: {str(e)}")
+            raise
 
 def post_init(db_name, template_post_init):
     conn = sql_db.db_connect(db_name)
