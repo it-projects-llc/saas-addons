@@ -39,7 +39,7 @@ class SAASDB(models.Model):
         except Exception as e:
             _logger.error(f"Error during DB creation: {str(e)}")
             raise ValidationError(f"Erreur lors de la création de la base de données: {str(e)}")
-        self.name = db_name + '.' + self.operator_id.domain_build
+        self.name = db_name
         self.state = 'done'
         self.env['saas.log'].log_db_created(self)
         if callback_obj and callback_method:
@@ -103,7 +103,15 @@ class SAASDB(models.Model):
         return self.execute_kw("ir.model.data", "_xmlid_lookup", xmlid)
 
     def xmlid_to_res_model_res_id(self, xmlid, raise_if_not_found=False):
-        return self.execute_kw("ir.model.data", "_xmlid_to_res_model_res_id", xmlid, raise_if_not_found=raise_if_not_found)
+        # Utilise xmlid_lookup qui est une méthode publique et gère l'extraction des informations
+        # au lieu d'appeler une méthode privée directement.
+        res = self.xmlid_lookup(xmlid)
+        if res:
+            # xmlid_lookup retourne (external_id, model, res_id)
+            return res[1], res[2]
+        elif raise_if_not_found:
+            raise ValueError(f"XML ID '{xmlid}' not found.")
+        return None, None
 
     def action_install_missing_mandatory_modules(self):
         for build in self.filtered(lambda x: x.state == "done"):
