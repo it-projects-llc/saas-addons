@@ -21,7 +21,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_create_build" type="object" string="Create Build" class="oe_read_only"/>
+                    <button name="action_create_build" type="object" string="Create Build" />
                 </header>
                 <sheet>
                     <group>

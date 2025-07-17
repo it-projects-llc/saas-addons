@@ -14,8 +14,9 @@ from odoo.addons.queue_job.exception import RetryableJobError
 class SAASOperator(models.Model):
     _name = 'saas.operator'
     _description = 'Database Operator'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(required=True)
+    name = fields.Char(string='Name', required=True)
     # list of types can be extended via selection_add
     type = fields.Selection([
         ('local', 'Same Instance'),
@@ -27,6 +28,25 @@ class SAASOperator(models.Model):
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     build_count = fields.Integer(compute="_compute_build_count")
+    domain_build = fields.Char('Build Domain', required=True)
+
+    # Server capacity
+    max_databases = fields.Integer(string='Max Databases', default=50)
+    cpu_cores = fields.Integer(string='CPU Cores', default=4)
+    ram_size = fields.Integer(string='RAM (GB)', default=16)
+    storage_size = fields.Integer(string='Storage (GB)', default=500)
+
+    # Server status
+    active = fields.Boolean(default=True)
+    state = fields.Selection([
+        ('online', 'Online'),
+        ('offline', 'Offline'),
+        ('maintenance', 'Maintenance'),
+    ], string='Status', default='offline', tracking=True)
+
+    # Usage
+    used_databases = fields.Integer(string='Used Databases')
+    load_percentage = fields.Float(string='Load (%)', default=0)
 
     def _compute_build_count(self):
         for record in self:
@@ -49,11 +69,11 @@ class SAASOperator(models.Model):
 
     def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
+        db_name = db_name
         if not self:
             return
         elif self.type != 'local':
             raise NotImplementedError()
-
         return cluster.create_db(template_db, db_name, demo, lang)
 
     def _drop_db(self, db_name):
@@ -65,9 +85,43 @@ class SAASOperator(models.Model):
         return cluster.drop_db(db_name)
 
     def _install_modules(self, db_name, modules):
-        if self.type != 'local':
-            raise NotImplementedError()
+        """
+        Installe les modules sur une base de données donnée.
+        Cette méthode est appelée par la tâche en file d'attente.
+        """
+        # cluster = self.env['saas.cluster']._get_current_cluster()
 
+        # Étape 1 : S'assurer que le module 'mail' est installé en premier s'il ne l'est pas déjà.
+        # C'est une étape critique pour éviter les erreurs UndefinedColumn pour res_users.notification_type.
+        # Le module 'mail' ajoute cette colonne.
+        # Vous devrez peut-être ajuster cela en fonction de la façon dont votre cluster gère les installations initiales de modules.
+        # Une approche courante consiste à s'assurer que 'mail' fait partie des modules de base installés sur une nouvelle base de données.
+
+        # Exemple : Si votre cluster a une méthode pour installer des modules de base ou s'assurer que certains modules existent
+        # cluster.ensure_base_modules(db_name, ['mail'])
+
+        # Sinon, vous devrez peut-être l'installer explicitement avant d'autres modules.
+        # Ceci est un exemple simplifié et pourrait nécessiter une gestion des erreurs/vérifications plus robuste.
+        try:
+            # Tenter d'installer 'mail' s'il n'est pas déjà dans la liste des modules à installer
+            # et s'il n'est pas déjà installé dans la base de données cible.
+            # Cette partie dépend fortement de votre implémentation de 'saas_cluster_simple'.
+            # Un meilleur endroit pourrait être dans la logique de création/initialisation de la base de données.
+            if 'mail' not in modules:
+                # Ceci est un espace réservé. Vous avez besoin d'un mécanisme dans votre cluster pour installer un seul module.
+                # Par exemple, en appelant une commande Odoo sur la base de données cible.
+                # Pour la démonstration, supposons que cluster.install_modules peut gérer un seul module.
+                # Dans un scénario réel, vous auriez probablement une méthode dédiée pour la configuration des modules de base.
+                self.env.cr.commit()  # Committer la transaction actuelle avant l'appel Odoo externe
+                cluster.install_modules(db_name, ['mail'])
+                self.env.cr.commit()  # Committer après l'appel Odoo externe
+        except Exception as e:
+            # Journaliser l'erreur mais essayer de continuer si 'mail' est peut-être déjà là ou géré différemment
+            self.env.cr.rollback()  # Annuler si l'installation de 'mail' a échoué
+            # self.env.logger.warning(f"Impossible de s'assurer que le module 'mail' est installé sur {db_name}: {e}")
+            # Relancer l'exception si c'est une défaillance critique, ou gérer gracieusement.
+
+        # Étape 2 : Procéder à l'installation des modules d'origine
         return cluster.install_modules(db_name, modules)
 
     def install_modules(self, template_id, template_operator_id):
@@ -79,6 +133,7 @@ class SAASOperator(models.Model):
         self.with_delay().post_init(template_id, template_operator_id)
 
     def _post_init(self, db_name, template_post_init):
+        db_name = db_name
         if self.type != 'local':
             raise NotImplementedError()
 

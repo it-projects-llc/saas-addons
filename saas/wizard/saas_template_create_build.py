@@ -1,6 +1,7 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, models, fields
+from odoo.exceptions import ValidationError
 
 
 class CreateBuildByTemplate(models.TransientModel):
@@ -49,6 +50,10 @@ class CreateBuildByTemplate(models.TransientModel):
 
     def create_build(self):
         key_value_dict = self._convert_to_dict(self.build_post_init_ids)
+        build_name = self.build_name + ".getaperp.com"
+        existing_db = [db[0] for db in self.list_databases()]
+        if build_name in existing_db:
+            raise ValidationError("Une base de données avec ce nom existe déjà.")
         build = self.template_operator_id.sudo().create_db(key_value_dict, self.build_name)
         return {
             'type': 'ir.actions.act_window',
@@ -58,6 +63,13 @@ class CreateBuildByTemplate(models.TransientModel):
             'view_mode': 'form',
             'target': 'main',
         }
+
+    def list_databases(self):
+        """Liste toutes les bases de données disponibles."""
+        # Remplacer 'your_postgresql_connection_string' par votre chaîne de connexion PostgreSQL
+        self.env.cr.execute("SELECT datname FROM pg_catalog.pg_database")
+        return self.env.cr.fetchall()
+
 
     @api.onchange('random')
     def change_operator(self):

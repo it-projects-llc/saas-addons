@@ -1,7 +1,7 @@
 {
     "name": "SaaS: Portal",
     "summary": "Allows to customers see their Builds at Portal",
-    "version": "15.0.1.0.2",
+    "version": "17.0.1.0.2",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
@@ -29,5 +29,5 @@
     "post_init_hook": None,
     "uninstall_hook": None,
     "auto_install": False,
-    "installable": True,
+    "installable": False,
 }

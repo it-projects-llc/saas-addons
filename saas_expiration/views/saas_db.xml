@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='state']" position="after">
                 <field name="expiration_date" />
-                <field name="expiration_state" invisible="1"/>
+                <field name="expiration_state" />
             </xpath>
             <xpath expr="//tree" position="attributes">
                 <attribute name="decoration-warning">expiration_state == "expiring_soon"</attribute>

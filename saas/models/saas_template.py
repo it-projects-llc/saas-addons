@@ -179,7 +179,7 @@ class SAASTemplateLine(models.Model):
             r.write({
                 'state': 'creating',
             })
-            r.flush()
+            r.env.cr.commit()
             r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,

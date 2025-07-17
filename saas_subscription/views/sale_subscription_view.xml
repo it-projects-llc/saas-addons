@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sale_subscription_form" model="ir.ui.view">
+        <field name="name">sale.subscription.form</field>
+        <field name="model">sale.subscription</field>
+        <field name="inherit_id" ref="subscription_oca.sale_subscription_form" />
+        <field name="arch" type="xml">
+             <xpath expr="//button[@name='manual_invoice']" position="after">
+                <button
+                        name="create_db_button"
+                        string="Create Build"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('is_saas','!=',True)]}"
+                        groups="saas.group_user"
+                />
+            </xpath>
+             <xpath expr="//button[@name='action_view_account_invoice_ids']" position="after">
+                <button name="button_build_count" type="object" attrs="{'invisible': [('build_count', '=', 0)]}" groups="saas.group_user" class="oe_stat_button"  icon="fa-credit-card">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="build_count"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Builds
+                                </span>
+                            </div>
+                        </button>
+            </xpath>
+            <xpath expr="//field[@name='sale_order_id']" position="after">
+                    <field name="is_saas" attrs="{'readonly': 0}" groups="saas.group_user"/>
+            </xpath>
+            <xpath expr="//field[@name='date']" position='after'>
+                <field name="expiration_date" attrs="{'invisible': [('is_saas','!=',True)]}" groups="saas.group_user"/>
+            </xpath>
+            <xpath expr="//field[@name='crm_team_id']" position="after">
+                <field name="subdomain" attrs="{'invisible': [('is_saas','!=',True)]}" groups="saas.group_user"/>
+                <field name="operator_id" attrs="{'invisible': [('is_saas','!=',True)]}" groups="saas.group_user"/>
+                <field name="template_operator_id" attrs="{'invisible': [('is_saas','!=',True)]}" groups="saas.group_user"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

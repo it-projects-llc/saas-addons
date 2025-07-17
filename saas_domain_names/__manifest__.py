@@ -1,7 +1,7 @@
 {
     "name": "SaaS: Domain names",
     "images": [],
-    "version": "15.0.0.1.0",
+    "version": "17.0.0.1.0",
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
     "license": "AGPL-3",
@@ -20,5 +20,5 @@
     "post_init_hook": None,
     "uninstall_hook": None,
     "auto_install": False,
-    "installable": True,
+    "installable": False,
 }

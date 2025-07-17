@@ -2,8 +2,11 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class SAASDB(models.Model):
     _name = 'saas.db'
@@ -25,14 +28,30 @@ class SAASDB(models.Model):
         self.drop_db()
         return super(SAASDB, self).unlink()
 
+    @api.model
     def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()
         db_name = self.name
-        self.operator_id._create_db(template_db, db_name, demo, lang)
+        _logger.info(f"Creating savepoint for DB: {db_name}")
+        try:
+            _logger.info(f"Creating DB: {db_name} using template: {template_db}")
+            self.operator_id._create_db(template_db, db_name, demo, lang)
+        except Exception as e:
+            _logger.error(f"Error during DB creation: {str(e)}")
+            raise ValidationError(f"Erreur lors de la création de la base de données: {str(e)}")
+        self.name = db_name
         self.state = 'done'
         self.env['saas.log'].log_db_created(self)
         if callback_obj and callback_method:
+            _logger.info(f"Calling callback method: {callback_method}")
             getattr(callback_obj, callback_method)()
+        _logger.info(f"DB {db_name} created successfully")
+
+    def _on_template_created(self):
+        self.ensure_one()
+        self.to_rebuild = False
+        self.state = 'installing_modules'
+        self.operator_id.with_delay().install_modules(self.template_id, self)
 
     def drop_db(self):
         for r in self:
@@ -60,7 +79,7 @@ class SAASDB(models.Model):
         return res
 
     def refresh_data(self, should_read_from_build=True, should_write_to_build=True):
-        self.flush()
+        self.env.cr.commit()
         for record in self.filtered(lambda record: (record.type, record.state) == ("build", "done")).with_context(writing_from_refresh_data=True):
             if should_read_from_build:
                 vals = record.read_values_from_build()
@@ -84,7 +103,15 @@ class SAASDB(models.Model):
         return self.execute_kw("ir.model.data", "_xmlid_lookup", xmlid)
 
     def xmlid_to_res_model_res_id(self, xmlid, raise_if_not_found=False):
-        return self.execute_kw("ir.model.data", "_xmlid_to_res_model_res_id", xmlid, raise_if_not_found=raise_if_not_found)
+        # Utilise xmlid_lookup qui est une méthode publique et gère l'extraction des informations
+        # au lieu d'appeler une méthode privée directement.
+        res = self.xmlid_lookup(xmlid)
+        if res:
+            # xmlid_lookup retourne (external_id, model, res_id)
+            return res[1], res[2]
+        elif raise_if_not_found:
+            raise ValueError(f"XML ID '{xmlid}' not found.")
+        return None, None
 
     def action_install_missing_mandatory_modules(self):
         for build in self.filtered(lambda x: x.state == "done"):

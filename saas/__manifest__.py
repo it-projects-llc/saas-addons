@@ -9,7 +9,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
-    "version": "15.0.3.1.0",
+    "version": "17.0.21.3.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -38,7 +38,7 @@
         "views/saas_operator_views.xml",
         "views/saas_module_views.xml",
         "views/saas_db_views.xml",
-        "views/res_config_settings_views.xml",
+        #"views/res_config_settings_views.xml",
         "wizard/saas_template_create_build_view.xml",
         "data/ir_cron_data.xml",
         "data/saas_operator_data.xml",

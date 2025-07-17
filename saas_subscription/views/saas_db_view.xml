@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="saas_db_form" model="ir.ui.view">
+        <field name="name">SaaS.DB.form</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='operator_id']" position="after">
+                 <field name="is_subscription" invisible="1"/>
+                 <field name="subscription_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
