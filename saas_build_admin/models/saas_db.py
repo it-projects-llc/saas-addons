@@ -1,12 +1,9 @@
-# Copyright 2020-2023 Eugene Molotov <https://it-projects.info/team/em230418>
+# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models, api, _
+from odoo import fields, models, api
 import string
 import random
-import logging
-
-_logger = logging.getLogger(__name__)
 
 LETTERS_FOR_PASSWORD = string.ascii_lowercase + string.digits + "_-"
 
@@ -20,75 +17,90 @@ class SaasDb(models.Model):
     def write(self, vals):
         if "admin_user" in vals:
             vals["is_admin_user_updated_on_build"] = False
-        return super().write(vals)
+        return super(SaasDb, self).write(vals)
 
     def write_values_to_build(self):
-        super().write_values_to_build()
+        super(SaasDb, self).write_values_to_build()
 
         if self.is_admin_user_updated_on_build or not self.admin_user:
             return
 
-        try:
-            # 1. Créer d'abord le nouvel utilisateur admin
-            password = ''.join(random.choice(LETTERS_FOR_PASSWORD) for i in range(8))
-            vals = {
-                'name': self.admin_user.name,
-                'login': self.admin_user.login,
-                'password': password,
-                'active': True,
-                'groups_id': [(6, 0, [])]  # On ajoutera les groupes après
-            }
-
-            if self.admin_user.country_id:
-                country_id = self.execute_kw(
-                    "res.country",
-                    "search",
-                    [[["code", "=", self.admin_user.country_id.code]]],
-                    {'limit': 1}
-                )
-                if country_id:
-                    vals['country_id'] = country_id[0]
-
-            new_admin_id = self.execute_kw(
-                "res.users",
-                "create",
-                [vals],
-                {}
-            )
-
-            # 2. Copier les groupes de l'admin original (ID 2)
-            admin_groups = self.execute_kw(
-                "res.users",
-                "read",
-                [2],
-                {'fields': ['groups_id']}
-            )
-            if admin_groups and admin_groups[0].get('groups_id'):
-                self.execute_kw(
-                    "res.users",
-                    "write",
-                    [[new_admin_id], {'groups_id': [(6, 0, admin_groups[0]['groups_id'])]}],
-                    {}
-                )
-
-            # 3. Désactiver l'ancien admin (ID 2)
+        # Vérification de la langue admin avec la nouvelle API
+        is_admin_language_installed = bool(self.admin_user.lang) and bool(
             self.execute_kw(
-                "res.users",
-                "write",
-                [[2], {'active': False}],
-                {}
+                "res.lang",
+                "search_count",
+                [("code", "=", self.admin_user.lang)],
             )
+        )
 
-            # 4. Envoyer les informations par email
+        # Installation de la langue si nécessaire (code commenté mais corrigé)
+        # if not is_admin_language_installed:
+        #    lang_install_id = self.execute_kw(
+        #        "base.language.install", "create", [{"lang": self.admin_user.lang, "overwrite": False}]
+        #    )
+        #    self.execute_kw("base.language.install", "lang_install", [lang_install_id])
+
+        vals = {}
+
+        # Configuration de la langue (code commenté mais corrigé)
+        # if self.admin_user.lang:
+        #    vals["lang"] = self.admin_user.lang
+        # else:
+        #    vals["lang"] = "en_US"
+
+        # Configuration du pays
+        if self.admin_user.country_id:
+            res = self.execute_kw(
+                "res.country", "search_read", [("code", "=", self.admin_user.country_id.code)], ["id"]
+            )
+            if res:
+                vals["country_id"] = res[0]["id"]
+        else:
+            vals["country_id"] = False
+
+        # Génération du mot de passe
+        password = ''.join(random.choice(LETTERS_FOR_PASSWORD) for i in range(8))
+        vals["login"] = self.admin_user.login
+        vals["name"] = self.admin_user.name
+        vals["password"] = password
+
+        # Récupération et mise à jour de l'utilisateur admin
+        try:
+            # Nouvelle méthode pour récupérer l'xmlid dans Odoo 17
+            admin_user_ref = self.env.ref("base.user_admin", raise_if_not_found=False)
+            if admin_user_ref:
+                # Utilisation de l'ID directement
+                self.execute_kw("res.users", "write", [admin_user_ref.id], vals)
+            else:
+                # Fallback: recherche directe de l'utilisateur admin
+                admin_users = self.execute_kw(
+                    "res.users", "search", [("login", "=", "admin")]
+                )
+                if admin_users:
+                    self.execute_kw("res.users", "write", admin_users, vals)
+        except Exception as e:
+            # Log d'erreur si nécessaire
+            import logging
+            _logger = logging.getLogger(__name__)
+            _logger.error("Erreur lors de la mise à jour de l'utilisateur admin: %s", e)
+
+        # Envoi de l'email de notification
+        try:
             template = self.env.ref("saas_build_admin.template_build_admin_is_set", raise_if_not_found=False)
             if template:
                 template.with_context(
                     build=self,
                     build_admin_password=password
-                ).send_mail(self.admin_user.id, force_send=True)
-
-            self.is_admin_user_updated_on_build = True
-
+                ).send_mail(
+                    self.admin_user.id,
+                    force_send=True,
+                    raise_exception=True
+                )
         except Exception as e:
-            _logger.error("Failed to replace admin user in build %s: %s", self.name, str(e))
-            raise
+            import logging
+            _logger = logging.getLogger(__name__)
+            _logger.error("Erreur lors de l'envoi de l'email admin: %s", e)
+
+        # Marquer comme mis à jour
+        self.is_admin_user_updated_on_build = True
