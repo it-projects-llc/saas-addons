@@ -30,7 +30,7 @@ class SAASOperator(models.Model):
 
     def _compute_build_count(self):
         for record in self:
-            record.build_count = self.env['saas.db'].search_count([("operator_id", "=", self.id)])
+            record.build_count = self.env['saas.db'].search_count([("operator_id", "=", record.id)])
 
     def action_show_builds(self):
         self.ensure_one()

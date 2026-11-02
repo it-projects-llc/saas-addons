@@ -7,6 +7,7 @@ import logging
 import werkzeug
 from werkzeug.urls import url_encode
 from odoo import SUPERUSER_ID
+from odoo.exceptions import AccessError, MissingError
 from odoo.addons.saas_portal.controllers.portal import CustomerPortal
 
 _logger = logging.getLogger(__name__)
@@ -116,17 +117,21 @@ class Main(Controller):
 class CustomerPortal(CustomerPortal):
     @route(["/my/build/<int:build_id>/renew_subscription"], type="http", auth="public", website=True)
     def portal_my_build_renew_subscription(self, build_id=None, access_token=None, **kw):
-        # build_sudo = self._document_check_access("saas.db", build_id, access_token)  # does not work, 'cos of ir.model.access error
-        build_sudo = request.env["saas.db"].sudo().browse(build_id)
-
-        assert build_sudo.contract_id, "Following build does not have contract"
+        try:
+            build_sudo = self._document_check_access("saas.db", build_id, access_token)
+        except (AccessError, MissingError):
+            raise werkzeug.exceptions.NotFound()
+        if not build_sudo.contract_id:
+            raise werkzeug.exceptions.NotFound()
 
         contract = build_sudo.contract_id
 
-        invoices = contract._get_related_invoices().filtered(lambda invoice: (invoice.state, invoice.payment_state) == ("posted", "not_paid"))
+        invoices = contract._get_related_invoices().filtered(lambda invoice: invoice.state == "posted" and invoice.move_type == "out_invoice" and invoice.payment_state in ("not_paid", "partial", "in_payment"))
         if not invoices:
             invoice = contract.recurring_create_invoice()
-            invoice.action_post()
+            if not invoice:
+                return request.redirect("/my/build/{}".format(build_sudo.id))
+            invoice.filtered(lambda move: move.state == "draft").action_post()
         else:
             invoice = invoices[0]
         return request.redirect(invoice.get_portal_url())

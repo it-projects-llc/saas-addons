@@ -9,7 +9,7 @@ from odoo import fields, models
 
 
 def jsonrpc(url, params, timeout=1200):
-    data = {"jsonrpc": 2.0, "params": params}
+    data = {"jsonrpc": "2.0", "params": params}
     req = requests.post(url, json=data, timeout=timeout)
     req.raise_for_status()
     try:

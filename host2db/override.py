@@ -21,6 +21,7 @@ class Host2DBConfig(configparser.ConfigParser):
 
     def read(self, *args, **kwargs):
         self._last_time_read = time()
+        self._config_mtime = os.path.getmtime(self.config_filename) if os.path.exists(self.config_filename) else None
         return super(Host2DBConfig, self).read(*args, **kwargs)
 
     def _reread_config(self):
@@ -49,7 +50,9 @@ class Host2DBConfig(configparser.ConfigParser):
         return res
 
     def get_db_by_host(self, host):
-        if not self._last_time_read or time() - self._last_time_read > 60:
+        mtime = os.path.getmtime(self.config_filename) if os.path.exists(self.config_filename) else None
+        if not self._last_time_read or mtime != getattr(self, "_config_mtime", None):
+            self.clear()
             self._reread_config()
 
         return self.get(self.SECTION, host, fallback=None)
@@ -64,7 +67,7 @@ def db_filter(dbs, host=None):
     h = host.split(":")[0]
     dbname = host2db_config.get_db_by_host(h)
     if dbname:
-        return [dbname]
+        return [dbname] if dbname in dbs else []
     else:
         return db_filter_org(dbs, host)
 
@@ -73,3 +76,10 @@ if "host2db" in config.get("server_wide_modules"):
     _logger = logging.getLogger(__name__)
     _logger.info("monkey patching odoo.http.router.db_filter")
     http.router.db_filter = db_filter
+    http.db_filter = db_filter
+    # Odoo 20 controllers import db_filter directly. Update already-imported
+    # aliases as well, so authentication and websocket routing use the mapping.
+    import sys
+    for module_name, module in tuple(sys.modules.items()):
+        if module_name.startswith(("odoo.http", "odoo.addons.web.controllers")) and getattr(module, "db_filter", None) is db_filter_org:
+            module.db_filter = db_filter

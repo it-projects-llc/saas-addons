@@ -1,7 +1,7 @@
 {
     "name": "SaaS: Portal",
     "summary": "Allows to customers see their Builds at Portal",
-    "version": "20.0.1.0.2",
+    "version": "20.0.1.0.3",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
@@ -18,10 +18,12 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/ir.access.csv",
+        "data/portal_entry_data.xml",
         "views/saas_db_views.xml",
         "views/portal_templates.xml",
     ],
     "demo": [],
+    "assets": {"web.assets_frontend": ["saas_portal/static/src/js/build_status.js"]},
     "post_load": None,
     "pre_init_hook": None,
     "post_init_hook": None,

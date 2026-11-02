@@ -1,74 +1,59 @@
-# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
-from odoo import models
-from datetime import date
-import logging
-
-_logger = logging.getLogger(__name__)
+# Copyright 2020 Eugene Molotov; AGPL-3.0. Odoo 20 purchase integration.
+from odoo import fields, models
+from odoo.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
+    _inherit = "account.move"
 
-    _inherit = 'account.move'
+    saas_purchase_processed = fields.Boolean(copy=False, readonly=True)
 
-    def action_invoice_paid(self):
-        sale_lines = self.mapped("line_ids.sale_line_ids")
-        today = date.today()
-
-        for order in sale_lines.mapped("order_id"):
-            sale_lines_in_order = sale_lines.filtered(lambda x: x.order_id == order)
-            new_contract_lines = []
-            partner = order.partner_id
-
-            user_line = sale_lines_in_order.filtered(lambda l: l.product_id.product_tmpl_id == self.env.ref("saas_product.product_users"))
-            if user_line.product_id == self.env.ref("saas_product.product_users_monthly"):
-                subscription_period = "month"
-            elif user_line.product_id == self.env.ref("saas_product.product_users_annually"):
-                subscription_period = "year"
-
-            build_vals = {}
-            for l in sale_lines_in_order:
-                p = l.product_id
-                if p.product_tmpl_id == self.env.ref("saas_product.product_users") and p != self.env.ref("saas_product.product_users_trial"):
-                    new_contract_lines.append({
-                        "name": p.name,
-                        "product_id": p.id,
-                        "price_unit": p.lst_price,
-                        "quantity": l.qty_invoiced,
-                        "move_line_id": l.invoice_lines[0].id,
-                    })
-                    build_vals["expiration_date"] = today + p._get_expiration_timedelta()
-                    build_vals["max_users_limit"] = l.qty_invoiced
-                elif self.env["saas.app"].search([("product_tmpl_id", "=", p.product_tmpl_id.id)]):
-                    new_contract_lines.append({
-                        "name": p.name,
-                        "product_id": p.id,
-                        "price_unit": p.lst_price,
-                        "quantity": l.qty_invoiced,
-                        "move_line_id": l.invoice_lines[0].id,
-                    })
-                elif self.env["saas.template"].search([("product_tmpl_id", "=", p.product_tmpl_id.id)]):
-                    new_contract_lines.append({
-                        "name": p.name,
-                        "product_id": p.id,
-                        "price_unit": p.lst_price,
-                        "quantity": l.qty_invoiced,
-                        "move_line_id": l.invoice_lines[0].id,
-                    })
-
-                for x in new_contract_lines:
-                    x.update({
-                        "uom_id": self.env.ref("uom.product_uom_unit").id,
-                    })
-
-            self.env["contract.contract"].with_context(create_build_vals=build_vals).create({
-                "name": "{}'s SaaS Contract".format(partner.name),
-                "partner_id": partner.id,
-                "contract_line_ids": list(map(lambda line: (0, 0, line), new_contract_lines)),
-                "line_recurrence": False,
-                "build_id": order.build_id.id,
-                "recurring_rule_type": subscription_period + "ly",
-                "recurring_interval": 1,
-            })
-        super(AccountMove, self).action_invoice_paid()
+    def _invoice_paid_hook(self):
+        result = super()._invoice_paid_hook()
+        monthly = self.env.ref("saas_product.product_users_monthly")
+        annually = self.env.ref("saas_product.product_users_annually")
+        for invoice in self.sudo().filtered(lambda move: move.payment_state == "paid" and move.move_type == "out_invoice" and not move.saas_purchase_processed):
+            sale_lines = invoice.invoice_line_ids.sale_line_ids
+            for order in sale_lines.order_id:
+                invoice_lines = invoice.invoice_line_ids.filtered(lambda line: bool(line.sale_line_ids & order.order_line))
+                user_lines = invoice_lines.filtered(lambda line: line.product_id and line.product_id in (monthly | annually))
+                if not user_lines:
+                    continue
+                if len(user_lines.product_id) != 1:
+                    raise ValidationError("Use one billing period for each SaaS database purchase.")
+                if not order.build_id or order.build_id.state != "draft":
+                    raise ValidationError("Select an unprovisioned database before paying for a SaaS subscription.")
+                user_product = user_lines.product_id
+                quantity = sum(user_lines.mapped("quantity"))
+                if quantity < 1 or not float(quantity).is_integer():
+                    raise ValidationError("The SaaS user quantity must be a positive whole number.")
+                period = "month" if user_product == monthly else "year"
+                contract_lines = []
+                for line in invoice_lines:
+                    product = line.product_id
+                    if not product.product_tmpl_id.is_saas_product:
+                        continue
+                    contract_lines.append((0, 0, {
+                        "name": line.name,
+                        "product_id": product.id,
+                        "price_unit": line.price_unit,
+                        "quantity": line.quantity,
+                        "move_line_id": line.id,
+                        "uom_id": line.product_uom_id.id,
+                    }))
+                self.env["contract.contract"].sudo().with_context(create_build_vals={
+                    "expiration_date": fields.Datetime.now() + user_product._get_expiration_timedelta(),
+                    "max_users_limit": int(quantity),
+                }).create({
+                    "name": f"{order.partner_id.name}'s SaaS Contract",
+                    "partner_id": order.partner_id.id,
+                    "contract_line_fixed_ids": contract_lines,
+                    "line_recurrence": False,
+                    "build_id": order.build_id.id,
+                    "recurring_rule_type": period + "ly",
+                    "recurring_interval": 1,
+                })
+                # The first paid invoice granted the initial period already.
+                invoice.saas_renewal_applied = True
+            invoice.saas_purchase_processed = True
+        return result

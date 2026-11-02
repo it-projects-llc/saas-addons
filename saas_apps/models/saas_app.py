@@ -68,21 +68,40 @@ class SaasApp(models.Model):
 
     @api.model
     def action_make_applist_from_local_instance(self):
-        def walk(parent_ir_module_name, parent_app_name=None):
-            modules = self.env["ir.module.module.dependency"].sudo().search([("name", "=", parent_ir_module_name)]).mapped("module_id")
-            for m in modules:
-                app_name = None
+        modules = self.env["ir.module.module"].sudo().search([("state", "!=", "uninstallable")])
+        dependencies = {module.name: set(module.dependencies_id.mapped("name")) for module in modules}
+        dependents = {}
+        for name, names in dependencies.items():
+            for dependency in names:
+                dependents.setdefault(dependency, set()).add(name)
 
-                if m.application:
-                    app = self.env["saas.app"]._search_or_create(m)
+        reachable = set()
+        pending = ["base"]
+        while pending:
+            name = pending.pop()
+            if name not in reachable:
+                reachable.add(name)
+                pending.extend(dependents.get(name, ()))
 
-                    if parent_app_name:
-                        app.dependency_ids |= self.env["saas.app"].search([("name", "=", parent_app_name)])
+        applications = modules.filtered(lambda module: module.application and module.name in reachable)
+        apps = {app.name: app for app in self.search([("name", "in", applications.mapped("name"))])}
+        missing = applications.filtered(lambda module: module.name not in apps)
+        for app in self.create([{
+            "name": module.name, "shortdesc": module.shortdesc or module.name, "icon_image": module.icon_image,
+        } for module in missing]):
+            apps[app.name] = app
 
-                    app_name = app.name
+        for module in applications:
+            visited = {module.name}
+            required_apps = set()
+            pending = list(dependencies.get(module.name, ()))
+            while pending:
+                name = pending.pop()
+                if name in visited:
+                    continue
+                visited.add(name)
+                if name in apps:
+                    required_apps.add(apps[name].id)
                 else:
-                    app_name = parent_app_name
-
-                walk(m.name, app_name)
-
-        walk("base")
+                    pending.extend(dependencies.get(name, ()))
+            apps[module.name].dependency_ids = [(6, 0, sorted(required_apps))]

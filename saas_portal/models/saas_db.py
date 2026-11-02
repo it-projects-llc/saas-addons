@@ -22,18 +22,20 @@ class SaasDb(models.Model):
         else:
             super(SaasDb, self)._compute_display_name()
 
-    def _get_domain_of_queue_job_records(self):
-        return [
-            "&",
-            ("model_name", "=", "saas.db"),
-            ("record_ids", "like", [self.id]),
-        ]
+    def _get_pending_job_targets(self):
+        self.ensure_one()
+        return {"saas.db": self.id}
 
     def _compute_number_of_queue_jobs_to_be_done(self):
         for record in self:
-            record.number_of_queue_jobs_to_be_done = self.env["queue.job"].search_count([
-                ("state", "in", ["started", "pending", "enqueued"]),
-            ] + record._get_domain_of_queue_job_records())
+            targets = record._get_pending_job_targets()
+            jobs = self.env["queue.job"].search([
+                ("state", "in", ["started", "pending", "enqueued", "wait_dependencies"]),
+                ("model_name", "in", list(targets)),
+            ])
+            record.number_of_queue_jobs_to_be_done = len(jobs.filtered(
+                lambda job: targets.get(job.model_name) in job.records.ids
+            ))
 
     number_of_queue_jobs_to_be_done = fields.Integer(compute=_compute_number_of_queue_jobs_to_be_done, store=False)
 

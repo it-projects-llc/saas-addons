@@ -1,4 +1,3 @@
-from odoo.addons.saas.tests.common_saas_test import Common
 
 from odoo import SUPERUSER_ID
 from odoo.tests.common import tagged, TransactionCase
@@ -7,11 +6,11 @@ from unittest.mock import patch
 
 
 @tagged('post_install', '-at_install')
-class TestSaasContract(TransactionCase, Common):
+class TestSaasContract(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super(TestSaasContract, cls).setUpClass()
-        cls.setup_saas_env(cls)
+        cls.env = cls.env(context={**cls.env.context, "writing_from_refresh_data": True})
 
     def setUp(self):
         super(TestSaasContract, self).setUp()
@@ -27,6 +26,7 @@ class TestSaasContract(TransactionCase, Common):
         super(TestSaasContract, self).tearDown()
 
     def test_contract_expiration_flow(self):
+        self.build.write({"state": "done"})
         partner = self.user.partner_id
         subscription_period = "monthly"
         recurring_rule_type = "monthly"
@@ -38,9 +38,8 @@ class TestSaasContract(TransactionCase, Common):
         contract = self.env["contract.contract"].with_context(create_build=True).create({
             "name": "{}'s SaaS Contract".format(partner.name),
             "partner_id": partner.id,
-            "contract_template_id": self.env.ref("saas_contract.contract_template_{}".format(subscription_period)).id,
             "build_id": self.build.id,
-            "contract_line_ids": [(0, 0, {
+            "contract_line_fixed_ids": [(0, 0, {
                 "name": product_user.name,
                 "product_id": product_user.id,
                 "uom_id": self.env.ref("uom.product_uom_unit").id,

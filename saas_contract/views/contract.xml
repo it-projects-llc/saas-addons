@@ -8,19 +8,19 @@
         <field name="inherit_id" ref="contract.contract_contract_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <field name="build_status" invisible="[('build_id', '=', False)]" widget="statusbar"/>
+                <field name="build_status" invisible="not build_id" widget="statusbar"/>
             </xpath>
             <xpath expr="//field[@name='line_recurrence']" position="attributes">
-                <attribute name="attrs">{"readonly": [('build_id', '!=', False)]}</attribute>
+                <attribute name="readonly">bool(build_id)</attribute>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="after">
-                <field name="build_id" invisible="[('build_id', '=', False)]"/>
+                <field name="build_id" invisible="not build_id"/>
             </xpath>
             <xpath expr="//field[@name='date_end']" position="after">
-                <field name="build_expiration_date_defacto" invisible="[('build_id', '=', False)]"/>
+                <field name="build_expiration_date_defacto" invisible="not build_id"/>
             </xpath>
 
-            <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='last_date_invoiced']" position="after">
+            <xpath expr="//field[@name='contract_line_ids']/list/field[@name='last_date_invoiced']" position="after">
                 <field name="build_id" invisible="1" />
             </xpath>
         </field>
@@ -30,11 +30,10 @@
         <field name="name">SaaS Contracts</field>
         <field name="res_model">contract.contract</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('contract_type', '=', 'sale'), ('build_id', '!=', False)]</field>
+        <field name="domain">[('build_id', '!=', False)]</field>
         <field name="context">
             {'is_contract':1,
-            'search_default_not_finished':1,
-            'default_contract_type': 'sale'}
+            'search_default_not_finished':1}
         </field>
         <field name="search_view_id" ref="contract.contract_contract_search_view" />
         <field name="help" type="html">

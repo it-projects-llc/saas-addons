@@ -14,12 +14,11 @@ class SaasDb(models.Model):
     database_limit_size = fields.Float(default=lambda self: self.env["ir.config_parameter"].get_float("saas_apps_signup.database_limit_size_default", 0.0))
     is_admin_user_language_installed = fields.Boolean("Is admin user's language installed?")
 
-    def _get_domain_of_queue_job_records(self):
-        return [
-            "|", "&",
-            ("model_name", "=", "contract.contract"),
-            ("record_ids", "like", [self.contract_id.id]),
-        ] + super(SaasDb, self)._get_domain_of_queue_job_records()
+    def _get_pending_job_targets(self):
+        targets = super()._get_pending_job_targets()
+        if self.contract_id:
+            targets["contract.contract"] = self.contract_id.id
+        return targets
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -61,7 +60,7 @@ class SaasDb(models.Model):
                     # TODO: check if result is successfull1
                     self.execute_kw("base.language.install", "lang_install", wizard_id)
 
-                    _, model, res_id = self.xmlid_lookup("base.user_admin")
+                    model, res_id = self.xmlid_lookup("base.user_admin")
 
                     self.execute_kw(model, "write", [res_id], {"lang": self.admin_user.database_lang})
 

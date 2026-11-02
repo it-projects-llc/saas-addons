@@ -44,7 +44,7 @@ class Contract(models.Model):
     ], "Build status", compute="_compute_build_status", store=False)
     trial_expiration_date = fields.Datetime("Trial expiration date", readonly=True)
 
-    @api.depends("build_id")
+    @api.depends("build_id", "build_id.expiration_date", "trial_expiration_date")
     def _compute_build_status(self):
         now = fields.Datetime.now()
         for record in self:
@@ -52,15 +52,13 @@ class Contract(models.Model):
                 record.build_status = False
                 continue
 
-            if record.trial_expiration_date:
-                if record.build_expiration_date_defacto and record.trial_expiration_date <= record.build_expiration_date_defacto:
-                    record.build_status = "active"
-                else:
-                    record.build_status = "trial"
-            elif now <= record.build_expiration_date_defacto:
-                record.build_status = "active"
-            else:
+            expiration = record.build_expiration_date_defacto
+            if expiration and expiration <= now:
                 record.build_status = "suspended"
+            elif record.trial_expiration_date and expiration and expiration <= record.trial_expiration_date:
+                record.build_status = "trial"
+            else:
+                record.build_status = "active"
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -72,8 +70,8 @@ class Contract(models.Model):
 
     def write(self, vals):
         res = super(Contract, self).write(vals)
-        if vals.get("line_recurrence") is False and self.mapped("build_id"):
-            raise ValidationError("Cannot set line recurrence from SaaS contract")
+        if vals.get("line_recurrence") and self.mapped("build_id"):
+            raise ValidationError("Cannot enable line-level recurrence for a SaaS contract")
         return res
 
 
@@ -82,14 +80,3 @@ class ContractLine(models.Model):
     _inherit = 'contract.line'
 
     build_id = fields.Many2one("saas.db", related="contract_id.build_id")
-
-    def _compute_allowed(self):
-        super(ContractLine, self)._compute_allowed()
-        for x in self.filtered("build_id"):
-            x.update({
-                "is_plan_successor_allowed": False,
-                "is_stop_plan_successor_allowed": False,
-                "is_stop_allowed": False,
-                "is_cancel_allowed": False,
-                "is_un_cancel_allowed": False,
-            })

@@ -156,17 +156,11 @@ class Contract(models.Model):
             if not contract.build_id:
                 contract.build_id = build
 
-    @api.model
-    def _finalize_and_create_invoices(self, invoices_values):
-        invoices = super(Contract, self)._finalize_and_create_invoices(invoices_values)
+    def _recurring_create_invoice(self, date_ref=False):
+        invoices = super()._recurring_create_invoice(date_ref)
         for invoice in invoices:
-            contract = invoice.contract_id
-            build = contract.build_id
-
-            contract.invalidate_cache()
-            if build and build.state == "done":
+            if invoice.state == "draft" and invoice.invoice_line_ids.mapped("contract_line_id.contract_id.build_id").filtered(lambda build: build.state == "done"):
                 invoice.action_post()
-
         return invoices
 
 

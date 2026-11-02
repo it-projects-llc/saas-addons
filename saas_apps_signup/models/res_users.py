@@ -16,22 +16,31 @@ class ResUsers(models.Model):
     @api.model
     def signup(self, values, *args, **kwargs):
         self = self.with_user(SUPERUSER_ID)
+        company_name = (values.pop("company_name", None) or "").strip()
 
         if values.get("country_code"):
             values["country_id"] = self.env["res.country"].search([("code", "=", values["country_code"])]).id
             del values["country_code"]
 
         if not self.env.context.get("create_user"):
-            return super(ResUsers, self).signup(values, *args, **kwargs)
-
+            result = super().signup(values, *args, **kwargs)
         elif "sale_order_id" in values:
-            return self.signup_to_buy(values, *args, **kwargs)
-
+            result = self.signup_to_buy(values, *args, **kwargs)
         elif "period" in values:
-            return self.signup_to_try(values, *args, **kwargs)
-
+            result = self.signup_to_try(values, *args, **kwargs)
         else:
-            return super(ResUsers, self).signup(values, *args, **kwargs)
+            result = super().signup(values, *args, **kwargs)
+
+        if company_name:
+            user = self.search([("login", "=", result[0])], limit=1)
+            if user and not user.partner_id.parent_id:
+                # Each new customer owns a separate commercial partner. Never
+                # join an existing customer's company merely by matching a name.
+                user.partner_id.parent_id = self.env["res.partner"].create({
+                    "name": company_name, "is_company": True,
+                    "country_id": user.country_id.id,
+                })
+        return result
 
     def signup_to_try(self, values, *args, **kwargs):
         # popping out values before creating user
@@ -45,7 +54,7 @@ class ResUsers(models.Model):
         res = super(ResUsers, self).signup(values, *args, **kwargs)
 
         if database_name:
-            admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
+            admin_user = self.env['res.users'].sudo().search([('login', '=', res[0])], limit=1)
 
             build = self.env["saas.db"].create({
                 "name": database_name,
@@ -67,7 +76,7 @@ class ResUsers(models.Model):
         operator_id = int(values.pop("operator_id"))
 
         res = super(ResUsers, self).signup(values, *args, **kwargs)
-        admin_user = self.env['res.users'].sudo().search([('login', '=', res[1])], limit=1)
+        admin_user = self.env['res.users'].sudo().search([('login', '=', res[0])], limit=1)
         sale_order.partner_id = admin_user.partner_id
 
         build = self.env["saas.db"].create({

@@ -57,7 +57,7 @@ class Main(SignupVerifyEmail):
 
                 order = request.env["sale.order"].sudo().browse(d["sale_order_id"])
                 template = request.env["saas.template"].sudo().search([
-                    ("id", "in", order.mapped("order_line.product_id.product_tmpl_id").ids),
+                    ("product_tmpl_id", "in", order.mapped("order_line.product_id.product_tmpl_id").ids),
                 ])
                 if not template:
                     template = request.env.ref("saas_apps.base_template")
@@ -94,3 +94,15 @@ class Main(SignupVerifyEmail):
         except OperatorNotAvailable as e:
             qcontext["error"] = str(e)
             return request.render("auth_signup.signup", qcontext)
+
+    def _get_passwordless_signup_values(self, values):
+        signup = super()._get_passwordless_signup_values(values)
+        for key in EXTRA_SIGN_UP_REQUEST_PARAMS:
+            if values.get(key):
+                signup[key] = values[key]
+        if signup.get("sale_order_id"):
+            from werkzeug.exceptions import BadRequest
+            cart = request.cart
+            if not cart or cart.id != int(signup["sale_order_id"]):
+                raise BadRequest("The signup order must be the current shopping cart.")
+        return signup

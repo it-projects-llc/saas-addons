@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="portal_builds" model="portal.entry">
+        <field name="name">Builds</field>
+        <field name="image" type="base64" file="saas/static/description/icon.png"/>
+        <field name="description">Open and manage your trial and purchased databases</field>
+        <field name="url">/my/builds</field>
+        <field name="placeholder_count">build_count</field>
+        <field name="category">common_category</field>
+        <field name="is_config_card" eval="True"/>
+        <field name="sequence">35</field>
+    </record>
+</odoo>
