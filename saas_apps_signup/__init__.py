@@ -1,7 +1,6 @@
 # pylint: disable=absent-doc,js-empty-coverage
 from . import controllers
 from . import models
-from . import tests
 
 from odoo.api import Environment, SUPERUSER_ID
 

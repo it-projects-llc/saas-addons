@@ -10,7 +10,7 @@ class SaasDb(models.Model):
     _inherit = "saas.db"
 
     max_users_limit = fields.Integer("Max Users Allowed")
-    users_count = fields.Integer("Current No. Of Users", readonly=1)
+    users_count = fields.Integer("Current No. Of Users", readonly=True)
 
     @api.constrains("max_users_limit")
     def _check_max_users_limit(self):
@@ -55,13 +55,18 @@ class SaasDb(models.Model):
     def read_values_from_build(self):
         vals = super(SaasDb, self).read_values_from_build()
 
-        vals.update(
-            users_count=self.execute_kw(
-                "res.users",
-                "search_count",
-                [(("is_excluded_from_limiting", "=", False))],
-            )
+        # builds without the limiting module installed have no such field
+        build_fields = self.execute_kw(
+            "res.users", "fields_get", allfields=["is_excluded_from_limiting"]
         )
+        if "is_excluded_from_limiting" in build_fields:
+            vals.update(
+                users_count=self.execute_kw(
+                    "res.users",
+                    "search_count",
+                    [(("is_excluded_from_limiting", "=", False))],
+                )
+            )
 
         if not self.max_users_limit:
             model, res_id = self.xmlid_to_res_model_res_id(

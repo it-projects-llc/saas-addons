@@ -7,7 +7,7 @@
     "category": "Sales",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
-    "version": "15.0.1.0.1",
+    "version": "20.0.1.0.1",
     "application": False,
 
     "author": "IT-Projects LLC, Eugene Molotov",
@@ -16,9 +16,8 @@
     "license": "Other OSI approved licence",  # MIT
     # "price": 9.00,
     # "currency": "EUR",
-
     "depends": [
-        "saas_expiration", "saas_limit_max_users", "contract", "saas_product", "l10n_generic_coa",
+        "saas_expiration", "saas_limit_max_users", "contract", "saas_product", "account",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
@@ -27,8 +26,6 @@
         "views/saas_db.xml",
     ],
     "demo": [
-    ],
-    "qweb": [
     ],
 
     "post_load": None,

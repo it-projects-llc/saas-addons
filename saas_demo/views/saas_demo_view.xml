@@ -7,8 +7,7 @@
     <record model='ir.actions.act_window' id="saas_demo_action" >
         <field name="name">Demo</field>
         <field name="res_model">saas.demo</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <!-- Menu items -->
     <menuitem name="Demos"
@@ -21,12 +20,12 @@
         <field name="name">saas.demo.tree</field>
         <field name="model">saas.demo</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="operator_ids" />
                 <field name="template_ids"/>
                 <field name="repo_ids"/>
-            </tree>
+            </list>
         </field>
     </record>
 

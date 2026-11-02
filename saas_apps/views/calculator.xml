@@ -43,7 +43,7 @@
                                                 t-att-data-depends="app.dependencies_str()"
                                             >
                                                 <div class="app-icon">
-                                                    <img t-att-src="'data:image/png;base64,%s' % to_text(app.icon_image)"
+                                                    <img t-if="app.icon_image" t-att-src="image_data_uri(app.icon_image)"
                                                         style="max-width: 40px;max-height: 40px;"/>
                                                 </div>
                                                 <div class="app-data">
@@ -84,7 +84,7 @@
                                         >
                                             <div class="app-icon">
                                                 <img t-if="package.package_image"
-                                                     t-att-src="'data:image/png;base64,%s' % to_text(package.package_image)"
+                                                     t-att-src="image_data_uri(package.package_image)"
                                                      style="max-width: 40px;max-height: 40px;"
                                                 />
                                             </div>

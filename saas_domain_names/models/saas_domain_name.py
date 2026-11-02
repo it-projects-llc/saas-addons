@@ -11,9 +11,7 @@ class DomainName(models.Model):
     name = fields.Char("Domain", required=True)
     operator_id = fields.Many2one("saas.operator", string="Operator", required=True)
 
-    _sql_constraints = [
-        ("saas_domain_name_uniq", "unique(name)", "Domain names must be unique"),
-    ]
+    _name_unique = models.Constraint("unique(name)", "Domain names must be unique")
 
     @api.model
     def _run_domain_operations(self, operator_id, operations):

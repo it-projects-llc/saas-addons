@@ -7,7 +7,7 @@
     "category": "Extra Tools",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=12.0",
     "images": ['images/quick_auth_master.jpg'],
-    "version": "15.0.1.1.0",
+    "version": "20.0.1.1.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -22,14 +22,10 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/res_groups_data.xml",
-        "security/ir_rule_data.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
     "demo": [
     ],
-    "qweb": [
-    ],
-
     "post_load": None,
     "pre_init_hook": None,
     "post_init_hook": None,

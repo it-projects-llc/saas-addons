@@ -69,7 +69,7 @@ class Backup(models.Model):
                 "search_default_started": 1,
                 "search_default_failed": 1,
             },
-            "views": [[False, "tree"], [False, "form"]],
+            "views": [[False, "list"], [False, "form"]],
             "search_view_id": self.env.ref("queue_job.view_queue_job_search").id,
             "domain": [["id", "in", self.job_ids.ids]],
         }
@@ -79,7 +79,7 @@ class Backup(models.Model):
             "type": "ir.actions.act_window",
             "name": "Restored builds",
             "res_model": "saas.db",
-            "views": [[False, "tree"], [False, "form"]],
+            "views": [[False, "list"], [False, "form"]],
             "domain": [["origin_backup_id", "in", self.ids]],
         }
 

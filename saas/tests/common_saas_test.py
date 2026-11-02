@@ -1,6 +1,6 @@
 # Copyright 2019 Denis Mudarisov <https://it-projects.info/team/trojikman>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo.service import db
+from odoo.modules import db
 
 DB_TEMPLATE_1 = 'db_template_1'
 DB_TEMPLATE_2 = 'db_template_2'
@@ -22,7 +22,7 @@ class Common(object):
     def setup_saas_env(self):
         self.env = self.env(context=dict(
             self.env.context,
-            test_queue_job_no_delay=True,
+            queue_job__no_delay=True,
         ))
 
         self.saas_template_1 = self.env['saas.template'].create({
@@ -72,4 +72,4 @@ class Common(object):
         db_list += [DB_TEMPLATE_1, DB_TEMPLATE_2, 'template_database']
         for i in db_list:
             if i in db.list_dbs():
-                db.exp_drop(i)
+                db.drop(i)

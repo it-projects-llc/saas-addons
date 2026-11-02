@@ -39,7 +39,7 @@
                         Dear <t t-out="object.name" />,<br />
                         <br />
                         Your database has been created successfully.<br />
-                        Build URI: <a t-att-href="ctx.get('build').get_url()" t-out="ctx.get('build').get_url()" /><br />
+                        Build URI: <t t-if="ctx.get('build')"><a t-att-href="ctx.get('build').get_url()" t-out="ctx.get('build').get_url()" /></t><br />
                         Admin login: <t t-out="object.login" /><br/>
                         Admin password: <t t-out="ctx.get('build_admin_password')" /><br/>
                         <br/>

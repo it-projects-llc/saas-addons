@@ -32,7 +32,7 @@ class AuthQuickMaster(http.Controller):
         url = urllib.parse.urljoin(build_url, '/auth_quick/check-token?token=%s' % token_obj.token)
         return werkzeug.utils.redirect(url, 302)
 
-    @http.route('/auth_quick_master/check-token', type="json", auth='public')
+    @http.route('/auth_quick_master/check-token', type="jsonrpc", auth='public')
     def check_token(self, token):
         _logger.debug('Checking for token: %s', token)
         token_obj = request.env['auth_quick_master.token'].sudo().search([

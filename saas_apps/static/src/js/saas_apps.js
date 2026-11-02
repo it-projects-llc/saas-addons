@@ -1,234 +1,266 @@
-odoo.define("saas_apps.saas_apps", function (require) {
-    "use strict";
+/* Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
+   License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
+import { rpc } from "@web/core/network/rpc";
 
-    require('web.dom_ready');
+const MONTHLY = "month";
+const ANNUALLY = "year";
 
-    var session = require('web.session');
+const state = {
+    basketApps: new Set(),
+    chosenPackageId: null,
+    period: ANNUALLY,
+};
 
-    if (!$(".js_saas_apps").length) {
-        return Promise.reject("DOM doesn't contain '.js_saas_apps'");
+const node = (id) => document.getElementById(id);
+const nodes = (selector, root = document) => [...(root || document).querySelectorAll(selector)];
+
+function dependsOf(el) {
+    return (el.dataset.depends || "").split(",").filter(Boolean);
+}
+
+function nameOf(el) {
+    return el.dataset.name;
+}
+
+function appNodes() {
+    return nodes(".app");
+}
+
+function priceOf(el, period = state.period) {
+    return parseFloat(el.dataset[`price${capitalize(period)}`] || 0);
+}
+
+function productIdOf(el, period = state.period) {
+    return el.dataset[`productId${capitalize(period)}`];
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function userQty() {
+    const input = node("users");
+    if (!input) {
+        return 1;
     }
+    const value = parseInt(input.value, 10);
+    return Number.isNaN(value) || value <= 0 ? 1 : value;
+}
 
-    var MONTHLY = "month";
-    var ANNUALLY = "year";
-    var basket_apps = new Set();
-    var chosen_package_id = null;;
-    var period = ANNUALLY;
-
-    // Задаем свойства вида depends-<MODULE_NAME>=1
-    $(".app[data-depends]").each(function(i, el) {
-        var $el = $(el);
-        $el.data("depends").split(",").filter(Boolean).forEach(function(depend) {
-            $el.data("depends-" + depend, 1);
-        });
-    });
-
-    function getAppNameByElementCallback(i, el) {
-        return $(el).data("name");
+function sanitizeUserInput() {
+    const input = node("users");
+    if (input) {
+        input.value = userQty();
     }
+}
 
-    function renderTotalPrice() {
-        function priceCallback(i, el) {
-            return parseFloat($(el).data("price-" + period) || 0);
+function chosenApps() {
+    return appNodes().filter((el) => state.basketApps.has(nameOf(el)));
+}
+
+function chosenPackages() {
+    return nodes(".package").filter((el) => el.dataset.packageId === state.chosenPackageId);
+}
+
+function renderTotalPrice() {
+    const apps = chosenApps();
+    const packages = chosenPackages();
+    const sumApps = apps.reduce((acc, el) => acc + priceOf(el), 0);
+    const sumPackages = packages.reduce((acc, el) => acc + priceOf(el), 0);
+    const qty = userQty();
+    const usersBlock = node("users_block");
+    const sumUsers = qty * parseFloat(usersBlock ? usersBlock.dataset[`price${capitalize(state.period)}`] || 0 : 0);
+
+    setText("price", String(sumApps + sumPackages + sumUsers));
+    setText("box-period", state.period);
+    setText("users-qty", String(qty));
+    setText("users-cnt-cost", String(sumUsers));
+    setText("apps-qty", String(apps.length + packages.length));
+    setText("apps-cost", String(sumApps + sumPackages));
+
+    const btnBlock = node("btn-block");
+    if (btnBlock) {
+        btnBlock.style.display = apps.length || packages.length ? "" : "none";
+    }
+}
+
+function setText(id, value) {
+    const el = node(id);
+    if (el) {
+        el.textContent = value;
+    }
+}
+
+function renderApps() {
+    for (const el of appNodes()) {
+        el.classList.toggle("green-border", state.basketApps.has(nameOf(el)));
+    }
+}
+
+function renderPackages() {
+    for (const el of nodes(".package")) {
+        el.classList.toggle("green-border", el.dataset.packageId === state.chosenPackageId);
+    }
+}
+
+function selectApp(el) {
+    const name = nameOf(el);
+    state.basketApps.add(name);
+    for (const depend of dependsOf(el)) {
+        state.basketApps.add(depend);
+    }
+}
+
+function deselectApp(name) {
+    // Removing an app also removes the apps that depend on it, recursively.
+    const queue = [name];
+    while (queue.length) {
+        const current = queue.shift();
+        state.basketApps.delete(current);
+        for (const el of appNodes()) {
+            if (dependsOf(el).includes(current)) {
+                queue.push(nameOf(el));
+            }
         }
+    }
+}
 
-        var chosen_apps = $(".app").filter(function(i, el) {
-            return basket_apps.has(getAppNameByElementCallback(i, el));
-        });
-
-        var chosen_apps_prices = chosen_apps.map(priceCallback).get();
-
-        // Тут вполне допускается вариант, что выбрали несколько пакетов
-        // Хотя функциолом это не продусмотрено
-        var chosen_packages = $(".package").filter(function(i, el) {
-            return $(el).data("package-id") === chosen_package_id;
-        });
-
-        var chosen_packages_prices = chosen_packages.map(priceCallback).get();
-
-        var sum_app_prices = _.reduce(chosen_apps_prices, function(a, c) {
-            return a + c;
-        }, 0);
-
-        var sum_package_prices = _.reduce(chosen_packages_prices, function(a, c) {
-            return a + c;
-        }, 0);
-
-        var user_qty = parseInt($("#users").val(), 10);
-        var sum_user_prices = user_qty * parseFloat($("#users_block").data("price-" + period));
-
-        $("#price").html((sum_app_prices + sum_package_prices + sum_user_prices).toString());
-        $("#box-period").html(period);
-        $("#users-qty").html(user_qty);
-        $("#users-cnt-cost").html(sum_user_prices);
-        // TODO: надо бы отдельно вписать package, нет?
-        $("#apps-qty").html(chosen_apps.length + chosen_packages.length);
-        $("#apps-cost").html(sum_app_prices + sum_package_prices);
-
-        if (chosen_packages.length === 0 && chosen_apps.length === 0) {
-            $("#btn-block").hide();
+function goToBuild(buildParams, templateId) {
+    rpc("/check_saas_template", { template_id: templateId }).then((template) => {
+        if (template.state === "ready") {
+            window.location.href = `/saas_public/${template.id}/create-fast-build${buildParams}`;
         } else {
-            $("#btn-block").show();
+            setTimeout(() => goToBuild(buildParams, templateId), 5000);
+        }
+    });
+}
+
+function showLoader() {
+    for (const el of nodes(".loader")) {
+        el.style.display = "";
+    }
+}
+
+export function getInputs() {
+    sanitizeUserInput();
+    return {
+        chosen_apps: [...state.basketApps],
+        chosen_package_id: state.chosenPackageId,
+        period: state.period,
+        user_cnt: userQty(),
+    };
+}
+
+function onAppClick(el) {
+    state.chosenPackageId = null;
+    const name = nameOf(el);
+    if (state.basketApps.has(name)) {
+        deselectApp(name);
+    } else {
+        selectApp(el);
+    }
+    renderApps();
+    renderPackages();
+    renderTotalPrice();
+}
+
+function onPackageClick(el) {
+    state.basketApps.clear();
+    const packageId = el.dataset.packageId;
+    state.chosenPackageId = state.chosenPackageId === packageId ? null : packageId;
+    renderApps();
+    renderPackages();
+    renderTotalPrice();
+}
+
+function setup() {
+    if (!document.querySelector(".js_saas_apps")) {
+        return;
+    }
+
+    for (const el of appNodes()) {
+        el.addEventListener("click", () => onAppClick(el));
+    }
+    for (const el of nodes(".package")) {
+        el.addEventListener("click", () => onPackageClick(el));
+    }
+    for (const el of nodes(".switch-period")) {
+        el.addEventListener("click", () => {
+            state.period = el.dataset.period;
+            renderTotalPrice();
+        });
+    }
+
+    const usersInput = node("users");
+    if (usersInput) {
+        usersInput.addEventListener("input", renderTotalPrice);
+        const minus = node("minus-user");
+        if (minus) {
+            minus.addEventListener("click", () => {
+                sanitizeUserInput();
+                usersInput.value = Math.max(1, userQty() - 1);
+                renderTotalPrice();
+            });
+        }
+        const plus = node("plus-user");
+        if (plus) {
+            plus.addEventListener("click", () => {
+                sanitizeUserInput();
+                usersInput.value = userQty() + 1;
+                renderTotalPrice();
+            });
         }
     }
 
-    function renderApps() {
-        $(".app").each(function(i, el) {
-            var $app = $(el);
-            if (basket_apps.has($app.data("name"))) {
-                $app.addClass("green-border");
+    const tryTrial = node("try-trial");
+    if (tryTrial) {
+        tryTrial.addEventListener("click", () => {
+            if (state.basketApps.size > 0) {
+                goToBuild(`?installing_modules=${JSON.stringify([...state.basketApps])}`);
+                showLoader();
+            } else if (state.chosenPackageId) {
+                goToBuild("", parseInt(state.chosenPackageId, 10));
+                showLoader();
             } else {
-                $app.removeClass("green-border");
+                window.alert("Please, choose apps or package first");
             }
         });
     }
 
-    function renderPackages() {
-        $(".package:not([data-package-id=" + chosen_package_id + "])").removeClass("green-border");
-        $(".package[data-package-id=" + chosen_package_id + "]").addClass("green-border");
-    }
-
-    $(".app").on("click", function() {
-        chosen_package_id = null;
-        var $el = $(this);
-        var name = $el.data("name");
-        if (basket_apps.has(name) === false) {
-            basket_apps.add(name);
-            var app_names_to_select = $el
-                .data("depends")
-                .split(",")
-                .filter(Boolean)  // take away falsy values
-                .concat([name]);
-            app_names_to_select.forEach(function(app_name) {
-                basket_apps.add(app_name);
-            });
-        } else {
-            var app_names_to_deselect = [name];
-            while (app_names_to_deselect.length > 0) {
-                var app_names_to_deselect_next = [];
-                app_names_to_deselect.forEach(function(app_name) {
-                    // Remove from basket
-                    basket_apps.delete(app_name);
-
-                    // Find other apps that depend on this
-                    app_names_to_deselect_next = app_names_to_deselect_next.concat(
-                        $(".app:data(depends-" + app_name + ")").map(getAppNameByElementCallback).get()
-                    );
+    const buyNow = node("buy-now");
+    if (buyNow) {
+        buyNow.addEventListener("click", () => {
+            let productIds = [];
+            if (state.basketApps.size > 0) {
+                productIds = [...state.basketApps].map((name) => {
+                    const el = document.querySelector(`.app[data-name="${name}"]`);
+                    return el ? productIdOf(el) : undefined;
                 });
-                app_names_to_deselect = app_names_to_deselect_next;
-            }
-        }
-        renderApps();
-        renderTotalPrice();
-    });
-
-    $(".package").on("click", function() {
-        basket_apps.clear();
-        var $el = $(this);
-        var package_id = $el.data("package-id");
-
-        if (chosen_package_id === package_id) {
-            chosen_package_id = null;
-        } else {
-            chosen_package_id = package_id;
-        }
-
-        renderApps();
-        renderPackages();
-        renderTotalPrice();
-    });
-
-    function sanitizeUserInput() {
-        var v = $("#users").val();
-        if (parseInt(v, 10) <= 0 || v.trim() === "") {
-            $("#users").val(1);
-        }
-    }
-
-    function getInputs() {
-        sanitizeUserInput();
-        return {
-            chosen_apps: Array.from(basket_apps),
-            chosen_package_id: chosen_package_id,
-            period: period,
-            user_cnt: parseInt($("#users").val(), 10),
-        };
-    }
-
-    function goToBuild(build_params, template_id) {
-        session.rpc('/check_saas_template', {
-            template_id: template_id
-        }).then(function(template) {
-            if (template.state === 'ready') {
-                var url = "/saas_public/" + template.id + "/create-fast-build" + build_params;
-                console.log("Redirect to: " + url);
-                // When there's ready saas_template_operator obj, then start creating new build
-                window.location.href = url;
+            } else if (state.chosenPackageId) {
+                const el = document.querySelector(`.package[data-package-id="${state.chosenPackageId}"]`);
+                productIds = el ? [productIdOf(el)] : [];
             } else {
-                // If there's no ready saas_template_operator,
-                // recalling this func till the saas_template_operator obj isn't ready
-                setTimeout(goToBuild, 5000, build_params, template_id);
+                window.alert("Please, choose apps or package first");
+                return;
             }
+
+            rpc("/price/cart/update_json", {
+                product_ids: productIds,
+                period: state.period,
+                user_cnt: userQty(),
+            }).then((res) => {
+                window.location.href = res.link;
+            });
         });
     }
-
-    $("#minus-user").on("click", function() {
-        sanitizeUserInput();
-        var v = parseInt($("#users").val(), 10);
-        $("#users").val(Math.max(1, v - 1));
-        renderTotalPrice();
-    });
-
-    $("#plus-user").on("click", function() {
-        sanitizeUserInput();
-        var v = parseInt($("#users").val(), 10);
-        $("#users").val(v + 1);
-        renderTotalPrice();
-    });
-
-    $("#try-trial").on("click", function() {
-        if (basket_apps.size > 0) {
-            var build_params = '?installing_modules=["' + Array.from(basket_apps).join('","') + '"]';
-            goToBuild(build_params);
-            $(".loader").show();
-        } else if (chosen_package_id) {
-            goToBuild("", parseInt(chosen_package_id, 10));
-            $(".loader").show();
-        } else {
-            alert("Please, choose apps or package first");
-        }
-    });
-
-    $("#buy-now").on("click", function() {
-        var product_ids = [];
-        if (basket_apps.size > 0) {
-            product_ids = Array.from(basket_apps).map(function(m) {
-                return $("[data-name=" + m + "]").data("product-id-" + period);
-            });
-        } else if (chosen_package_id) {
-            product_ids = [$("[data-package-id=" + chosen_package_id + "]").data("product-id-" + period)];
-        } else {
-            alert("Please, choose apps or package first");
-            return;
-        }
-
-        session.rpc("/price/cart/update_json", {
-            product_ids: product_ids,
-            period: period,
-            user_cnt: parseInt($("#users").val(), 10),
-        }).then(function(res) {
-            window.location.href = res.link;
-        });
-    });
-
-    $(".switch-period").on("click", function() {
-        period = $(this).data("period");
-        renderTotalPrice();
-    });
 
     renderTotalPrice();
+}
 
-    return {
-        getInputs: getInputs,
-    };
-});
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setup);
+} else {
+    setup();
+}
+
+export { MONTHLY, ANNUALLY };

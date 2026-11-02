@@ -1,7 +1,7 @@
 from odoo.tests.common import tagged, TransactionCase
 
 
-@tagged('post_install', 'at_install')
+@tagged('post_install', '-at_install')
 class TestMain(TransactionCase):
     def test_action_make_applist_from_local_instance(self):
         self.env['saas.app'].action_make_applist_from_local_instance()

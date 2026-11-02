@@ -11,7 +11,7 @@
                     name="action_open_restored_build"
                     string="View restored build"
                     type="object"
-                    attrs="{'invisible': [('restored_build_id', '=', False)]}"
+                    invisible="[('restored_build_id', '=', False)]"
                 />
             </xpath>
         </field>

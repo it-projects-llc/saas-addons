@@ -5,28 +5,29 @@ from .common_saas_test import Common, DB_TEMPLATE_1, DB_TEMPLATE_2, MODULE_TO_IN
 
 import odoo
 from odoo import SUPERUSER_ID
+from odoo.modules import db
+from odoo.modules.registry import Registry
 from odoo.tests.common import tagged, TransactionCase
-from odoo.service import db
 
 DB_INSTANCE_1 = 'db-instance-1'
 DB_INSTANCE_2 = 'db-instance-2'
 KEY_VALUES = {'mail_message': 'mail.message'}
 
 
-@tagged('post_install', 'at_install')
+@tagged('post_install', '-at_install')
 class TestSaas(TransactionCase, Common):
 
     def assert_modules_is_installed(self, db_name, module):
-        db = odoo.sql_db.db_connect(db_name)
-        odoo.registry(db_name).check_signaling()
-        with odoo.api.Environment.manage(), db.cursor() as cr:
+        conn = odoo.sql_db.db_connect(db_name)
+        Registry(db_name)
+        with conn.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
             self.assertTrue(env['ir.module.module'].search([('name', '=', module)]))
 
     def assert_record_is_created(self, db_name, model_name, search_domain):
-        db = odoo.sql_db.db_connect(db_name)
-        odoo.registry(db_name).check_signaling()
-        with odoo.api.Environment.manage(), db.cursor() as cr:
+        conn = odoo.sql_db.db_connect(db_name)
+        Registry(db_name)
+        with conn.cursor() as cr:
             env = odoo.api.Environment(cr, SUPERUSER_ID, {})
             return self.assertTrue(env[model_name].search(search_domain))
 
@@ -36,7 +37,7 @@ class TestSaas(TransactionCase, Common):
         template_db_log = self.env['ir.logging'].search([
             ('dbname', '=', dbname),
             ('level', 'in', ['WARNING', 'ERROR', 'CRITICAL']),
-            ('message', 'not like', 'test_queue_job_no_delay'),
+            ('message', 'not like', 'queue_job__no_delay'),
         ])
         self.assertFalse(template_db_log)
 

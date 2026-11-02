@@ -5,7 +5,7 @@ class SaasDb(models.Model):
     _inherit = "saas.db"
 
     installed_apps = fields.Many2many(
-        "saas.module", "saas_db_installed_apps_rel", readonly=1
+        "saas.module", "saas_db_installed_apps_rel", readonly=True
     )
 
     def read_values_from_build(self):

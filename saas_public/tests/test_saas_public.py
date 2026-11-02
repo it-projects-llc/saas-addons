@@ -4,10 +4,10 @@ import urllib
 
 from odoo.addons.saas.tests.common_saas_test import Common
 from odoo.tests.common import tagged, HttpCase
-from odoo.service import db
+from odoo.modules import db
 
 
-@tagged('post_install', 'at_install')
+@tagged('post_install', '-at_install')
 class TestSaasPublic(HttpCase, Common):
     def setUp(self):
         super(TestSaasPublic, self).setUp()

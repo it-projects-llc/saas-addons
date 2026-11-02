@@ -9,7 +9,7 @@
     "category": "SaaS",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
-    "version": "15.0.3.1.0",
+    "version": "20.0.3.1.0",
     "application": False,
 
     "author": "IT-Projects LLC, Ivan Yelizariev",
@@ -23,15 +23,14 @@
         "auth_quick_master",
         "saas_cluster_simple",
         "queue_job",
-        "web_editor",
-        "web_notify",
+                "web_notify",
         "mail",
         "http_routing",
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
         "security/saas_security.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/saas_view.xml",
         "views/saas_template_views.xml",
         "views/saas_template_operator_views.xml",
@@ -50,9 +49,6 @@
         "demo/saas_template_demo.xml",
         "demo/saas_security_demo.xml",
     ],
-    "qweb": [
-    ],
-
     "post_load": None,
     "pre_init_hook": None,
     "post_init_hook": None,

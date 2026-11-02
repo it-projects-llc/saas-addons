@@ -9,8 +9,6 @@
             <field name="user_id" ref="base.user_root" />
             <field name="interval_number">2</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
-            <field name="doall">1</field>
             <field name="state">code</field>
             <field name="code">model.preparing_template_next()</field>
         </record>
@@ -22,8 +20,6 @@
             <field name="user_id" ref="base.user_root" />
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
-            <field name="doall">1</field>
             <field name="state">code</field>
             <field name="code">model.search([('type','=','build'),('state','=','done')]).refresh_data()</field>
         </record>

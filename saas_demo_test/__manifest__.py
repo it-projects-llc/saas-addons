@@ -5,7 +5,7 @@
     "summary": """Tests for Quick Demo Databases module""",
     "category": "SaaS",
     "images": [],
-    "version": "12.0.1.0.0",
+    "version": "20.0.1.0.0",
     "application": False,
 
     "author": "IT-Projects LLC, Denis Mudarisov",

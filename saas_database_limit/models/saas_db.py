@@ -15,7 +15,7 @@ class SaasDb(models.Model):
 
         self.execute_kw(
             "ir.config_parameter",
-            "set_param",
+            "set_str",
             "database_limit_size",
             str(int((self.database_limit_size or 0) * 1000000)),
         )

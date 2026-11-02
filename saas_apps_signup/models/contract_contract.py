@@ -12,14 +12,16 @@ class Contract(models.Model):
 
     _inherit = 'contract.contract'
 
-    @api.model
-    def create(self, vals):
-        record = super(Contract, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(Contract, self).create(vals_list)
 
-        if self.env.context.get("create_build_vals"):
-            record.with_user(SUPERUSER_ID).with_delay()._create_build(self.env.context.get("create_build_vals"))
+        create_build_vals = self.env.context.get("create_build_vals")
+        if create_build_vals:
+            for record in records:
+                record.with_user(SUPERUSER_ID).with_delay()._create_build(create_build_vals)
 
-        return record
+        return records
 
     @api.model
     def _create_saas_contract_for_trial(self, build, max_users_limit, subscription_period, installing_modules=None, saas_template_id=None):
@@ -172,12 +174,13 @@ class ContractLine(models.Model):
 
     _inherit = 'contract.line'
 
-    @api.model
-    def create(self, vals):
-        move_line_id = vals.pop("move_line_id", None)
-        res = super(ContractLine, self).create(vals)
-        if move_line_id:
-            self.env["account.move.line"].sudo().browse(move_line_id).write({
-                "contract_line_id": res.id,
-            })
-        return res
+    @api.model_create_multi
+    def create(self, vals_list):
+        move_line_ids = [vals.pop("move_line_id", None) for vals in vals_list]
+        records = super(ContractLine, self).create(vals_list)
+        for record, move_line_id in zip(records, move_line_ids):
+            if move_line_id:
+                self.env["account.move.line"].sudo().browse(move_line_id).write({
+                    "contract_line_id": record.id,
+                })
+        return records

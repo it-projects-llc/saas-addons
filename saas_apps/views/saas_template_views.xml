@@ -9,9 +9,9 @@
         <field name="arch" type="xml">
             <xpath expr="//form/sheet/group" position="inside">
                 <field name="is_package"/>
-                <field attrs="{'invisible':[('is_package','=',False)]}" name="package_image" widget="image" class="oe_left oe_avatar"/>
-                <field attrs="{'invisible':[('is_package','=',False)]}" name="month_price"/>
-                <field attrs="{'invisible':[('is_package','=',False)]}" name="year_price"/>
+                <field invisible="[('is_package', '=', False)]" name="package_image" widget="image" class="oe_left oe_avatar"/>
+                <field invisible="[('is_package', '=', False)]" name="month_price"/>
+                <field invisible="[('is_package', '=', False)]" name="year_price"/>
             </xpath>
         </field>
     </record>

@@ -7,7 +7,7 @@
         <field name="name">Templates</field>
         <field name="res_model">saas.template</field>
         <field name="views">[(False, 'form')]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('is_technical_template', '=', False)]</field>
     </record>
 
@@ -15,7 +15,7 @@
         <field name="name">Technical templates</field>
         <field name="res_model">saas.template</field>
         <field name="views">[(False, 'form')]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('is_technical_template', '=', True)]</field>
     </record>
 
@@ -23,14 +23,14 @@
         <field name="name">Builds</field>
         <field name="res_model">saas.db</field>
         <field name="views">[(False, 'form')]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('type', '=', 'build')]</field>
     </record>
     <record model='ir.actions.act_window' id="saas_operator_action" >
         <field name="name">Operators</field>
         <field name="res_model">saas.operator</field>
         <field name="views">[(False, 'form')]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <record id="action_config_settings" model="ir.actions.act_window">
@@ -38,7 +38,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="target">inline</field>
+        <field name="path">saas_settings</field>
         <field name="context">{'module' : 'saas', 'bin_size': False}</field>
     </record>
 

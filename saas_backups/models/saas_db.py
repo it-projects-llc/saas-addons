@@ -36,6 +36,6 @@ class SaasDb(models.Model):
             "type": "ir.actions.act_window",
             "name": "Backups of %s" % (self.name,),
             "res_model": "saas.db.backup",
-            "views": [[False, "tree"], [False, "form"]],
+            "views": [[False, "list"], [False, "form"]],
             "domain": [["origin_build_id", "=", self.id]],
         }

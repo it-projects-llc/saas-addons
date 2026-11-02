@@ -55,21 +55,21 @@ class Host2DBConfig(configparser.ConfigParser):
         return self.get(self.SECTION, host, fallback=None)
 
 
-db_filter_org = http.db_filter
+db_filter_org = http.router.db_filter
 host2db_config = Host2DBConfig()
 
 
-def db_filter(dbs, httprequest=None):
-    httprequest = httprequest or http.request.httprequest
-    h = httprequest.environ.get("HTTP_HOST", "").split(":")[0]
+def db_filter(dbs, host=None):
+    host = host or http.request.httprequest.environ.get("HTTP_HOST", "")
+    h = host.split(":")[0]
     dbname = host2db_config.get_db_by_host(h)
     if dbname:
         return [dbname]
     else:
-        return db_filter_org(dbs, httprequest)
+        return db_filter_org(dbs, host)
 
 
 if "host2db" in config.get("server_wide_modules"):
     _logger = logging.getLogger(__name__)
-    _logger.info("monkey patching http.db_filter")
-    http.db_filter = db_filter
+    _logger.info("monkey patching odoo.http.router.db_filter")
+    http.router.db_filter = db_filter

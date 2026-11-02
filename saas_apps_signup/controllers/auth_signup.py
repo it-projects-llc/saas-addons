@@ -1,7 +1,6 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import odoo
 from odoo.http import request
 from odoo.addons.auth_signup_verify_email.controllers.main import SignupVerifyEmail
 import logging
@@ -71,8 +70,12 @@ class Main(SignupVerifyEmail):
             if template:
                 d["operator_id"] = template._random_ready_operator_id()
 
-        d['langs'] = odoo.service.db.exp_list_lang()
-        d['countries'] = odoo.service.db.exp_list_countries()
+        d["langs"] = request.env["res.lang"].get_installed()
+        d["countries"] = [
+            (country.code, country.name)
+            for country in request.env["res.country"].sudo().search([], order="name")
+            if country.code
+        ]
         return d
 
     def passwordless_signup(self):

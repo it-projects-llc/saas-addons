@@ -6,7 +6,7 @@ from odoo.tests.common import HttpCase, tagged
 from odoo.addons.saas_demo.os import analysis_dir, repos_dir
 
 
-@tagged('post_install', 'at_install')
+@tagged('post_install', '-at_install')
 class TestSaasDemo(HttpCase):
 
     def setUp(self):
@@ -14,7 +14,7 @@ class TestSaasDemo(HttpCase):
 
         self.env = self.env(context=dict(
             self.env.context,
-            test_queue_job_no_delay=True,
+            queue_job__no_delay=True,
         ))
         self.saas_demo = self.env['saas.demo'].create({'name': 'SaaS Demo Test'})
         self.saas_operator = self.env['saas.operator'].create({

@@ -12,10 +12,10 @@ class SaasDb(models.Model):
 
     @api.model
     def _get_number_of_days_for_trial(self):
-        return int(
+        return (
             self.sudo()
             .env["ir.config_parameter"]
-            .get_param("saas_expiration.number_of_days_for_trial", 7)
+            .get_int("saas_expiration.number_of_days_for_trial", 7)
         )
 
     # fmt: off
@@ -58,7 +58,7 @@ class SaasDb(models.Model):
 
         self.execute_kw(
             "ir.config_parameter",
-            "set_param",
+            "set_str",
             "database_expiration_date",
             self.expiration_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
         )

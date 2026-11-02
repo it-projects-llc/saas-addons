@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields
+from odoo import api, models, fields
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ class SaasDb(models.Model):
 
     _inherit = 'saas.db'
 
-    database_limit_size = fields.Float(default=lambda self: self.env["ir.config_parameter"].get_param("saas_apps_signup.database_limit_size_default", 0.0))
+    database_limit_size = fields.Float(default=lambda self: self.env["ir.config_parameter"].get_float("saas_apps_signup.database_limit_size_default", 0.0))
     is_admin_user_language_installed = fields.Boolean("Is admin user's language installed?")
 
     def _get_domain_of_queue_job_records(self):
@@ -21,7 +21,8 @@ class SaasDb(models.Model):
             ("record_ids", "like", [self.contract_id.id]),
         ] + super(SaasDb, self)._get_domain_of_queue_job_records()
 
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
 
         if not self.env.user.has_group("saas.group_manager"):
             if self.env['saas.db']._search([
@@ -30,7 +31,7 @@ class SaasDb(models.Model):
             ], limit=1):
                 raise Exception("You cannot create more than one draft database")
 
-        return super(SaasDb, self).create(vals)
+        return super(SaasDb, self).create(vals_list)
 
     def read_values_from_build(self):
         vals = super(SaasDb, self).read_values_from_build()
@@ -47,7 +48,7 @@ class SaasDb(models.Model):
     def write_values_to_build(self):
         super(SaasDb, self).write_values_to_build()
 
-        web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        web_base_url = self.env["ir.config_parameter"].sudo().get_str("web.base.url")
         if not web_base_url:
             return
 
@@ -70,25 +71,25 @@ class SaasDb(models.Model):
 
         self.execute_kw(
             "ir.config_parameter",
-            "set_param",
+            "set_str",
             "database_expiration_details_link",
             web_base_url + self.access_url + "/renew_subscription",
         )
 
         self.execute_kw(
             "ir.config_parameter",
-            "set_param",
+            "set_str",
             "database_expiration_details_link_label",
             "Renew subscribtion",
         )
 
         Config = self.env["ir.config_parameter"].sudo()
 
-        database_expiration_warning_delay = Config.get_param("saas_apps_signup.database_expiration_warning_delay")
+        database_expiration_warning_delay = Config.get_str("saas_apps_signup.database_expiration_warning_delay")
         if database_expiration_warning_delay:
             self.execute_kw(
                 "ir.config_parameter",
-                "set_param",
+                "set_str",
                 "database_expiration_warning_delay",
                 database_expiration_warning_delay
             )

@@ -11,12 +11,18 @@ class Template(models.Model):
     repo_id = fields.Many2one('saas.demo.repo')
     demo_main_addon_id = fields.Many2one('saas.module')
     # demo_url = fields.Char()
-    demo_addon_ids = fields.Many2many('saas.module', help='Will be used as default filter in Apps section of the builds')
+    demo_addon_ids = fields.Many2many(
+        'saas.module',
+        'saas_template_demo_addons_rel',
+        'template_id', 'module_id',
+        help='Will be used as default filter in Apps section of the builds',
+    )
     demo_branch = fields.Char()
 
-    _sql_constraints = [
-        ('demo_uniq', 'unique (demo_id, demo_main_addon_id, demo_branch)', 'Template for that demo already exists.'),
-    ]
+    _demo_uniq = models.Constraint(
+        'unique (demo_id, demo_main_addon_id, demo_branch)',
+        'Template for that demo already exists.',
+    )
 
 
 class TemplateOperator(models.Model):

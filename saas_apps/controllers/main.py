@@ -8,7 +8,14 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 class SaaSAppsController(Controller):
     @route("/price", type="http", auth="public", website=True)
     def user_page(self, **kw):
-        res = request.env["res.config.settings"].sudo().get_values()
+        res = request.env["res.config.settings"].sudo().default_get(
+            [
+                "show_packages",
+                "show_apps",
+                "show_buy_now_button",
+                "show_try_trial_button",
+            ]
+        )
         show_apps = bool(res["show_apps"])
         show_packages = bool(res["show_packages"])
 
@@ -31,7 +38,7 @@ class SaaSAppsController(Controller):
                 "show_packages": show_packages,
                 "show_buy_now_button": bool(res["show_buy_now_button"]),
                 "show_try_trial_button": bool(res["show_try_trial_button"]),
-                "currency": request.website.currency_id,
+                "currency": request.env.website.currency_id,
                 "user_month_product": request.env.ref(
                     "saas_product.product_users_monthly"
                 ),
@@ -41,7 +48,7 @@ class SaaSAppsController(Controller):
             },
         )
 
-    @route(["/check_saas_template"], type="json", auth="public")
+    @route(["/check_saas_template"], type="jsonrpc", auth="public")
     def check_saas_template(self, **kw):
         # TODO: надо бы ошибки выводить
         # TODO: если указанный template_id не найден, то не надо использовать базовый шаблон
@@ -64,14 +71,14 @@ class SaaSAppsController(Controller):
 # TODO: он нужен?
 class SaasAppsCart(WebsiteSale):
     def clear_cart(self):
-        order = request.website.sale_get_order()
+        order = request.cart
         if order:
             for line in order.website_order_line:
                 line.unlink()
 
     @route(
         "/price/cart/update_json",
-        type="json",
+        type="jsonrpc",
         auth="public",
         methods=["POST"],
         website=True,
@@ -80,7 +87,7 @@ class SaasAppsCart(WebsiteSale):
     def cart_update_price_page(self, **kw):
         self.clear_cart()
         period = kw.get("period")
-        sale_order = request.website.sale_get_order(force_create=True)
+        sale_order = request.cart or request.env.website._create_cart()
         # Adding user as product in cart
         if period == "month":
             user_product = request.env.ref("saas_product.product_users_monthly")
@@ -92,10 +99,14 @@ class SaasAppsCart(WebsiteSale):
             )
 
         user_cnt = int(kw.get("user_cnt"))
-        sale_order._cart_update(product_id=int(user_product.id), add_qty=user_cnt)
+        sale_order.with_context(skip_cart_verification=True)._cart_add(
+            product_id=int(user_product.id), quantity=user_cnt
+        )
 
         for product_id in kw.get("product_ids", []):
-            sale_order._cart_update(product_id=int(product_id), add_qty=1)
+            sale_order.with_context(skip_cart_verification=True)._cart_add(
+                product_id=int(product_id), quantity=1
+            )
         return {"link": "/shop/cart"}
 
     @route()

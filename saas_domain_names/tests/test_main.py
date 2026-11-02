@@ -1,13 +1,19 @@
-from odoo.tests import HttpCase
-from odoo.addons.http_routing.models.ir_http import slugify
+from odoo.tests import HttpCase, tagged
 from odoo.addons.saas.tests.common_saas_test import Common
 
 DB_PREFIX = "saas_domain_names_test_"
 DB_TEMPLATE_NAME = DB_PREFIX + "template"
-DB_NAME = slugify(DB_PREFIX + "db")
+FIXTURE_MODULE = "test_saas_build"
 
 
+@tagged('post_install', '-at_install')
 class TestMain(HttpCase, Common):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # Odoo 20 moved http_routing.slugify to ir.http._slugify
+        cls.db_name = cls.env["ir.http"]._slugify(DB_PREFIX + "db")
+
     def get_operator(self):
         return self.env.ref("saas.local_operator")
 
@@ -18,14 +24,16 @@ class TestMain(HttpCase, Common):
         return operator.global_url
 
     def test_domain_workflow(self):
-        self.drop_dbs([DB_TEMPLATE_NAME, DB_NAME])
+        if not self.env["ir.module.module"].search_count([("name", "=", FIXTURE_MODULE)]):
+            self.skipTest(f"fixture module {FIXTURE_MODULE} is not installed")
+        self.drop_dbs([DB_TEMPLATE_NAME, self.db_name])
 
-        env = self.env(context=dict(self.env.context, test_queue_job_no_delay=True))
+        env = self.env(context=dict(self.env.context, queue_job__no_delay=True))
         operator = self.get_operator()
 
         # create template and template operator
         template = env["saas.template"].create(
-            {"template_module_ids": [(0, 0, {"name": "test_saas_build"})]}
+            {"template_module_ids": [(0, 0, {"name": FIXTURE_MODULE})]}
         )
 
         template_operator = env["saas.template.operator"].create(
@@ -40,7 +48,7 @@ class TestMain(HttpCase, Common):
         template_operator._prepare_template()
 
         # create build from template
-        db = template_operator.create_db({}, DB_NAME)
+        db = template_operator.create_db({}, self.db_name)
 
         domain_name = self.get_domain_to_test()
 
@@ -58,7 +66,7 @@ class TestMain(HttpCase, Common):
 
         # make sure, that before setting database it is not assigned to build
         response = self.url_open(
-            "{}/test_saas_build/get_db_name".format(operator_origin),
+            "{}/{}/get_db_name".format(operator_origin, FIXTURE_MODULE),
             headers={"Host": domain_name},
         )
         self.assertEqual(response.status_code, 404)
@@ -68,10 +76,10 @@ class TestMain(HttpCase, Common):
 
         # make sure, you can access to build using assigned domain name
         response = self.url_open(
-            "{}/test_saas_build/get_db_name".format(operator_origin),
+            "{}/{}/get_db_name".format(operator_origin, FIXTURE_MODULE),
             headers={"Host": domain_name},
         )
-        self.assertEqual(response.text, DB_NAME)
+        self.assertEqual(response.text, self.db_name)
 
         # TODO: unassign domain name using build
         # TODO: delete dn record and check

@@ -1,0 +1,3 @@
+id,name,model_id,group_id/id,operation,domain
+user_access_saas_demo,access_saas_demo,saas.demo,saas.group_user,cru,
+user_access_saas_demo_repo,access_saas_demo_repo,saas.demo.repo,saas.group_user,cru,

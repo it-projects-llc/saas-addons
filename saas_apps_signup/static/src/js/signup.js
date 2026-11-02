@@ -1,48 +1,87 @@
-/*  Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
-    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
-odoo.define('saas_apps_signup.signup', function (require) {
-    "use strict";
+/* Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
+   License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
+import { rpc } from "@web/core/network/rpc";
 
-    var session = require('web.session');
+function node(id) {
+    return document.getElementById(id);
+}
 
-    $(document).ready(function() {
-        if ($('.oe_signup_form').length > 0) {
+function setup() {
+    const form = document.querySelector(".oe_signup_form");
+    if (!form) {
+        return;
+    }
 
-          $('.oe_signup_form').on('submit', function (ev) {
-                $(".loader").removeClass("hid");
-            });
-
-            $('#company_name').on('change', function(event) {
-                var database_name = event.target.value.toLowerCase().replace(/[^[a-z0-9_-]/gi, '');
-                $("#database_name").val(database_name).trigger("change");
-            });
-
-            $('#database_name').on('change', function(event) {
-
-                var helper = $("#build-domain-helper");
-                var submit_btn = $('.oe_login_buttons > button[type="submit"]');
-
-                helper.find(".build-domain-helper_status").hide();
-                submit_btn.attr("disabled", "disabled");
-                if (!event.target.value) return;
-
-                helper.find(".build-domain-helper_status-loading").show();
-
-                session.rpc("/saas_apps_signup/is_database_slot_available", {
-                    database_name: event.target.value,
-                    operator_id: $("[name=operator_id]").val(),
-                }).then(function(response) {
-                    helper.find(".build-domain-helper_status").hide();
-                    if (response.domain) {
-                        helper.find("span.domain").html(response.domain);
-                        helper.find(".build-domain-helper_status-true").show();
-                        submit_btn.attr("disabled", null);
-                    } else {
-                        helper.find(".build-domain-helper_status-false").html(response.answer).show();
-                    }
-                });
-            });
+    form.addEventListener("submit", () => {
+        for (const loader of document.querySelectorAll(".loader")) {
+            loader.classList.remove("hid");
         }
     });
 
-});
+    const companyName = node("company_name");
+    const databaseName = node("database_name");
+    if (companyName && databaseName) {
+        companyName.addEventListener("change", () => {
+            databaseName.value = companyName.value.toLowerCase().replace(/[^a-z0-9_-]/gi, "");
+            databaseName.dispatchEvent(new Event("change"));
+        });
+    }
+
+    if (!databaseName) {
+        return;
+    }
+    databaseName.addEventListener("change", () => {
+        const helper = node("build-domain-helper");
+        const submitBtn = document.querySelector('.oe_login_buttons > button[type="submit"]');
+        if (!helper) {
+            return;
+        }
+        const statuses = [...helper.querySelectorAll(".build-domain-helper_status")];
+        const hideAll = () => statuses.forEach((el) => (el.style.display = "none"));
+
+        hideAll();
+        if (submitBtn) {
+            submitBtn.disabled = true;
+        }
+        if (!databaseName.value) {
+            return;
+        }
+        const loading = helper.querySelector(".build-domain-helper_status-loading");
+        if (loading) {
+            loading.style.display = "";
+        }
+
+        const operator = document.querySelector("[name=operator_id]");
+        rpc("/saas_apps_signup/is_database_slot_available", {
+            database_name: databaseName.value,
+            operator_id: operator ? operator.value : undefined,
+        }).then((response) => {
+            hideAll();
+            if (response.domain) {
+                const domain = helper.querySelector("span.domain");
+                if (domain) {
+                    domain.textContent = response.domain;
+                }
+                const ok = helper.querySelector(".build-domain-helper_status-true");
+                if (ok) {
+                    ok.style.display = "";
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                }
+            } else {
+                const failed = helper.querySelector(".build-domain-helper_status-false");
+                if (failed) {
+                    failed.textContent = response.answer;
+                    failed.style.display = "";
+                }
+            }
+        });
+    });
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setup);
+} else {
+    setup();
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="job_function_saas_demo_repos_updating_start" model="queue.job.function">
+        <field name="model_id" ref="saas_demo.model_saas_demo" />
+        <field name="method">repos_updating_start</field>
+    </record>
+</odoo>

@@ -5,7 +5,7 @@
 
     <record model="res.groups" id="group_auth_quick">
         <field name="name">Quick authentication for builds</field>
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
 
 </odoo>

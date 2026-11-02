@@ -9,25 +9,22 @@ class SaasDb(models.Model):
         "saas.domain.name", copy=False, domain="[('operator_id', '=', operator_id)]"
     )
 
-    _sql_constraints = [
-        (
-            "domain_name_id_uniq",
-            "unique(domain_name_id)",
-            "Cannot assign same domain to multiple builds",
-        ),
-    ]
+    _domain_name_id_unique = models.Constraint(
+        "unique(domain_name_id)",
+        "Cannot assign same domain to multiple builds",
+    )
 
-    @api.model
-    def create(self, vals):
-        record = super(SaasDb, self).create(vals)
-        if record.domain_name_id:
-            DomainName = self.env["saas.domain.name"]
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(SaasDb, self).create(vals_list)
+        DomainName = self.env["saas.domain.name"]
+        for record in records:
+            if record.domain_name_id:
+                DomainName.with_delay()._run_domain_operations(
+                    record.operator_id.id, ["map", record.domain_name_id.name, record.name]
+                )
 
-            DomainName.with_delay()._run_domain_operations(
-                record.operator_id.id, ["map", record.domain_name_id.name, record.name]
-            )
-
-        return record
+        return records
 
     def write(self, vals):
         domain_name_ids_before = {}

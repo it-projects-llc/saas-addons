@@ -16,8 +16,7 @@ except ImportError:
     import ConfigParser
 
 from odoo import tools
-from odoo.modules.module import module_manifest, README, MANIFEST_NAMES, adapt_version
-from odoo.tools import pycompat
+from odoo.modules.module import README, MANIFEST_NAMES, adapt_version
 import odoo
 
 _logger = logging.getLogger(__name__)
@@ -99,7 +98,7 @@ def update_addons_path(folder_of_folders, force=True):
         main_addons = os.path.abspath(os.path.join(root_odoo_path(), 'addons'))
         addons_path = [base_addons, main_addons]
     else:
-        addons_path = odoo.conf.addons_paths
+        addons_path = list(tools.config["addons_path"])
 
     extra = [
         os.path.join(folder_of_folders, p)
@@ -118,9 +117,9 @@ def update_addons_path(folder_of_folders, force=True):
 
 
 def update_config(section, key, value):
-    config_parser.read(tools.config.rcfile)
+    config_parser.read(tools.config["config"])
     config_parser.set(section, key, value)
-    with open(tools.config.rcfile, 'w') as configfile:
+    with open(tools.config["config"], 'w') as configfile:
         config_parser.write(configfile)
 
 
@@ -147,7 +146,14 @@ def load_information_from_description_file(module, mod_path):
     :param module: The name of the module (sale, purchase, ...)
     :param mod_path: Physical path of module, if not providedThe name of the module (sale, purchase, ...)
     """
-    manifest_file = module_manifest(mod_path)
+    manifest_file = next(
+        (
+            opj(mod_path, mname)
+            for mname in MANIFEST_NAMES
+            if os.path.isfile(opj(mod_path, mname))
+        ),
+        None,
+    )
     if manifest_file:
         # default values for descriptor
         info = {
@@ -166,12 +172,12 @@ def load_information_from_description_file(module, mod_path):
             'summary': '',
             'website': '',
         }
-        info.update(pycompat.izip(
+        info.update(zip(
             'depends data demo test init_xml update_xml demo_xml'.split(),
             iter(list, None)))
-        f = file_open(manifest_file, mode='rb')
+        f = file_open(manifest_file, mode='r')
         try:
-            info.update(ast.literal_eval(pycompat.to_native(f.read())))
+            info.update(ast.literal_eval(f.read()))
         finally:
             f.close()
 

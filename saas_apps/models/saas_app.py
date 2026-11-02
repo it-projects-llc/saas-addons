@@ -19,19 +19,26 @@ class SaasApp(models.Model):
 
     # TODO: add non-storable compute field like "Are cyclic dependency detected?"
 
-    @api.model
-    def create(self, vals):
-        res = super(SaasApp, self).create(vals)
-        if not res.product_tmpl_id:
-            res.product_tmpl_id = self.env["product.template"].create({
-                "name": res.shortdesc,
-                "image_1920": res.icon_image,
-                "saas_app_id": res.id,
-                "is_saas_product": True,
-                "website_published": True,
-                "list_price": 0,
-            })
-        return res
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(SaasApp, self).create(vals_list)
+        for res, vals in zip(records, vals_list):
+            if not res.product_tmpl_id:
+                res.product_tmpl_id = self.env["product.template"].create({
+                    "name": res.shortdesc,
+                    "image_1920": res.icon_image,
+                    "saas_app_id": res.id,
+                    "is_saas_product": True,
+                    "website_published": True,
+                    "list_price": 0,
+                })
+            # create() inverts month_price/year_price before the product template is
+            # linked, so the requested prices have to be applied again now that the
+            # subscription variants exist.
+            prices = {key: vals[key] for key in ("month_price", "year_price") if vals.get(key)}
+            if prices:
+                res.write(prices)
+        return records
 
     def _search_or_create(self, ir_module):
         app = self.search([("name", "=", ir_module.name)])

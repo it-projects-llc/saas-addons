@@ -5,22 +5,27 @@ from odoo.http import request, route, Controller
 import logging
 
 import werkzeug
-from werkzeug.urls import Href, url_encode
+from werkzeug.urls import url_encode
 from odoo import SUPERUSER_ID
-from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.addons.saas_portal.controllers.portal import CustomerPortal
 
 _logger = logging.getLogger(__name__)
 
 
+def _url_with_query(url, params):
+    # Odoo 20 dropped werkzeug.urls.Href; url_encode is provided by odoo's
+    # werkzeug monkeypatch.
+    return "{}?{}".format(url, url_encode(params))
+
+
 class Main(Controller):
-    @route("/saas_apps_signup/is_database_slot_available", auth="public", type="json")
+    @route("/saas_apps_signup/is_database_slot_available", auth="public", type="jsonrpc")
     def is_available(self, database_name, operator_id, **kw):
         database_name = database_name.lower().strip()
         if not database_name:
             return {"answer": "Empty database name"}
 
-        if database_name != slugify(database_name):
+        if database_name != request.env["ir.http"]._slugify(database_name):
             return {"answer": "Invalid database name"}
 
         is_free_slot = not request.env["saas.db"].sudo().search([("name", "=", database_name)])
@@ -87,7 +92,7 @@ class Main(Controller):
         assert not(saas_template_id and installing_modules), "Both saas_template_id and installing_modules given"
 
         if request.env.user == request.env.ref("base.public_user"):
-            return werkzeug.utils.redirect(Href("/web/signup")(params))
+            return werkzeug.utils.redirect(_url_with_query("/web/signup", params))
 
         build = request.env["saas.db"].search([
             ("type", "=", "build"),
@@ -95,7 +100,7 @@ class Main(Controller):
             ("admin_user", "=", request.env.user.id),
         ], order='id DESC', limit=1)
         if not build:
-            return request.redirect(Href("/my/builds/create")({
+            return request.redirect(_url_with_query("/my/builds/create", {
                 "redirect": request.httprequest.full_path
             }))
 

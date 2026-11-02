@@ -38,9 +38,9 @@ class SAASOperator(models.Model):
             "type": "ir.actions.act_window",
             "name": "Builds and templates",
             "res_model": "saas.db",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "domain": [["operator_id", "=", self.id]],
-            "views": [[False, "tree"], [False, "form"]],
+            "views": [[False, "list"], [False, "form"]],
         }
         return action
 
@@ -134,8 +134,8 @@ class SAASOperator(models.Model):
 
     @staticmethod
     def _get_mandatory_code():
-        master = "env['ir.config_parameter'].set_param('auth_quick.master', '{master_url}')\n"
-        build = "env['ir.config_parameter'].set_param('auth_quick.build', '{build_id}')\n"
+        master = "env['ir.config_parameter'].set_str('auth_quick.master', '{master_url}')\n"
+        build = "env['ir.config_parameter'].set_str('auth_quick.build', '{build_id}')\n"
         return master + build
 
     def _build_execute_kw(self, db_name, model, method, args, kwargs):
@@ -199,7 +199,7 @@ class SAASOperator(models.Model):
 
     def _update_global_url(self, url):
         self.ensure_one()
-        code = "env['ir.config_parameter'].set_param('auth_quick.master', '{}')\n".format(url)
+        code = "env['ir.config_parameter'].set_str('auth_quick.master', '{}')\n".format(url)
         builds = self.env['saas.db'].search([('operator_id', '=', self.id), ('type', '=', 'build')])
         action = {
             'name': 'Build Code Eval',
@@ -212,7 +212,7 @@ class SAASOperator(models.Model):
             self.build_execute_kw(build, 'ir.actions.server', 'run', [action_ids])
 
     def notify_users(self, message, title=None, message_type=None):
-        manager_users = self.env.ref('saas.group_manager').users
+        manager_users = self.env.ref("saas.group_manager").user_ids
         if message_type == 'success':
             manager_users.notify_success(message=message, title=title, sticky=True)
         else:

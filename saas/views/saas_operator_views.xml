@@ -36,10 +36,10 @@
         <field name="name">saas.operator.tree</field>
         <field name="model">saas.operator</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="type"/>
-            </tree>
+            </list>
         </field>
     </record>
 </odoo>

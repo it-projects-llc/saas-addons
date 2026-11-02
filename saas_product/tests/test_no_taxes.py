@@ -4,7 +4,7 @@
 from odoo.tests.common import HttpCase, tagged
 
 
-@tagged("at_install", "post_install")
+@tagged('post_install', '-at_install')
 class TestNoTaxes(HttpCase):
     def test_no_taxes(self):
         product_template = self.env["product.template"].create(

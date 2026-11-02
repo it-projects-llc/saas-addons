@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.addons.saas_backups.models.saas_db import ARCHIVED
 import logging
@@ -13,10 +13,14 @@ class SaasDb(models.Model):
     is_temporary = fields.Boolean("Is temporary build?", readonly=True)
     is_approved = fields.Boolean("Is temporary build approved?", readonly=True, tracking=True)
 
-    def name_get(self):
+    @api.depends_context("use_domain_name")
+    @api.depends("domain_name_id.name", "name")
+    def _compute_display_name(self):
         if self.env.context.get("use_domain_name"):
-            return [(record.id, record.domain_name_id.name or record.name) for record in self]
-        return super(SaasDb, self).name_get()
+            for record in self:
+                record.display_name = record.domain_name_id.name or record.name
+        else:
+            super(SaasDb, self)._compute_display_name()
 
     def _get_domain_of_queue_job_records(self):
         return [

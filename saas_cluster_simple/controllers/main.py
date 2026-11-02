@@ -28,7 +28,7 @@ def check_master_pwd(f):
 
 
 class OperatorController(Controller):
-    @route("/saas_operator/<string:method_name>", type="json", auth="none")
+    @route("/saas_operator/<string:method_name>", type="jsonrpc", auth="none")
     @check_master_pwd
     def run_cluster_method(self, method_name, **kw):
         method = getattr(cluster, method_name)

@@ -4,10 +4,10 @@
         <field name="name">saas.domain.name.tree</field>
         <field name="model">saas.domain.name</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="operator_id" options="{'no_create': 1}"/>
-            </tree>
+            </list>
         </field>
     </record>
 

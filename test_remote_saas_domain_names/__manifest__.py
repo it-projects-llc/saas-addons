@@ -1,5 +1,6 @@
 {
     "name": "Tests for saas_domain_names on remote operator",
+    "version": "20.0.1.0.0",
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
     "license": "AGPL-3",
@@ -7,6 +8,5 @@
     "external_dependencies": {"python": [], "bin": []},
     "data": [],
     "demo": [],
-    "qweb": [],
     "installable": True,
 }

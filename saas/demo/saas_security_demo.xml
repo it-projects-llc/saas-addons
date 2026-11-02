@@ -2,6 +2,6 @@
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).-->
 <odoo>
     <record model="res.groups" id="group_user">
-      <field name="users" eval="[(4, ref('base.user_demo'))]"/>
+      <field name="user_ids" eval="[(4, ref('base.user_demo'))]"/>
     </record>
 </odoo>

@@ -8,7 +8,6 @@ from urllib.parse import urlparse
 
 from odoo import models, fields, api
 
-from odoo.addons.queue_job.job import job
 from ..os import analysis_dir, update_repo, get_manifests
 from ..odoo import is_test
 
@@ -37,7 +36,7 @@ class Demo(models.Model):
                 path = os.path.join(analysis_path, repo.branch, repo.url_escaped)
                 demos_for_immediate_update = self.update_modules_templates(path, demo, demos_for_immediate_update, repo)
         if demos_for_immediate_update:
-            self.repos_updating_start(demos_for_immediate_update)
+            self.with_delay().repos_updating_start(demos_for_immediate_update)
 
     def update_modules_templates(self, path, demo, demos_for_immediate_update, repo):
         for module, manifest in get_manifests(path).items():
@@ -94,7 +93,6 @@ class Demo(models.Model):
         return vals
 
     @api.model
-    @job
     def repos_updating_start(self, demos=None):
         # TODO: This method is called by cron once in a night or when new template is created
         if not demos:

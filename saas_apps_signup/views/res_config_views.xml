@@ -6,30 +6,16 @@
         <field name="priority" eval="95"/>
         <field name="inherit_id" ref="saas.res_config_settings_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//div[@data-key='saas']" position="inside">
-                    <div class="row mt16 o_settings_container">
-                        <div class="col-12 col-lg-6 o_setting_box" id="database_limit_size_default_settings">
-                            <div class="o_setting_right_pane">
-                                <label for="database_limit_size_default"/>
-                                <br/>
-                                <field name="database_limit_size_default"/>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6 o_setting_box" id="database_expiration_warning_delay_settings">
-                            <div class="o_setting_right_pane">
-                                <label for="database_expiration_warning_delay"/>
-                                <br/>
-                                <field name="database_expiration_warning_delay"/>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6 o_setting_box" id="number_of_days_for_trial_setings">
-                            <div class="o_setting_right_pane">
-                                <label for="number_of_days_for_trial"/>
-                                <br/>
-                                <field name="number_of_days_for_trial"/>
-                            </div>
-                        </div>
-                    </div>
+            <xpath expr="//block[@name='saas_defaults_container']" position="inside">
+                <setting id="database_limit_size_default_setting" string="Database limit size (default)" company_dependent="1">
+                    <field name="database_limit_size_default" class="fw-bold"/>
+                </setting>
+                <setting id="database_expiration_warning_delay_setting" string="Database expiration warning delay (default)">
+                    <field name="database_expiration_warning_delay" class="fw-bold"/>
+                </setting>
+                <setting id="number_of_days_for_trial_setting" string="Number of days for trial (default)">
+                    <field name="number_of_days_for_trial" class="fw-bold"/>
+                </setting>
             </xpath>
         </field>
     </record>

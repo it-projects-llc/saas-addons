@@ -22,7 +22,7 @@
                 <field name="expiration_date" />
                 <field name="expiration_state" invisible="1"/>
             </xpath>
-            <xpath expr="//tree" position="attributes">
+            <xpath expr="//list" position="attributes">
                 <attribute name="decoration-warning">expiration_state == "expiring_soon"</attribute>
                 <attribute name="decoration-danger">expiration_state == "expired"</attribute>
             </xpath>

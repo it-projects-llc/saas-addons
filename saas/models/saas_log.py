@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import logging
 
-from odoo import models, fields
+from odoo import api, models, fields
 
 _logger = logging.getLogger(__name__)
 
@@ -40,13 +40,14 @@ class SAASLog(models.Model):
             'db_id': db.id,
         })
 
-    def log_db_authed(self, token_obj):
-        self.create({
-            'type': 'authed',
-            'data_id': 'auth_quick_master.token,%s' % token_obj.id,
-            'db_id': int(token_obj.build),
-            'user_id': token_obj.user_id.id,
-        })
+    def log_db_authed(self, tokens):
+        for token in tokens:
+            self.create({
+                'type': 'authed',
+                'data_id': 'auth_quick_master.token,%s' % token.id,
+                'db_id': int(token.build),
+                'user_id': token.user_id.id,
+            })
 
     def log_db_dropped(self, db):
         self.create({
@@ -55,6 +56,7 @@ class SAASLog(models.Model):
             'db_id': db.id,
         })
 
-    def create(self, vals):
-        _logger.debug('saas.log: %s', vals)
-        return super(SAASLog, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        _logger.debug('saas.log: %s', vals_list)
+        return super(SAASLog, self).create(vals_list)

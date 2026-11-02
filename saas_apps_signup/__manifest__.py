@@ -7,7 +7,7 @@
     "category": "Hidden",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
-    "version": "15.0.0.1.1",
+    "version": "20.0.0.1.1",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "apps@it-projects.info",
@@ -26,7 +26,6 @@
     "data": [
         "data/auth_signup_data.xml",
         "data/website.xml",
-        "security/ir.model.access.csv",
         "views/auth_signup.xml",
         "views/calculator.xml",
         "views/portal_templates.xml",
@@ -46,3 +45,4 @@
     "auto_install": False,
     "installable": True,
 }
+

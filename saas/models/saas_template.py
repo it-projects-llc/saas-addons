@@ -8,9 +8,8 @@ import logging
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import test_python_expr
-from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.exceptions import ValidationError, UserError
-from odoo.addons.queue_job.delay import group
+from odoo.addons.queue_job.delay import chain
 
 _logger = logging.getLogger(__name__)
 
@@ -79,7 +78,6 @@ class SAASTemplate(models.Model):
                 'name': 'Create Build',
                 'res_model': 'saas.template.create_build',
                 'src_model': 'saas.template',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'view_id': self.env.ref('saas.saas_template_create_build').id,
                 'target': 'new',
@@ -99,14 +97,10 @@ class SAASModules(models.Model):
     description = fields.Char()
     template_ids = fields.Many2many('saas.template')
 
-    def name_get(self):
-        result = []
+    @api.depends('name', 'description')
+    def _compute_display_name(self):
         for rec in self:
-            if rec.description:
-                result.append((rec.id, '%s (%s)' % (rec.description, rec.name)))
-            else:
-                result.append((rec.id, rec.name))
-        return result
+            rec.display_name = '%s (%s)' % (rec.description, rec.name) if rec.description else rec.name
 
 
 class SAASTemplateLine(models.Model):
@@ -168,6 +162,9 @@ class SAASTemplateLine(models.Model):
             self.operator_id.notify_users(message, message_type='info')
             # delete db is there is one
             r.operator_db_id.drop_db()
+            # an interrupted run can leave a database behind whose saas.db
+            # record was rolled back, so drop the target name too
+            self.operator_id._drop_db(r.operator_db_name)
             if not r.operator_db_id or r.operator_id != r.operator_db_id.operator_id:
                 r.operator_db_id = self.env['saas.db'].create({
                     'name': r.operator_db_name,
@@ -179,7 +176,7 @@ class SAASTemplateLine(models.Model):
             r.write({
                 'state': 'creating',
             })
-            r.flush()
+            r.flush_model()
             r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,
@@ -194,7 +191,7 @@ class SAASTemplateLine(models.Model):
 
     def prepare_name(self, db_name):
         self.ensure_one()
-        return slugify(db_name)
+        return self.env['ir.http']._slugify(db_name)
 
     def create_db(self, key_values=None, db_name=None, with_delay=True, draft_build_id=None):
         self.ensure_one()
@@ -222,18 +219,15 @@ class SAASTemplateLine(models.Model):
 
         self.env['saas.log'].log_db_creating(build, self.operator_db_id)
         if with_delay:
-            job_create = build.with_delay().create_db(
-                self.operator_db_name, self.template_id.template_demo,
-            )
-            job_install_modules = group(job_create).on_done(
-                build.with_delay().action_install_missing_mandatory_modules()
-            )
-
-            group(job_install_modules).on_done(
-                self.operator_id.with_delay().build_post_init(
+            chain(
+                build.delayable().create_db(
+                    self.operator_db_name, self.template_id.template_demo,
+                ),
+                build.delayable().action_install_missing_mandatory_modules(),
+                self.operator_id.delayable().build_post_init(
                     build, self.template_id.build_post_init, key_values
-                )
-            )
+                ),
+            ).delay()
         else:
             build.create_db(
                 self.operator_db_name,

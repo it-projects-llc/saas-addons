@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from unittest.mock import patch
 
 
-@tagged('post_install', 'at_install')
+@tagged('post_install', '-at_install')
 class TestSaasContract(TransactionCase, Common):
     @classmethod
     def setUpClass(cls):

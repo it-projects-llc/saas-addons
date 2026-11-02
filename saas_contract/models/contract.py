@@ -62,12 +62,13 @@ class Contract(models.Model):
             else:
                 record.build_status = "suspended"
 
-    @api.model
-    def create(self, vals):
-        res = super(Contract, self).create(vals)
-        if res.build_id and res.line_recurrence:
-            raise ValidationError("Cannot create SaaS contract with enabled line-level recurrence")
-        return res
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(Contract, self).create(vals_list)
+        for res in records:
+            if res.build_id and res.line_recurrence:
+                raise ValidationError("Cannot create SaaS contract with enabled line-level recurrence")
+        return records
 
     def write(self, vals):
         res = super(Contract, self).write(vals)
