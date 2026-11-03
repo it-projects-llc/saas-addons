@@ -11,3 +11,4 @@ from . import mail_thread
 from . import saas_template
 
 from . import website_checkout_step
+from . import ir_http

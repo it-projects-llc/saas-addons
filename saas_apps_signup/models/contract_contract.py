@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models, SUPERUSER_ID
+from odoo import _, api, models, SUPERUSER_ID
 import logging
 from ..exceptions import OperatorNotAvailable
 
@@ -133,11 +133,15 @@ class Contract(models.Model):
                 template = template[0]
             template_operators = template.operator_ids
             if not template_operators:
-                raise OperatorNotAvailable("No template operators in base template. Contact administrator")
+                raise OperatorNotAvailable(
+                    _("No template operators in base template. Contact administrator")
+                )
 
             template_operator = template_operators.random_ready_operator()
             if not template_operator:
-                raise OperatorNotAvailable("No template operators are ready. Try again later")
+                raise OperatorNotAvailable(
+                    _("No template operators are ready. Try again later")
+                )
 
             installing_modules_var = "[" + ",".join(map(
                 lambda item: '"{}"'.format(item.strip().replace('"', '')),

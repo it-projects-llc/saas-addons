@@ -75,7 +75,7 @@ class CustomerPortal(CustomerPortal):
         values = {"build": build_sudo}
 
         if not build_sudo.is_temporary:
-            values["error"] = "This build is not marked as temporary"
+            values["error"] = _("This build is not marked as temporary")
             return request.render("saas_portal.approve_build_result", values)
 
         build_sudo.with_context(writing_from_refresh_data=True).is_approved = True

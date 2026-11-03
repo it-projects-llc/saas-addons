@@ -1,0 +1,233 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_backups
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: saas_backups
+#: model:ir.module.module,description:base.module_saas_backups
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===============\n"
+" SaaS: Backups\n"
+"===============\n"
+"\n"
+"This module makes backups for build.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"* `Eugene Molotov <https://github.com/em230418>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__active
+msgid "Active"
+msgstr ""
+
+#. module: saas_backups
+#: model_terms:ir.ui.view,arch_db:saas_backups.saas_db_form_view
+msgid "Archive"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields.selection,name:saas_backups.selection__saas_db__state__archived
+msgid "Archived"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__backup_ids
+msgid "Backup"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__backup_count
+msgid "Backup count"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,help:saas_backups.field_saas_db_backup__name
+#: model:ir.model.fields,help:saas_backups.field_saas_db_backup__remote_filename
+msgid "Backup filename on operator"
+msgstr ""
+
+#. module: saas_backups
+#. odoo-python
+#: code:addons/saas_backups/models/saas_db_backup.py:0
+msgid "Backup for database %s restored as %s"
+msgstr ""
+
+#. module: saas_backups
+#: model_terms:ir.ui.view,arch_db:saas_backups.saas_db_form_view
+msgid "Backups"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model,name:saas_backups.model_saas_db
+msgid "Build"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model,name:saas_backups.model_saas_db_backup
+msgid "Build backup"
+msgstr ""
+
+#. module: saas_backups
+#: model_terms:ir.ui.view,arch_db:saas_backups.saas_db_form_view
+msgid "Create backup"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_queue_job__display_name
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields.selection,name:saas_backups.selection__saas_db__state__failed
+msgid "Failed"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_queue_job__id
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__id
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__job_ids
+msgid "Job"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.module.module,summary:base.module_saas_backups
+msgid "Makes backups of builds"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__name
+msgid "Name"
+msgstr ""
+
+#. module: saas_backups
+#. odoo-python
+#: code:addons/saas_backups/models/queue_job.py:0
+msgid "No restored build defined"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__origin_build_id
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__origin_build_id
+msgid "Origin Build"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__origin_backup_id
+msgid "Origin backup"
+msgstr ""
+
+#. module: saas_backups
+#: model_terms:ir.ui.view,arch_db:saas_backups.saas_db_backup_view_form
+msgid "Pending jobs"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model,name:saas_backups.model_queue_job
+msgid "Queue Job"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__remote_filename
+msgid "Remote filename"
+msgstr ""
+
+#. module: saas_backups
+#. odoo-python
+#: code:addons/saas_backups/models/saas_db_backup.py:0
+#: model_terms:ir.ui.view,arch_db:saas_backups.saas_db_backup_view_form
+msgid "Restore backup"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_queue_job__restored_build_id
+msgid "Restored Build"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__restored_build_count
+msgid "Restored build count"
+msgstr ""
+
+#. module: saas_backups
+#: model_terms:ir.ui.view,arch_db:saas_backups.saas_db_backup_view_form
+msgid "Restored builds"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.module.module,shortdesc:base.module_saas_backups
+msgid "SaaS: Backups"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db__state
+msgid "State"
+msgstr ""
+
+#. module: saas_backups
+#: model:ir.model.fields,field_description:saas_backups.field_saas_db_backup__unfinished_job_count
+msgid "Unfinished job count"
+msgstr ""
+
+#. module: saas_backups
+#: model_terms:ir.ui.view,arch_db:saas_backups.view_queue_job_form
+msgid "View restored build"
+msgstr ""

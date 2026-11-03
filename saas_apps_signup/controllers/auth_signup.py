@@ -1,6 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from odoo import _
 from odoo.http import request
 from odoo.addons.auth_signup_verify_email.controllers.main import SignupVerifyEmail
 import logging
@@ -86,7 +87,7 @@ class Main(SignupVerifyEmail):
         if database_name:
             db_record = request.env['saas.db'].sudo().search([('name', '=', database_name)], limit=1)
             if db_record:
-                qcontext["error"] = "Database %s already exist" % (database_name,)
+                qcontext["error"] = _("Database %s already exist", database_name)
                 return request.render("auth_signup.signup", qcontext)
 
         try:
@@ -104,5 +105,5 @@ class Main(SignupVerifyEmail):
             from werkzeug.exceptions import BadRequest
             cart = request.cart
             if not cart or cart.id != int(signup["sale_order_id"]):
-                raise BadRequest("The signup order must be the current shopping cart.")
+                raise BadRequest(_("The signup order must be the current shopping cart."))
         return signup

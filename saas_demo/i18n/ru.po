@@ -1,0 +1,350 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_demo
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. module: saas_demo
+#: model:ir.module.module,description:base.module_saas_demo
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"======================\n"
+" Quick Demo Databases\n"
+"======================\n"
+"\n"
+"One-click demo-instances with modules from your git repositories\n"
+"\n"
+"How it works\n"
+"============\n"
+"\n"
+"* 1 ``saas.operator`` record has 1 set of repositories (``saas.demo`` record).\n"
+"* In each repository only one branch is used.\n"
+"* 1 ``saas.template`` record may have many ``saas.template.operator``. The idea\n"
+"  is that we can rebuild template database on one operator, while there is\n"
+"  another one available to use.\n"
+"* ``saas.template`` records are generated automatically from ``saas.demo`` records\n"
+"\n"
+"Repository updating\n"
+"===================\n"
+"\n"
+"* Once in a night all ``saas.demo`` 's *Operators* are marked for updates\n"
+"* One by one *Operators* from ``saas.demo`` update repositories, destroy templates and start rebuilding templates.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Ivan Yelizariev <https://it-projects.info/team/yelizariev>`__\n"
+"* `Denis Mudarisov <https://it-projects.info/team/mudarisov>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/13.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_demo/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_\n"
+"\n"
+"Tested on Odoo 12.0 8d9e276a9fbf3b4cd8b8251e184d936ff654dd1f\n"
+msgstr ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"============================================\n"
+" Быстрое создание демонстрационных баз данных\n"
+"============================================\n"
+"\n"
+"Демонстрационные экземпляры с модулями из ваших Git-репозиториев в один клик\n"
+"\n"
+"Как это работает\n"
+"================\n"
+"\n"
+"* Одной записи ``saas.operator`` соответствует один набор репозиториев (запись ``saas.demo``).\n"
+"* В каждом репозитории используется только одна ветка.\n"
+"* Одной записи ``saas.template`` может соответствовать несколько записей ``saas.template.operator``. Это позволяет пересоздавать базу шаблона на одном операторе, пока другой остаётся доступным.\n"
+"* Записи ``saas.template`` создаются автоматически на основе записей ``saas.demo``.\n"
+"\n"
+"Обновление репозиториев\n"
+"=======================\n"
+"\n"
+"* Каждую ночь все *операторы* из ``saas.demo`` отмечаются для обновления.\n"
+"* *Операторы* из ``saas.demo`` по очереди обновляют репозитории, удаляют шаблоны и запускают их пересоздание.\n"
+"\n"
+"Благодарности\n"
+"=============\n"
+"\n"
+"Участники\n"
+"---------\n"
+"* `Ivan Yelizariev <https://it-projects.info/team/yelizariev>`__\n"
+"* `Denis Mudarisov <https://it-projects.info/team/mudarisov>`__\n"
+"\n"
+"Спонсоры\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Сопровождающие\n"
+"--------------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Дополнительная информация\n"
+"=========================\n"
+"\n"
+"Демонстрация: http://runbot.it-projects.info/demo/saas-addons/13.0\n"
+"\n"
+"HTML-описание: https://apps.odoo.com/apps/modules/13.0/saas_demo/\n"
+"\n"
+"Инструкция по использованию: `<doc/index.rst>`_\n"
+"\n"
+"История изменений: `<doc/changelog.rst>`_\n"
+"\n"
+"Уведомления об обновлениях: `через Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_, `по электронной почте <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_\n"
+"\n"
+"Протестировано на Odoo 12.0 8d9e276a9fbf3b4cd8b8251e184d936ff654dd1f\n"
+
+#. module: saas_demo
+#: model:ir.module.module,summary:base.module_saas_demo
+msgid "One-click demo-instances with modules from your git repositories"
+msgstr ""
+"Демонстрационные экземпляры с модулями из ваших Git-репозиториев в один клик"
+
+#. module: saas_demo
+#: model:ir.module.module,shortdesc:base.module_saas_demo
+msgid "Quick Demo Databases"
+msgstr "Быстрое создание демонстрационных баз данных"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__automatic_addons_path_update
+msgid "Automatic Addons Path Update"
+msgstr "Автоматическое обновление путей модулей"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__branch
+msgid "Branch"
+msgstr "Ветка"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__commit
+msgid "Commit SHA"
+msgstr "SHA коммита"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__create_uid
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__create_uid
+msgid "Created by"
+msgstr "Кем создано"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__create_date
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__create_date
+msgid "Created on"
+msgstr "Дата создания"
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_operator
+msgid "Database Operator"
+msgstr "Оператор баз данных"
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_template
+msgid "Database Template"
+msgstr "Шаблон базы данных"
+
+#. module: saas_demo
+#: model:ir.actions.act_window,name:saas_demo.saas_demo_action
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__demo_id
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__demo_id
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_id
+msgid "Demo"
+msgstr "Демонстрация"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_addon_ids
+msgid "Demo Addon"
+msgstr "Демонстрационный модуль"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_branch
+msgid "Demo Branch"
+msgstr "Ветка демонстрации"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__demo_main_addon_id
+msgid "Demo Main Addon"
+msgstr "Основной демонстрационный модуль"
+
+#. module: saas_demo
+#: model:ir.ui.menu,name:saas_demo.saas_demo_main_menu_item
+msgid "Demos"
+msgstr "Демонстрации"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__display_name
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: saas_demo
+#: model_terms:ir.ui.view,arch_db:saas_demo.saas_demo_form_view
+msgid "Fetch Repositories"
+msgstr "Загрузить репозитории"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__id
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__id
+msgid "ID"
+msgstr "ID"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__write_uid
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__write_uid
+msgid "Last Updated by"
+msgstr "Кем изменено"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__write_date
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__write_date
+msgid "Last Updated on"
+msgstr "Дата изменения"
+
+#. module: saas_demo
+#: model:ir.model.fields,help:saas_demo.field_saas_demo_repo__commit
+msgid "Last processed point"
+msgstr "Последний обработанный коммит"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__name
+msgid "Name"
+msgstr "Название"
+
+#. module: saas_demo
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__base
+msgid "Not a demo"
+msgstr "Не демонстрация"
+
+#. module: saas_demo
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__none
+msgid "Not planned"
+msgstr "Не запланировано"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__operator_ids
+msgid "Operator"
+msgstr "Оператор"
+
+#. module: saas_demo
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__pending
+msgid "Pending"
+msgstr "Ожидает"
+
+#. module: saas_demo
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__rebuilding
+msgid "Rebuilding Templates"
+msgstr "Пересоздание шаблонов"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__repo_ids
+#: model:ir.model.fields,field_description:saas_demo.field_saas_template__repo_id
+msgid "Repo"
+msgstr "Репозиторий"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__repo_name
+msgid "Repo Name"
+msgstr "Название репозитория"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__url
+msgid "Repo URL"
+msgstr "URL репозитория"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__url_escaped
+msgid "Repo URL (escaped)"
+msgstr "URL репозитория (экранированный)"
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_demo
+msgid "Repos Set for Demo"
+msgstr "Набор репозиториев для демонстрации"
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_demo_repo
+msgid "Repository for Demo"
+msgstr "Репозиторий для демонстрации"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__demo_repo
+msgid "Scan for demo"
+msgstr "Искать демонстрационные модули"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__needs_restart
+msgid "Server needs to be restarted"
+msgstr "Требуется перезапуск сервера"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo__template_ids
+msgid "Template"
+msgstr "Шаблон"
+
+#. module: saas_demo
+#: model:ir.model.constraint,message:saas_demo.constraint_saas_template_demo_uniq
+msgid "Template for that demo already exists."
+msgstr "Шаблон для этой демонстрации уже существует."
+
+#. module: saas_demo
+#: model:ir.model,name:saas_demo.model_saas_template_operator
+msgid "Template's Deployment"
+msgstr "Развёртывание шаблона"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_operator__update_repos_state
+msgid "Update Repos State"
+msgstr "Состояние обновления репозиториев"
+
+#. module: saas_demo
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__updating
+msgid "Updating Repositories"
+msgstr "Обновление репозиториев"
+
+#. module: saas_demo
+#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__vendor
+msgid "Vendor"
+msgstr "Владелец репозитория"
+
+#. module: saas_demo
+#: model:ir.model.fields,help:saas_demo.field_saas_template__demo_addon_ids
+msgid "Will be used as default filter in Apps section of the builds"
+msgstr ""
+"Будет использоваться как фильтр по умолчанию в разделе приложений "
+"экземпляров"

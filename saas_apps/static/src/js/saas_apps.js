@@ -1,5 +1,6 @@
 /* Copyright 2020 Vildan Safin <https://www.it-projects.info/team/Enigma228322>
    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
+import { _t, translationIsReady } from "@web/core/l10n/translation";
 import { rpc } from "@web/core/network/rpc";
 
 const MONTHLY = "month";
@@ -62,7 +63,22 @@ function chosenPackages() {
     return nodes(".package").filter((el) => el.dataset.packageId === state.chosenPackageId);
 }
 
+function renderBillingPeriod() {
+    for (const el of nodes(".switch-period")) {
+        const active = el.dataset.period === state.period;
+        el.classList.toggle("active", active);
+        el.setAttribute("aria-current", String(active));
+    }
+    for (const el of nodes(".yearly-price")) {
+        el.classList.toggle("hid", state.period !== ANNUALLY);
+    }
+    for (const el of nodes(".monthly-price")) {
+        el.classList.toggle("hid", state.period !== MONTHLY);
+    }
+}
+
 function renderTotalPrice() {
+    renderBillingPeriod();
     const apps = chosenApps();
     const packages = chosenPackages();
     const sumApps = apps.reduce((acc, el) => acc + priceOf(el), 0);
@@ -72,7 +88,7 @@ function renderTotalPrice() {
     const sumUsers = qty * parseFloat(usersBlock ? usersBlock.dataset[`price${capitalize(state.period)}`] || 0 : 0);
 
     setText("price", String(sumApps + sumPackages + sumUsers));
-    setText("box-period", state.period);
+    setText("box-period", state.period === MONTHLY ? _t("month") : _t("year"));
     setText("users-qty", String(qty));
     setText("users-cnt-cost", String(sumUsers));
     setText("apps-qty", String(apps.length + packages.length));
@@ -185,7 +201,8 @@ function setup() {
         el.addEventListener("click", () => onPackageClick(el));
     }
     for (const el of nodes(".switch-period")) {
-        el.addEventListener("click", () => {
+        el.addEventListener("click", (event) => {
+            event.preventDefault();
             state.period = el.dataset.period;
             renderTotalPrice();
         });
@@ -222,7 +239,7 @@ function setup() {
                 goToBuild("", parseInt(state.chosenPackageId, 10));
                 showLoader();
             } else {
-                window.alert("Please, choose apps or package first");
+                window.alert(_t("Please, choose apps or package first"));
             }
         });
     }
@@ -240,7 +257,7 @@ function setup() {
                 const el = document.querySelector(`.package[data-package-id="${state.chosenPackageId}"]`);
                 productIds = el ? [productIdOf(el)] : [];
             } else {
-                window.alert("Please, choose apps or package first");
+                window.alert(_t("Please, choose apps or package first"));
                 return;
             }
 
@@ -257,10 +274,16 @@ function setup() {
     renderTotalPrice();
 }
 
+// Website translations are initialized by the public root after assets load.
+// Do not evaluate _t() during module startup, before that initialization.
+function start() {
+    translationIsReady.then(setup);
+}
+
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setup);
+    document.addEventListener("DOMContentLoaded", start);
 } else {
-    setup();
+    start();
 }
 
 export { MONTHLY, ANNUALLY };

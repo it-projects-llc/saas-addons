@@ -1,0 +1,801 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. module: saas
+#: model:ir.module.module,description:base.module_saas
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===========\n"
+" SaaS Base\n"
+"===========\n"
+"\n"
+"Base module for master SaaS instance.\n"
+"\n"
+"The module is similar to ``saas_portal`` in *odoo-saas-tools*.\n"
+"\n"
+"Models overview\n"
+"===============\n"
+"\n"
+"* ``saas.template`` -- similar to ``saas_portal.plan`` in *odoo-saas-tools*, but covers only technical aspects (database creation) and not any sale/trial stuff. A single record can be used for multiple servers (via ``saas.template.operator``.\n"
+"* ``saas.operator`` -- similar to ``saas_portal.server`` in *odoo-saas-tools*. Credentials to create-destroy, update, migrate, backup, etc. odoo instances.\n"
+"\n"
+"  * It doesn't need special odoo instance (database, *SaaS Server* in terms of\n"
+"    *odoo-saas-tool* project) in corresponding server and could work by sending\n"
+"    requests, for example, to kubernetes.\n"
+"  * Single *operator* is only one set of modules at some versions. If you have a\n"
+"    server which is used for different versions of odoo or just module version,\n"
+"    then you need you to create ``saas.operator`` per each module set. Those\n"
+"    *operators* may use same credentials.\n"
+"  * Different *Operators* may have same postgresql scope. It's usefull in\n"
+"    staging when we apply a database for new versions of modules. On the other\n"
+"    hand, it force us to have unique database names across operators\n"
+"\n"
+"* ``saas.db`` -- similar to ``saas_portal.client`` in *odoo-saas-tools*\n"
+"* ``saas.log`` -- saas history, e.g. database creation, updating, etc.\n"
+"\n"
+"Roadmap\n"
+"=======\n"
+"\n"
+"* TODO: Create menu for SaaS Operator\n"
+"    * smart button for builds list\n"
+"* TODO: Create menu for SaaS Log model\n"
+"    * saas.db form: add smart button for saas.log's\n"
+"    * saas.operator: add smart button for saas.log's\n"
+"* TODO: Add check uniqueness of database name across saas.db records with state == done. Also check that there is no records of saas.db with name equal to one that user wants to use in use in wizard, saas template operator.\n"
+"* TODO: Make the saas.template form duplicable again\n"
+"* TODO: Add page refresh button on saas.template form\n"
+"* TODO: saas_test: add database creation rollback and extra safety:\n"
+"    * setUp: prepare list of database names that will be created during the tests. Check that those databases don't exist and raise error otherwise\n"
+"    * use random suffix to avoid droping database reserved for production purposes during test execution, e.g. template_database_ecusnc63asdf234\n"
+"    * tearDown: drop created databases after test exectuion\n"
+"* TODO: Add coverage for \"Connect to the build\" button:\n"
+"    * get authentication on master database in requests' session (use authenticate method from odoo/tests/common.py)\n"
+"    * open \"connect to build url\"\n"
+"    * check that you are finally redirected to /web page at the build\n"
+"* TODO: add computed record in saas.db model to avoid using the name of the master database. Some new db type is needed. Say, ``('other', 'Reserved DB Name')``\n"
+"\n"
+"* TODO: saas.operator: add a button that runs a wizard which allows to make new build (saas.db) from backup; add a method in ``saas.operator`` which takes the backup as argument; implement the method for \"Same Instance\" operator\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Ivan Yelizariev <https://it-projects.info/team/yelizariev>`__\n"
+"* `Denis Mudarisov <https://it-projects.info/team/mudarisov>`__\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas.atom>`_\n"
+"\n"
+"Tested on Odoo 14.0 8ca3ea063050f2ab2d19cce8a68116489872a734\n"
+msgstr ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===================\n"
+" Базовый модуль SaaS\n"
+"===================\n"
+"\n"
+"Базовый модуль управляющего экземпляра SaaS.\n"
+"\n"
+"Модуль аналогичен ``saas_portal`` из проекта *odoo-saas-tools*.\n"
+"\n"
+"Обзор моделей\n"
+"=============\n"
+"\n"
+"* ``saas.template`` — аналог ``saas_portal.plan`` из *odoo-saas-tools*. Охватывает только технические задачи создания баз данных, без продажи и пробных периодов. Одна запись может использоваться на нескольких серверах через ``saas.template.operator``.\n"
+"* ``saas.operator`` — аналог ``saas_portal.server`` из *odoo-saas-tools*. Хранит параметры доступа для создания, удаления, обновления, миграции и резервного копирования экземпляров Odoo.\n"
+"\n"
+"  * Не требует отдельного экземпляра Odoo на сервере (базы данных, или *SaaS Server* в терминологии проекта *odoo-saas-tool*). Может отправлять запросы, например, в Kubernetes.\n"
+"  * Каждый *оператор* обслуживает один набор модулей определённых версий. Если сервер используется для разных версий Odoo или модулей, создайте отдельную запись ``saas.operator`` для каждого набора. Эти *операторы* могут использовать одинаковые параметры доступа.\n"
+"  * Разные *операторы* могут использовать один сервер PostgreSQL. Это удобно при проверке новых версий модулей, но требует уникальных имён баз данных для всех операторов.\n"
+"\n"
+"* ``saas.db`` — аналог ``saas_portal.client`` из *odoo-saas-tools*.\n"
+"* ``saas.log`` — история SaaS: создание баз данных, обновления и другие события.\n"
+"\n"
+"Планы развития\n"
+"==============\n"
+"\n"
+"* TODO: создать меню оператора SaaS.\n"
+"    * Кнопка перехода к списку экземпляров.\n"
+"* TODO: создать меню журнала SaaS.\n"
+"    * Добавить кнопку перехода к журналу saas.log в форму saas.db.\n"
+"    * Добавить кнопку перехода к журналу saas.log в форму saas.operator.\n"
+"* TODO: проверять уникальность имён баз данных среди записей saas.db с state == done. Также проверять отсутствие записи saas.db с именем, которое пользователь вводит в мастере или в развёртывании шаблона.\n"
+"* TODO: восстановить возможность дублирования формы saas.template.\n"
+"* TODO: добавить кнопку обновления страницы в форму saas.template.\n"
+"* TODO: saas_test — добавить откат создания баз данных и дополнительные проверки безопасности:\n"
+"    * setUp: подготовить список имён баз данных для тестов. Проверить, что эти базы не существуют; иначе вызвать ошибку.\n"
+"    * Использовать случайный суффикс, например template_database_ecusnc63asdf234, чтобы не удалить рабочую базу данных во время теста.\n"
+"    * tearDown: удалять созданные базы данных после выполнения теста.\n"
+"* TODO: добавить тесты кнопки «Открыть экземпляр»:\n"
+"    * Войти в управляющую базу данных через сеанс requests методом authenticate из odoo/tests/common.py.\n"
+"    * Открыть URL подключения к экземпляру.\n"
+"    * Проверить итоговое перенаправление на страницу /web экземпляра.\n"
+"* TODO: добавить вычисляемую запись в модель saas.db, чтобы запретить использование имени управляющей базы данных. Для этого нужен новый тип базы, например ``('other', 'Reserved DB Name')``.\n"
+"\n"
+"* TODO: saas.operator — добавить кнопку запуска мастера создания экземпляра (saas.db) из резервной копии, добавить в ``saas.operator`` метод, принимающий резервную копию, и реализовать его для оператора «Тот же экземпляр Odoo».\n"
+"\n"
+"Благодарности\n"
+"=============\n"
+"\n"
+"Участники\n"
+"---------\n"
+"* `Ivan Yelizariev <https://it-projects.info/team/yelizariev>`__\n"
+"* `Denis Mudarisov <https://it-projects.info/team/mudarisov>`__\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__\n"
+"\n"
+"Спонсоры\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Сопровождающие\n"
+"--------------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Дополнительная информация\n"
+"=========================\n"
+"\n"
+"Демонстрация: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"Инструкция по использованию: `<doc/index.rst>`_\n"
+"\n"
+"История изменений: `<doc/changelog.rst>`_\n"
+"\n"
+"Уведомления об обновлениях: `через Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas.atom>`_, `по электронной почте <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas.atom>`_\n"
+"\n"
+"Протестировано на Odoo 14.0 8ca3ea063050f2ab2d19cce8a68116489872a734\n"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_needaction
+msgid "Action Needed"
+msgstr "Требуется действие"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_attachment_count
+msgid "Attachment Count"
+msgstr "Количество вложений"
+
+#. module: saas
+#: model:ir.model,name:saas.model_auth_quick_master_token
+msgid "Authentication Token"
+msgstr "Токен аутентификации"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_operator__db_url_template
+msgid "Avaialble variables: {db_name}"
+msgstr "Доступные переменные: {db_name}"
+
+#. module: saas
+#: model:ir.module.module,summary:base.module_saas
+msgid "Base module for master SaaS instance"
+msgstr "Базовый модуль управляющего экземпляра SaaS"
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_db
+msgid "Build"
+msgstr "Экземпляр"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__build_count
+msgid "Build Count"
+msgstr "Количество экземпляров"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__build_creation_id
+msgid "Build Creation"
+msgstr "Создание экземпляра"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__build_post_init
+msgid "Build Initialization"
+msgstr "Инициализация экземпляра"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__build_post_init_ids
+msgid "Build Initialization Values"
+msgstr "Параметры инициализации экземпляра"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__build_name
+msgid "Build name"
+msgstr "Имя экземпляра"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
+msgid "Build post init form"
+msgstr "Форма инициализации экземпляра"
+
+#. module: saas
+#: model:ir.model,name:saas.model_build_post_init_line
+msgid "Build post init line"
+msgstr "Строка параметров инициализации экземпляра"
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_db_action
+#: model:ir.ui.menu,name:saas.saas_main_menu_item_2
+#: model_terms:ir.ui.view,arch_db:saas.saas_operator_form_view
+msgid "Builds"
+msgstr "Экземпляры"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
+msgid "Cancel"
+msgstr "Отмена"
+
+#. module: saas
+#: model:ir.ui.menu,name:saas.saas_main_menu_config
+msgid "Configuration"
+msgstr "Настройка"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+msgid "Connect to the Build"
+msgstr "Открыть экземпляр"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_create_build
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
+msgid "Create Build"
+msgstr "Создать экземпляр"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_db__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_log__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_module__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_operator__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_uid
+msgid "Created by"
+msgstr "Кем создано"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_db__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_log__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_module__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_operator__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_template__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__create_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__create_date
+msgid "Created on"
+msgstr "Дата создания"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__type
+msgid "DB Type"
+msgstr "Тип базы данных"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__db_url_template
+msgid "DB URLs"
+msgstr "URL баз данных"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__creation
+msgid "DB is being created"
+msgstr "База данных создаётся"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__created
+msgid "DB is created"
+msgstr "База данных создана"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__dropped
+msgid "DB is dropped"
+msgstr "База данных удалена"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__creating
+msgid "Database Creating"
+msgstr "Создание базы данных"
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_log
+msgid "Database Event Log"
+msgstr "Журнал событий базы данных"
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_operator
+msgid "Database Operator"
+msgstr "Оператор баз данных"
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_template
+msgid "Database Template"
+msgstr "Шаблон базы данных"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_state
+msgid "Database operator state"
+msgstr "Состояние базы данных на операторе"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__db_id
+msgid "Db"
+msgstr "База данных"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.res_config_settings_view_form
+msgid "Defaults"
+msgstr "Значения по умолчанию"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_module__description
+msgid "Description"
+msgstr "Описание"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_auth_quick_master_token__display_name
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__display_name
+#: model:ir.model.fields,field_description:saas.field_queue_job__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_log__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_module__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_operator__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_template__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__display_name
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__state__draft
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__draft
+msgid "Draft"
+msgstr "Черновик"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__description
+msgid "Extra data"
+msgstr "Дополнительные данные"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__post_init
+msgid "Extra initialization"
+msgstr "Дополнительная инициализация"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_follower_ids
+msgid "Followers"
+msgstr "Подписчики"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Подписчики (контакты)"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__has_message
+msgid "Has Message"
+msgstr "Есть сообщения"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_auth_quick_master_token__id
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__id
+#: model:ir.model.fields,field_description:saas.field_queue_job__id
+#: model:ir.model.fields,field_description:saas.field_saas_db__id
+#: model:ir.model.fields,field_description:saas.field_saas_log__id
+#: model:ir.model.fields,field_description:saas.field_saas_module__id
+#: model:ir.model.fields,field_description:saas.field_saas_operator__id
+#: model:ir.model.fields,field_description:saas.field_saas_template__id
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__id
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__id
+msgid "ID"
+msgstr "ID"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Если отмечено, новые сообщения требуют вашего внимания."
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Если отмечено, при доставке некоторых сообщений возникла ошибка."
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__template_demo
+msgid "Install demo data"
+msgstr "Установить демонстрационные данные"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_operator_form_view
+msgid "Install missing mandatory modules"
+msgstr "Установить недостающие обязательные модули"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_is_follower
+msgid "Is Follower"
+msgstr "Подписан"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__is_technical_template
+msgid "Is technical template?"
+msgstr "Технический шаблон?"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__key
+msgid "Key"
+msgstr "Ключ"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_db__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_log__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_module__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_operator__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__write_uid
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__write_uid
+msgid "Last Updated by"
+msgstr "Кем изменено"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_db__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_log__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_module__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_operator__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_template__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__write_date
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__write_date
+msgid "Last Updated on"
+msgstr "Дата изменения"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__type
+msgid "Log type"
+msgstr "Тип события"
+
+#. module: saas
+#: model:res.groups,name:saas.group_manager
+msgid "Manager"
+msgstr "Администратор"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__global_url
+msgid "Master URL (Server-to-Server)"
+msgstr "URL управляющего экземпляра (межсерверное взаимодействие)"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_has_error
+msgid "Message Delivery error"
+msgstr "Ошибка доставки сообщения"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_ids
+msgid "Messages"
+msgstr "Сообщения"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__installing_modules
+msgid "Modules installation"
+msgstr "Установка модулей"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__template_module_ids
+msgid "Modules to install"
+msgstr "Модули для установки"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__name
+#: model:ir.model.fields,field_description:saas.field_saas_operator__name
+#: model:ir.model.fields,field_description:saas.field_saas_template__name
+msgid "Name"
+msgstr "Название"
+
+#. module: saas
+#: model:res.groups.privilege,placeholder:saas.res_groups_privilege_saas
+msgid "No"
+msgstr "Нет"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__type__build
+msgid "Normal Build"
+msgstr "Обычный экземпляр"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Количество действий"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__message_has_error_counter
+msgid "Number of errors"
+msgstr "Количество ошибок"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Количество сообщений, требующих действия"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Количество сообщений с ошибкой доставки"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__operator_id
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_id
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__saas_operator
+msgid "Operator"
+msgstr "Оператор"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_id
+msgid "Operator Db"
+msgstr "База данных на операторе"
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_operator_action
+#: model:ir.ui.menu,name:saas.saas_operator_menu_item
+msgid "Operators"
+msgstr "Операторы"
+
+#. module: saas
+#: model:ir.actions.server,name:saas.preparing_template_next_cron_ir_actions_server
+msgid "Preparing Template Next Cron"
+msgstr "Планировщик подготовки следующего шаблона"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_template__build_post_init
+msgid "Python code to be executed once build db is created from template"
+msgstr "Код Python, выполняемый после создания базы экземпляра из шаблона"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_template__template_post_init
+msgid ""
+"Python code to be executed once db is created and modules are installed"
+msgstr ""
+"Код Python, выполняемый после создания базы данных и установки модулей"
+
+#. module: saas
+#: model:ir.model,name:saas.model_queue_job
+msgid "Queue Job"
+msgstr "Фоновое задание"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__type__authed
+msgid "Quick Authentication"
+msgstr "Быстрая аутентификация"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__rating_ids
+msgid "Ratings"
+msgstr "Оценки"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__state__done
+#: model:ir.model.fields.selection,name:saas.selection__saas_template_operator__state__done
+msgid "Ready"
+msgstr "Готово"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__data_id
+msgid "Reference"
+msgstr "Идентификатор"
+
+#. module: saas
+#: model_terms:ir.ui.view,arch_db:saas.saas_db_form_view
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_form_view
+msgid "Refresh"
+msgstr "Обновить"
+
+#. module: saas
+#: model:ir.module.category,name:saas.module_management
+#: model:ir.ui.menu,name:saas.saas_main_menu
+#: model:res.groups.privilege,name:saas.res_groups_privilege_saas
+#: model_terms:ir.ui.view,arch_db:saas.res_config_settings_view_form
+msgid "SaaS"
+msgstr "SaaS"
+
+#. module: saas
+#: model:ir.module.module,shortdesc:base.module_saas
+msgid "SaaS Base"
+msgstr "Базовый модуль SaaS"
+
+#. module: saas
+#: model:ir.actions.server,name:saas.refresh_saas_db_data_ir_actions_server
+msgid "SaaS: refresh data from build database"
+msgstr "SaaS: обновление данных из базы экземпляра"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_operator__type__local
+msgid "Same Instance"
+msgstr "Тот же экземпляр Odoo"
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.action_config_settings
+#: model:ir.ui.menu,name:saas.saas_main_menu_config_settings
+msgid "Settings"
+msgstr "Настройки"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_db__state
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__state
+msgid "State"
+msgstr "Состояние"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_db__name
+msgid "Technical Database name"
+msgstr "Техническое имя базы данных"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_module__name
+msgid "Technical name"
+msgstr "Техническое имя"
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_technical_template_action
+#: model:ir.ui.menu,name:saas.saas_main_menu_config_tt
+msgid "Technical templates"
+msgstr "Технические шаблоны"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_module__template_ids
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_id
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__template_id
+#: model_terms:ir.ui.view,arch_db:saas.saas_template_view_tree
+msgid "Template"
+msgstr "Шаблон"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_db__type__template
+msgid "Template DB"
+msgstr "База данных шаблона"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__template_post_init
+msgid "Template Initialization"
+msgstr "Инициализация шаблона"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__template_operator_ids
+msgid "Template Operator"
+msgstr "Развёртывание шаблона"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_operator_count
+msgid "Template Operator Count"
+msgstr "Количество развёртываний шаблона"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__operator_db_name
+msgid "Template database name"
+msgstr "Имя базы данных шаблона"
+
+#. module: saas
+#. odoo-python
+#: code:addons/saas/models/saas_template.py:0
+msgid ""
+"Template deployment %s is being created and will be ready in a few minutes."
+msgstr ""
+"Развёртывание шаблона %s создаётся и будет готово через несколько минут."
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_template_operator
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__template_operator_id
+msgid "Template's Deployment"
+msgstr "Развёртывание шаблона"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template__operator_ids
+msgid "Template's deployments"
+msgstr "Развёртывания шаблона"
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_module
+msgid "Template's modules to install"
+msgstr "Модули для установки в шаблон"
+
+#. module: saas
+#: model:ir.actions.act_window,name:saas.saas_template_action
+#: model:ir.ui.menu,name:saas.saas_main_menu_item
+msgid "Templates"
+msgstr "Шаблоны"
+
+#. module: saas
+#. odoo-python
+#: code:addons/saas/models/saas_template.py:0
+msgid ""
+"There are no ready template's deployments. Create new one or wait until it's"
+" done."
+msgstr ""
+"Нет готовых развёртываний шаблона. Создайте новое или дождитесь завершения "
+"текущего."
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_template_create_build__build_post_init_ids
+msgid ""
+"These values will be used on execution template's Build Initialization code"
+msgstr ""
+"Эти значения будут использованы при выполнении кода инициализации экземпляра"
+" из шаблона"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_operator__to_rebuild
+msgid "To Rebuild"
+msgstr "Требуется пересоздание"
+
+#. module: saas
+#: model:ir.model.fields.selection,name:saas.selection__saas_log__data_id__auth_quick_master_token
+msgid "Token"
+msgstr "Токен"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_operator__type
+msgid "Type"
+msgstr "Тип"
+
+#. module: saas
+#: model:ir.model.fields,help:saas.field_saas_operator__global_url
+msgid "URL for server-to-server communication "
+msgstr "URL для межсерверного взаимодействия "
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_template_create_build__random
+msgid "Use random operator"
+msgstr "Использовать случайный оператор"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_saas_log__user_id
+#: model:res.groups,name:saas.group_user
+msgid "User"
+msgstr "Пользователь"
+
+#. module: saas
+#: model:ir.module.category,description:saas.module_management
+msgid "User access level for SaaS"
+msgstr "Уровень доступа пользователя к SaaS"
+
+#. module: saas
+#: model:ir.model.fields,field_description:saas.field_build_post_init_line__value
+msgid "Value"
+msgstr "Значение"
+
+#. module: saas
+#: model:ir.model,name:saas.model_saas_template_create_build
+msgid "Wizard to create build by template"
+msgstr "Мастер создания экземпляра из шаблона"

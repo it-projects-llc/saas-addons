@@ -1,5 +1,5 @@
 # Copyright 2020 Eugene Molotov; AGPL-3.0. Odoo 20 purchase integration.
-from odoo import fields, models
+from odoo import _, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -20,13 +20,19 @@ class AccountMove(models.Model):
                 if not user_lines:
                     continue
                 if len(user_lines.product_id) != 1:
-                    raise ValidationError("Use one billing period for each SaaS database purchase.")
+                    raise ValidationError(
+                        _("Use one billing period for each SaaS database purchase.")
+                    )
                 if not order.build_id or order.build_id.state != "draft":
-                    raise ValidationError("Select an unprovisioned database before paying for a SaaS subscription.")
+                    raise ValidationError(
+                        _("Select an unprovisioned database before paying for a SaaS subscription.")
+                    )
                 user_product = user_lines.product_id
                 quantity = sum(user_lines.mapped("quantity"))
                 if quantity < 1 or not float(quantity).is_integer():
-                    raise ValidationError("The SaaS user quantity must be a positive whole number.")
+                    raise ValidationError(
+                        _("The SaaS user quantity must be a positive whole number.")
+                    )
                 period = "month" if user_product == monthly else "year"
                 contract_lines = []
                 for line in invoice_lines:
@@ -45,7 +51,7 @@ class AccountMove(models.Model):
                     "expiration_date": fields.Datetime.now() + user_product._get_expiration_timedelta(),
                     "max_users_limit": int(quantity),
                 }).create({
-                    "name": f"{order.partner_id.name}'s SaaS Contract",
+                    "name": _("%s's SaaS Contract", order.partner_id.name),
                     "partner_id": order.partner_id.id,
                     "contract_line_fixed_ids": contract_lines,
                     "line_recurrence": False,

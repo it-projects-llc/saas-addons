@@ -1,0 +1,168 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_limit_max_users
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. module: saas_limit_max_users
+#: model:ir.module.module,description:base.module_saas_limit_max_users
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"=======================\n"
+" SaaS: Limit Max Users\n"
+"=======================\n"
+"\n"
+"This module controls maximum amount of active users that can build have.\n"
+"\n"
+"Also it can show current number of active users in build.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      To get a guaranteed support\n"
+"      you are kindly requested to purchase the module\n"
+"      at `odoo apps store <https://apps.odoo.com/apps/modules/13.0/saas_limit_max_users/>`__.\n"
+"\n"
+"      Thank you for understanding!\n"
+"\n"
+"      `IT-Projects Team <https://www.it-projects.info/team>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/13.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_limit_max_users/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_limit_max_users.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_limit_max_users.atom>`_\n"
+"\n"
+"Tested on Odoo 13.0 47707e1b099195487fd3d3e0ae012e4aed5a9bc5\n"
+msgstr ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"==========================================\n"
+" SaaS: ограничение количества пользователей\n"
+"==========================================\n"
+"\n"
+"Ограничивает максимальное количество активных пользователей экземпляра.\n"
+"\n"
+"Также отображает текущее количество активных пользователей экземпляра.\n"
+"\n"
+"Благодарности\n"
+"=============\n"
+"\n"
+"Участники\n"
+"---------\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Спонсоры\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Сопровождающие\n"
+"--------------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      Для получения гарантированной поддержки\n"
+"      приобретите модуль\n"
+"      в `магазине приложений Odoo <https://apps.odoo.com/apps/modules/13.0/saas_limit_max_users/>`__.\n"
+"\n"
+"      Спасибо за понимание!\n"
+"\n"
+"      `Команда IT-Projects <https://www.it-projects.info/team>`__\n"
+"\n"
+"Дополнительная информация\n"
+"=========================\n"
+"\n"
+"Демонстрация: http://runbot.it-projects.info/demo/saas-addons/13.0\n"
+"\n"
+"HTML-описание: https://apps.odoo.com/apps/modules/13.0/saas_limit_max_users/\n"
+"\n"
+"Инструкция по использованию: `<doc/index.rst>`_\n"
+"\n"
+"История изменений: `<doc/changelog.rst>`_\n"
+"\n"
+"Уведомления об обновлениях: `через Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_limit_max_users.atom>`_, `по электронной почте <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_limit_max_users.atom>`_\n"
+"\n"
+"Протестировано на Odoo 13.0 47707e1b099195487fd3d3e0ae012e4aed5a9bc5\n"
+
+#. module: saas_limit_max_users
+#: model:ir.model,name:saas_limit_max_users.model_saas_db
+msgid "Build"
+msgstr "Экземпляр"
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__users_count
+msgid "Current No. Of Users"
+msgstr "Текущее количество пользователей"
+
+#. module: saas_limit_max_users
+#: model:ir.model,name:saas_limit_max_users.model_saas_operator
+msgid "Database Operator"
+msgstr "Оператор баз данных"
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_operator__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__id
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_operator__id
+msgid "ID"
+msgstr "ID"
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__max_users_limit
+msgid "Max Users Allowed"
+msgstr "Максимальное количество пользователей"
+
+#. module: saas_limit_max_users
+#. odoo-python
+#: code:addons/saas_limit_max_users/models/saas_db.py:0
+msgid "Number of allowed max users must be at least 1"
+msgstr "Максимальное количество пользователей должно быть не меньше 1"
+
+#. module: saas_limit_max_users
+#: model:ir.module.module,shortdesc:base.module_saas_limit_max_users
+msgid "SaaS: limit max users"
+msgstr "SaaS: ограничение количества пользователей"
+
+#. module: saas_limit_max_users
+#: model:ir.module.module,summary:base.module_saas_limit_max_users
+msgid "This module controls maximum amount of users that can build have."
+msgstr "Ограничение максимального количества пользователей экземпляра."

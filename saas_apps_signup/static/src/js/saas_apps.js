@@ -1,5 +1,6 @@
 /* Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).*/
+import { _t } from "@web/core/l10n/translation";
 import { getInputs } from "@saas_apps/js/saas_apps";
 
 function setup() {
@@ -10,11 +11,11 @@ function setup() {
     btn.addEventListener("click", () => {
         const inputs = getInputs();
         if (!inputs.chosen_apps.length && !inputs.chosen_package_id) {
-            window.alert("Please chosen apps or package to install");
+            window.alert(_t("Please chosen apps or package to install"));
             return;
         }
         if (!inputs.user_cnt) {
-            window.alert("Number of users are not given");
+            window.alert(_t("Number of users are not given"));
             return;
         }
 

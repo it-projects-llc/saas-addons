@@ -1,0 +1,614 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_apps_signup
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/account_move.py:0
+msgid "%s's SaaS Contract"
+msgstr "Договор SaaS для %s"
+
+#. module: saas_apps_signup
+#: model:ir.module.module,description:base.module_saas_apps_signup
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===================\n"
+" Saas: Apps Signup\n"
+"===================\n"
+"\n"
+"This module extends ``saas_apps`` module by implemeting\n"
+"\n"
+"* signup procedure for unregistered users\n"
+"* contracts management\n"
+"* choosing database name before creating it\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      To get a guaranteed support\n"
+"      you are kindly requested to purchase the module\n"
+"      at `odoo apps store <https://apps.odoo.com/apps/modules/14.0/saas_apps_signup/>`__.\n"
+"\n"
+"      Thank you for understanding!\n"
+"\n"
+"      `IT-Projects Team <https://www.it-projects.info/team>`__\n"
+"\n"
+"Roadmap\n"
+"=======\n"
+"\n"
+"* TODO: write documentation\n"
+"* TODO: implement test cases\n"
+"  * unregistered user chooses apps, clicks try trial, registers - new build is created with expiration\n"
+"  * unregistered user chooses apps, clicks buy now, registers, logs in, checkout and pay - new build is created with payed period\n"
+"  * registered user chooses apps, clicks try trial, enters database name - new build is created with expiration\n"
+"  * registered user chooses apps, click buy now, enters database name, checkout and pay - new build is created with payed period\n"
+"  * same as above, but use other period\n"
+"  * same as above, but user chooses templates\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/14.0/saas_apps_signup/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps_signup.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps_signup.atom>`_\n"
+"\n"
+"Tested on Odoo 14.0 99531f5dd8966fc4ad89d1e9c2886ad701527f3a\n"
+msgstr ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"============================\n"
+" Приложения SaaS: регистрация\n"
+"============================\n"
+"\n"
+"Расширяет модуль ``saas_apps``, добавляя:\n"
+"\n"
+"* Регистрацию новых пользователей.\n"
+"* Управление договорами.\n"
+"* Выбор имени базы данных перед её созданием.\n"
+"\n"
+"Благодарности\n"
+"=============\n"
+"\n"
+"Участники\n"
+"---------\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Спонсоры\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Сопровождающие\n"
+"--------------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      Для получения гарантированной поддержки\n"
+"      приобретите модуль\n"
+"      в `магазине приложений Odoo <https://apps.odoo.com/apps/modules/14.0/saas_apps_signup/>`__.\n"
+"\n"
+"      Спасибо за понимание!\n"
+"\n"
+"      `Команда IT-Projects <https://www.it-projects.info/team>`__\n"
+"\n"
+"Планы развития\n"
+"==============\n"
+"\n"
+"* TODO: написать документацию.\n"
+"* TODO: реализовать тестовые сценарии:\n"
+"  * Незарегистрированный пользователь выбирает приложения, нажимает «Попробовать» и регистрируется — создаётся экземпляр с ограниченным сроком доступа.\n"
+"  * Незарегистрированный пользователь выбирает приложения, нажимает «Купить», регистрируется, входит, оформляет и оплачивает заказ — создаётся экземпляр с оплаченным периодом доступа.\n"
+"  * Зарегистрированный пользователь выбирает приложения, нажимает «Попробовать» и вводит имя базы данных — создаётся экземпляр с ограниченным сроком доступа.\n"
+"  * Зарегистрированный пользователь выбирает приложения, нажимает «Купить», вводит имя базы данных, оформляет и оплачивает заказ — создаётся экземпляр с оплаченным периодом доступа.\n"
+"  * Повторить эти сценарии с другим расчётным периодом.\n"
+"  * Повторить эти сценарии с выбором шаблонов вместо отдельных приложений.\n"
+"\n"
+"Дополнительная информация\n"
+"=========================\n"
+"\n"
+"Демонстрация: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"HTML-описание: https://apps.odoo.com/apps/modules/14.0/saas_apps_signup/\n"
+"\n"
+"Инструкция по использованию: `<doc/index.rst>`_\n"
+"\n"
+"История изменений: `<doc/changelog.rst>`_\n"
+"\n"
+"Уведомления об обновлениях: `через Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps_signup.atom>`_, `по электронной почте <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps_signup.atom>`_\n"
+"\n"
+"Протестировано на Odoo 14.0 99531f5dd8966fc4ad89d1e9c2886ad701527f3a\n"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid ""
+"<small id=\"build-domain-helper\">\n"
+"                    <span class=\"text-danger build-domain-helper_status build-domain-helper_status-false\" style=\"display: none\">Domain is not available</span>\n"
+"                    <span class=\"text-success build-domain-helper_status build-domain-helper_status-true\" style=\"display: none\">\n"
+"                        Your domain\n"
+"                        <span class=\"domain\"/>\n"
+"                    </span>\n"
+"                    <span class=\"build-domain-helper_status build-domain-helper_status-loading\" style=\"display: none\">Detecting is domain available</span>\n"
+"                </small>"
+msgstr ""
+"<small id=\"build-domain-helper\">\n"
+"                    <span class=\"text-danger build-domain-helper_status build-domain-helper_status-false\" style=\"display: none\">Домен недоступен</span>\n"
+"                    <span class=\"text-success build-domain-helper_status build-domain-helper_status-true\" style=\"display: none\">\n"
+"                        Ваш домен\n"
+"                        <span class=\"domain\"/>\n"
+"                    </span>\n"
+"                    <span class=\"build-domain-helper_status build-domain-helper_status-loading\" style=\"display: none\">Проверка доступности домена</span>\n"
+"                </small>"
+
+#. module: saas_apps_signup
+#: model:mail.template,body_html:saas_apps_signup.set_password_email
+msgid ""
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;\"><tr><td align=\"center\">\n"
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"padding: 16px; background-color: white; color: #454748; border-collapse:separate;\">\n"
+"<tbody>\n"
+"    <!-- HEADER -->\n"
+"    <tr>\n"
+"        <td align=\"center\" style=\"min-width: 590px;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;\">\n"
+"                <tr><td valign=\"middle\">\n"
+"                    <span style=\"font-size: 10px;\">Welcome to Odoo</span><br/>\n"
+"                    <span style=\"font-size: 20px; font-weight: bold;\">\n"
+"                        <t t-out=\"object.name or ''\"/>\n"
+"                    </span>\n"
+"                </td><td valign=\"middle\" align=\"right\">\n"
+"                    <img src=\"/logo.png?company=%7B%7B%20object.company_id.id%20%7D%7D\" style=\"padding: 0px; margin: 0px; height: auto; width: 80px;\" t-att-alt=\"object.company_id.name\"/>\n"
+"                </td></tr>\n"
+"                <tr><td colspan=\"2\" style=\"text-align:center;\">\n"
+"                  <hr width=\"100%\" style=\"background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;\"/>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td>\n"
+"    </tr>\n"
+"    <!-- CONTENT -->\n"
+"    <tr>\n"
+"        <td align=\"center\" style=\"min-width: 590px;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;\">\n"
+"                <tr><td valign=\"top\" style=\"font-size: 13px;\">\n"
+"                    <div>\n"
+"                        Dear <t t-out=\"object.name or ''\"/>,<br/><br/>\n"
+"                        To set a password and activate your account please click <b>Activate</b> button\n"
+"                        <div style=\"margin: 16px 0px 16px 0px;\">\n"
+"                            <a t-att-href=\"object.partner_id._get_signup_url()\" style=\"background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;\">\n"
+"                                Activate\n"
+"                            </a>\n"
+"                        </div>\n"
+"                        Your sign in email is: <b><a t-attf-href=\"/web/login?login={{ object.email }}\" target=\"_blank\" t-out=\"object.email or ''\"/></b><br/><br/>\n"
+"                        --<br/>The <t t-out=\"object.company_id.name or ''\"/> Team\n"
+"                    </div>\n"
+"                </td></tr>\n"
+"                <tr><td style=\"text-align:center;\">\n"
+"                  <hr width=\"100%\" style=\"background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;\"/>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td>\n"
+"    </tr>\n"
+"    <!-- FOOTER -->\n"
+"    <tr>\n"
+"        <td align=\"center\" style=\"min-width: 590px;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;\">\n"
+"                <tr><td valign=\"middle\" align=\"left\">\n"
+"                    <t t-out=\"object.company_id.name or ''\">YourCompany</t>\n"
+"                </td></tr>\n"
+"                <tr><td valign=\"middle\" align=\"left\" style=\"opacity: 0.7;\">\n"
+"                    <t t-out=\"object.company_id.phone or ''\">+1 650-123-4567</t>\n"
+"                    <t t-if=\"object.company_id.email\">\n"
+"                        | <a t-att-href=\"'mailto:%s' % object.company_id.email\" style=\"text-decoration:none; color: #454748;\" t-out=\"object.company_id.email or ''\">info@yourcompany.com</a>\n"
+"                    </t>\n"
+"                    <t t-if=\"object.company_id.website\">\n"
+"                        | <a t-att-href=\"'%s' % object.company_id.website\" style=\"text-decoration:none; color: #454748;\" t-out=\"object.company_id.website or ''\">http://www.example.com</a>\n"
+"                    </t>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td>\n"
+"    </tr>\n"
+"</tbody>\n"
+"</table>\n"
+"</td></tr>\n"
+"<!-- POWERED BY -->\n"
+"<tr><td align=\"center\" style=\"min-width: 590px;\">\n"
+"    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;\">\n"
+"      <tr><td style=\"text-align: center; font-size: 13px;\">\n"
+"        Powered by <a target=\"_blank\" href=\"https://www.odoo.com?utm_source=db&amp;utm_medium=auth\" style=\"color: #875A7B;\">Odoo</a>\n"
+"      </td></tr>\n"
+"    </table>\n"
+"</td></tr>\n"
+"</table>"
+msgstr ""
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;\"><tr><td align=\"center\">\n"
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"padding: 16px; background-color: white; color: #454748; border-collapse:separate;\">\n"
+"<tbody>\n"
+"    <!-- HEADER -->\n"
+"    <tr>\n"
+"        <td align=\"center\" style=\"min-width: 590px;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;\">\n"
+"                <tr><td valign=\"middle\">\n"
+"                    <span style=\"font-size: 10px;\">Добро пожаловать в Odoo</span><br/>\n"
+"                    <span style=\"font-size: 20px; font-weight: bold;\">\n"
+"                        <t t-out=\"object.name or ''\"/>\n"
+"                    </span>\n"
+"                </td><td valign=\"middle\" align=\"right\">\n"
+"                    <img src=\"/logo.png?company=%7B%7B%20object.company_id.id%20%7D%7D\" style=\"padding: 0px; margin: 0px; height: auto; width: 80px;\" t-att-alt=\"object.company_id.name\"/>\n"
+"                </td></tr>\n"
+"                <tr><td colspan=\"2\" style=\"text-align:center;\">\n"
+"                  <hr width=\"100%\" style=\"background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;\"/>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td>\n"
+"    </tr>\n"
+"    <!-- CONTENT -->\n"
+"    <tr>\n"
+"        <td align=\"center\" style=\"min-width: 590px;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;\">\n"
+"                <tr><td valign=\"top\" style=\"font-size: 13px;\">\n"
+"                    <div>\n"
+"                        Здравствуйте, <t t-out=\"object.name or ''\"/>,<br/><br/>\n"
+"                        Чтобы задать пароль и активировать учётную запись, нажмите кнопку <b>Активировать</b>\n"
+"                        <div style=\"margin: 16px 0px 16px 0px;\">\n"
+"                            <a t-att-href=\"object.partner_id._get_signup_url()\" style=\"background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;\">\n"
+"                                Активировать\n"
+"                            </a>\n"
+"                        </div>\n"
+"                        Ваш адрес электронной почты для входа: <b><a t-attf-href=\"/web/login?login={{ object.email }}\" target=\"_blank\" t-out=\"object.email or ''\"/></b><br/><br/>\n"
+"                        --<br/>Команда <t t-out=\"object.company_id.name or ''\"/>\n"
+"                    </div>\n"
+"                </td></tr>\n"
+"                <tr><td style=\"text-align:center;\">\n"
+"                  <hr width=\"100%\" style=\"background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;\"/>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td>\n"
+"    </tr>\n"
+"    <!-- FOOTER -->\n"
+"    <tr>\n"
+"        <td align=\"center\" style=\"min-width: 590px;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;\">\n"
+"                <tr><td valign=\"middle\" align=\"left\">\n"
+"                    <t t-out=\"object.company_id.name or ''\">YourCompany</t>\n"
+"                </td></tr>\n"
+"                <tr><td valign=\"middle\" align=\"left\" style=\"opacity: 0.7;\">\n"
+"                    <t t-out=\"object.company_id.phone or ''\">+1 650-123-4567</t>\n"
+"                    <t t-if=\"object.company_id.email\">\n"
+"                        | <a t-att-href=\"'mailto:%s' % object.company_id.email\" style=\"text-decoration:none; color: #454748;\" t-out=\"object.company_id.email or ''\">info@yourcompany.com</a>\n"
+"                    </t>\n"
+"                    <t t-if=\"object.company_id.website\">\n"
+"                        | <a t-att-href=\"'%s' % object.company_id.website\" style=\"text-decoration:none; color: #454748;\" t-out=\"object.company_id.website or ''\">http://www.example.com</a>\n"
+"                    </t>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td>\n"
+"    </tr>\n"
+"</tbody>\n"
+"</table>\n"
+"</td></tr>\n"
+"<!-- POWERED BY -->\n"
+"<tr><td align=\"center\" style=\"min-width: 590px;\">\n"
+"    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;\">\n"
+"      <tr><td style=\"text-align: center; font-size: 13px;\">\n"
+"        Работает на <a target=\"_blank\" href=\"https://www.odoo.com?utm_source=db&amp;utm_medium=auth\" style=\"color: #875A7B;\">Odoo</a>\n"
+"      </td></tr>\n"
+"    </table>\n"
+"</td></tr>\n"
+"</table>"
+
+#. module: saas_apps_signup
+#: model:mail.template,subject:saas_apps_signup.set_password_email
+msgid "Account activation"
+msgstr "Активация учётной записи"
+
+#. module: saas_apps_signup
+#: model:mail.template,name:saas_apps_signup.set_password_email
+msgid "Auth Signup: Odoo Connection (Modified)"
+msgstr "Регистрация: подключение к Odoo (изменённый шаблон)"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_saas_db
+#: model:ir.model.fields,field_description:saas_apps_signup.field_sale_order__build_id
+msgid "Build"
+msgstr "Экземпляр"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Company name"
+msgstr "Название компании"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_res_config_settings
+msgid "Config Settings"
+msgstr "Параметры настройки"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_res_partner
+msgid "Contact"
+msgstr "Контакт"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_contract_contract
+msgid "Contract"
+msgstr "Договор"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_contract_line
+msgid "Contract Line"
+msgstr "Строка договора"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Country"
+msgstr "Страна"
+
+#. module: saas_apps_signup
+#: model:ir.model,website_form_label:saas_apps_signup.model_res_partner
+msgid "Create a Customer"
+msgstr "Создать клиента"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.portal_create_build
+msgid "Create database"
+msgstr "Создать базу данных"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Creating database..."
+msgstr "Создание базы данных…"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_db__database_limit_size
+msgid "DB size limit (Mb)"
+msgstr "Ограничение размера базы данных (МБ)"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/controllers/auth_signup.py:0
+msgid "Database %s already exist"
+msgstr "База данных %s уже существует"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_saas_template
+msgid "Database Template"
+msgstr "Шаблон базы данных"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/controllers/main.py:0
+msgid "Database already exists"
+msgstr "База данных уже существует"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.res_config_settings_view_form
+msgid "Database expiration warning delay (default)"
+msgstr "Срок предупреждения об истечении доступа (по умолчанию)"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.res_config_settings_view_form
+msgid "Database limit size (default)"
+msgstr "Ограничение размера базы данных (по умолчанию)"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.portal_create_build
+msgid "Database name"
+msgstr "Имя базы данных"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__database_limit_size_default
+msgid "Default limit size for all builds (megabytes)"
+msgstr "Ограничение размера для всех экземпляров по умолчанию (мегабайты)"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_account_move__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_contract_contract__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_contract_line__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_partner__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_users__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_template__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_sale_order__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_website_checkout_step__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_mail_thread
+msgid "Email Thread"
+msgstr "Переписка"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/controllers/main.py:0
+msgid "Empty database name"
+msgstr "Имя базы данных не указано"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__database_expiration_warning_delay
+msgid "Expiration warning delay (days)"
+msgstr "Предупреждать об истечении доступа за (дней)"
+
+#. module: saas_apps_signup
+#: model:ir.module.module,summary:base.module_saas_apps_signup
+msgid "Extends saas_apps"
+msgstr "Расширение saas_apps"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_account_move__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_contract_contract__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_contract_line__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_mail_thread__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_partner__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_users__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_db__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_template__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_sale_order__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_website_checkout_step__id
+msgid "ID"
+msgstr "ID"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/controllers/main.py:0
+msgid "Invalid database name"
+msgstr "Недопустимое имя базы данных"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_db__is_admin_user_language_installed
+msgid "Is admin user's language installed?"
+msgstr "Язык администратора установлен?"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_account_move
+msgid "Journal Entry"
+msgstr "Бухгалтерская проводка"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Language"
+msgstr "Язык"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/contract_contract.py:0
+msgid "No template operators are ready. Try again later"
+msgstr "Нет готовых операторов шаблона. Повторите попытку позже"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/contract_contract.py:0
+msgid "No template operators in base template. Contact administrator"
+msgstr ""
+"Для базового шаблона не настроены операторы. Обратитесь к администратору"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.res_config_settings_view_form
+msgid "Number of days for trial (default)"
+msgstr "Продолжительность пробного периода в днях (по умолчанию)"
+
+#. module: saas_apps_signup
+#. odoo-javascript
+#: code:addons/saas_apps_signup/static/src/js/saas_apps.js:0
+msgid "Number of users are not given"
+msgstr "Укажите количество пользователей"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Phone"
+msgstr "Телефон"
+
+#. module: saas_apps_signup
+#. odoo-javascript
+#: code:addons/saas_apps_signup/static/src/js/saas_apps.js:0
+msgid "Please chosen apps or package to install"
+msgstr "Выберите приложения или пакет для установки"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_users__database_lang
+msgid "Preferred language for database"
+msgstr "Предпочтительный язык базы данных"
+
+#. module: saas_apps_signup
+#: model:ir.module.module,shortdesc:base.module_saas_apps_signup
+msgid "SaaS Apps: signup"
+msgstr "Приложения SaaS: регистрация"
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_account_bank_statement_line__saas_purchase_processed
+#: model:ir.model.fields,field_description:saas_apps_signup.field_account_move__saas_purchase_processed
+msgid "Saas Purchase Processed"
+msgstr "Покупка SaaS обработана"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_sale_order
+msgid "Sales Order"
+msgstr "Заказ на продажу"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/account_move.py:0
+msgid ""
+"Select an unprovisioned database before paying for a SaaS subscription."
+msgstr "Перед оплатой подписки SaaS выберите ещё не развёрнутую базу данных."
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/account_move.py:0
+msgid "The SaaS user quantity must be a positive whole number."
+msgstr "Количество пользователей SaaS должно быть целым положительным числом."
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/controllers/auth_signup.py:0
+msgid "The signup order must be the current shopping cart."
+msgstr "Заказ для регистрации должен соответствовать текущей корзине."
+
+#. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__number_of_days_for_trial
+msgid "Trial period (days)"
+msgstr "Пробный период (дней)"
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.price
+msgid "Try trial"
+msgstr "Попробовать"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/account_move.py:0
+msgid "Use one billing period for each SaaS database purchase."
+msgstr ""
+"При покупке каждой базы данных SaaS используйте один расчётный период."
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_res_users
+msgid "User"
+msgstr "Пользователь"
+
+#. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_website_checkout_step
+msgid "Website Checkout Step"
+msgstr "Этап оформления заказа на сайте"
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/saas_db.py:0
+msgid "You cannot create more than one draft database"
+msgstr "Нельзя создать больше одной базы данных в состоянии черновика"

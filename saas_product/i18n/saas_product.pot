@@ -1,0 +1,165 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: saas_product
+#: model:ir.module.module,description:base.module_saas_product
+msgid ""
+".. image:: https://img.shields.io/badge/license-MIT-blue.svg\n"
+"   :target: https://opensource.org/licenses/MIT\n"
+"   :alt: License: MIT\n"
+"\n"
+"===============\n"
+" SaaS: Product\n"
+"===============\n"
+"\n"
+"This technical module helps to create saas-related products.\n"
+"\n"
+"As example this module has product \"Users\" with variants \"Anually\" and \"Monthly\" with different prices.\n"
+"Other saas-related products can define `product.template` record and make variants by assigning\n"
+"\"Subscribtion: Annually\" and \"Subscribtion: Monthly\" attribute values.\n"
+"\n"
+"In python it looks like this:\n"
+"\n"
+".. code-block:: python\n"
+"\n"
+"    template = env[\"product.template\"].create({\"name\": \"Test SaaS Product\"})\n"
+"\n"
+"    template_attribute_line = env[\"product.template.attribute.line\"].create({\n"
+"        \"product_tmpl_id\": template.id,\n"
+"        \"attribute_id\": env.ref(\"saas_product.product_attribute_subscription\").id,\n"
+"        \"value_ids\": [(6, 0, [\n"
+"            env.ref(\"saas_product.product_attribute_value_subscription_anually\").id,\n"
+"            env.ref(\"saas_product.product_attribute_value_subscription_monthly\").id,\n"
+"        ])]\n"
+"    })\n"
+"\n"
+"    annually_value_id = template_attribute_line.product_template_value_ids[0]\n"
+"    monthly_value_id = template_attribute_line.product_template_value_ids[1]\n"
+"\n"
+"    product_annually = template._get_variant_for_combination(annually_value_id)\n"
+"    product_monthly = template._get_variant_for_combination(monthly_value_id)\n"
+"\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      To get a guaranteed support\n"
+"      you are kindly requested to purchase the module\n"
+"      at `odoo apps store <https://apps.odoo.com/apps/modules/14.0/saas_product/>`__.\n"
+"\n"
+"      Thank you for understanding!\n"
+"\n"
+"      `IT-Projects Team <https://www.it-projects.info/team>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/14.0/saas_product/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_product.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_product.atom>`_\n"
+"\n"
+"Tested on Odoo 14.0 9e68ec931d254ba563b4a16afa38b6003336a7cf\n"
+msgstr ""
+
+#. module: saas_product
+#: model:product.attribute.value,name:saas_product.product_attribute_value_subscription_annually
+msgid "Annually"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.model.fields,field_description:saas_product.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:saas_product.field_product_product__display_name
+#: model:ir.model.fields,field_description:saas_product.field_product_template__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.model.fields,field_description:saas_product.field_account_move_line__id
+#: model:ir.model.fields,field_description:saas_product.field_product_product__id
+#: model:ir.model.fields,field_description:saas_product.field_product_template__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.model.fields,field_description:saas_product.field_product_product__is_saas_product
+#: model:ir.model.fields,field_description:saas_product.field_product_template__is_saas_product
+msgid "Is SaaS product?"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.model,name:saas_product.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: saas_product
+#: model:product.attribute.value,name:saas_product.product_attribute_value_subscription_monthly
+msgid "Monthly"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.model,name:saas_product.model_product_template
+msgid "Product"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.model,name:saas_product.model_product_product
+msgid "Product Variant"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.module.module,shortdesc:base.module_saas_product
+msgid "SaaS: Product"
+msgstr ""
+
+#. module: saas_product
+#: model:product.attribute,name:saas_product.product_attribute_subscription
+msgid "Subscription (SaaS)"
+msgstr ""
+
+#. module: saas_product
+#: model:ir.module.module,summary:base.module_saas_product
+msgid ""
+"This module helps to create saas related products. For example subscribtion"
+msgstr ""
+
+#. module: saas_product
+#: model:product.attribute.value,name:saas_product.product_attribute_value_subscription_trial
+msgid "Trial"
+msgstr ""
+
+#. module: saas_product
+#: model:product.template,name:saas_product.product_users
+msgid "Users"
+msgstr ""

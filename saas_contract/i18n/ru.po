@@ -1,0 +1,243 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_contract
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. module: saas_contract
+#: model:ir.module.module,description:base.module_saas_contract
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"=================\n"
+" Saas: Contracts\n"
+"=================\n"
+"\n"
+"This module manages contracts with SaaS clients\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      To get a guaranteed support\n"
+"      you are kindly requested to purchase the module\n"
+"      at `odoo apps store <https://apps.odoo.com/apps/modules/14.0/saas_contract/>`__.\n"
+"\n"
+"      Thank you for understanding!\n"
+"\n"
+"      `IT-Projects Team <https://www.it-projects.info/team>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/14.0/saas_contract/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_contract.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_contract.atom>`_\n"
+"\n"
+"Tested on Odoo 14.0 c64d21cdfe2850a7d16abc65155e4acb0445a8bd\n"
+msgstr ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"==============\n"
+" SaaS: договоры\n"
+"==============\n"
+"\n"
+"Управляет договорами с клиентами SaaS\n"
+"\n"
+"Благодарности\n"
+"=============\n"
+"\n"
+"Участники\n"
+"---------\n"
+"\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Спонсоры\n"
+"--------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Сопровождающие\n"
+"--------------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      Для получения гарантированной поддержки\n"
+"      приобретите модуль\n"
+"      в `магазине приложений Odoo <https://apps.odoo.com/apps/modules/14.0/saas_contract/>`__.\n"
+"\n"
+"      Спасибо за понимание!\n"
+"\n"
+"      `Команда IT-Projects <https://www.it-projects.info/team>`__\n"
+"\n"
+"Дополнительная информация\n"
+"=========================\n"
+"\n"
+"HTML-описание: https://apps.odoo.com/apps/modules/14.0/saas_contract/\n"
+"\n"
+"Инструкция по использованию: `<doc/index.rst>`_\n"
+"\n"
+"История изменений: `<doc/changelog.rst>`_\n"
+"\n"
+"Уведомления об обновлениях: `через Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_contract.atom>`_, `по электронной почте <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_contract.atom>`_\n"
+"\n"
+"Протестировано на Odoo 14.0 c64d21cdfe2850a7d16abc65155e4acb0445a8bd\n"
+
+#. module: saas_contract
+#: model:ir.model.fields.selection,name:saas_contract.selection__contract_contract__build_status__active
+msgid "Active"
+msgstr "Активно"
+
+#. module: saas_contract
+#: model:ir.model,name:saas_contract.model_saas_db
+#: model:ir.model.fields,field_description:saas_contract.field_contract_contract__build_id
+#: model:ir.model.fields,field_description:saas_contract.field_contract_line__build_id
+msgid "Build"
+msgstr "Экземпляр"
+
+#. module: saas_contract
+#: model:ir.model.fields,field_description:saas_contract.field_contract_contract__build_expiration_date_defacto
+msgid "Build expiration date (defacto)"
+msgstr "Фактическая дата окончания доступа к экземпляру"
+
+#. module: saas_contract
+#: model:ir.model.fields,field_description:saas_contract.field_contract_contract__build_status
+msgid "Build status"
+msgstr "Статус экземпляра"
+
+#. module: saas_contract
+#. odoo-python
+#: code:addons/saas_contract/models/contract.py:0
+msgid "Cannot create SaaS contract with enabled line-level recurrence"
+msgstr "Нельзя создать договор SaaS с периодичностью на уровне строк"
+
+#. module: saas_contract
+#. odoo-python
+#: code:addons/saas_contract/models/contract.py:0
+msgid "Cannot enable line-level recurrence for a SaaS contract"
+msgstr "Нельзя включить периодичность на уровне строк для договора SaaS"
+
+#. module: saas_contract
+#: model_terms:ir.actions.act_window,help:saas_contract.action_saas_contract
+msgid "Click to create a new contract."
+msgstr "Нажмите, чтобы создать новый договор."
+
+#. module: saas_contract
+#: model:ir.model,name:saas_contract.model_contract_contract
+#: model:ir.model.fields,field_description:saas_contract.field_saas_db__contract_id
+msgid "Contract"
+msgstr "Договор"
+
+#. module: saas_contract
+#: model:ir.model,name:saas_contract.model_contract_line
+msgid "Contract Line"
+msgstr "Строка договора"
+
+#. module: saas_contract
+#: model:ir.ui.menu,name:saas_contract.saas_contract_menu
+msgid "Contracts"
+msgstr "Договоры"
+
+#. module: saas_contract
+#: model_terms:ir.ui.view,arch_db:saas_contract.saas_db_form_view
+msgid "Create SaaS contract"
+msgstr "Создать договор SaaS"
+
+#. module: saas_contract
+#: model:ir.model.fields,field_description:saas_contract.field_account_move__display_name
+#: model:ir.model.fields,field_description:saas_contract.field_contract_contract__display_name
+#: model:ir.model.fields,field_description:saas_contract.field_contract_line__display_name
+#: model:ir.model.fields,field_description:saas_contract.field_saas_db__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: saas_contract
+#: model:ir.model.fields,field_description:saas_contract.field_account_move__id
+#: model:ir.model.fields,field_description:saas_contract.field_contract_contract__id
+#: model:ir.model.fields,field_description:saas_contract.field_contract_line__id
+#: model:ir.model.fields,field_description:saas_contract.field_saas_db__id
+msgid "ID"
+msgstr "ID"
+
+#. module: saas_contract
+#: model:ir.model,name:saas_contract.model_account_move
+msgid "Journal Entry"
+msgstr "Бухгалтерская проводка"
+
+#. module: saas_contract
+#: model_terms:ir.ui.view,arch_db:saas_contract.saas_contract_tree_view
+msgid "Name"
+msgstr "Название"
+
+#. module: saas_contract
+#: model:ir.actions.act_window,name:saas_contract.action_saas_contract
+msgid "SaaS Contracts"
+msgstr "Договоры SaaS"
+
+#. module: saas_contract
+#: model:ir.module.module,shortdesc:base.module_saas_contract
+msgid "SaaS: Contracts"
+msgstr "SaaS: договоры"
+
+#. module: saas_contract
+#: model:ir.model.fields,field_description:saas_contract.field_account_bank_statement_line__saas_renewal_applied
+#: model:ir.model.fields,field_description:saas_contract.field_account_move__saas_renewal_applied
+msgid "Saas Renewal Applied"
+msgstr "Продление SaaS применено"
+
+#. module: saas_contract
+#: model_terms:ir.ui.view,arch_db:saas_contract.saas_db_form_view
+msgid "Show contract"
+msgstr "Открыть договор"
+
+#. module: saas_contract
+#: model:ir.model.fields.selection,name:saas_contract.selection__contract_contract__build_status__suspended
+msgid "Suspended"
+msgstr "Приостановлено"
+
+#. module: saas_contract
+#: model:ir.module.module,summary:base.module_saas_contract
+msgid "This module manages contracts with SaaS clients"
+msgstr "Управление договорами с клиентами SaaS"
+
+#. module: saas_contract
+#: model:ir.model.fields.selection,name:saas_contract.selection__contract_contract__build_status__trial
+msgid "Trial"
+msgstr "Пробный период"
+
+#. module: saas_contract
+#: model:ir.model.fields,field_description:saas_contract.field_contract_contract__trial_expiration_date
+msgid "Trial expiration date"
+msgstr "Дата окончания пробного периода"

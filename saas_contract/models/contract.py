@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -65,13 +65,17 @@ class Contract(models.Model):
         records = super(Contract, self).create(vals_list)
         for res in records:
             if res.build_id and res.line_recurrence:
-                raise ValidationError("Cannot create SaaS contract with enabled line-level recurrence")
+                raise ValidationError(
+                    _("Cannot create SaaS contract with enabled line-level recurrence")
+                )
         return records
 
     def write(self, vals):
         res = super(Contract, self).write(vals)
         if vals.get("line_recurrence") and self.mapped("build_id"):
-            raise ValidationError("Cannot enable line-level recurrence for a SaaS contract")
+            raise ValidationError(
+                _("Cannot enable line-level recurrence for a SaaS contract")
+            )
         return res
 
 

@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models, fields
+from odoo import _, api, models, fields
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class SaasDb(models.Model):
                 ("state", "=", "draft"),
                 ("admin_user", "=", self.env.user.id),
             ], limit=1):
-                raise Exception("You cannot create more than one draft database")
+                raise Exception(_("You cannot create more than one draft database"))
 
         return super(SaasDb, self).create(vals_list)
 

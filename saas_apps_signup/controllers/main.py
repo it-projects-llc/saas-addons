@@ -6,7 +6,7 @@ import logging
 
 import werkzeug
 from werkzeug.urls import url_encode
-from odoo import SUPERUSER_ID
+from odoo import _, SUPERUSER_ID
 from odoo.exceptions import AccessError, MissingError
 from odoo.addons.saas_portal.controllers.portal import CustomerPortal
 
@@ -24,16 +24,16 @@ class Main(Controller):
     def is_available(self, database_name, operator_id, **kw):
         database_name = database_name.lower().strip()
         if not database_name:
-            return {"answer": "Empty database name"}
+            return {"answer": _("Empty database name")}
 
         if database_name != request.env["ir.http"]._slugify(database_name):
-            return {"answer": "Invalid database name"}
+            return {"answer": _("Invalid database name")}
 
         is_free_slot = not request.env["saas.db"].sudo().search([("name", "=", database_name)])
         if is_free_slot:
             return {"domain": request.env["saas.operator"].sudo().browse(int(operator_id)).db_url_template.format(db_name=database_name)}
         else:
-            return {"answer": "Database already exists"}
+            return {"answer": _("Database already exists")}
 
     @route("/my/builds/create", auth="user", type="http", website=True)
     def portal_build_selector(self, database_name=None, redirect=None, operator_id=None, **kw):

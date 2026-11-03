@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import _, fields, models
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -94,7 +94,7 @@ class Backup(models.Model):
 
         return {
             "type": "ir.actions.act_window",
-            "name": "Restore backup",
+            "name": _("Restore backup"),
             "res_model": "queue.job",
             "view_mode": "form",
             "res_id": job.db_record().id,
@@ -123,7 +123,9 @@ class Backup(models.Model):
             job = self.env["queue.job"].search([("uuid", "=", job_uuid)], limit=1)
             job.write({"restored_build_id": restored_build_id.id})
             job.user_id.notify_info(
-                message="Backup for database %s restored as %s"
-                % (self.origin_build_id.name, restored_build_id.name),
+                message=_(
+                    "Backup for database %s restored as %s",
+                    self.origin_build_id.name, restored_build_id.name,
+                ),
                 sticky=True,
             )
