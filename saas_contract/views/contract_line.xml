@@ -8,26 +8,8 @@
             <xpath expr="//group" position="inside">
                 <field name="build_id" invisible="1" />
             </xpath>
-            <xpath expr="//field[@name='is_auto_renew']/.." position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
-            </xpath>
             <xpath expr="//field[@name='automatic_price']" position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='recurring_invoicing_offset']" position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='termination_notice_date']/.." position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='manual_renew_needed']/.." position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='predecessor_contract_line_id']/.." position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='successor_contract_line_id']/.." position="attributes">
-                <attribute name="attrs">{"invisible": [('build_id', '!=', False)]}</attribute>
+                <attribute name="invisible">bool(build_id)</attribute>
             </xpath>
         </field>
     </record>

@@ -20,6 +20,9 @@ DEFAULT_BUILD_PYTHON_CODE = """# Available variables:
 
 class Common(object):
     def setup_saas_env(self):
+        # The fixture tests only its own deployments, not the optional demo
+        # data's deployments left in the fresh audit database.
+        self.env["saas.template.operator"].search([]).write({"to_rebuild": False})
         self.env = self.env(context=dict(
             self.env.context,
             queue_job__no_delay=True,

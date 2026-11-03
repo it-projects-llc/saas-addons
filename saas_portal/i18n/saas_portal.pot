@@ -1,0 +1,262 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_portal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_table_builds
+msgid "(Admin:"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+msgid "(Draft)"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.module.module,description:base.module_saas_portal
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"==============\n"
+" SaaS: Portal\n"
+"==============\n"
+"\n"
+"Allows to customers see their Builds at Portal.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"* `Eugene Molotov <https://github.com/em230418>`__:\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Known bugs\n"
+"----------\n"
+"\n"
+"* ``number_of_queue_jobs_to_be_done`` field always shows zero\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+msgid "<b>Expiration date</b>"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+msgid "<b>Number of users</b>"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+msgid "<b>Pending processes</b>"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+msgid "<small class=\"text-muted\">Build - </small>"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__access_warning
+msgid "Access warning"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.module.module,summary:base.module_saas_portal
+msgid "Allows to customers see their Builds at Portal"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+msgid "Approved"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model,name:saas_portal.model_saas_db
+msgid "Build"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model,name:saas_portal.model_saas_db_backup
+msgid "Build backup"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.ignore_is_approved_dialog
+msgid ""
+"Build owner has not approved this build. Are you sure, you want to set it as"
+" main?"
+msgstr ""
+
+#. module: saas_portal
+#: model:portal.entry,name:saas_portal.portal_builds
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_builds
+msgid "Builds"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.domain_change_notice_dialog
+msgid "Cancel"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,help:saas_portal.field_saas_db__access_url
+msgid "Customer Portal URL"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db_backup__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.domain_change_notice_dialog
+msgid "Domain of origin build will be assigned to this build"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.approve_build_result
+msgid "Go back to build"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__id
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db_backup__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__is_approved
+msgid "Is temporary build approved?"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__is_temporary
+msgid "Is temporary build?"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_build
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_table_builds
+msgid "Link"
+msgstr ""
+
+#. module: saas_portal
+#. odoo-python
+#: code:addons/saas_portal/controllers/portal.py:0
+msgid "Name"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.ignore_is_approved_dialog
+msgid "No"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_table_builds
+msgid "None"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__number_of_queue_jobs_to_be_done
+msgid "Number Of Queue Jobs To Be Done"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.domain_change_notice_dialog
+msgid "Ok"
+msgstr ""
+
+#. module: saas_portal
+#: model:portal.entry,description:saas_portal.portal_builds
+msgid "Open and manage your trial and purchased databases"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__access_url
+msgid "Portal Access URL"
+msgstr ""
+
+#. module: saas_portal
+#. odoo-python
+#: code:addons/saas_portal/models/saas_db.py:0
+msgid "Predecessor build is not set"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.module.module,shortdesc:base.module_saas_portal
+msgid "SaaS: Portal"
+msgstr ""
+
+#. module: saas_portal
+#: model:ir.model.fields,field_description:saas_portal.field_saas_db__access_token
+msgid "Security Token"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.saas_db_form_view
+msgid "Set as main"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_builds
+msgid "Temporary builds"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.portal_my_builds
+msgid "There are no builds"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.approve_build_result
+msgid ""
+"This build is marked as approved successfully. Please wait for some time, "
+"until admin sets this build as main."
+msgstr ""
+
+#. module: saas_portal
+#. odoo-python
+#: code:addons/saas_portal/controllers/portal.py:0
+#: code:addons/saas_portal/models/saas_db.py:0
+msgid "This build is not marked as temporary"
+msgstr ""
+
+#. module: saas_portal
+#: model_terms:ir.ui.view,arch_db:saas_portal.ignore_is_approved_dialog
+msgid "Yes"
+msgstr ""

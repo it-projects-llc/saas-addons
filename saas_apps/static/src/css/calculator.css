@@ -1,171 +1,38 @@
-.col-lg-12{
-    flex: 0 0 100%;
-    max-width: 100%;
+/* Keep the app selector independent of the website's Bootstrap layout. */
+.js_saas_apps .saas-pricing-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); gap: 2rem; align-items: start; }
+.js_saas_apps .saas-pricing-catalog { min-width: 0; }
+.js_saas_apps h3 { margin: 0 0 1rem; }
+.js_saas_apps #users_block { margin-bottom: 2rem; }
+.js_saas_apps .saas-users-stepper { display: flex; align-items: center; gap: .5rem; }
+.js_saas_apps #users { width: 6rem; text-align: center; }
+.js_saas_apps .users-qty-change-buttons { width: 2.5rem; height: 2.5rem; padding: 0; font-size: 1.5rem; line-height: 1; }
+.js_saas_apps .saas-app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .75rem; margin-bottom: 2rem; }
+.js_saas_apps .app, .js_saas_apps .package { display: flex; align-items: center; gap: .75rem; min-height: 86px; padding: 1rem; border: 2px solid transparent; border-radius: .5rem; background: var(--o-body-bg, #fff); box-shadow: 0 2px 12px #0000000d; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.js_saas_apps .app:hover, .js_saas_apps .package:hover { border-color: var(--bs-primary, #71639e); }
+.js_saas_apps .app-data { min-width: 0; }
+.js_saas_apps .app-price { font-size: .9rem; color: var(--bs-secondary-color, #6c757d); }
+.js_saas_apps .price-value, .js_saas_apps .period { display: inline; }
+.js_saas_apps .green-border { border-color: #198754; box-shadow: 0 0 0 1px #198754; }
+.js_saas_apps .normal-border { border-color: transparent; }
+.js_saas_apps .saas-pricing-summary { position: sticky; top: 1.5rem; min-width: 0; }
+.js_saas_apps #price-window { display: block; margin: 0; overflow: hidden; }
+.js_saas_apps #price-window .card-header { padding: 1rem 1rem 0; }
+.js_saas_apps #price-window .card-header-tabs { margin-bottom: 0; }
+.js_saas_apps #price-window ul.list-unstyled { display: grid; gap: .75rem; }
+.js_saas_apps #price-window ul.list-unstyled > li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.js_saas_apps .leftstr, .js_saas_apps .rightstr { float: none; width: auto; }
+.js_saas_apps .rightstr { text-align: end; white-space: nowrap; }
+.js_saas_apps .pricing-card-title { display: inline; margin: 0; font-size: 1.75rem; line-height: 1.3; }
+.js_saas_apps .fnt-24 { font-size: 1rem; }
+.js_saas_apps #btn-block { margin-top: 1rem; }
+.hid { display: none; }
+.saas-pricing-loader { position: fixed; z-index: 1050; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; background: #ffffffdd; }
+.saas-pricing-loader > img { width: 100px; }
+.saas-pricing-loader .status { font-size: 1.25rem; }
+@media (max-width: 991.98px) {
+    .js_saas_apps .saas-pricing-layout { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .js_saas_apps .saas-pricing-summary { position: static; }
 }
-
-#price{
-    display: inline;
-}
-
-.pricing-card-title{
-    font-size: 32px;
-}
-
-.users-qty-change-buttons{
-    max-width: 30px;
-    max-height: 30px;
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-.loader{
-    position: fixed;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.5;
-}
-
-.status{
-    font-size: 26px;
-    color: black;
-    position: fixed;
-    margin-top: -70px;
-}
-
-.loader > img {
-    width: 100px;
-    opacity: 0.6;
-    transform: rotate(-30deg);
-}
-
-.transition {
-    transition: 0.3s;
-}
-
-.app, .package{
-    max-height: 70px;
-    display: flex;
-    margin-bottom: 10px;
-    min-width: 174px;
-    cursor: pointer;
-}
-
-.app-data{
-    margin-left: 5%;
-}
-
-.price-value{
-    display: inline;
-}
-
-.period{
-    display: inline;
-}
-
-.green-border{
-    border: 2px solid green;
-}
-
-.normal-border{
-    border: 2px solid #FFFFFF;
-}
-
-.hid{
-    display: none;
-}
-
-.fnt-24{
-    font-size: 24px;
-}
-
-.leftstr, .rightstr {
-    float: left;
-    width: 50%;
-}
-
-.rightstr {
-    text-align: right;
-}
-
-.fnt-larger{
-    font-size: larger;
-}
-
-@media (min-width: 1400px) {
-    #price-window
-    {
-        position: fixed;
-        right: 30%;
-        top: 20%;
-        width: 15%;
-        min-width: 20%;
-        z-index: 1;
-    }
-
-    .page-alignment{
-        min-width: 640px;
-    }
-
-    .main-column{
-        margin-right: auto;
-        margin-left: 10%;
-        max-width: 50%;
-    }
-}
-
-@media (min-width: 999px) {
-    #price-window
-    {
-        position: fixed;
-        right: 15%;
-        top: 15%;
-        width: 20%;
-        z-index: 1;
-    }
-
-    .main-column{
-        margin-right: auto;
-        margin-left: 10%;
-        max-width: 50%;
-    }
-
-    .page-alignment{
-        min-width: 640px;
-    }
-
-    .app, .package{
-        margin-left: 7px;
-        max-width: 31%;
-    }
-}
-
-@media (max-width: 799px) {
-    #price-window
-    {
-        position: fixed;
-        right: 0;
-        bottom: -6%;
-        width: 100%;
-        z-index: 1;
-    }
-    .container{
-        margin-left: auto !important;
-    }
-
-    .main-column{
-        margin-right: auto;
-        margin-left: 10%;
-        max-width: 80%;
-    }
-}
-
-.col-lg-9{
-    padding-left: 0px;
+@media (max-width: 479.98px) {
+    .js_saas_apps .saas-app-grid { grid-template-columns: minmax(0, 1fr); }
 }

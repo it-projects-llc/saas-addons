@@ -157,8 +157,10 @@ class SAASTemplateLine(models.Model):
 
     def _prepare_template(self):
         for r in self:
-            message = '''Template\'s deployment with name {} is creating
-            and will be ready in a few minutes.'''.format(r.operator_db_name)
+            message = _(
+                "Template deployment %s is being created and will be ready in a few minutes.",
+                r.operator_db_name,
+            )
             self.operator_id.notify_users(message, message_type='info')
             # delete db is there is one
             r.operator_db_id.drop_db()

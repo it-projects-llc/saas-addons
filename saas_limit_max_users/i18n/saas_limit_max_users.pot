@@ -1,0 +1,118 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_limit_max_users
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: saas_limit_max_users
+#: model:ir.module.module,description:base.module_saas_limit_max_users
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"=======================\n"
+" SaaS: Limit Max Users\n"
+"=======================\n"
+"\n"
+"This module controls maximum amount of active users that can build have.\n"
+"\n"
+"Also it can show current number of active users in build.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Eugene Molotov <https://it-projects.info/team/em230418>`__:\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      To get a guaranteed support\n"
+"      you are kindly requested to purchase the module\n"
+"      at `odoo apps store <https://apps.odoo.com/apps/modules/13.0/saas_limit_max_users/>`__.\n"
+"\n"
+"      Thank you for understanding!\n"
+"\n"
+"      `IT-Projects Team <https://www.it-projects.info/team>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/13.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_limit_max_users/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_limit_max_users.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_limit_max_users.atom>`_\n"
+"\n"
+"Tested on Odoo 13.0 47707e1b099195487fd3d3e0ae012e4aed5a9bc5\n"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.model,name:saas_limit_max_users.model_saas_db
+msgid "Build"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__users_count
+msgid "Current No. Of Users"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.model,name:saas_limit_max_users.model_saas_operator
+msgid "Database Operator"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_operator__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__id
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_operator__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.model.fields,field_description:saas_limit_max_users.field_saas_db__max_users_limit
+msgid "Max Users Allowed"
+msgstr ""
+
+#. module: saas_limit_max_users
+#. odoo-python
+#: code:addons/saas_limit_max_users/models/saas_db.py:0
+msgid "Number of allowed max users must be at least 1"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.module.module,shortdesc:base.module_saas_limit_max_users
+msgid "SaaS: limit max users"
+msgstr ""
+
+#. module: saas_limit_max_users
+#: model:ir.module.module,summary:base.module_saas_limit_max_users
+msgid "This module controls maximum amount of users that can build have."
+msgstr ""

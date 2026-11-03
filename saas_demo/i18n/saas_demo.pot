@@ -1,17 +1,90 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* saas_demo
+# 	* saas_demo
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
-"Report-Msgid-Bugs-To: \n"
-"Last-Translator: <>\n"
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+
+#. module: saas_demo
+#: model:ir.module.module,description:base.module_saas_demo
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"======================\n"
+" Quick Demo Databases\n"
+"======================\n"
+"\n"
+"One-click demo-instances with modules from your git repositories\n"
+"\n"
+"How it works\n"
+"============\n"
+"\n"
+"* 1 ``saas.operator`` record has 1 set of repositories (``saas.demo`` record).\n"
+"* In each repository only one branch is used.\n"
+"* 1 ``saas.template`` record may have many ``saas.template.operator``. The idea\n"
+"  is that we can rebuild template database on one operator, while there is\n"
+"  another one available to use.\n"
+"* ``saas.template`` records are generated automatically from ``saas.demo`` records\n"
+"\n"
+"Repository updating\n"
+"===================\n"
+"\n"
+"* Once in a night all ``saas.demo`` 's *Operators* are marked for updates\n"
+"* One by one *Operators* from ``saas.demo`` update repositories, destroy templates and start rebuilding templates.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Ivan Yelizariev <https://it-projects.info/team/yelizariev>`__\n"
+"* `Denis Mudarisov <https://it-projects.info/team/mudarisov>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/13.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/13.0/saas_demo/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/13.0/saas_demo.atom>`_\n"
+"\n"
+"Tested on Odoo 12.0 8d9e276a9fbf3b4cd8b8251e184d936ff654dd1f\n"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.module.module,summary:base.module_saas_demo
+msgid "One-click demo-instances with modules from your git repositories"
+msgstr ""
+
+#. module: saas_demo
+#: model:ir.module.module,shortdesc:base.module_saas_demo
+msgid "Quick Demo Databases"
+msgstr ""
 
 #. module: saas_demo
 #: model:ir.model.fields,field_description:saas_demo.field_saas_operator__automatic_addons_path_update
@@ -96,12 +169,6 @@ msgid "ID"
 msgstr ""
 
 #. module: saas_demo
-#: model:ir.model.fields,field_description:saas_demo.field_saas_demo____last_update
-#: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo____last_update
-msgid "Last Modified on"
-msgstr ""
-
-#. module: saas_demo
 #: model:ir.model.fields,field_description:saas_demo.field_saas_demo__write_uid
 #: model:ir.model.fields,field_description:saas_demo.field_saas_demo_repo__write_uid
 msgid "Last Updated by"
@@ -124,12 +191,12 @@ msgid "Name"
 msgstr ""
 
 #. module: saas_demo
-#: selection:saas.operator,update_repos_state:0
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__base
 msgid "Not a demo"
 msgstr ""
 
 #. module: saas_demo
-#: selection:saas.operator,update_repos_state:0
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__none
 msgid "Not planned"
 msgstr ""
 
@@ -139,12 +206,12 @@ msgid "Operator"
 msgstr ""
 
 #. module: saas_demo
-#: selection:saas.operator,update_repos_state:0
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__pending
 msgid "Pending"
 msgstr ""
 
 #. module: saas_demo
-#: selection:saas.operator,update_repos_state:0
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__rebuilding
 msgid "Rebuilding Templates"
 msgstr ""
 
@@ -195,7 +262,7 @@ msgid "Template"
 msgstr ""
 
 #. module: saas_demo
-#: sql_constraint:saas.template:0
+#: model:ir.model.constraint,message:saas_demo.constraint_saas_template_demo_uniq
 msgid "Template for that demo already exists."
 msgstr ""
 
@@ -210,7 +277,7 @@ msgid "Update Repos State"
 msgstr ""
 
 #. module: saas_demo
-#: selection:saas.operator,update_repos_state:0
+#: model:ir.model.fields.selection,name:saas_demo.selection__saas_operator__update_repos_state__updating
 msgid "Updating Repositories"
 msgstr ""
 
@@ -223,4 +290,3 @@ msgstr ""
 #: model:ir.model.fields,help:saas_demo.field_saas_template__demo_addon_ids
 msgid "Will be used as default filter in Apps section of the builds"
 msgstr ""
-

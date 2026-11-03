@@ -35,11 +35,13 @@ class SaasDb(models.Model):
 
     def _compute_expiration_state(self):
 
-        time_now = fields.datetime.now()
+        time_now = fields.Datetime.now()
 
         for build in self:
 
-            if time_now > build.expiration_date:
+            if not build.expiration_date:
+                build.expiration_state = "active"
+            elif time_now > build.expiration_date:
                 build.expiration_state = "expired"
 
             elif time_now < build.expiration_date and time_now >= (

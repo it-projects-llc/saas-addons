@@ -2,29 +2,52 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 # Based on https://github.com/it-projects-llc/odoo-saas-tools/blob/11.0/saas.py
 import logging
-import xmlrpc.client
+import requests
 
 _logger = logging.getLogger(__name__)
 
 
-def rpc_auth(url, db_name, admin_username='admin', admin_password='admin'):
-    # Authenticate
-    common = xmlrpc.client.ServerProxy('{}/xmlrpc/2/common'.format(url))
-    admin_uid = common.authenticate(db_name, admin_username, admin_password, {})
-    models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
-    if not admin_uid:
-        _logger.debug('Authentication failed %s', ((url, db_name, admin_username, admin_password),))
-        raise Exception('Authentication to %s is failed' % url)
-    return db_name, models, admin_uid, admin_password
+class SessionRPC:
+    """Keep the utility's execute_kw interface on Odoo 20 session RPC."""
+    def __init__(self, url):
+        self.url = url.rstrip("/")
+        self.session = requests.Session()
+
+    def request(self, path, params):
+        response = self.session.post(self.url + path, json={
+            "jsonrpc": "2.0", "params": params,
+        }, timeout=1200)
+        response.raise_for_status()
+        payload = response.json()
+        if payload.get("error"):
+            error = payload["error"]
+            raise RuntimeError(error.get("data", {}).get("message") or error.get("message", "RPC failed"))
+        return payload.get("result")
+
+    def execute_kw(self, db_name, uid, password, model, method, args, kwargs):
+        return self.request("/web/dataset/call_kw", {
+            "model": model, "method": method, "args": args, "kwargs": kwargs,
+        })
+
+
+def rpc_auth(url, db_name, admin_username="admin", admin_password="admin"):
+    models = SessionRPC(url)
+    try:
+        result = models.request("/web/session/authenticate", {
+            "db": db_name, "login": admin_username, "password": admin_password,
+        })
+        if not result or not result.get("uid"):
+            raise RuntimeError("Authentication failed")
+    except Exception:
+        models.session.close()
+        raise
+    return db_name, models, result["uid"], admin_password
 
 
 def rpc_execute_kw(auth, model, method, rpc_args=None, rpc_kwargs=None):
-    rpc_args = rpc_args or []
-    rpc_kwargs = rpc_kwargs or {}
     db_name, models, admin_uid, admin_password = auth
-    _logger.debug('RPC Execute: env["%s"].%s(*%s, **%s)', model, method, rpc_args, rpc_kwargs)
-    return models.execute_kw(db_name, admin_uid, admin_password,
-                             model, method, rpc_args, rpc_kwargs)
+    _logger.debug("RPC Execute: %s.%s", model, method)
+    return models.execute_kw(db_name, admin_uid, admin_password, model, method, rpc_args or [], rpc_kwargs or {})
 
 
 def rpc_install_modules(auth, domain):

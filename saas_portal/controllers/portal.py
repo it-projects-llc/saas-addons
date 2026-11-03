@@ -1,5 +1,6 @@
 from odoo import http, _
 from odoo.http import request
+from odoo.tools.misc import format_datetime
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.exceptions import AccessError, MissingError
 import logging
@@ -8,13 +9,10 @@ _logger = logging.getLogger(__name__)
 
 
 class CustomerPortal(CustomerPortal):
-    def _prepare_home_portal_values(self, counters):
-        values = super()._prepare_home_portal_values(counters)
-        if "build_count" in counters:
-            values["build_count"] = request.env["saas.db"].search_count([
-                ("type", "=", "build"),
-            ])
-        return values
+    def _prepare_portal_counter_values(self, counter):
+        if counter == "build_count":
+            return "saas.db", [("type", "=", "build")], "read"
+        return super()._prepare_portal_counter_values(counter)
 
     @http.route(
         ["/my/builds", "/my/builds/page/<int:page>"],
@@ -77,8 +75,23 @@ class CustomerPortal(CustomerPortal):
         values = {"build": build_sudo}
 
         if not build_sudo.is_temporary:
-            values["error"] = "This build is not marked as temporary"
+            values["error"] = _("This build is not marked as temporary")
             return request.render("saas_portal.approve_build_result", values)
 
         build_sudo.with_context(writing_from_refresh_data=True).is_approved = True
         return request.render("saas_portal.approve_build_result", values)
+
+    @http.route("/my/build/<int:build_id>/status", type="jsonrpc", auth="user")
+    def portal_build_status(self, build_id, access_token=None):
+        build = self._document_check_access("saas.db", build_id, access_token)
+        pending = build.number_of_queue_jobs_to_be_done
+        ready = build.state == "done" and not pending
+        return {
+            "state": build.state,
+            "pending": pending,
+            "ready": ready,
+            "url": build.get_url() if ready else False,
+            "users": build.users_count,
+            "limit": build.max_users_limit,
+            "expiration": format_datetime(request.env, build.expiration_date) if build.expiration_date else "",
+        }

@@ -1,0 +1,126 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_domain_names
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: saas_domain_names
+#: model:ir.module.module,description:base.module_saas_domain_names
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"====================\n"
+" SaaS: Domain names\n"
+"====================\n"
+"\n"
+"Manage domain names of the builds.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"* `Eugene Molotov <https://github.com/em230418>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model,name:saas_domain_names.model_saas_db
+msgid "Build"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.constraint,message:saas_domain_names.constraint_saas_db_domain_name_id_unique
+msgid "Cannot assign same domain to multiple builds"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_db__display_name
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__name
+msgid "Domain"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_db__domain_name_id
+msgid "Domain Name"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.constraint,message:saas_domain_names.constraint_saas_domain_name_name_unique
+msgid "Domain names must be unique"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.actions.act_window,name:saas_domain_names.action_saas_domain_names
+#: model:ir.ui.menu,name:saas_domain_names.saas_menu_domains
+msgid "Domains"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_db__id
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model.fields,field_description:saas_domain_names.field_saas_domain_name__operator_id
+msgid "Operator"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.module.module,shortdesc:base.module_saas_domain_names
+msgid "SaaS: Domain names"
+msgstr ""
+
+#. module: saas_domain_names
+#: model:ir.model,name:saas_domain_names.model_saas_domain_name
+msgid "Web domain"
+msgstr ""

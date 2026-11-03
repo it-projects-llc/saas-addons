@@ -59,6 +59,7 @@ def turn_off_tests():
     operator legitimately does here: create and provision template/build
     databases, which are separate databases and separate cursors.
     """
+    request_token = request_var.set(None)
     test_enable = tools.config["test_enable"]
     current_test = odoo_module.current_test
     registry_new = Registry.new
@@ -68,6 +69,7 @@ def turn_off_tests():
     try:
         yield
     finally:
+        request_var.reset(request_token)
         Registry.new = registry_new
         odoo_module.current_test = current_test
         tools.config["test_enable"] = test_enable
@@ -135,6 +137,12 @@ def install_modules(db_name, modules):
         # We need to have fresh module list before installing new ones
         env["ir.module.module"].update_list()
 
+        requested = {name for field, op, names in modules if field == "name" and op == "in" for name in names}
+        available = env["ir.module.module"].search([("name", "in", list(requested))])
+        missing = requested - set(available.mapped("name"))
+        blocked = available.filtered(lambda module: module.state == "uninstallable").mapped("name")
+        if missing or blocked:
+            raise UserError("Required addons missing or uninstallable: %s" % ", ".join(sorted(missing | set(blocked))))
         module_ids = env["ir.module.module"].search(
             [("state", "=", "uninstalled")] + modules
         )
@@ -198,12 +206,16 @@ def _get_new_database_name(old_db_name):
 
 
 def deploy_backup(backup_name):
-    original_db_name = re.match(r"([^_]+)_.*\.zip", backup_name).group(1)
+    match = re.fullmatch(r"(.+)_\d{4}-\d{2}-\d{2}_\d{2}_\d{2}_\d{2}\.zip", backup_name)
+    if not match:
+        raise UserError("Invalid backup filename")
+    original_db_name = match.group(1)
     db_name = _get_new_database_name(original_db_name)
     if not db_name:
         raise Exception("Cannot calculate database name for deploying backup %s" % (backup_name,))
 
-    db.restore(db_name, full_backup_path(backup_name), copy=True)
+    with turn_off_tests():
+        db.restore(db_name, full_backup_path(backup_name), copy=True)
     return {
         "db_name": db_name,
     }

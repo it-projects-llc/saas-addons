@@ -9,3 +9,6 @@ from . import res_config_settings
 from . import sale_order
 from . import mail_thread
 from . import saas_template
+
+from . import website_checkout_step
+from . import ir_http

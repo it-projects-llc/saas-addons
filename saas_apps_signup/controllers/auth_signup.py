@@ -1,6 +1,8 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from odoo import _
+from odoo.exceptions import ValidationError
 from odoo.http import request
 from odoo.addons.auth_signup_verify_email.controllers.main import SignupVerifyEmail
 import logging
@@ -15,6 +17,7 @@ EXTRA_SIGN_UP_REQUEST_PARAMS = try_now_args + (
     "database_name",
     "phone",
     "database_lang",
+    "database_languages",
     "country_code",
 
     "saas_template_id",
@@ -25,6 +28,13 @@ _logger = logging.getLogger(__name__)
 
 
 class Main(SignupVerifyEmail):
+    def _get_database_language_codes(self, values):
+        form = request.httprequest.form
+        if "database_languages" in form:
+            return form.getlist("database_languages")
+        codes = values.get("database_languages", [])
+        return codes.split(",") if isinstance(codes, str) else codes
+
     def get_auth_signup_qcontext(self):
         d = {k: v for (k, v) in request.params.items() if k in EXTRA_SIGN_UP_REQUEST_PARAMS}
         d.update(super(Main, self).get_auth_signup_qcontext())
@@ -57,7 +67,7 @@ class Main(SignupVerifyEmail):
 
                 order = request.env["sale.order"].sudo().browse(d["sale_order_id"])
                 template = request.env["saas.template"].sudo().search([
-                    ("id", "in", order.mapped("order_line.product_id.product_tmpl_id").ids),
+                    ("product_tmpl_id", "in", order.mapped("order_line.product_id.product_tmpl_id").ids),
                 ])
                 if not template:
                     template = request.env.ref("saas_apps.base_template")
@@ -70,7 +80,10 @@ class Main(SignupVerifyEmail):
             if template:
                 d["operator_id"] = template._random_ready_operator_id()
 
-        d["langs"] = request.env["res.lang"].get_installed()
+        languages = request.env["res.lang"].sudo().with_context(active_test=False).search([], order="name")
+        d["langs"] = [(lang.code, lang.name) for lang in languages]
+        d["database_languages"] = self._get_database_language_codes(request.params)
+        d["is_saas_signup"] = bool(d.get("operator_id"))
         d["countries"] = [
             (country.code, country.name)
             for country in request.env["res.country"].sudo().search([], order="name")
@@ -82,11 +95,19 @@ class Main(SignupVerifyEmail):
         values = request.params
         qcontext = self.get_auth_signup_qcontext()
 
+        try:
+            request.env["saas.db"]._get_signup_languages(
+                qcontext["database_languages"], values.get("database_lang")
+            )
+        except ValidationError as error:
+            qcontext["error"] = str(error)
+            return request.render("auth_signup.signup", qcontext)
+
         database_name = values.get("database_name")
         if database_name:
             db_record = request.env['saas.db'].sudo().search([('name', '=', database_name)], limit=1)
             if db_record:
-                qcontext["error"] = "Database %s already exist" % (database_name,)
+                qcontext["error"] = _("Database %s already exist", database_name)
                 return request.render("auth_signup.signup", qcontext)
 
         try:
@@ -94,3 +115,16 @@ class Main(SignupVerifyEmail):
         except OperatorNotAvailable as e:
             qcontext["error"] = str(e)
             return request.render("auth_signup.signup", qcontext)
+
+    def _get_passwordless_signup_values(self, values):
+        signup = super()._get_passwordless_signup_values(values)
+        for key in EXTRA_SIGN_UP_REQUEST_PARAMS:
+            if values.get(key):
+                signup[key] = values[key]
+        signup["database_languages"] = self._get_database_language_codes(values)
+        if signup.get("sale_order_id"):
+            from werkzeug.exceptions import BadRequest
+            cart = request.cart
+            if not cart or cart.id != int(signup["sale_order_id"]):
+                raise BadRequest(_("The signup order must be the current shopping cart."))
+        return signup

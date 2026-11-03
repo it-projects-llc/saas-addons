@@ -1,10 +1,12 @@
 # Copyright 2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-import werkzeug
-import urllib.parse
+import json
 import logging
+import urllib.parse
 
-from odoo import http
+import werkzeug
+
+from odoo import _, http
 from odoo.http import request
 
 _logger = logging.getLogger(__name__)
@@ -22,12 +24,12 @@ class AuthQuickMaster(http.Controller):
         }).sudo()
 
         if not token_obj.user_has_access():
-            return """{"error": "You don't have access"}"""
+            return json.dumps({"error": _("You don't have access")}, ensure_ascii=False)
 
         build_url = token_obj.get_build_url() or build_url
 
         if not build_url:
-            return """{"error": "Build url is unknown"}"""
+            return json.dumps({"error": _("Build url is unknown")}, ensure_ascii=False)
 
         url = urllib.parse.urljoin(build_url, '/auth_quick/check-token?token=%s' % token_obj.token)
         return werkzeug.utils.redirect(url, 302)
@@ -39,10 +41,10 @@ class AuthQuickMaster(http.Controller):
             ('token', '=', token)
         ])
         if token_obj.is_obsolete():
-            return {"error": "Token is obsolete"}
+            return {"error": _("Token is obsolete")}
 
         if not token_obj.user_has_access():
-            return {"error": "User doesn't have access"}
+            return {"error": _("User doesn't have access")}
 
         return {"success": "ok", "data": {
             "build_user_id": token_obj.build_user_id,

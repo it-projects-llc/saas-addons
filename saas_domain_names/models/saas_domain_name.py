@@ -27,4 +27,4 @@ class DomainName(models.Model):
     def unlink(self):
         for record in self:
             record.operator_id.unmap_domain(record.name)
-        super(DomainName, self).unlink()
+        return super(DomainName, self).unlink()

@@ -7,7 +7,7 @@
     "category": "Hidden",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version=14.0",
     "images": [],
-    "version": "20.0.0.1.1",
+    "version": "20.0.0.2.0",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "apps@it-projects.info",
@@ -27,6 +27,7 @@
         "data/auth_signup_data.xml",
         "data/website.xml",
         "views/auth_signup.xml",
+        "views/saas_db_views.xml",
         "views/calculator.xml",
         "views/portal_templates.xml",
         "views/res_config_views.xml",
@@ -34,6 +35,7 @@
     "demo": [],
     "assets": {
         "web.assets_frontend": [
+            "saas_apps_signup/static/src/css/signup.css",
             "saas_apps_signup/static/src/js/saas_apps.js",
             "saas_apps_signup/static/src/js/signup.js",
         ],

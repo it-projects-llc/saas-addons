@@ -1,0 +1,468 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_apps
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. module: saas_apps
+#: model:ir.module.module,description:base.module_saas_apps
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===========\n"
+" Saas Apps\n"
+"===========\n"
+"\n"
+"Base module for manage modules in saas.\n"
+"\n"
+"Module allows to choose modules that users gonna use in their db.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Vildan Safin <https://www.it-projects.info/team/Enigma228322>`__\n"
+"* `Eugene Molotov <https://www.it-projects.info/team/em230418>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      To get a guaranteed support\n"
+"      you are kindly requested to purchase the module\n"
+"      at `odoo apps store <https://apps.odoo.com/apps/modules/14.0/saas_apps/>`__.\n"
+"\n"
+"      Thank you for understanding!\n"
+"\n"
+"      `IT-Projects Team <https://www.it-projects.info/team>`__\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"HTML Description: https://apps.odoo.com/apps/modules/14.0/saas_apps/\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps.atom>`_\n"
+"\n"
+"Tested on Odoo 14.0 feb7c99f47cae55fff77035fe53975ea4a14d624\n"
+msgstr ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===============\n"
+" Приложения SaaS\n"
+"===============\n"
+"\n"
+"Базовый модуль управления модулями SaaS.\n"
+"\n"
+"Позволяет выбирать модули, которыми пользователи будут пользоваться в своих базах данных.\n"
+"\n"
+"Благодарности\n"
+"=============\n"
+"\n"
+"Участники\n"
+"---------\n"
+"* `Vildan Safin <https://www.it-projects.info/team/Enigma228322>`__\n"
+"* `Eugene Molotov <https://www.it-projects.info/team/em230418>`__\n"
+"\n"
+"Спонсоры\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Сопровождающие\n"
+"--------------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"      Для получения гарантированной поддержки\n"
+"      приобретите модуль\n"
+"      в `магазине приложений Odoo <https://apps.odoo.com/apps/modules/14.0/saas_apps/>`__.\n"
+"\n"
+"      Спасибо за понимание!\n"
+"\n"
+"      `Команда IT-Projects <https://www.it-projects.info/team>`__\n"
+"\n"
+"Дополнительная информация\n"
+"=========================\n"
+"\n"
+"Демонстрация: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"HTML-описание: https://apps.odoo.com/apps/modules/14.0/saas_apps/\n"
+"\n"
+"Инструкция по использованию: `<doc/index.rst>`_\n"
+"\n"
+"История изменений: `<doc/changelog.rst>`_\n"
+"\n"
+"Уведомления об обновлениях: `через Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps.atom>`_, `по электронной почте <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps.atom>`_\n"
+"\n"
+"Протестировано на Odoo 14.0 feb7c99f47cae55fff77035fe53975ea4a14d624\n"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "/ month"
+msgstr "/ месяц"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "/ year"
+msgstr "/ год"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "<b id=\"apps-qty\" class=\"left-align-price\">0</b> Apps"
+msgstr "Приложений: <b id=\"apps-qty\" class=\"left-align-price\">0</b>"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "<b id=\"users-qty\" class=\"left-align-price\">1</b> Users"
+msgstr "Пользователей: <b id=\"users-qty\" class=\"left-align-price\">1</b>"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "<small id=\"box-period\" class=\"text-muted period fnt-24\">year</small>"
+msgstr "<small id=\"box-period\" class=\"text-muted period fnt-24\">год</small>"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Annually"
+msgstr "Ежегодно"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Buy now"
+msgstr "Купить"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Choose the number of <b>Users</b>"
+msgstr "Выберите количество <b>пользователей</b>"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Choose your Apps"
+msgstr "Выберите приложения"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Choose your Packages"
+msgstr "Выберите пакеты"
+
+#. module: saas_apps
+#: model:ir.module.module,summary:base.module_saas_apps
+msgid "Choose your apps"
+msgstr "Выберите приложения"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_res_config_settings
+msgid "Config Settings"
+msgstr "Параметры настройки"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__create_uid
+msgid "Created by"
+msgstr "Кем создано"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__create_date
+msgid "Created on"
+msgstr "Дата создания"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__currency_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__currency_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__currency_id
+msgid "Currency"
+msgstr "Валюта"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_saas_template
+msgid "Database Template"
+msgstr "Шаблон базы данных"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Decrease users"
+msgstr "Уменьшить количество пользователей"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__dependency_ids
+msgid "Dependencies"
+msgstr "Зависимости"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_product_template__display_name
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__display_name
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__display_name
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_product_template__id
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__icon_image
+msgid "Icon"
+msgstr "Значок"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Increase users"
+msgstr "Увеличить количество пользователей"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__is_package
+msgid "Is package?"
+msgstr "Пакет?"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__write_uid
+msgid "Last Updated by"
+msgstr "Кем изменено"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__write_date
+msgid "Last Updated on"
+msgstr "Дата изменения"
+
+#. module: saas_apps
+#: model:ir.ui.menu,name:saas_apps.menu_website_manage_apps_list
+msgid "Manage Apps"
+msgstr "Управление приложениями"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__shortdesc
+msgid "Module Name"
+msgstr "Название модуля"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__month_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__month_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__month_ptv
+msgid "Month Ptv"
+msgstr "Значение атрибута ежемесячной подписки"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__month_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__month_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__month_price
+msgid "Month price"
+msgstr "Цена за месяц"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Monthly"
+msgstr "Ежемесячно"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Number of users"
+msgstr "Количество пользователей"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__package_image
+msgid "Package image"
+msgstr "Изображение пакета"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_saas_period_product_mixin
+msgid "Period Product Mixin"
+msgstr "Миксин товара с периодической оплатой"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Please wait..."
+msgstr "Подождите…"
+
+#. module: saas_apps
+#. odoo-javascript
+#: code:addons/saas_apps/static/src/js/saas_apps.js:0
+msgid "Please, choose apps or package first"
+msgstr "Сначала выберите приложения или пакет"
+
+#. module: saas_apps
+#: model:website.menu,name:saas_apps.main_pricing_menu
+msgid "Pricing"
+msgstr "Тарифы"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_product_template
+msgid "Product"
+msgstr "Товар"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__product_tmpl_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__product_tmpl_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__product_tmpl_id
+msgid "Product Tmpl"
+msgstr "Шаблон товара"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__year_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__year_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__year_product_id
+msgid "Product for annually subscription"
+msgstr "Товар для ежегодной подписки"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__month_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__month_product_id
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__month_product_id
+msgid "Product for monthly subscription"
+msgstr "Товар для ежемесячной подписки"
+
+#. module: saas_apps
+#. odoo-javascript
+#: code:addons/saas_apps/static/src/xml/base.xml:0
+#: code:addons/saas_apps/static/src/xml/list_buttons.xml:0
+msgid "Refresh"
+msgstr "Обновить"
+
+#. module: saas_apps
+#. odoo-javascript
+#: code:addons/saas_apps/static/src/xml/list_buttons.xml:0
+msgid "Reload apps from this instance"
+msgstr "Обновить список приложений из этого экземпляра"
+
+#. module: saas_apps
+#: model:ir.model,name:saas_apps.model_saas_app
+msgid "SaaS App"
+msgstr "Приложение SaaS"
+
+#. module: saas_apps
+#: model:ir.module.module,shortdesc:base.module_saas_apps
+msgid "SaaS Apps"
+msgstr "Приложения SaaS"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "SaaS pricing page"
+msgstr "Страница тарифов SaaS"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_product_product__saas_app_id
+#: model:ir.model.fields,field_description:saas_apps.field_product_template__saas_app_id
+msgid "Saas App"
+msgstr "Приложение SaaS"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_product_product__saas_package_id
+#: model:ir.model.fields,field_description:saas_apps.field_product_template__saas_package_id
+msgid "Saas Package"
+msgstr "Пакет SaaS"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.saas_app_search
+msgid "Search Redirect"
+msgstr "Перенаправление поиска"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__allow_to_sell
+msgid "Sellable"
+msgstr "Доступно для продажи"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_buy_now_button
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show 'Buy now' button"
+msgstr "Показывать кнопку «Купить»"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_try_trial_button
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show 'Try trial' button"
+msgstr "Показывать кнопку «Попробовать»"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show applications at \"price\" page"
+msgstr "Показывать приложения на странице тарифов"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show apps"
+msgstr "Показывать приложения"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_res_config_settings__show_packages
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show packages"
+msgstr "Показывать пакеты"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.res_config_settings_view_form
+msgid "Show packages at \"price\" page"
+msgstr "Показывать пакеты на странице тарифов"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__name
+msgid "Technical Name"
+msgstr "Техническое имя"
+
+#. module: saas_apps
+#: model_terms:ir.ui.view,arch_db:saas_apps.price
+msgid "Try trial"
+msgstr "Попробовать"
+
+#. module: saas_apps
+#: model:ir.actions.act_window,name:saas_apps.action_saas_app_list
+msgid "Website Apps"
+msgstr "Приложения на сайте"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__year_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__year_ptv
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__year_ptv
+msgid "Year Ptv"
+msgstr "Значение атрибута ежегодной подписки"
+
+#. module: saas_apps
+#: model:ir.model.fields,field_description:saas_apps.field_saas_app__year_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_period_product_mixin__year_price
+#: model:ir.model.fields,field_description:saas_apps.field_saas_template__year_price
+msgid "Year price"
+msgstr "Цена за год"
+
+#. module: saas_apps
+#. odoo-javascript
+#: code:addons/saas_apps/static/src/js/saas_apps.js:0
+msgid "month"
+msgstr "месяц"
+
+#. module: saas_apps
+#. odoo-javascript
+#: code:addons/saas_apps/static/src/js/saas_apps.js:0
+msgid "year"
+msgstr "год"

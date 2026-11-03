@@ -15,6 +15,7 @@ class ProductTemplate(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get("is_saas_product"):
+                vals.setdefault("type", "service")
                 vals["taxes_id"] = [(5,)]
                 vals["supplier_taxes_id"] = [(5,)]
                 vals["invoice_policy"] = "order"

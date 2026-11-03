@@ -88,3 +88,14 @@ class TestSaas(TransactionCase, Common):
         self.assert_no_error_in_db(DB_INSTANCE_2)
         self.assert_record_is_created(DB_INSTANCE_2, 'ir.config_parameter', [('key', '=', 'auth_quick.master')])
         self.assert_record_is_created(DB_INSTANCE_2, 'ir.config_parameter', [('key', '=', 'auth_quick.build')])
+
+        # Exercise native Odoo 20 backup/restore, including database names with underscores.
+        from odoo.addons.saas_cluster_simple import main as cluster
+        backup = cluster.create_backup(DB_INSTANCE_1)
+        restored = cluster.deploy_backup(backup["name"])["db_name"]
+        try:
+            self.assertTrue(restored.startswith(DB_INSTANCE_1 + "_"))
+            self.assert_record_is_created(restored, 'mail.message', [('subject', '=', BUILD_TEST_SUBJECT)])
+        finally:
+            cluster.drop_db(restored)
+            cluster.remove_backup(backup["name"])

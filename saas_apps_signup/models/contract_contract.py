@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models, SUPERUSER_ID
+from odoo import _, api, models, SUPERUSER_ID
 import logging
 from ..exceptions import OperatorNotAvailable
 
@@ -133,11 +133,15 @@ class Contract(models.Model):
                 template = template[0]
             template_operators = template.operator_ids
             if not template_operators:
-                raise OperatorNotAvailable("No template operators in base template. Contact administrator")
+                raise OperatorNotAvailable(
+                    _("No template operators in base template. Contact administrator")
+                )
 
             template_operator = template_operators.random_ready_operator()
             if not template_operator:
-                raise OperatorNotAvailable("No template operators are ready. Try again later")
+                raise OperatorNotAvailable(
+                    _("No template operators are ready. Try again later")
+                )
 
             installing_modules_var = "[" + ",".join(map(
                 lambda item: '"{}"'.format(item.strip().replace('"', '')),
@@ -156,17 +160,11 @@ class Contract(models.Model):
             if not contract.build_id:
                 contract.build_id = build
 
-    @api.model
-    def _finalize_and_create_invoices(self, invoices_values):
-        invoices = super(Contract, self)._finalize_and_create_invoices(invoices_values)
+    def _recurring_create_invoice(self, date_ref=False):
+        invoices = super()._recurring_create_invoice(date_ref)
         for invoice in invoices:
-            contract = invoice.contract_id
-            build = contract.build_id
-
-            contract.invalidate_cache()
-            if build and build.state == "done":
+            if invoice.state == "draft" and invoice.invoice_line_ids.mapped("contract_line_id.contract_id.build_id").filtered(lambda build: build.state == "done"):
                 invoice.action_post()
-
         return invoices
 
 

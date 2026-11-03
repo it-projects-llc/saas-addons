@@ -64,7 +64,7 @@ class SaasDb(models.Model):
                 users_count=self.execute_kw(
                     "res.users",
                     "search_count",
-                    [(("is_excluded_from_limiting", "=", False))],
+                    [("is_excluded_from_limiting", "=", False), ("share", "=", False)],
                 )
             )
 

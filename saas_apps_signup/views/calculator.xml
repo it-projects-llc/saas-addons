@@ -6,7 +6,7 @@
         </xpath>
 
         <xpath expr="//button[@id='try-trial']" position="after">
-            <button id="try-trial2" class="btn btn-lg btn-block btn-primary fnt-larger">Try trial</button>
+            <button id="try-trial2" class="btn btn-lg w-100 mt-2 btn-primary fnt-larger">Try trial</button>
         </xpath>
     </template>
 </odoo>

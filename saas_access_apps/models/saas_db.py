@@ -15,7 +15,7 @@ class SaasDb(models.Model):
 
         # disallowing all users to install apps
         if model and res_id:
-            self.execute_kw(model, "write", [res_id], {"users": [(5,)]})
+            self.execute_kw(model, "write", [res_id], {"user_ids": [(5,)]})
         else:
             # TODO: maybe warning or something?
             pass

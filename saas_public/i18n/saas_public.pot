@@ -4,14 +4,62 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
+"POT-Creation-Date: 2026-11-03 12:30+0000\n"
+"PO-Revision-Date: 2026-11-03 12:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+
+#. module: saas_public
+#: model:ir.module.module,description:base.module_saas_public
+msgid ""
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"===============\n"
+" SaaS Public\n"
+"===============\n"
+"\n"
+"Create builds for non-authenticated users:\n"
+"\n"
+"* User opens a link and gets a build\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"* `Denis Mudarisov <https://it-projects.info/team/trojikman>`__\n"
+"* `Eugene Molotov <https://it-projects.info/team/molotov>`__\n"
+"\n"
+"Sponsors\n"
+"--------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"Maintainers\n"
+"-----------\n"
+"* `IT-Projects LLC <https://it-projects.info>`__\n"
+"\n"
+"\n"
+"Further information\n"
+"===================\n"
+"\n"
+"Demo: http://runbot.it-projects.info/demo/saas-addons/14.0\n"
+"\n"
+"Usage instructions: `<doc/index.rst>`_\n"
+"\n"
+"Changelog: `<doc/changelog.rst>`_\n"
+"\n"
+"Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_public.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_public.atom>`_\n"
+"\n"
+"Tested on Odoo 14.0 fb377a8f1bf2bea020c14ea57997ea9078a54e5f\n"
+msgstr ""
 
 #. module: saas_public
 #: model:ir.model,name:saas_public.model_saas_template
@@ -19,6 +67,26 @@ msgid "Database Template"
 msgstr ""
 
 #. module: saas_public
+#: model:ir.model.fields,field_description:saas_public.field_saas_template__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: saas_public
+#: model:ir.model.fields,field_description:saas_public.field_saas_template__id
+msgid "ID"
+msgstr ""
+
+#. module: saas_public
+#: model:ir.module.module,summary:base.module_saas_public
+msgid "Module for creating public builds"
+msgstr ""
+
+#. module: saas_public
 #: model:ir.model.fields,field_description:saas_public.field_saas_template__public_access
 msgid "Public Access"
+msgstr ""
+
+#. module: saas_public
+#: model:ir.module.module,shortdesc:base.module_saas_public
+msgid "SaaS Public"
 msgstr ""

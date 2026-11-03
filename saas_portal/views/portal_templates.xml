@@ -1,28 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <odoo>
-
-    <template id="portal_my_home" name="Show Builds" customize_show="True" inherit_id="portal.portal_my_home" priority="40">
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-call="portal.portal_docs_entry">
-                <t t-set="title">Builds</t>
-                <t t-set="url" t-value="'/my/builds'"/>
-                <t t-set="placeholder_count" t-value="'build_count'"/>
-            </t>
-        </xpath>
-    </template>
-
     <template id="portal_table_builds" name="Table of builds">
         <t t-if="builds" t-call="portal.portal_table">
             <tbody>
                 <tr t-foreach="builds" t-as="build">
                     <td>
-                        <span class="float-left">
-                            <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name"/></a>
+                        <span class="float-start">
+                            <a t-attf-href="/my/build/#{build.id}?{{ keep_query() }}"><span t-field="build.name" /></a>
                             <t t-if="build.admin_user != user_id">
                                 (Admin: <t t-if="not build.admin_user">None</t><t t-else="" t-out="build.admin_user.name" />)
                             </t>
                         </span>
-                        <span class="float-right">
+                        <span class="float-end">
                             <t t-if="build.state == 'done'">
                                 <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary" target="_blank">
                                     Link
@@ -37,7 +26,7 @@
 
     <template id="portal_my_builds" name="My Builds">
         <t t-call="portal.portal_layout">
-            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
 
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Builds</t>
@@ -60,23 +49,23 @@
 
     <template id="portal_my_build" name="My Build">
         <t t-call="portal.portal_layout">
-            <t t-call="portal.portal_record_layout">
+            <t t-set="pending_jobs" t-value="build.number_of_queue_jobs_to_be_done" /><section class="card mb-4 js_saas_build_status" t-att-data-build-id="build.id" t-att-data-ready="'true' if build.state == 'done' and not pending_jobs else 'false'">
                 <t t-set="card_header">
-                    <h5 class="mb-0">
-                        <small class="text-muted">Build - </small><span t-field="build.name"/>
-                        <span t-if="build.state == 'draft'">(Draft)</span>
-                        <span class="float-right">
+                    <h5 class="mb-0 d-flex flex-wrap align-items-center gap-2">
+                        <small class="text-muted">Build - </small><span t-field="build.name" />
+                        <span t-att-hidden="build.state != 'draft'" data-build-draft="">(Draft)</span>
+                        <span class="ms-auto d-flex align-items-center gap-2">
                             <t t-if="build.is_temporary">
                                 <a class="btn btn-sm" disabled="disabled" t-if="build.is_approved">
                                     Approved
                                 </a>
                                 <form t-else="" style="display: inline-block" t-att-action="build.get_portal_url(suffix='/approve')" method="POST">
-                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
                                     <input class="btn btn-sm btn-secondary" type="submit" value="Approve" />
                                 </form>
                             </t>
-                            <t t-if="build.state == 'done'">
-                                <a role="button" t-att-href="build.get_url()" class="btn btn-sm btn-secondary" target="_blank">
+                            <t>
+                                <a role="button" t-att-href="build.get_url() if build.state == 'done' and not pending_jobs else None" class="btn btn-sm btn-secondary" target="_blank" t-att-hidden="build.state != 'done' or bool(pending_jobs)" data-build-link="" rel="noopener">
                                     Link
                                 </a>
                             </t>
@@ -89,7 +78,7 @@
                             <b>Expiration date</b>
                         </div>
                         <div class="col">
-                            <span t-field="build.expiration_date" />
+                            <span t-field="build.expiration_date" data-build-expiration="" />
                         </div>
                     </div>
                     <div class="row">
@@ -97,7 +86,7 @@
                             <b>Number of users</b>
                         </div>
                         <div class="col">
-                            <span t-field="build.users_count" /> / <span t-field="build.max_users_limit" />
+                            <span t-field="build.users_count" data-build-users="" /> / <span t-field="build.max_users_limit" data-build-limit="" />
                         </div>
                     </div>
                     <div class="row">
@@ -105,11 +94,11 @@
                             <b>Pending processes</b>
                         </div>
                         <div class="col">
-                            <span t-field="build.number_of_queue_jobs_to_be_done" />
+                            <span t-out="pending_jobs" data-build-pending="" />
                         </div>
                     </div>
                 </t>
-            </t>
+            <div class="card-header"><t t-out="card_header" /></div><div class="card-body"><t t-out="card_body" /></div></section>
         </t>
     </template>
 

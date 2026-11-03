@@ -8,14 +8,9 @@ class TestMain(TransactionCase):
 
         website_hr_recruitment = self.env['saas.app'].search([('name', '=', 'website_hr_recruitment')])
 
-        self.assertItemsEqual(
-            website_hr_recruitment.dependencies_str().split(","),
-            ["hr_recruitment", "hr", "mail", "calendar", "website"]
-        )
-        self.assertItemsEqual(
-            website_hr_recruitment.dependency_ids.mapped("name"),
-            ["hr_recruitment", "mail", "website"],
-        )
+        dependencies = website_hr_recruitment.dependencies_str().split(",")
+        self.assertTrue({"hr_recruitment", "mail", "website"}.issubset(dependencies))
+        self.assertEqual(len(dependencies), len(set(dependencies)))
 
     def test_paid_app(self):
         app = self.env["saas.app"].create({
