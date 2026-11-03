@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="saas_db_form_languages" model="ir.ui.view">
+        <field name="name">saas.db.form.languages</field>
+        <field name="model">saas.db</field>
+        <field name="inherit_id" ref="saas.saas_db_form_view"/>
+        <field name="arch" type="xml">
+            <field name="operator_id" position="after">
+                <field name="database_language_ids" widget="many2many_tags" options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

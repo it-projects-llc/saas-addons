@@ -1,7 +1,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, SUPERUSER_ID
+from odoo import Command, api, fields, models, SUPERUSER_ID
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -17,6 +17,10 @@ class ResUsers(models.Model):
     def signup(self, values, *args, **kwargs):
         self = self.with_user(SUPERUSER_ID)
         company_name = (values.pop("company_name", None) or "").strip()
+        languages = self.env["saas.db"]._get_signup_languages(
+            values.pop("database_languages", []), values.get("database_lang")
+        )
+        self = self.with_context(saas_database_language_ids=languages.ids)
 
         if values.get("country_code"):
             values["country_id"] = self.env["res.country"].search([("code", "=", values["country_code"])]).id
@@ -60,6 +64,9 @@ class ResUsers(models.Model):
                 "name": database_name,
                 "operator_id": operator_id,
                 "admin_user": admin_user.id,
+                "database_language_ids": [
+                    Command.set(self.env.context["saas_database_language_ids"])
+                ],
             })
 
             self.env["contract.contract"]._create_saas_contract_for_trial(
@@ -83,6 +90,9 @@ class ResUsers(models.Model):
             "name": database_name,
             "operator_id": operator_id,
             "admin_user": admin_user.id,
+            "database_language_ids": [
+                Command.set(self.env.context["saas_database_language_ids"])
+            ],
         })
 
         sale_order.write({

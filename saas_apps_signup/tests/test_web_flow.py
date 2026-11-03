@@ -22,7 +22,7 @@ class TestCheckoutSignup(HttpCase):
 
     def _signup(self, query, login):
         query = {**query, "operator_id": self.operator.id}
-        page = self.url_open("/web/signup?" + urlencode(query))
+        page = self.url_open("/web/signup?" + urlencode(query, doseq=True))
         self.assertEqual(page.status_code, 200)
         csrf = html.fromstring(page.content).xpath("//input[@name='csrf_token']/@value")[0]
         with patch("odoo.addons.auth_signup_verify_email.controllers.main.validate_email"):
@@ -46,6 +46,15 @@ class TestCheckoutSignup(HttpCase):
         self.assertEqual(create_trial.call_args.args[1:3], (2, "month"))
         self.assertEqual(create_trial.call_args.kwargs["installing_modules"], ["crm"])
 
+    def test_trial_signup_preserves_multiple_languages(self):
+        with patch.object(type(self.env["contract.contract"]), "_create_saas_contract_for_trial"):
+            self._signup({
+                "period": "month", "max_users_limit": 1, "installing_modules": "contacts",
+                "database_name": "audit-web-languages", "database_languages": ["fr_FR", "de_DE"],
+            }, "audit-web-languages@example.com")
+        build = self.env["saas.db"].search([("name", "=", "audit-web-languages")])
+        self.assertEqual(set(build.database_language_ids.mapped("code")), {"en_US", "fr_FR", "de_DE"})
+
     def test_anonymous_purchase_creates_owned_draft_and_links_cart(self):
         self._add_to_cart()
         response = self.url_open("/shop/checkout", allow_redirects=False)
@@ -53,11 +62,12 @@ class TestCheckoutSignup(HttpCase):
         redirect = response.headers["Location"]
         self.assertIn("/web/signup?", redirect)
         order_id = int(parse_qs(urlparse(redirect).query)["sale_order_id"][0])
-        user = self._signup({"sale_order_id": order_id, "database_name": "audit-web-purchase"}, "audit-web-purchase@example.com")
+        user = self._signup({"sale_order_id": order_id, "database_name": "audit-web-purchase", "database_languages": ["fr_FR", "de_DE"]}, "audit-web-purchase@example.com")
         order = self.env["sale.order"].browse(order_id)
         self.assertEqual(order.partner_id, user.partner_id)
         self.assertEqual(order.build_id.admin_user, user)
         self.assertEqual(order.build_id.state, "draft")
+        self.assertEqual(set(order.build_id.database_language_ids.mapped("code")), {"en_US", "fr_FR", "de_DE"})
 
     def test_logged_customer_selects_own_draft_before_checkout(self):
         user = self.env["res.users"].with_context(no_reset_password=True).create({"name": "Cart customer", "login": "audit-cart", "password": "local-audit", "group_ids": [(6, 0, self.env.ref("base.group_portal").ids)]})

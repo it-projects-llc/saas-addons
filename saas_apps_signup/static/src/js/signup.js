@@ -18,6 +18,25 @@ function setup() {
         }
     });
 
+    const preferredLanguage = node("database_lang");
+    const languageOptions = [...form.querySelectorAll(".js-database-language-option")];
+    const syncRequiredLanguages = () => {
+        for (const option of languageOptions) {
+            const checkbox = option.querySelector('input[type="checkbox"]');
+            const required = checkbox.value === "en_US" || checkbox.value === preferredLanguage?.value;
+            if (required) checkbox.checked = true;
+            checkbox.disabled = required;
+        }
+    };
+    preferredLanguage?.addEventListener("change", syncRequiredLanguages);
+    syncRequiredLanguages();
+    node("database_language_search")?.addEventListener("input", (event) => {
+        const query = event.target.value.trim().toLocaleLowerCase();
+        for (const option of languageOptions) {
+            option.hidden = !option.textContent.toLocaleLowerCase().includes(query);
+        }
+    });
+
     const companyName = node("company_name");
     const databaseName = node("database_name");
     if (companyName && databaseName) {

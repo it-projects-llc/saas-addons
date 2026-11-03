@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0\n"
 "Report-Msgid-Bugs-To: https://github.com/it-projects-llc/saas-addons/issues\n"
-"POT-Creation-Date: 2026-11-03 12:30+0000\n"
-"PO-Revision-Date: 2026-11-03 12:30+0000\n"
+"POT-Creation-Date: 2026-11-03 18:33+0000\n"
+"PO-Revision-Date: 2026-11-03 18:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -87,6 +87,13 @@ msgid ""
 "Notifications on updates: `via Atom <https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps_signup.atom>`_, `by Email <https://blogtrottr.com/?subscribe=https://github.com/it-projects-llc/saas-addons/commits/14.0/saas_apps_signup.atom>`_\n"
 "\n"
 "Tested on Odoo 14.0 99531f5dd8966fc4ad89d1e9c2886ad701527f3a\n"
+msgstr ""
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid ""
+"<small class=\"form-text text-muted\">English and your preferred language "
+"are included automatically.</small>"
 msgstr ""
 
 #. module: saas_apps_signup
@@ -185,6 +192,11 @@ msgstr ""
 #. module: saas_apps_signup
 #: model:mail.template,subject:saas_apps_signup.set_password_email
 msgid "Account activation"
+msgstr ""
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Administrator language"
 msgstr ""
 
 #. module: saas_apps_signup
@@ -290,6 +302,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:saas_apps_signup.field_account_move__display_name
 #: model:ir.model.fields,field_description:saas_apps_signup.field_contract_contract__display_name
 #: model:ir.model.fields,field_description:saas_apps_signup.field_contract_line__display_name
+#: model:ir.model.fields,field_description:saas_apps_signup.field_ir_http__display_name
 #: model:ir.model.fields,field_description:saas_apps_signup.field_mail_thread__display_name
 #: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__display_name
 #: model:ir.model.fields,field_description:saas_apps_signup.field_res_partner__display_name
@@ -323,9 +336,15 @@ msgid "Extends saas_apps"
 msgstr ""
 
 #. module: saas_apps_signup
+#: model:ir.model,name:saas_apps_signup.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: saas_apps_signup
 #: model:ir.model.fields,field_description:saas_apps_signup.field_account_move__id
 #: model:ir.model.fields,field_description:saas_apps_signup.field_contract_contract__id
 #: model:ir.model.fields,field_description:saas_apps_signup.field_contract_line__id
+#: model:ir.model.fields,field_description:saas_apps_signup.field_ir_http__id
 #: model:ir.model.fields,field_description:saas_apps_signup.field_mail_thread__id
 #: model:ir.model.fields,field_description:saas_apps_signup.field_res_config_settings__id
 #: model:ir.model.fields,field_description:saas_apps_signup.field_res_partner__id
@@ -344,6 +363,12 @@ msgid "Invalid database name"
 msgstr ""
 
 #. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/saas_db.py:0
+msgid "Invalid language selection."
+msgstr ""
+
+#. module: saas_apps_signup
 #: model:ir.model.fields,field_description:saas_apps_signup.field_saas_db__is_admin_user_language_installed
 msgid "Is admin user's language installed?"
 msgstr ""
@@ -354,8 +379,9 @@ msgid "Journal Entry"
 msgstr ""
 
 #. module: saas_apps_signup
+#: model:ir.model.fields,field_description:saas_apps_signup.field_saas_db__database_language_ids
 #: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
-msgid "Language"
+msgid "Languages to install"
 msgstr ""
 
 #. module: saas_apps_signup
@@ -414,6 +440,16 @@ msgid "Sales Order"
 msgstr ""
 
 #. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Search languages"
+msgstr ""
+
+#. module: saas_apps_signup
+#: model_terms:ir.ui.view,arch_db:saas_apps_signup.additional_fields
+msgid "Search languages..."
+msgstr ""
+
+#. module: saas_apps_signup
 #. odoo-python
 #: code:addons/saas_apps_signup/models/account_move.py:0
 msgid ""
@@ -422,8 +458,20 @@ msgstr ""
 
 #. module: saas_apps_signup
 #. odoo-python
+#: code:addons/saas_apps_signup/models/saas_db.py:0
+msgid "Select valid Odoo languages."
+msgstr ""
+
+#. module: saas_apps_signup
+#. odoo-python
 #: code:addons/saas_apps_signup/models/account_move.py:0
 msgid "The SaaS user quantity must be a positive whole number."
+msgstr ""
+
+#. module: saas_apps_signup
+#. odoo-python
+#: code:addons/saas_apps_signup/models/saas_db.py:0
+msgid "The instance does not support these languages: %s"
 msgstr ""
 
 #. module: saas_apps_signup
